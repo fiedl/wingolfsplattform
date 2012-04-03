@@ -15,7 +15,7 @@ development:
   database: wingolfsplattform_development
   pool: 5
   username: root
-  password:
+  password: ww2PVcA9GKfwtrrU
   host: localhost
 
 # Warning: The database defined as "test" will be erased and
@@ -28,7 +28,7 @@ test:
   database: wingolfsplattform_test
   pool: 5
   username: root
-  password:
+  password: ww2PVcA9GKfwtrrU
   host: localhost
 
 production:
@@ -38,5 +38,5 @@ production:
   database: wingolfsplattform_production
   pool: 5
   username: root
-  password:
+  password: ww2PVcA9GKfwtrrU
   host: localhost
