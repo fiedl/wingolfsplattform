@@ -1,5 +1,9 @@
 Wingolfsplattform::Application.routes.draw do 
 
+  namespace :mitgliederdaten do
+    resources :users
+  end
+
   get "errors/unauthorized"
 
   mount Mercury::Engine => '/'
