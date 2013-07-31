@@ -175,7 +175,7 @@ class UserData
     add_profile_field :work_phone, value: phone_format(d('epdprofphone')), type: 'Phone'
     add_profile_field :work_fax, value: phone_format(d('epdproffax')), type: 'Phone'
 
-    add_profile_field :homepage, value: d('epdpersonallabeledurl'), type: 'Homepage'
+    add_profile_field :homepages, value: d('epdpersonallabeledurl'), type: 'Homepage'
     add_profile_field :work_homepage, value: d('epdproflabeledurl'), type: 'Homepage'
 
     academic_degrees.each do |degree|

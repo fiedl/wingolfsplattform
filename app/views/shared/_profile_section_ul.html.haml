@@ -1,3 +1,3 @@
 %ul.section_container
-  - profileable.profile_fields_by_section( section ).each do | profile_field |
-    = render partial: 'profile_fields/profile_field', object: profile_field
+  - profileable.profile_fields_by_section(section).each do | profile_field |
+    = render partial: profile_field, layout: 'shared/profile_field_layout', locals: {profile_field: profile_field}

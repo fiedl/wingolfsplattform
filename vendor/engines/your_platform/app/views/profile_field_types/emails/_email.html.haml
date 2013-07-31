@@ -1,0 +1,6 @@
+= profile_field_label email
+- if can? :update, profile_field
+  = best_in_place profile_field, :value,
+                    type: :text,
+                    display_as: :display_html,
+                    classes: :value

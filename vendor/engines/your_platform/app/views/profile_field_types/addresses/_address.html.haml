@@ -1,0 +1,6 @@
+= profile_field_label address
+- if can? :update, address
+  = best_in_place address, :value,
+                    type: :text,
+                    display_as: :display_html,
+                    classes: :value

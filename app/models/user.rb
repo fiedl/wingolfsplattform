@@ -71,7 +71,7 @@ class User
     self.profile_fields.create(label: :phone, type: "ProfileFieldTypes::Phone")
     self.profile_fields.create(label: :mobile, type: "ProfileFieldTypes::Phone")
     self.profile_fields.create(label: :fax, type: "ProfileFieldTypes::Phone")
-    self.profile_fields.create(label: :homepage, type: "ProfileFieldTypes::Homepage")
+    self.profile_fields.create(label: :homepages, type: "ProfileFieldTypes::Homepage")
 
     self.profile_fields.create(label: :study, type: "ProfileFieldTypes::Study")
 

@@ -1,0 +1,5 @@
+%li.profile_field_parent{id: "profile_field_id_#{profile_field.id}"}
+  %span.profile_field
+    = yield
+    - if can? :destroy, profile_field
+      = remove_button(profile_field)

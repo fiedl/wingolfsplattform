@@ -77,7 +77,7 @@ describe User do
       @user.profile_fields.where(label: :phone).count.should == 1
       @user.profile_fields.where(label: :mobile).count.should == 1
       @user.profile_fields.where(label: :fax).count.should == 1
-      @user.profile_fields.where(label: :homepage).count.should == 1
+      @user.profile_fields.where(label: :homepages).count.should == 1
       @user.profile_fields.where(label: :academic_degree).count.should == 1
       @user.profile_fields.where(label: :professional_category).count.should == 1
       @user.profile_fields.where(label: :occupational_area).count.should == 1
