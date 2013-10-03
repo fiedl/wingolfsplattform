@@ -44,15 +44,54 @@ module Structureable
   # 
   def is_structureable( options = {} )
     
-    # default options
-    conf = {
-      :link_class_name => 'DagLink'
-    }
-    conf.update( options )
+    # # default options
+    # conf = {
+    #   :link_class_name => 'DagLink'
+    # }
+    # conf.update( options )
+    # 
+    # # the model is part of the dag link structure. see gem `acts-as-dag`
+    # has_dag_links    conf
+    
+    include Neoid::Node
+    has_many :links_as_parent, foreign_key: :parent_id, class_name: 'DagLink'
+    has_many :links_as_child, foreign_key: :child_id, class_name: 'DagLink'
+    
+    parent_class_names = options[:ancestor_class_names] || []
+    child_class_names = options[:descendant_class_names] || []
 
-    # the model is part of the dag link structure. see gem `acts-as-dag`
-    has_dag_links    conf
+    parent_class_names.each do |parent_class_name|
+      has_many( "links_as_child_for_#{parent_class_name.underscore.pluralize}".to_sym, 
+                as: :child, class_name: 'DagLink', 
+                conditions: { parent_type: parent_class_name } )
+      has_many( "parent_#{parent_class_name.underscore.pluralize}".to_sym, 
+                through: "links_as_child_for_#{parent_class_name.underscore.pluralize}".to_sym, 
+                as: :structureable, 
+                foreign_key: :parent_id, source: 'parent', 
+                source_type: parent_class_name )
+      define_method "ancestor_#{parent_class_name.underscore.pluralize}".to_sym do
+        send("parent_#{parent_class_name.underscore.pluralize}".to_sym)
+      end
+    end  
 
+    child_class_names.each do |child_class_name|
+      has_many( "links_as_parent_for_#{child_class_name.underscore.pluralize}".to_sym, 
+                as: :parent, class_name: 'DagLink', 
+                conditions: { child_type: child_class_name } )
+      has_many( "child_#{child_class_name.underscore.pluralize}".to_sym, 
+                through: "links_as_parent_for_#{child_class_name.underscore.pluralize}".to_sym, 
+                as: :structureable, 
+                foreign_key: :child_id, source: 'child', 
+                source_type: child_class_name )
+      define_method "descendant_#{child_class_name.underscore.pluralize}".to_sym do
+       send("child_#{child_class_name.underscore.pluralize}".to_sym)
+      end
+    end
+    
+    neoidable do |c|
+      c.field :name
+      c.field :title
+    end
     
     before_destroy   :destroy_links
 
@@ -85,25 +124,25 @@ module Structureable
     # 
     def destroy_dag_links
 
-      # destory only child and parent links, since the indirect links
-      # are destroyed automatically by the DagLink model then.
-      links = self.links_as_parent + self.links_as_child 
-
-      for link in links do
-
-        if link.destroyable?
-          link.destroy
-        else
-
-          # In facty, all these links should be destroyable. If this error should
-          # be raised, something really went wrong. Please send in a bug report then
-          # at http://github.com/fiedl/your_platform.
-          raise "Could not destroy dag links of the structureable object that should be deleted." +
-            " Please send in a bug report at http://github.com/fiedl/your_platform."
-          return false
-        end  
-
-      end  
+      # # destory only child and parent links, since the indirect links
+      # # are destroyed automatically by the DagLink model then.
+      # links = self.links_as_parent + self.links_as_child 
+      # 
+      # for link in links do
+      # 
+      #   if link.destroyable?
+      #     link.destroy
+      #   else
+      # 
+      #     # In facty, all these links should be destroyable. If this error should
+      #     # be raised, something really went wrong. Please send in a bug report then
+      #     # at http://github.com/fiedl/your_platform.
+      #     raise "Could not destroy dag links of the structureable object that should be deleted." +
+      #       " Please send in a bug report at http://github.com/fiedl/your_platform."
+      #     return false
+      #   end  
+      # 
+      # end  
     end
 
     def destroy_links
