@@ -10,6 +10,9 @@
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
+# Ignore neo4j
+neo4j
+
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
