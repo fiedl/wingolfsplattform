@@ -54,15 +54,18 @@ module Structureable
     # has_dag_links    conf
     
     include Neoid::Node
-    has_many :links_as_parent, foreign_key: :parent_id, class_name: 'DagLink'
-    has_many :links_as_child, foreign_key: :child_id, class_name: 'DagLink'
+    
+    delegate :neo_id, to: :neo_node
+    
+    has_many :links_as_parent, foreign_key: :parent_id, class_name: 'StructureLink'
+    has_many :links_as_child, foreign_key: :child_id, class_name: 'StructureLink'
     
     parent_class_names = options[:ancestor_class_names] || []
     child_class_names = options[:descendant_class_names] || []
 
     parent_class_names.each do |parent_class_name|
       has_many( "links_as_child_for_#{parent_class_name.underscore.pluralize}".to_sym, 
-                as: :child, class_name: 'DagLink', 
+                as: :child, class_name: 'StructureLink', 
                 conditions: { parent_type: parent_class_name } )
       has_many( "parent_#{parent_class_name.underscore.pluralize}".to_sym, 
                 through: "links_as_child_for_#{parent_class_name.underscore.pluralize}".to_sym, 
@@ -76,7 +79,7 @@ module Structureable
 
     child_class_names.each do |child_class_name|
       has_many( "links_as_parent_for_#{child_class_name.underscore.pluralize}".to_sym, 
-                as: :parent, class_name: 'DagLink', 
+                as: :parent, class_name: 'StructureLink', 
                 conditions: { child_type: child_class_name } )
       has_many( "child_#{child_class_name.underscore.pluralize}".to_sym, 
                 through: "links_as_parent_for_#{child_class_name.underscore.pluralize}".to_sym, 

@@ -23,5 +23,5 @@ Neoid.db = $neo
 
 Neoid.configure do |c|
   # should Neoid create sub-reference from the ref node (id#0) to every node-model? default: true
-  c.enable_subrefs = true
+  c.enable_subrefs = false
 end

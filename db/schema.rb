@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131003125918) do
+ActiveRecord::Schema.define(:version => 20131004092633) do
 
   create_table "attachments", :force => true do |t|
     t.string   "file"
@@ -38,18 +38,6 @@ ActiveRecord::Schema.define(:version => 20131003125918) do
     t.string   "plz"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-  end
-
-  create_table "dag_links", :force => true do |t|
-    t.integer  "parent_id"
-    t.string   "parent_type"
-    t.integer  "child_id"
-    t.string   "child_type"
-    t.boolean  "direct"
-    t.integer  "count"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-    t.datetime "deleted_at"
   end
 
   create_table "events", :force => true do |t|
@@ -155,6 +143,17 @@ ActiveRecord::Schema.define(:version => 20131003125918) do
     t.integer  "promoted_on_event_id"
     t.datetime "created_at",              :null => false
     t.datetime "updated_at",              :null => false
+  end
+
+  create_table "structure_links", :force => true do |t|
+    t.integer  "parent_id"
+    t.string   "parent_type"
+    t.integer  "child_id"
+    t.string   "child_type"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.datetime "valid_to"
+    t.datetime "valid_from"
   end
 
   create_table "user_accounts", :force => true do |t|
