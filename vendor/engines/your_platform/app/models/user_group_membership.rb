@@ -6,7 +6,7 @@
 #
 # This class allows abstract access to the UserGroupMemberships themselves,
 # and to their properties like since when the membership exists.
-class UserGroupMembership < DagLink
+class UserGroupMembership < StructureLink
 
   attr_accessible :created_at, :deleted_at, :archived_at, :created_at_date_formatted
 

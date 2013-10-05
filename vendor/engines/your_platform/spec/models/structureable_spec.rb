@@ -8,10 +8,12 @@ require 'spec_helper'
 #   end
 
 describe Structureable do
+  
+  before do
+    @node = create(:page)
+  end
 
   describe ".is_structureable" do
-
-    before { @node = create( :page ) }
     subject { @node }
 
     it "should provide the has_dag_links functionality" do
@@ -28,7 +30,24 @@ describe Structureable do
       @node.destroy
       @parent.links_as_parent.count.should == 0
     end
+  end
 
+  describe "#neo_node" do
+    subject { @node.neo_node }
+    it { should_not == nil }
+    it "should be independent of the STI subclass" do
+      @node.class.name.should == "Page"
+      subject.should == @node.becomes(BlogPost).neo_node
+    end
+  end
+  
+  describe "#neo_id" do
+    subject { @node.neo_id }
+    it { should_not == nil }
+    it "should be independent of the STI subclass" do
+      @node.class.name.should == "Page"
+      subject.should == @node.becomes(BlogPost).neo_id
+    end
   end
   
 end

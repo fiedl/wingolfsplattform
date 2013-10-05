@@ -12,6 +12,8 @@ namespace :neo4j do
     Neoid.batch do
       User.all.each(&:neo_save)
       Group.all.each(&:neo_save)
+      Workflow.all.each(&:neo_save)
+      Page.all.each(&:neo_save)
       StructureLink.all.each(&:neo_save)
     end
 

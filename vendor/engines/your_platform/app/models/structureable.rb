@@ -28,11 +28,6 @@ module Structureable
   # Options:
   #   ancestor_class_names
   #   descendant_class_names
-  #   link_class_name         (default: 'DagLink')
-  # 
-  # For detailed information on the options, please see the documentation of the
-  # `acts-as-dag` gem, since these options are forwarded to the has_dag_links method.
-  # http://rubydoc.info/github/resgraph/acts-as-dag/Dag#has_dag_links-instance_method
   # 
   # Example:
   #     class Group < ActiveRecord::Base
@@ -44,19 +39,8 @@ module Structureable
   # 
   def is_structureable( options = {} )
     
-    # # default options
-    # conf = {
-    #   :link_class_name => 'DagLink'
-    # }
-    # conf.update( options )
-    # 
-    # # the model is part of the dag link structure. see gem `acts-as-dag`
-    # has_dag_links    conf
-    
     include Neoid::Node
-    
-    delegate :neo_id, to: :neo_node
-    
+
     has_many :links_as_parent, foreign_key: :parent_id, class_name: 'StructureLink'
     has_many :links_as_child, foreign_key: :child_id, class_name: 'StructureLink'
     
@@ -110,6 +94,22 @@ module Structureable
   end
 
   module StructureableInstanceMethods
+
+    # Overriding the neo_node method ensures that for STI the same neo_node
+    # is returned for the same object regardless of the subclass.
+    # 
+    # That means: page.neo_node == page.becomes(BlogPost).neo_node
+    #
+    def neo_node
+      super || self.becomes(self.class.base_class).neo_node
+    end
+
+    # The unique id of the neo4j node that corresponds to the
+    # strucureable object.
+    #
+    def neo_id
+      neo_node.try(:neo_id)
+    end
 
     # Include Rules, e.g. let this object have admins.
     # 

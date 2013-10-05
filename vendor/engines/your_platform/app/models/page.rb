@@ -1,6 +1,6 @@
 class Page < ActiveRecord::Base
 
-  attr_accessible        :content, :title, :redirect_to
+  attr_accessible        :content, :title, :name, :redirect_to
 
   is_structureable       ancestor_class_names: %w(Page User Group), descendant_class_names: %w(Page User Group)
   is_navable
@@ -8,6 +8,14 @@ class Page < ActiveRecord::Base
   has_many :attachments, as: :parent, dependent: :destroy
 
   belongs_to :author, :class_name => "User", foreign_key: 'author_user_id'
+  
+  
+  # General Attributes
+  # ----------------------------------------------------------------------------------------------------
+  
+  def name
+    self.title
+  end
 
 
   # Redirection
