@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # This module provides the ActiveRecord::Base extension `is_structureable`, which characterizes
-# a model as part of the global dag_link structure in this project. All structureable objects
+# a model as part of the global graph structure in this project. All structureable objects
 # are nodes of this dag link.
 # 
 # Examples: 
@@ -12,15 +12,10 @@
 #     @group.children # => [ @user, ... ]
 #     @user.parents # => [ @group, ... ]
 # 
-# For all methods that are provided, please consult the documentations of the 
-# `acts-as-dag` gem and of the `acts_as_paranoid_dag` gem.
-# 
 # This module is included in ActiveRecord::Base via an initializer at
 # config/initializers/active_record_structureable_extension.rb
 #
 module Structureable
-
-  # options: ancestor_class_names, descendant_class_names
 
   # This method is used to declare a model as structureable, i.e. part of the global 
   # dag link structure. 
@@ -143,10 +138,31 @@ module Structureable
       ")
     end
     def ancestors
+      find_related_nodes_via_cypher("
+        match (ancestors)-[:is_parent_of*0..100]->(self)
+        return ancestors
+      ").uniq
     end
     def descendants
+      find_related_nodes_via_cypher("
+        match (self)-[:is_parent_of*0..100]->(descendants)
+        return descendants
+      ").uniq
     end
     
+    # This method returns all ActiveRecord objects found by a cypher
+    # neo4j query defined through the given query_string.
+    # 
+    # Within the query_string, no START expression is needed, 
+    # because the start node is given by the neo_node of this
+    # structureable object. It is referred to just by 'self'. 
+    #
+    # Example:
+    #   group.find_related_nodes_via_cypher("
+    #     match (self)-[:is_parent_of]->(children)
+    #     return children
+    #   ")  # =>  [child_group1, child_group2, ...]
+    #
     def find_related_nodes_via_cypher(query_string)
       query_string = "
         start self=node(#{neo_id})
@@ -157,48 +173,37 @@ module Structureable
       )
     end
     
+    # This method returns the ActiveRecord objects that match the
+    # given cypher query result. 
+    # 
+    # For an example, have a look at the method
+    #   find_related_nodes_via_cypher.
+    #
     def cypher_results_to_objects(cypher_results)
       cypher_results["data"].collect do |result|
         result.first["data"]["ar_type"].constantize.find(result.first["data"]["ar_id"])
       end
     end
+    private :cypher_results_to_objects
     
 
     # Include Rules, e.g. let this object have admins.
     # 
     include StructureableMixins::Roles
 
-    # When a dag node is destroyed, also destroy the corresponding dag links.
-    # Otherwise, there would remain ghost dag links in the database that would
-    # corrupt the integrity of the database. 
+    # When a graph node is destroyed, also destroy the corresponding links.
+    # Otherwise, there would remain ghost links in the database.
     # 
-    # If the database gets ever messed up like this, delete the concerning
-    # *direct* dag links by hand and then run this rake task to re-create
-    # the indirect dag links:
-    # 
-    #    rake reconstruct_indirect_dag_links:all
+    # If the database gets ever messed up, it can be re-constructed using 
+    # this rake task:
+    #
+    #    # bash 
+    #    bundle exec rake neo4j:neo4j_reconstruct_graph
     # 
     def destroy_dag_links
-
-      # # destory only child and parent links, since the indirect links
-      # # are destroyed automatically by the DagLink model then.
-      # links = self.links_as_parent + self.links_as_child 
-      # 
-      # for link in links do
-      # 
-      #   if link.destroyable?
-      #     link.destroy
-      #   else
-      # 
-      #     # In facty, all these links should be destroyable. If this error should
-      #     # be raised, something really went wrong. Please send in a bug report then
-      #     # at http://github.com/fiedl/your_platform.
-      #     raise "Could not destroy dag links of the structureable object that should be deleted." +
-      #       " Please send in a bug report at http://github.com/fiedl/your_platform."
-      #     return false
-      #   end  
-      # 
-      # end  
+      for link in (self.links_as_parent + self.links_as_child) do
+        link.destroy
+      end  
     end
 
     def destroy_links
