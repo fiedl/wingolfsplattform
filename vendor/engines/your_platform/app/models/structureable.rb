@@ -41,9 +41,23 @@ module Structureable
     
     include Neoid::Node
 
+    # StructureLinks (direct relationships between strcturable objects) are stored
+    # via ActiveRecord in the mysql database. (The neo4j database contains only 
+    # redundant information and is used for fast queries.)
+    #
     has_many :links_as_parent, foreign_key: :parent_id, class_name: 'StructureLink'
     has_many :links_as_child, foreign_key: :child_id, class_name: 'StructureLink'
     
+    # For all class names that are provided by 
+    # TODO: CORRECT OPTIONS 
+    # provide polymorphic associations (via ActiveRecord).
+    # 
+    # Examples:
+    #   user.links_as_child_for_groups
+    #   user.parent_groups
+    #   group.links_as_parent_for_users
+    #   group.child_users
+    # 
     parent_class_names = options[:ancestor_class_names] || []
     child_class_names = options[:descendant_class_names] || []
 
@@ -75,6 +89,9 @@ module Structureable
       end
     end
     
+    # Attributes that are copied over to the neo4j nodes.
+    # These attributes are accessible in the neo4j graph queries.
+    #
     neoidable do |c|
       c.field :name
       c.field :title
@@ -110,6 +127,42 @@ module Structureable
     def neo_id
       neo_node.try(:neo_id)
     end
+    
+    # Use neo4j for graph queries.
+    #
+    def parents
+      find_related_nodes_via_cypher("
+        match (parents)-[:is_parent_of]->(self)
+        return parents
+      ")
+    end
+    def children
+      find_related_nodes_via_cypher("
+        match (self)-[:is_parent_of]->(children)
+        return children
+      ")
+    end
+    def ancestors
+    end
+    def descendants
+    end
+    
+    def find_related_nodes_via_cypher(query_string)
+      query_string = "
+        start self=node(#{neo_id})
+        #{query_string}
+      "
+      cypher_results_to_objects(
+        Neoid.db.execute_query(query_string)
+      )
+    end
+    
+    def cypher_results_to_objects(cypher_results)
+      cypher_results["data"].collect do |result|
+        result.first["data"]["ar_type"].constantize.find(result.first["data"]["ar_id"])
+      end
+    end
+    
 
     # Include Rules, e.g. let this object have admins.
     # 

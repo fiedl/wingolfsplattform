@@ -34,6 +34,8 @@ bundle install
 bundle exec rake db:create db:migrate
 bundle exec rake bootstrap:all
 bundle exec rake db:test:prepare
+bundle exec rake neo4j:install
+bundle exec rake neo4j:start
 bundle exec rake
 ```
 

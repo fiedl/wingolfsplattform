@@ -50,4 +50,17 @@ describe Structureable do
     end
   end
   
+  describe "#parents", focus: true do
+    before do 
+      @parent_page = @node.parent_pages.create(title: "Parent Page")
+      @parent_group = @node.parent_groups.create(name: "Parent Group")
+      @parents = [@parent_page, @parent_group]
+    end
+    subject { @node.parents }
+    it "should list all parents" do
+      subject.should == @parents
+    end
+    
+  end
+  
 end
