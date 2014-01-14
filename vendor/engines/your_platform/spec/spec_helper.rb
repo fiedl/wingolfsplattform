@@ -1,6 +1,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 
+
 #require File.expand_path("../../config/environment", __FILE__)
 #require File.expand_path("../../test_app/config/environment", __FILE__) # TODO: use this when the test_app is ready
 require File.expand_path("../../../../../config/environment", __FILE__) # this refers to the wingolfsplattform # TODO: remove this
