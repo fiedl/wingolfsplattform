@@ -1,4 +1,4 @@
-require_dependency 'app/models/user'
+require File.join(Rails.root, 'app/models/user')
 
 class User
   
@@ -224,9 +224,24 @@ class User
   end
   
   def import_secondary_corporations_from( netenv_user )
+
+    last_date_of_joining = netenv_user.aktivmeldungsdatum
+    
     netenv_user.secondary_corporations.each do |corporation|
+
+      # Wenn zwei Bandaufnahmen im gleichen Jahr sind, aber nicht bekannt ist, an welchem Datum
+      # sie jeweils stattfanden, muss trotzdem die Reihenfolge der Bandaufnahmen berücksichtigt
+      # werden. Also wird jeweils verglichen, ob das die nächste Bandaufnahme im gleichen Jahr
+      # war wie die vorige und dann im Zweifel ein Tag zum angenommenen Datum dazugezählt, damit
+      # die Reihenfolge erhalten bleibt.
+      #
       year_of_joining = netenv_user.year_of_joining(corporation)
-      assumed_date_of_joining = year_of_joining.to_datetime
+      if last_date_of_joining.year.to_s == year_of_joining.to_s
+        assumed_date_of_joining = last_date_of_joining + 1.day
+      else
+        assumed_date_of_joining = year_of_joining.to_datetime
+      end
+      last_date_of_joining = assumed_date_of_joining
       
       if netenv_user.bandaufnahme_als_aktiver?( corporation )
         group_to_assign = corporation.status_group("Aktive Burschen")
@@ -258,7 +273,7 @@ class User
     netenv_user.former_corporations.each do |corporation|
       
       reason = netenv_user.reason_for_exit(corporation)  || "ausgetreten"
-      date = netenv_user.date_of_exit(corporation)
+      date = netenv_user.date_of_exit(corporation) || netenv_user.netenv_org_membership_end_date
       
       # Unassign user from previous groups in that corporation.
       (self.parent_groups & corporation.descendant_groups).each do |status_group|
@@ -285,7 +300,8 @@ class User
     if netenv_user.verstorben?
       
       date_of_death = netenv_user.netenv_org_membership_end_date
-      
+      date_of_death ||= self.memberships.order(:valid_from).last.valid_from + 1.day
+            
       # Aus allen Gruppen austragen, außer der 'hidden_users'-Gruppe.
       self.direct_groups.each do |group|
         unless group.has_flag? :hidden_users

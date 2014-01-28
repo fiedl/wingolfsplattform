@@ -53,8 +53,14 @@ module GroupMixins::Corporations
 
     # Find all corporation groups, i.e. the children of `corporations_parent`.
     #
+    # FIXME: This method does not filter out the officers_parent child_group.
+    # For some reason this would cause several specs to fail. 
+    #
+    # For the moment, if you want just the corporations, i.e. without the
+    # officers_parent, please use `Corporation.all`.
+    #
     def find_corporation_groups
-      self.corporations_parent.try(:child_groups) || []
+      find_corporations_parent_group.try(:child_groups) || []
     end
 
     # Find all corporation groups, i.e. the children of `corporations_parent`.
@@ -92,7 +98,7 @@ module GroupMixins::Corporations
     #      |----- other_group_2
     #
     def find_corporations_branch_groups
-      if Group.corporations_parent
+      if Group.find_corporations_parent_group
         return [ Group.corporations_parent ] + Group.corporations_parent.descendant_groups
       end
     end

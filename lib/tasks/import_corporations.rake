@@ -9,8 +9,8 @@ namespace :import do
     'bootstrap:all',
     'corporations:print_header',
     'corporations:import_wingolf_am_hochschulort_groups',
-    'corporations:import_sub_structure_of_wingolf_am_hochschulort_groups',
     'corporations:import_wah_vertagte',
+    'corporations:import_sub_structure_of_wingolf_am_hochschulort_groups',
     'corporations:set_default_nav_attributes',
     'corporations:add_erstbandphilister_parent_groups'
   ]
@@ -30,10 +30,10 @@ namespace :import do
 
     task import_sub_structure_of_wingolf_am_hochschulort_groups: :environment do
       STDOUT.sync = true
-      print "\n" + "Task: Import default substructure for wingolf_am_hochschulort groups. \n".cyan
+      print "\n" + "Task: Import default substructure for Corporation groups. \n".cyan
 
       counter = 0
-      Group.corporations.each do |corporation|
+      Corporation.all.each do |corporation|
         if corporation.child_groups.count == 0
           if corporation.import_default_group_structure "default_group_sub_structures/wingolf_am_hochschulort_children.yml"
             counter += 1
@@ -45,7 +45,7 @@ namespace :import do
           print ".".yellow # nothing to do for this group
         end
       end
-      print "\n" + ( "Added sub structure for " + counter.to_s + " groups.\n" ).green
+      print "\n" + ( "Added sub structure for " + counter.to_s + " Corporations.\n" ).green
     end
 
     # Dieser Task importiert die Gruppenstruktur für Wingolf-am-Hochschulort-Gruppen,
@@ -55,7 +55,7 @@ namespace :import do
     # vereitelt werden können.
     #
     task import_and_update_sub_structure_of_wah_groups: :environment do
-      Group.corporations.each do |corporation|
+      Corporation.all.each do |corporation|
         corporation.import_default_group_structure "default_group_sub_structures/wingolf_am_hochschulort_children.yml"
       end
     end
@@ -66,18 +66,22 @@ namespace :import do
       # make the sub-groups "Philister" and "Ehrenphilister" of the "Philisterschaft" groups
       # be slim in the vertical menu and in the breadcrumb.
       groups_to_slim = Corporation.all.collect do |wah|
-        wah.philisterschaft.child_groups.collect do |child_group|
-          if child_group.name.in? [ "Philister", "Ehrenphilister" ]
-            child_group
-          else
-            []
+        if wah.philisterschaft
+          wah.philisterschaft.child_groups.collect do |child_group|
+            if child_group.name.in? [ "Philister", "Ehrenphilister" ]
+              child_group
+            else
+              []
+            end
           end
         end
       end.flatten
       for group in groups_to_slim
-        group.nav_node.slim_menu = true
-        group.nav_node.slim_breadcrumb = true
-        group.save
+        if group
+          group.nav_node.slim_menu = true
+          group.nav_node.slim_breadcrumb = true
+          group.save
+        end
       end
     end
 
@@ -89,12 +93,11 @@ namespace :import do
       if File.exists? file_name
         counter = 0
         CSV.foreach file_name, headers: true, col_sep: ';' do |row|
-          new_wah_group = Group.create( row.to_hash )
-          new_wah_group.child_groups.create( name: "Philisterschaft" )
-          new_wah_group.parent_groups << Group.corporations_parent
+          new_corporation = Group.create( row.to_hash )
+          new_corporation.parent_groups << Group.corporations_parent
           counter += 1
         end
-        p "Wah Groups created: " + counter.to_s
+        p "Corporations created: " + counter.to_s
       end
     end
 

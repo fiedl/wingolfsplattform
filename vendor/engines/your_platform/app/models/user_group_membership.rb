@@ -9,7 +9,6 @@
 #
 class UserGroupMembership < DagLink
 
-  attr_accessible :created_at, :deleted_at, :archived_at, :created_at_date_formatted
   before_validation :ensure_correct_ancestor_and_descendant_type
   after_commit      :flush_cache
   before_destroy    :flush_cache
@@ -31,8 +30,8 @@ class UserGroupMembership < DagLink
 
   def flush_cache
     Rails.cache.delete([self.user, "my_groups_table"])
-    Rails.cache.delete([self.user, "aktivitaetszahl"])
     Rails.cache.delete([self.user, "last_group_in_first_corporation"])
+    Rails.cache.delete([self.user, "aktivitaetszahl"])  # TODO: Move to wingolfsplattform!
   end
 
   # Creation Class Method
@@ -81,7 +80,6 @@ class UserGroupMembership < DagLink
   #     memberships = UserGroupMembership.find_all_by( user: u, group: g ).now
   #     memberships = UserGroupMembership.find_all_by( user: u, group: g ).in_the_past
   #     memberships = UserGroupMembership.find_all_by( user: u, group: g ).now_and_in_the_past
-  #     memberships = UserGroupMembership.find_all_by( user: u, group: g ).with_deleted  # same as .now_and_in_the_past
   #
   def self.find_all_by( params )
     user = params[ :user ]
@@ -94,7 +92,7 @@ class UserGroupMembership < DagLink
       .where( :ancestor_type => "Group" )
     links = links.where( :descendant_id => user.id ) if user
     links = links.where( :ancestor_id => group.id ) if group
-    links = links.order( :created_at )
+    links = links.order( :valid_from )
     return links
   end
 

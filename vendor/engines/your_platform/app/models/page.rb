@@ -8,6 +8,31 @@ class Page < ActiveRecord::Base
   has_many :attachments, as: :parent, dependent: :destroy
 
   belongs_to :author, :class_name => "User", foreign_key: 'author_user_id'
+  
+  
+  # Quick Assignment of Children
+  # ----------------------------------------------------------------------------------------------------
+
+  # Add a child to this page. This could be a blog entry or another page or even a group.
+  # Example:
+  # 
+  #     my_page << another_page
+  #
+  def <<(child)
+    unless child.in? self.children
+      if child.in? self.descendants
+        link = DagLink.where(
+          ancestor_type: 'Page', ancestor_id: self.id, 
+          descendant_type: child.class.name, descendant_id: child.id
+        ).first
+        link.make_direct
+        link.save
+      else
+        self.child_pages << child if child.kind_of? Page
+        self.child_groups << child if child.kind_of? Group
+      end
+    end
+  end
 
 
   # Redirection
@@ -48,7 +73,7 @@ class Page < ActiveRecord::Base
   # ----------------------------------------------------------------------------------------------------
 
   # This method returns all Page objects that can be regarded as blog entries of self.
-  # Blog entries are simply child pages of self that have the :blog_entry flag. 
+  # Blog entries are simply child pages of self that have the :blog_entry flag.
   # They won't show up in the vertical menu.
   #
   # Page: "My Blog"
@@ -99,7 +124,7 @@ class Page < ActiveRecord::Base
     intranet_root.add_flag :intranet_root
     return intranet_root
   end
-  
+
   def self.intranet_root
     self.find_or_create_intranet_root
   end
@@ -112,7 +137,7 @@ class Page < ActiveRecord::Base
   end
 
   def self.find_or_create_help_page
-    self.find_help_page || self.created_help_page
+    self.find_help_page || self.create_help_page
   end
 
   def self.create_help_page
@@ -121,6 +146,5 @@ class Page < ActiveRecord::Base
     n = help_page.nav_node; n.hidden_menu = true; n.save;
     return help_page
   end
-
 
 end
