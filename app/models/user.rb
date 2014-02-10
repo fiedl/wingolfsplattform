@@ -8,8 +8,8 @@ require_dependency YourPlatform::Engine.root.join( 'app/models/user' ).to_s
 # this re-opened class contains all wingolf-specific additions to the user model.
 #
 class User
-
   attr_accessible :wingolfsblaetter_abo, :hidden
+
 
   # This method returns a kind of label for the user, e.g. for menu items representing the user.
   # Use this rather than the name attribute itself, since the title method is likely to be overridden
@@ -25,7 +25,9 @@ class User
   # This method returns the bv (Bezirksverband) the user is associated with.
   #
   def bv
-    (Bv.all & self.groups).try(:first).try(:becomes, Bv)
+    if Bv.all & self.groups
+      (Bv.all & self.groups).try(:first).try(:becomes, Bv)
+    end
   end
   
   def bv_membership
@@ -152,7 +154,7 @@ class User
     self.member_of? wbl_abo_group
   end
   def wingolfsblaetter_abo=(new_abo_status)
-    if new_abo_status == true || new_abo_status == "true"
+    if new_abo_status == true || new_abo_status == "true" || new_abo_status == ""
       wbl_abo_group.assign_user self
     else
       wbl_abo_group.unassign_user self
@@ -176,6 +178,18 @@ class User
       UserGroupMembership.find_by_user_and_group(self, Group.everyone.main_admins_parent).try(:destroy)
       UserGroupMembership.find_by_user_and_group(self, Group.everyone.admins_parent).try(:destroy)
     end
+  end
+
+  # Admin for this user
+  # =====================================================================================
+  # Admin for this user are all admins of any ancestor group of this user
+
+  def admins
+    self.ancestor_groups.collect { |ancestor| ancestor.find_admins }.flatten
+  end
+
+  def cached_admins
+    Rails.cache.fetch([self, "admins"]) { admins }
   end
 
 end
