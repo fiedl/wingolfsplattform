@@ -21,7 +21,7 @@ GIT
       treetop (~> 1.4.8)
 
 GIT
-  remote: git@github.com:fiedl/acts-as-dag.git
+  remote: https://github.com/fiedl/acts-as-dag.git
   revision: 1c0da02b6ac90f0d677972f564078a2f37eae8a8
   specs:
     acts-as-dag (3.0.0)
