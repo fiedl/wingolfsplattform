@@ -20,6 +20,14 @@ GIT
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
 
+GIT
+  remote: git@github.com:fiedl/acts-as-dag.git
+  revision: 1c0da02b6ac90f0d677972f564078a2f37eae8a8
+  specs:
+    acts-as-dag (3.0.0)
+      activemodel
+      activerecord
+
 PATH
   remote: vendor/engines/your_platform
   specs:
@@ -86,9 +94,6 @@ GEM
     activesupport (3.2.16)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
-    acts-as-dag (3.0.0)
-      activemodel
-      activerecord
     acts_as_tree (1.5.0)
       activerecord (>= 3.0.0)
     addressable (2.3.5)
@@ -426,6 +431,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  acts-as-dag!
   angularjs-rails
   better_errors
   binding_of_caller

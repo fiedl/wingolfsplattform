@@ -62,6 +62,7 @@ gem 'jquery-ui-rails'							# dual: MIT License, GPL2 License
 #gem 'acts-as-dag', path: '../acts-as-dag'
 #gem 'acts-as-dag', git: "git://github.com/resgraph/acts-as-dag.git"	# MIT License
 #gem 'acts-as-dag', '>= 2.5.7'  # now in your_platform
+gem 'acts-as-dag', git: 'git@github.com:fiedl/acts-as-dag.git'
 
 # Formtastic Form Helper,
 # see: https://github.com/justinfrench/formtastic,
