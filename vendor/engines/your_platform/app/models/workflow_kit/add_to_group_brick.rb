@@ -15,7 +15,10 @@ module WorkflowKit
       user = User.find( params[ :user_id ] )  
       group = Group.find( params[ :group_id ] )
 
-      UserGroupMembership.create( user: user, group: group )
+      membership = UserGroupMembership.find_by( user: user, group: group )
+      membership ||= UserGroupMembership.create( user: user, group: group )
+
+      membership.try( :make_valid )
     end
   end
 end

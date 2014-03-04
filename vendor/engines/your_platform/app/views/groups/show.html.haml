@@ -29,9 +29,9 @@
 
     %span#group_members
 
-      / child users
+      / members
       = will_paginate @members if @members
-      %ul.child_users
+      %ul.members
         - if @members.count > 0
           - for user in @members do
             = render partial: 'user_group_memberships/list_item', locals: {user: user, group: @group} if can? :read, user

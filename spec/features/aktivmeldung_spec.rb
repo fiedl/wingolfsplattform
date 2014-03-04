@@ -28,6 +28,7 @@ feature "Aktivmeldung" do
     check I18n.t(:create_account)
 
     page.find("input[name='commit']").click
+    wait_for_ajax
 
     page.should have_content "Bundesbruder Kanne"
     page.should have_content I18n.t(:date_of_birth)

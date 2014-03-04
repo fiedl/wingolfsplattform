@@ -17,9 +17,9 @@ module WorkflowKit
       membership = UserGroupMembership.find_by( user: user, group: group )
       if membership
         if membership.direct?
-          membership.invalidate
+          membership.invalidate(Time.zone.now-1.second)
         else
-          membership.direct_memberships.each { |m| m.invalidate } 
+          membership.direct_memberships.each { |m| m.invalidate(Time.zone.now-1.second) }
         end
       end
     end

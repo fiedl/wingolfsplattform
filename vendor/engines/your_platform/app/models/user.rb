@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 
   validates_presence_of     :first_name, :last_name
   validates_uniqueness_of   :alias, :if => Proc.new { |user| ! user.alias.blank? }
-  validates_format_of       :email, :with => /\A[a-z0-9_.-]+@[a-z0-9.-]+\.[a-z.]+\z/i, :if => Proc.new { |user| user.email.present? }
+  validates_format_of       :email, :with => /\A([-a-z0-9!\#$%&'*+\/=?^_`{|}~]+\.)*[-a-z0-9!\#$%&'*+\/=?^_`{|}~]+@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :if => Proc.new { |user| user.email.present? }               
 
   has_profile_fields        profile_sections: [:contact_information, :about_myself, :study_information, :career_information,
      :organizations, :bank_account_information]
@@ -30,7 +30,6 @@ class User < ActiveRecord::Base
   after_save                :save_date_of_birth_profile_field
 
   has_one                   :account, class_name: "UserAccount", autosave: true, inverse_of: :user, dependent: :destroy
-  validates_associated      :account
 
   delegate                  :send_welcome_email, :to => :account
 
@@ -45,9 +44,19 @@ class User < ActiveRecord::Base
   is_navable
 
   before_save               :generate_alias_if_necessary, :capitalize_name
-  before_save               :build_account_if_requested
-  after_save                :add_to_group_if_requested
   
+  # Save
+  # ==========================================================================================
+  # Instead of after_save callbacks, I override the save method to do additional stuff at
+  # save time. The reason is that in these additional further ActiveRecord are created and 
+  # saved, thus resulting in callbacks within callbacks with unpredictional result.
+  alias_method :orig_save, :save
+  def save
+    result = self.orig_save
+    self.build_account_if_requested
+    self.add_to_group_if_requested
+    return result
+  end   
   
   # Mixins
   # ==========================================================================================
@@ -267,35 +276,24 @@ class User < ActiveRecord::Base
       self.account.destroy if self.has_account?
       self.account = self.build_account
       self.create_account = false # to make sure that this code is nut run twice.
+      self.account.save
       return self.account
     end
-
   end
-  private :build_account_if_requested
 
 
   # Groups
   # ------------------------------------------------------------------------------------------
 
   def add_to_group_if_requested
-    if self.add_to_group
+    unless self.add_to_group.blank?
       group = add_to_group if add_to_group.kind_of? Group
-      group = Group.find( add_to_group ) if add_to_group.to_i unless group
+      group ||= Group.find( add_to_group ) if add_to_group.kind_of? String
+      group ||= Group.find( add_to_group ) if add_to_group.kind_of? Fixnum
+      add_to_group = nil
       UserGroupMembership.create( user: self, group: group ) if group
     end
-    unless self.add_to_corporation.blank?
-      corporation = add_to_corporation if add_to_corporation.kind_of? Group
-      corporation ||= Group.find( add_to_corporation ) if add_to_corporation.to_i
-      if corporation
-        #
-        # TODO: Move to wingolfsplattform. THIS IS WINGOLF SPECIFIC!!
-        #
-        hospitanten_group = corporation.descendant_groups.where(name: "Hospitanten").first
-        hospitanten_group.assign_user self
-      end
-    end
   end
-  private :add_to_group_if_requested
 
 
   # Corporations

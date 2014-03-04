@@ -137,17 +137,6 @@ describe Group do
       end
     end
 
-    describe "#child_users" do
-      describe "for usual groups" do
-        before { @user.parent_groups << @group }
-        subject { @group.child_users }
-
-        it "should return all child users" do
-          subject.should include( @user )
-        end
-      end
-    end
-
   end
 
 
@@ -237,12 +226,18 @@ describe Group do
     describe "(user)" do
       before do
         @user = create(:user)
+        @user.save!
         @object_to_add = @user
       end
-      it "should add the user as a child user" do
-        @group.child_users.should_not include @user
+      it "should add the user as a group's user" do
+        @group.members.should be_empty
+        @user.groups.should be_empty
         subject
-        @group.child_users.should include @user
+        @user.groups.should include @group
+        @user.parent_groups.should include @group
+        @group.members.should include @user
+        @group.memberships.first.should eq( @user.memberships.first )
+        @group.direct_memberships.first.should eq( @user.direct_memberships.first )
       end
     end
     

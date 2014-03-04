@@ -341,6 +341,7 @@ describe StatusGroupMembership do
       it "should not remove the first status group from the user's status groups" do
         status_groups_of_user_and_corporation.should include first_status_group_membership
         subject
+        sleep 2
         status_groups_of_user_and_corporation.should include first_status_group_membership
       end
     end

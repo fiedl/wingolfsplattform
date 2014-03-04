@@ -400,9 +400,9 @@ describe StructureableMixins::HasSpecialGroups do
       context "for an existing special group" do
         before { @my_structureable.create_testers_parent_group }
         it "should add the user" do
-          @my_structureable.find_testers_parent_group.child_users.should == []
+          @my_structureable.find_testers_parent_group.members.should == []
           subject
-          @my_structureable.find_testers_parent_group.child_users.should == [ @tester_user ]
+          @my_structureable.find_testers_parent_group.members.should == [ @tester_user ]
         end
       end
       context "for a non-existing special group" do
@@ -414,7 +414,7 @@ describe StructureableMixins::HasSpecialGroups do
         it "should add the user" do
           @my_structureable.find_testers_parent_group.should == nil
           subject
-          @my_structureable.find_testers_parent_group.child_users.should == [ @tester_user ]
+          @my_structureable.find_testers_parent_group.members.should == [ @tester_user ]
         end
       end
     end

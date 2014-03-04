@@ -79,7 +79,7 @@ describe StructureableMixins::Roles do
     context "if admin users exist" do
       before do 
         @admin_user = create( :user )
-        @my_structureable.admins_parent.child_users << @admin_user
+        @my_structureable.admins_parent << @admin_user
       end
       it "should return an array of admin users" do
         subject.should == [ @admin_user ]
@@ -101,7 +101,7 @@ describe StructureableMixins::Roles do
     context "if admin users exist" do
       before do 
         @admin_user = create( :user )
-        @my_structureable.admins_parent.child_users << @admin_user
+        @my_structureable.admins_parent << @admin_user
       end
       it "should return an array of admin users" do
         subject.should == [ @admin_user ]
@@ -126,7 +126,7 @@ describe StructureableMixins::Roles do
       end
       it "should add the user to the group, not only the array" do
         subject
-        @my_structureable.admins_parent.child_users.should include @admin_user
+        @my_structureable.admins_parent.direct_members.should include @admin_user
       end
     end
     context "for the admin group not existing" do
@@ -425,7 +425,7 @@ describe StructureableMixins::Roles do
     end
     specify "users of this group should also be members of the admins_parent_group" do
       @user = create( :user )
-      @my_structureable.main_admins_parent.child_users << @user 
+      @my_structureable.main_admins_parent << @user 
       @user.ancestor_groups.should include( @my_structureable.admins_parent, 
                                             @my_structureable.main_admins_parent )
     end
@@ -442,7 +442,7 @@ describe StructureableMixins::Roles do
       end
       it "should list main_admins added directly to the dag" do
         @my_structureable.main_admins_parent.should be_kind_of Group
-        @my_structureable.main_admins_parent.child_users << @admin_user
+        @my_structureable.main_admins_parent << @admin_user
         subject.should include @admin_user
       end
       it "should list main_admins added by 'main_admins << user'" do
@@ -569,8 +569,8 @@ describe StructureableMixins::Roles do
       @subgroup_officers_parent = @container_subgroup.create_officers_parent_group
       @officer1 = create( :group ); @officer1.parent_groups << @officers_parent
       @officer2 = create( :group ); @officer2.parent_groups << @subgroup_officers_parent
-      @officer1_user = create( :user ); @officer1.child_users << @officer1_user
-      @officer2_user = create( :user ); @officer2.child_users << @officer2_user
+      @officer1_user = create( :user ); @officer1.direct_members << @officer1_user
+      @officer2_user = create( :user ); @officer2.direct_members << @officer2_user
       @container_group.reload
       @container_subgroup.reload
       @officers_parent.reload

@@ -116,32 +116,32 @@ describe User do
       subject.should_not == "H08 E06"
     end
   end
-  
+
   describe "#wingolfit?", :focus do
-    before { @user = create(:user) }
-    subject { @user.wingolfit? }
+    before { @user2 = create( :user ) }
+    subject { @user2.wingolfit? }
     describe "for freshly created user" do
       it { should == false }
     end
     describe "for a user that has just an account" do
-      before { @user = create(:user_with_account) }
+      before { @user2 = create(:user_with_account) }
       it { should == false }
     end
     describe "for a member of a Corporation status group (except guests)" do
       before do
         @corporation = create(:corporation_with_status_groups)
-        @membership = @corporation.status_groups.first.assign_user @user
+        @membership = @corporation.status_groups.first << @user2
       end
-      it { should == true}
+      it { should == true }
       describe "when the member has died" do
-        before { @user.set_date_of_death_if_unset "01.01.2006" }
+        before { @user2.set_date_of_death_if_unset "01.01.2006" }
         it { should == true }
       end
       describe "when the user terminated his membership" do
         before do
           @former_members = @corporation.child_groups.create
           @former_members.add_flag :former_members_parent
-          @membership.promote_to @former_members, at: 2.minutes.ago
+          @user2.memberships.last.promote_to @former_members, at: 2.minutes.ago
         end
         it { should == false }
       end
@@ -149,11 +149,11 @@ describe User do
     describe "for a guest of a corporation" do
       before do
         @corporation = create(:corporation_with_status_groups)
-        @corporation.find_or_create_guests_parent_group.assign_user @user
+        @corporation.find_or_create_guests_parent_group << @user2
       end
       it { should == false }
       describe "when the guest has died" do
-        before { @user.set_date_of_death_if_unset "01.01.2006" }
+        before { @user2.set_date_of_death_if_unset "01.01.2006" }
         it { should == false }
       end
     end

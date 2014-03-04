@@ -36,6 +36,24 @@ class User
     bv_membership.valid_from if bv
   end
     
+  # Groups
+  # ------------------------------------------------------------------------------------------
+  # Override the add_to_group_if_requested method in order to add to Hospitanten
+  #
+  alias_method :orig_add_to_group_if_requested, :add_to_group_if_requested
+  def add_to_group_if_requested
+    self.orig_add_to_group_if_requested
+    unless self.add_to_corporation.blank?
+      corporation = add_to_corporation if add_to_corporation.kind_of? Group
+      corporation ||= Group.find( add_to_corporation ) if add_to_corporation.to_i
+      add_to_corporation = nil
+      if corporation
+        hospitanten_group = corporation.descendant_groups.where(name: "Hospitanten").first
+        hospitanten_group.assign_user self
+      end
+    end
+  end
+
 
   # This method returns the aktivitaetszahl of the user, e.g. "E10 H12".
   #

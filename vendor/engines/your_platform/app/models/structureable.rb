@@ -8,7 +8,7 @@
 #     @page1.parent_pages << @page2
 #     @page1.parents # => [ @page2, ... ]
 #     
-#     @group.child_users << @user
+#     @group.direct_members << @user
 #     @group.children # => [ @user, ... ]
 #     @user.parents # => [ @group, ... ]
 # 

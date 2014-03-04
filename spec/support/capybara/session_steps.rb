@@ -12,7 +12,6 @@ module SessionSteps
     user = create(:admin) if parameter == :admin
     user = create(:user_with_account) if parameter == :user
     user ||= create(:user_with_account)
-
     password = user.account.password
     login_string = user.alias
 

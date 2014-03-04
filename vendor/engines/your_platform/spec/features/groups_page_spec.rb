@@ -25,7 +25,7 @@ feature "Groups Page" do
       within('.box.section.members') do
         click_on I18n.t(:add)
 
-        page.should have_selector '#group_members ul.child_users li', count: 1
+        page.should have_selector '#group_members ul.members li', count: 1
         page.should have_text @user.title
         find('.user-select-input').value.should == ""
       end
@@ -65,7 +65,7 @@ feature "Groups Page" do
 
     scenario 'should not render list entries for hidden or dead members' do
       visit group_path(@group)
-      page.should have_selector '#group_members ul.child_users li', count: 10
+      page.should have_selector '#group_members ul.members li', count: 10
       page.should have_no_text 'Hidden'
       page.should have_no_text 'Dead'
     end

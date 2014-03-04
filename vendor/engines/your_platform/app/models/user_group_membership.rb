@@ -10,8 +10,8 @@
 class UserGroupMembership < DagLink
 
   before_validation :ensure_correct_ancestor_and_descendant_type
-  after_commit      :flush_cache_ugm
-  before_destroy    :flush_cache_ugm
+  after_commit      :flush_cache_membership
+  before_destroy    :flush_cache_membership
 
   # Validity Range
   # ====================================================================================================
@@ -42,43 +42,51 @@ class UserGroupMembership < DagLink
     I18n.translate( :membership_of_user_in_group, user_name: self.user.title, group_name: self.group.name )
   end
 
-  # Override the flush_cache_ugm method in order to delete specific cache
-  #
-  def flush_cache_ugm
-    Rails.cache.delete([self.user, "my_groups_table"])
-    Rails.cache.delete([self.user, "corporate_vita_for_user"])
-    Rails.cache.delete([self.user, "last_group_in_first_corporation"])
+  def flush_cache_membership
+    Rails.cache.delete([self.user, 'my_groups_table'])
+    Rails.cache.delete([self.user, 'corporate_vita_for_user'])
+    Rails.cache.delete([self.user, 'group_in_first_corporation'])
   end
 
   # Creation Class Method
   # ====================================================================================================
 
   # Create a membership of the `u` in the group `g`.
-  #
+  # The same user can be multiple in the same group, but only with different validity ranges.
   #    membership = UserGroupMembership.create( user: u, group: g )
   #
   def self.create( params )
-    if UserGroupMembership.find_by( params ).present?
-      raise 'Membership already exists: id = ' + UserGroupMembership.find_by( params ).id.to_s
+    if UserGroupMembership.find_all_by( params ).any?
+      raise 'Valid membership already exists: id = ' + UserGroupMembership.find_all_by( params ).id.to_s
     else
       user = params[:user]
       user ||= User.find params[:user_id] if params[:user_id]
       user ||= User.find_by_title params[:user_title] if params[:user_title]
-      raise "Could not create UserGroupMembership without user." unless user
+      raise 'Could not create UserGroupMembership without user.' unless user
       
       group = params[ :group ]
       group ||= Group.find params[:group_id] if params[:group_id]
-      raise "Could not create UserGroupMembership without group." unless group
-      
+      raise 'Could not create UserGroupMembership without group.' unless group
+
+      old_memberships = UserGroupMembership
+        .unscoped
+        .where( :descendant_type => 'User' )
+        .where( :descendant_id => user.id )
+        .where( :ancestor_type => 'Group' )
+        .where( :ancestor_id => group.id )
       new_membership = DagLink
-        .create(ancestor_id: group.id, ancestor_type: 'Group', descendant_id: user.id, descendant_type: 'User')
-        .becomes(UserGroupMembership)
+        .create( ancestor_id: group.id, ancestor_type: 'Group', descendant_id: user.id, descendant_type: 'User' )
         
       # This needs to be called manually, since DagLink won't call the proper callback.
       #
-      new_membership.set_valid_from_to_now(true)
-      new_membership.save
-      
+      new_membership = new_membership.becomes( UserGroupMembership )
+      new_membership.set_valid_from_to_now( true )
+      new_membership.save if new_membership.changed?
+      unless new_membership.invalid?
+        raise 'Creation of new membership failed ' + user.name + ' in ' + group.name + ' ' + params.to_s + ' ' + old_memberships.to_s + ' ' + new_memberships.to_s + ' ' + new_membership.errors.to_xml
+        new_membership = nil
+      end
+
       return new_membership
     end
   end
@@ -90,10 +98,11 @@ class UserGroupMembership < DagLink
   # Find all memberships that match the given parameters.
   # This method returns an ActiveRecord::Relation object, which means that the result can
   # be chained with scope methods.
+  # If no validity is given, only the currently valid ones are returned.
   #
   #     memberships = UserGroupMembership.find_all_by( user: u )
   #     memberships = UserGroupMembership.find_all_by( group: g )
-  #     memberships = UserGroupMembership.find_all_by( user: u, group: g ).now
+  #     memberships = UserGroupMembership.find_all_by( user: u, group: g )
   #     memberships = UserGroupMembership.find_all_by( user: u, group: g ).in_the_past
   #     memberships = UserGroupMembership.find_all_by( user: u, group: g ).now_and_in_the_past
   #
@@ -104,8 +113,8 @@ class UserGroupMembership < DagLink
     group = params[ :group ]
     group ||= Group.find params[:group_id] if params[:group_id]
     links = UserGroupMembership
-      .where( :descendant_type => "User" )
-      .where( :ancestor_type => "Group" )
+      .where( :descendant_type => 'User' )
+      .where( :ancestor_type => 'Group' )
     links = links.where( :descendant_id => user.id ) if user
     links = links.where( :ancestor_id => group.id ) if group
     links = links.order( :valid_from )
@@ -220,7 +229,7 @@ class UserGroupMembership < DagLink
   #     |---- group3       |
   #             |------------- user
   # 
-  # Here, group2 and grou3 are children of group1. user is member of group2 and group3.
+  # Here, group2 and group3 are children of group1. user is member of group2 and group3.
   # Hence, the indirect membership of user and group1 will include both direct memberships.
   #
   def direct_memberships(options = {})

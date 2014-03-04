@@ -422,40 +422,40 @@ describe User do
   end
 
   describe "#create_account attribute" do
-    describe "#create_account == true" do
-      it "should cause the user to be created with account" do
-        create( :user, create_account: true ).account.should_not be_nil
-      end
+    it "#create_account == true" do
+      @user2 = create( :user, :create_account => true ) 
+      @user2.save
+      expect(@user2.account).to be
     end
-    describe "#create_account == false" do
-      it "should cause the user to be created without account" do
-        create( :user, create_account: false ).account.should be_nil
-      end
+    it "#create_account == 1" do
+      @user2 = create( :user, :create_account => 1 ) 
+      @user2.save
+      expect(@user2.account).to be
     end
-    describe "#create_account == 0" do
-      it "should cause the user to be created without account" do
-        create( :user, create_account: 0 ).account.should be_nil
-      end
+    it "#create_account == '1'" do
+      @user2 = create( :user, :create_account => "1" ) 
+      @user2.save
+      expect(@user2.account).to be
     end
-    describe "#create_account == 1" do
-      it "should cause the user to be created with account" do
-        create( :user, create_account: 1 ).account.should_not be_nil
-      end
+    it "#create_account == false" do
+      @user2 = create( :user, :create_account => false ) 
+      @user2.save
+      expect(@user2.account).to be_nil
     end
-    describe "#create_account == '0'" do # for HTML forms
-      it "should cause the user to be created without account" do
-        create( :user, create_account: "0" ).account.should be_nil
-      end
+    it "#create_account == 0" do
+      @user2 = create( :user, :create_account => 0 ) 
+      @user2.save
+      expect(@user2.account).to be_nil
     end
-    describe "#create_account == '1'" do # for HTML forms
-      it "should cause the user to be created with account" do
-        create( :user, create_account: "1" ).account.should_not be_nil
-      end
+    it "#create_account == '0'" do
+      @user2 = create( :user, :create_account => '0' ) 
+      @user2.save
+      expect(@user2.account).to be_nil
     end
-    describe "#create_account == ''" do
-      it "should cause the user to be created without account" do
-        create( :user, create_account: "" ).account.should be_nil
-      end
+    it "#create_account == ''" do
+      @user2 = create( :user, :create_account => '' ) 
+      @user2.save
+      expect(@user2.account).to be_nil
     end
   end
 
@@ -489,19 +489,31 @@ describe User do
       @group = create( :group )
     end
     describe "#add_to_group == nil" do
-      subject { create( :user, :add_to_group => nil ) }
+      subject do
+        @user2 = create( :user, :add_to_group => nil ) 
+        @user2.save
+        @user2
+      end
       it "should not add the user to a group during creation" do
         subject.parent_groups.should_not include( @group )
       end
     end
     describe "#add_to_group == some_group" do
-      subject { create( :user, :add_to_group => @group ) }
+      subject do
+        @user2 = create( :user, :add_to_group => @group ) 
+        @user2.save
+        @user2
+      end
       it "should add the user to the group during creation" do
         subject.parent_groups.should include( @group )
       end
     end
     describe "#add_to_group == some_group_id" do
-      subject { create( :user, :add_to_group => @group.id ) }
+      subject do
+        @user2 = create( :user, :add_to_group => @group.id ) 
+        @user2.save
+        @user2
+      end
       it "should add the user to the group during creation" do
         subject.parent_groups.should include( @group )
       end
@@ -652,7 +664,7 @@ describe User do
   describe "#memberships" do
     before do
       @group = create( :group )
-      @group.child_users << @user
+      @group << @user
       @membership = UserGroupMembership.find_by( user: @user, group: @group )
     end
     subject { @user.memberships }
@@ -735,7 +747,7 @@ describe User do
         @group_a = create( :group )
         @event_0 = @group_a.child_events.create( start_at: 5.hours.from_now )
         @group_b = @group_a.child_groups.create
-        @group_b.child_users << @user
+        @group_b << @user
         @event_1 = @group_b.child_events.create( start_at: 5.hours.from_now )
         @group_c = @group_a.child_groups.create
         @event_2 = @group_c.child_events.create( start_at: 5.hours.from_now )
@@ -790,7 +802,7 @@ describe User do
     context "for the user being a member of the object" do
       before do
         @group = create( :group )
-        @group.child_users << @user
+        @group << @user
         @object.child_groups << @group 
       end
       it { should == :member }
@@ -822,7 +834,7 @@ describe User do
 
   describe "#member_of?" do
     before do
-      @group = create( :group ); @group.child_users << @user 
+      @group = create( :group ); @group << @user 
       @page = create( :page )
     end
     context "for the user being a descendant of the object" do
@@ -875,7 +887,7 @@ describe User do
     before do 
       @group = create( :group, name: "Directly Administrated Group" )
       @group.find_or_create_admins_parent_group
-      @group.admins_parent.child_users << @user
+      @group.admins_parent << @user
     end
     subject { @user.admin_of }
     it { should == @user.administrated_objects }
@@ -890,7 +902,7 @@ describe User do
     context "for the user being admin" do
       before do
         @group.find_or_create_admins_parent_group
-        @group.admins_parent.child_users << @user  # the @user is direct admin of @group
+        @group.admins_parent << @user  # the @user is direct admin of @group
       end
       context "for directly administrated objects" do
         subject { @user.admin_of? @group }
@@ -908,7 +920,7 @@ describe User do
     context "for the user being main admin" do
       before do
         @group.create_main_admins_parent_group
-        @group.main_admins_parent.child_users << @user
+        @group.main_admins_parent << @user
       end
       subject { @user.admin_of? @group }
       it { should == true }
@@ -928,7 +940,7 @@ describe User do
     subject { @user.directly_administrated_objects }
     it { should be_kind_of Array }
     context "for the user being admin of objects" do
-      before { @group.admins_parent.child_users << @user }
+      before { @group.admins_parent << @user }
       it "should list the objects the user is directly admin of" do
         subject.should include @group
       end
@@ -943,10 +955,10 @@ describe User do
     subject { @user.administrated_objects }
     it { should be_kind_of Array }
     context "for the user being admin of an object" do
-      before { @group.admins_parent.child_users << @user }
+      before { @group.admins_parent << @user }
       it "should list all objects administrated by the user" do
         @group.admins_parent.should be_kind_of Group
-        @group.admins_parent.child_users.should include @user
+        @group.admins_parent.direct_members.should include @user
         subject.should include @group
       end
     end
@@ -954,7 +966,7 @@ describe User do
       before do
         @sub_group = create( :group, name: "Indirectly Administrated Group" )
         @sub_group.parent_groups << @group
-        @group.admins_parent.child_users << @user
+        @group.admins_parent << @user
       end
       it "should list directly and indirectly administrated objects" do
         subject.should include( @group, @sub_group )
@@ -1011,7 +1023,7 @@ describe User do
       context "for the user being just a regular member of the object" do
         before do
           @group = create( :group )
-          @group.child_users << @user
+          @group << @user
           @page.child_groups << @group
         end
         it "should be false" do

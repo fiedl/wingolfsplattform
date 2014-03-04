@@ -128,7 +128,7 @@ module UserGroupMembershipMixins::ValidityRangeForIndirectMemberships
       end
     end
   end
-  private :recalculate_indirect_validity_ranges_if_needed
+
   
   
 

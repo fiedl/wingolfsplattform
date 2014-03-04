@@ -66,6 +66,20 @@ module UserGroupMembershipMixins::ValidityRange
   def make_invalid(time = Time.zone.now)
     time = time[:at] if time.kind_of?(Hash) && time[:at]
     self.update_attribute(:valid_to, time)
+    self.save
+    return self
+  end
+
+  # This method rebegins the membership, i.e. sets the end of the validity range
+  # to undefined.
+  #
+  # The following examples are equivalent (despite the return value):
+  #
+  #     membership.make_valid                                    #  => membership
+  #
+  def make_valid()
+    self.update_attribute(:valid_to, nil)
+    self.save    
     return self
   end
   

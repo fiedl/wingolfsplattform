@@ -18,7 +18,7 @@ describe GroupMixins::Corporations do
       @corporation_group_of_user.parent_groups << @corporations_parent_group
       @subgroup = create( :group ); @subgroup.parent_groups << @corporation_group_of_user
       @user = create( :user ); @user.parent_groups << @subgroup
-      @non_corporations_branch_group = create( :group ); @non_corporations_branch_group.child_users << @user
+      @non_corporations_branch_group = create( :group ); @non_corporations_branch_group.direct_members << @user
     end
 
     describe ".create_corporations_parent_group" do

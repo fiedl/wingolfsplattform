@@ -123,7 +123,7 @@ class Group < ActiveRecord::Base
   
   def <<(object)
     if object.kind_of? User
-      self.child_users << object unless self.child_users.include? object
+      UserGroupMembership.create( {:user=>object, :group=>self} ) unless self.direct_members.include? object
     end
     if object.kind_of? Group
       self.child_groups << object unless self.child_groups.include? object

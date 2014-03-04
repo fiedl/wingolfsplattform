@@ -62,6 +62,9 @@ FactoryGirl.define do
     #
     factory :user_with_account do
       create_account true
+      after :create do |user|
+        user.save
+      end
     end
 
     # global administrator
@@ -72,6 +75,7 @@ FactoryGirl.define do
       create_account true
       
       after :create do |admin|
+        admin.save
         Group.find_everyone_group.admins << admin
       end
     end

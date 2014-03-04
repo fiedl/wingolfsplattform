@@ -67,7 +67,7 @@ feature 'User page', js: false do
           page.should have_selector('a.add_button', visible: true)
 
           click_on I18n.t(:add)
-          wait_for_ajax
+          wait_for_ajax; wait_for_ajax
 
           page.should have_selector('.profile_field')
           within first '.profile_field' do
@@ -115,6 +115,7 @@ feature 'User page', js: false do
         within('.box.section.access') do
 
           click_on I18n.t(:edit)
+          wait_for_ajax; wait_for_ajax
           page.should have_button(I18n.t(:delete_account) )
 
           expect { click_on I18n.t(:delete_account) }.to change(UserAccount, :count).by -1

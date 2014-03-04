@@ -187,8 +187,8 @@ describe Post do
   #         @message = self.send(message_type)
   #         # the email used is sent to test-group@exmaple.com
   #         @group = create(:group, name: "Test Group")
-  #         @group.child_users << create(:user) << create(:user)
-  #         @users = @group.child_users
+  #         @group.direct_members << create(:user) << create(:user)
+  #         @users = @group.direct_members
   #         @post = Post.create_from_message(@message)
   #       end
   # 
