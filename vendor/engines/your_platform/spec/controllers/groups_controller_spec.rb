@@ -67,16 +67,16 @@ describe GroupsController do
         assigns(:members).should_not be_empty
       end
 
-      it 'assigns hidden members to @members' do
+      it 'assigns no hidden members to @members' do
         group = create(:group, :with_hidden_member)
         get :show, id: group
-        assigns(:members).should_not be_empty
+        assigns(:members).should be_empty
       end
 
-      it 'assigns dead members to @members' do
+      it 'assigns no dead members to @members', focus: true do
         group = create(:group, :with_dead_member)
         get :show, id: group
-        assigns(:members).should_not be_empty
+        assigns(:members).should be_empty
       end
 
       it 'assigns addresses of members of the requested group to @large_map_address_fields' do

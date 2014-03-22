@@ -53,7 +53,7 @@ class Ability
       else
 
         # Users that are no admins can read all and edit their own profile.
-        can :read, :all
+        #can :read, :all
         can :download, :all
         can :crud, User, :id => user.id
 
@@ -78,8 +78,10 @@ class Ability
         end
 
         # Normal users cannot see hidden users, except for self.
-        cannot :read, User do |user_to_show|
-          (user_to_show.hidden?  || !user_to_show.alive?) && (user != user_to_show)
+        can :read, User, User.alive? do |user_to_show|
+          #puts "blubb"
+          #!((user_to_show.hidden?  || !user_to_show.alive?) && (user != user_to_show))
+          user_to_show.alive?
         end
 
         # Normal users cannot see the former_members_parent groups
