@@ -201,3 +201,7 @@ gem 'tilt', '~> 1.4.1'
 
 # Maintenance Mode
 gem 'turnout'
+
+# Profiling
+gem 'perftools.rb', :git => 'git://github.com/tmm1/perftools.rb.git' # http://www.ruby-lang.org/en/LICENSE.txt (?)
+gem 'rack-perftools_profiler', :require => 'rack/perftools_profiler' # MIT License

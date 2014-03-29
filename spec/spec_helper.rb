@@ -88,6 +88,7 @@ Spork.prefork do
   require 'nokogiri'
   require 'capybara/poltergeist'
   require 'rspec/expectations'
+  require 'perftools'
 
 
   # Required Support Files (that help you testing)
@@ -204,6 +205,7 @@ Spork.prefork do
 
     config.before(:suite) do
       DatabaseCleaner.clean
+      PerfTools::CpuProfiler.start('/tmp/rspec_profile')
     end
 
     config.before(:each) do
@@ -235,6 +237,7 @@ Spork.prefork do
 
     config.after(:suite) do
       DatabaseCleaner.clean
+      PerfTools::CpuProfiler.stop
     end
 
    
