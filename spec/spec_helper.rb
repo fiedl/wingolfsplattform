@@ -236,8 +236,8 @@ Spork.prefork do
     end
 
     config.after(:suite) do
-      DatabaseCleaner.clean
       PerfTools::CpuProfiler.stop
+      DatabaseCleaner.clean
     end
 
    
