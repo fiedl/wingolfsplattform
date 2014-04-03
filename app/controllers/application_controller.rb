@@ -48,7 +48,10 @@ class ApplicationController
     options = {}
     options[:preview_as_user] = true if params[:preview_as] == 'user'
 
-    @current_ability ||= ::Ability.new(current_user, options)
+    Rack::MiniProfiler.step('Get current ability') {
+        @current_ability ||= ::Ability.new(current_user, options)
+    }
+    return @current_ability
   end
   
 end

@@ -105,10 +105,12 @@ class ApplicationController < ActionController::Base
   #   bundle exec foreman start fnordmetric
   #
   def log_generic_metric_event
-    type = "#{self.class.name.underscore}_#{action_name}"  # e.g. pages_controller_show
-    metric_logger.log_event( { id: params[:id] }, type: type)
-    metric_logger.log_event( { request_type: type }, type: :generic_request)
-    metric_logger.log_cpu_usage
+    Rack::MiniProfiler.step('log generic metric event'){
+      type = "#{self.class.name.underscore}_#{action_name}"  # e.g. pages_controller_show
+      metric_logger.log_event( { id: params[:id] }, type: type)
+      metric_logger.log_event( { request_type: type }, type: :generic_request)
+      metric_logger.log_cpu_usage unless params[:pp].present? #flamegraph does not play nice with log_cpu_usage
+    }
   end
   def metric_logger
     @metric_logger ||= MetricLogger.new(current_user: current_user, session_id: session[:session_id])

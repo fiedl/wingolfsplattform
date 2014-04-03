@@ -96,6 +96,7 @@ Gem::Specification.new do |s|
   # Metrics
   s.add_dependency 'fnordmetric'                                                       # MIT License
   s.add_dependency 'rack-mini-profiler', '>= 0.9.0.pre'                                # MIT License
+  s.add_dependency 'flamegraph'
 
   # Development Dependencies 
   # --------------------------------------------------------------------------------
