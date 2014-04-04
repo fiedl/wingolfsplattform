@@ -63,10 +63,15 @@ class MetricLogger
   #
   # We use the user's unique id as session id, since 
   def register_session
+    avatar = nil
+    Rack::MiniProfiler.step('get avatar') { avatar = ApplicationController.helpers.user_avatar_url(current_user)}
+
+      Rack::MiniProfiler.step('register session') do
     if current_user
-      log_event({ name: current_user.title }, type: "_set_name")
-      log_event({ url: ApplicationController.helpers.user_avatar_url(current_user) }, type: "_set_picture")
+      Rack::MiniProfiler.step('set name') { log_event({ name: current_user.title }, type: "_set_name") }
+      Rack::MiniProfiler.step('set avatar') { log_event({ url: avatar }, type: "_set_picture") }
     end
+      end
   end
   
   def log_cpu_usage
