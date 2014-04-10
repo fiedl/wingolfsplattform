@@ -47,8 +47,8 @@ class User < ActiveRecord::Base
   before_save               :generate_alias_if_necessary, :capitalize_name
   before_save               :build_account_if_requested
   after_save                :add_to_group_if_requested
-  
-  
+
+
   # Mixins
   # ==========================================================================================
   
@@ -391,6 +391,31 @@ class User < ActiveRecord::Base
     my_corporations.collect { |group| group.becomes( Corporation ) }
   end
 
+  def cached_corporations
+    Rails.cache.fetch([self, "corporations"]) { corporations }
+  end
+
+  def delete_cached_corporations
+    Rails.cache.delete [self, "corporations"]
+  end
+
+  # Find corporation groups of a certain user.
+  #
+  def corporation_groups
+    ancestor_groups_of_user = self.groups
+    corporation_groups = Group.find_corporation_groups if Group.find_corporations_parent_group
+    return ancestor_groups_of_user & corporation_groups if ancestor_groups_of_user and corporation_groups
+  end
+
+  def cached_corporation_groups
+    Rails.cache.fetch([self, "corporation_groups"]) { corporation_groups }
+  end
+
+  def delete_cached_corporation_groups
+    Rails.cache.delete [self, "corporation_groups"]
+  end
+
+
   # This returns the corporations the user is currently member of.
   #
   def current_corporations
@@ -446,6 +471,21 @@ class User < ActiveRecord::Base
     end
   end
 
+  def delete_cached_last_group_in_first_corporation
+    Rails.cache.delete [self, "last_group_in_first_corporation"]
+  end
+
+  def delete_cache
+    delete_cached_corporations
+    delete_cached_corporation_groups
+    delete_cached_last_group_in_first_corporation
+  end
+
+  def fetch_cache
+    cached_corporations
+    cached_corporation_groups
+    cached_last_group_in_first_corporation
+  end
 
   # Corporate Vita
   # ==========================================================================================

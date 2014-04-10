@@ -33,6 +33,7 @@ feature 'Corporate Vita', js: true do
       subject { page } # user profile page
       it 'should list the status group the user is a member of' do
         page.should have_content @status_groups.first.name
+        page.should have_no_content @status_groups.second.name
         page.should have_no_content @status_groups.last.name
       end
     end
@@ -42,11 +43,13 @@ feature 'Corporate Vita', js: true do
 
         # run the first workflow
         within '.box.first' do
+          wait_for_ajax;wait_for_ajax;
           click_on I18n.t(:change_status)
           click_on @first_promotion_workflow.name
         end
         
         within '#corporate_vita' do
+          page.visit(page.current_url)
           page.should have_content @status_groups.first.name
           page.should have_content @status_groups.second.name
           page.should have_no_content @status_groups.last.name

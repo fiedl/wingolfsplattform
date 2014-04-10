@@ -1,47 +1,36 @@
 module GroupsHelper
-  
-  def my_groups_table
-    groups_of_user_table current_user if current_user
-  end
-
-  def cached_my_groups_table
-    if current_user
-      Rails.cache.fetch([current_user, "my_groups_table"]) { my_groups_table }
-    end
-  end
-  
   def groups_of_user_table( user )
     content_tag :table, :class => "user_groups" do
       content_tag :tr do
-        
+
         # first column:
         c = content_tag :td do
           content_tag :ul do
-            
-            corporation_groups = Group.find_corporation_groups_of( user )
+
+            corporation_groups = user.cached_corporation_groups
             if corporation_groups
               corporation_groups.collect do |group|
                 sub_group_membership_lis( user: user, group: group, indent: 0, max_indent: 3 )
               end.join.html_safe
             end
-            
+
           end
         end
 
         # second column:
         c += content_tag( :td ) do
           content_tag :ul do
-            
+
             Group.find_non_corporations_branch_groups_of( user ).collect do |group|
               membership_li( user, group )
             end.join.html_safe
-            
+
           end
         end
       end
     end.html_safe
   end
-  
+
   private
 
   def membership_li( user, group )
@@ -62,7 +51,7 @@ module GroupsHelper
     current_indent = max_indent if current_indent > max_indent
     c += "<ul>" if current_indent < max_indent
     c += sub_groups_where_user_is_member.collect do |sub_group|
-      sub_group_membership_lis( user: options[ :user ], group: sub_group, 
+      sub_group_membership_lis( user: options[ :user ], group: sub_group,
                                 indent: current_indent, max_indent: options[ :max_indent ] )
     end.join
     c += "</ul>" if current_indent < max_indent

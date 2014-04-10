@@ -109,7 +109,23 @@ class User
   def delete_cached_aktivitaetszahl
     Rails.cache.delete [self, "aktivitaetszahl"]
   end
-  
+
+  # Override the delete_cache method in order to delete specific cache
+  #
+  alias_method :orig_delete_cache, :delete_cache
+  def delete_cache
+    delete_cached_aktivitaetszahl
+    orig_delete_cache
+  end
+
+  # Override the fetch_cache method in order to fetch specific cache
+  #
+  alias_method :orig_fetch_cache, :fetch_cache
+  def fetch_cache
+    cached_aktivitaetszahl
+    orig_fetch_cache
+  end
+
   def aktivitaetszahl_addition_for( corporation )
     addition = ""
     addition += " Stft" if self.member_of? corporation.descendant_groups.find_by_name("Stifter"), also_in_the_past: true
@@ -237,6 +253,5 @@ class User
       UserGroupMembership.find_by_user_and_group(self, Group.everyone.admins_parent).try(:destroy)
     end
   end
-
 end
 
