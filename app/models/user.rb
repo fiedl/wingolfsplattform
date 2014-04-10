@@ -35,7 +35,7 @@ class User
   # This method returns the bv (Bezirksverband) the user is associated with.
   #
   def bv
-    (Bv.all & self.groups).try(:first).try(:becomes, Bv)
+    (Bv.all & self.groups(true)).try(:first).try(:becomes, Bv)
   end
   
   def bv_membership
