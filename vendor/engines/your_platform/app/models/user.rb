@@ -399,6 +399,25 @@ class User < ActiveRecord::Base
     Rails.cache.delete [self, "corporations"]
   end
 
+  # A list of corporations and after each corporation entry,
+  # the list contains the memberships in the corporation.
+  def corporations_and_memberships
+    my_corporations = ( self.groups & Group.corporations ) if Group.corporations_parent
+    my_corporations ||= []
+    my_corporations = my_corporations.collect{ |group| group.becomes( Corporation ) }
+    my_corporations.collect do |corporation|
+      [corporation] + corporate_vita_memberships_in( corporation )
+    end.flatten
+  end
+
+  def cached_corporations_and_memberships
+    Rails.cache.fetch([self, "corporations_and_memberships"]) { corporations_and_memberships }
+  end
+
+  def delete_cached_corporations_and_memberships
+    Rails.cache.delete [self, "corporations_and_memberships"]
+  end
+
   # Find corporation groups of a certain user.
   #
   def corporation_groups
@@ -419,7 +438,7 @@ class User < ActiveRecord::Base
   # This returns the corporations the user is currently member of.
   #
   def current_corporations
-    self.corporations.select do |corporation|
+    self.cached_corporations.select do |corporation|
       Role.of(self).in(corporation).current_member?
     end || []
   end
@@ -479,12 +498,14 @@ class User < ActiveRecord::Base
     delete_cached_corporations
     delete_cached_corporation_groups
     delete_cached_last_group_in_first_corporation
+    delete_cached_corporations_and_memberships
   end
 
   def fetch_cache
     cached_corporations
     cached_corporation_groups
     cached_last_group_in_first_corporation
+    cached_corporations_and_memberships
   end
 
   # Corporate Vita
@@ -565,7 +586,7 @@ class User < ActiveRecord::Base
   def workflows_by_corporation
     hash = {}
     other_workflows = self.workflows
-    self.corporations.each do |corporation|
+    self.cached_corporations.each do |corporation|
       corporation_workflows = self.workflows_for(corporation)
       hash.merge!( corporation.title.to_s => corporation_workflows )
       other_workflows -= corporation_workflows

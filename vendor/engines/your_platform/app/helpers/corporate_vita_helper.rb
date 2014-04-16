@@ -1,11 +1,4 @@
 module CorporateVitaHelper
-
-  def corporate_vita_for_user( user )
-    render partial: 'users/corporate_vita', locals: {
-      user: user,
-    }
-  end
-
   def status_group_membership_valid_from_best_in_place( membership )
     best_in_place( membership,
                    :valid_from_localized_date,  # type: :date,
