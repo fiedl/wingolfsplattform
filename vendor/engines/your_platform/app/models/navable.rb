@@ -40,6 +40,21 @@ module Navable
       children.select { |child| child.respond_to? :nav_node }
     end
 
+    def cached_breadcrumbs
+      breadcrumbs_navables = Rails.cache.fetch("breadcrumbs_navables") { [] }
+      breadcrumbs_navables << self
+      Rails.cache.write("breadcrumbs_navables", breadcrumbs_navables)
+      Rails.cache.fetch([self, "breadcrumbs"]) { nav_node.breadcrumbs }
+    end
+
+    def delete_cached_breadcrumbs
+      breadcrumbs_navables = Rails.cache.fetch("breadcrumbs_navables") { [] }
+      breadcrumbs_navables.collect do |navable|
+        Rails.cache.delete([navable, "breadcrumbs"])
+      end
+      Rails.cache.delete("breadcrumbs_navables")
+    end
+
     private
 
   end

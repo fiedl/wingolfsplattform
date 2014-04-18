@@ -10,8 +10,6 @@
 class UserGroupMembership < DagLink
 
   before_validation :ensure_correct_ancestor_and_descendant_type
-  after_commit      :delete_cache
-  before_destroy    :delete_cache
 
   # Validity Range
   # ====================================================================================================
@@ -42,8 +40,12 @@ class UserGroupMembership < DagLink
     I18n.translate( :membership_of_user_in_group, user_name: self.user.title, group_name: self.group.name )
   end
 
+  alias_method :orig_delete_cache, :delete_cache
   def delete_cache
+    user.delete_cached_breadcrumbs
+    group.delete_cached_breadcrumbs
     user.delete_cache if user
+    orig_delete_cache
   end
 
   # Creation Class Method
