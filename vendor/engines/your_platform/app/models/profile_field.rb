@@ -6,7 +6,10 @@ class ProfileField < ActiveRecord::Base
   belongs_to             :profileable, polymorphic: true
   
   include ProfileFieldMixins::HasChildProfileFields
-  
+
+  after_commit      :delete_cache
+  before_destroy    :delete_cache
+
   # Only allow the type column to be an existing class name.
   #
   validates_each :type do |record, attr, value| 
@@ -77,7 +80,7 @@ class ProfileField < ActiveRecord::Base
   # Attention! Probably, you want to display only one in the view: The main value or the child fields.
   # 
   def value
-    if children.count > 0
+    if cached_children_count > 0
       ( [ super ] + children.collect { |child| child.value } ).join(", ")
     else
       super
@@ -146,8 +149,20 @@ class ProfileField < ActiveRecord::Base
       'ProfileFieldTypes::Date', 'ProfileFieldTypes::AcademicDegree'
     ]
   end
-  
-  
+
+
+  def cached_children_count
+    Rails.cache.fetch([self, "children_count"]) { children.count }
+  end
+
+  def delete_cached_children_count
+    Rails.cache.delete [parent, "children_count"]
+  end
+
+  def delete_cache
+    delete_cached_children_count
+  end
+
   # Some profile fields may contain values that need review, e.g. when an email could
   # not be delivered to an email address.
   #
