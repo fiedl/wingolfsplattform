@@ -146,14 +146,14 @@ class NavNode < ActiveRecord::Base
   # plus this NavNode's Navable as last element.
   #
   def ancestor_navables_and_own
-    ancestor_navables + [ self.navable ]
+    self.navable.cached_ancestor_navables + [ self.navable ]
   end
   
   # +ancestor_nodes+ returns an Array of the NavNodes of the ancestors of the Navable
   # associated with this NavNode.
   #
   def ancestor_nodes
-    @ancestor_nodes ||= self.ancestor_navables.collect do |ancestor|
+    @ancestor_nodes ||= self.navable.cached_ancestor_navables.collect do |ancestor|
       ancestor.nav_node
     end
   end
