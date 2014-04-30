@@ -69,6 +69,12 @@ module Navable
       end
       Rails.cache.delete("ancestor_navables_navables")
     end
+
+    def delete_cache
+      delete_cached_breadcrumbs
+      delete_cached_ancestor_navables
+    end
+
     private
 
   end

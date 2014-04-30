@@ -7,13 +7,11 @@ class DagLink < ActiveRecord::Base
   before_destroy    :delete_cache
 
   def delete_cache
-    if(descendant.is_navable?)
-      descendant.delete_cached_breadcrumbs
-      descendant.delete_cached_ancestor_navables
+    if(descendant.is_navable?) 
+      descendant.delete_cache
     end
     if(ancestor.is_navable?)
-      descendant.delete_cached_breadcrumbs
-      descendant.delete_cached_ancestor_navables
+      ancestor.delete_cache
     end
 
     if self.descendant_type == "Group"
