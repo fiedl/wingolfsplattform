@@ -315,12 +315,15 @@ describe User do
           @user.postal_address_field.should == @address_field2
         end
         it "should assign the user to the new BV" do
+          sleep 1.1  # because of the time comparison of valid_from/valid_to.
           subject
           sleep 1.1  # because of the time comparison of valid_from/valid_to.
           @user.reload.bv.should == @bv2
         end
         it "should end the current BV membership" do
+          sleep 1.1  # because of the time comparison of valid_from/valid_to.
           subject
+          sleep 1.1  # because of the time comparison of valid_from/valid_to.
           @membership1.reload.valid_to.should_not == nil
         end
       end
