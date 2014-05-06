@@ -11,8 +11,8 @@ Wingolfsplattform::Application.configure do
   config.serve_static_assets = true
   config.static_cache_control = "public, max-age=3600"
 
-  # Log error messages when you accidentally call methods on nil
-  config.whiny_nils = true
+  # Eager loading behaviour has to be set in rails 4.
+  config.eager_load = false
 
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
@@ -31,13 +31,6 @@ Wingolfsplattform::Application.configure do
   config.action_mailer.default_url_options = { :host => 'localhost' }
   ActionMailer::Base.default from: 'Wingolfsplattform <wingolfsplattform@wingolf.org>'
   
-
-  # Raise exception on mass assignment protection for Active Record models
-  # This is deactivated, now, since we use strong_parameters.
-  # https://github.com/rails/strong_parameters/
-  # 
-  # config.active_record.mass_assignment_sanitizer = :strict
-
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
   

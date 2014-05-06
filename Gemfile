@@ -8,7 +8,7 @@ source 'https://rubygems.org'						                                             
 
 
 
-gem 'rails', '~> 3.2'						# MIT License,
+gem 'rails', '~> 4.1.1'						# MIT License,
     	     								# http://www.opensource.org/licenses/mit-license.php
 
 # Bundle edge Rails instead:
@@ -16,17 +16,9 @@ gem 'rails', '~> 3.2'						# MIT License,
 
 gem 'mysql2'								# MIT License
 
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets, :production, 'testing-aki' do
-  gem 'sass-rails',   '>= 3.2.3'					# MIT License
-  gem 'coffee-rails', '>= 3.2.1'					# MIT License
-#  gem 'coffee-script', '1.4.0' # need this at 1.4.0 for mercury, at the moment
-    # see https://github.com/jejacks0n/mercury/issues/349
-
-  gem 'uglifier', '>= 1.0.3'						# MIT License
-
-end
+gem 'sass-rails',   '>= 3.2.3'					# MIT License
+gem 'coffee-rails', '>= 3.2.1'					# MIT License
+gem 'uglifier', '>= 1.0.3'						# MIT License
 
 # See https://github.com/sstephenson/execjs#readme for more
 # supported runtimes.
@@ -201,3 +193,10 @@ gem 'tilt', '~> 1.4.1'
 
 # Maintenance Mode
 gem 'turnout'
+
+# Transition to Rails 4. TODO: Remove those when obsolete.
+# http://railscasts.com/episodes/415-upgrading-to-rails-4?view=asciicast
+#
+gem 'best_in_place', git: 'git://github.com/bernat/best_in_place.git'
+gem 'protected_attributes'
+gem 'activerecord-deprecated_finders'

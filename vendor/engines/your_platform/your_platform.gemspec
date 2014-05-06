@@ -25,10 +25,9 @@ Gem::Specification.new do |s|
   # --------------------------------------------------------------------------------
 
   # Rails and Rails Additions
-  s.add_dependency "rails", "~> 3.2.11"
+  s.add_dependency "rails", "~> 4.1.1"
   s.add_dependency 'rack-ssl', '>= 1.3.4'
   s.add_dependency "rails-i18n"                                                        # MIT License
-  s.add_dependency "strong_parameters"                                                 # MIT License
 
   # JavaScript 
   s.add_dependency "jquery-rails"
@@ -39,7 +38,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'acts_as_tree'                                                      # MIT License
 
   # Authentification
-  s.add_dependency 'devise', '2.2.3'   # TODO: try to update                           # MIT License
+  s.add_dependency 'devise'
 
   # Authorization
   s.add_dependency 'cancan'                                                            # MIT License
@@ -60,7 +59,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'font-awesome-rails', '3.2.1.1'
 
   # In Place Editing
-  s.add_dependency 'best_in_place', '~> 2.1.0'                                         # MIT License
+  s.add_dependency 'best_in_place', '>= 2.1.0'                                         # MIT License
   
   # Geo Coding
   s.add_dependency 'geocoder'                                                          # MIT License

@@ -11,8 +11,11 @@
 # http://daniel.fone.net.nz/blog/2013/05/20/a-better-way-to-manage-the-rails-secret-token/
 #
 
-Wingolfsplattform::Application.config.secret_token = if Rails.env.production?
+Wingolfsplattform::Application.config.secret_key_base = if Rails.env.production?
    ::SECRETS['secret_token']
 else
   ('x' * 30) # meets minimum requirement of 30 chars long
 end
+
+# TODO: Remove this when transition to rails 4 is done.
+Wingolfsplattform::Application.config.secret_token = Wingolfsplattform::Application.config.secret_key_base

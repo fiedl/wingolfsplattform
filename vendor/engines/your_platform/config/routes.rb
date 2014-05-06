@@ -4,8 +4,8 @@ Rails.application.routes.draw do
 
   devise_for :user_accounts, :controllers => {:sessions => 'sessions'}
   devise_scope :user_account do
-    match 'sign_in' => 'devise/sessions#new', as: :sign_in
-    match 'sign_out' => 'devise/sessions#destroy', as: :sign_out
+    get 'sign_in', to: 'devise/sessions#new', as: :sign_in
+    delete 'sign_out', to: 'devise/sessions#destroy', as: :sign_out
   end
   
   get 'search/guess', to: "search#lucky_guess"
