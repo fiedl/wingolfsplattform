@@ -2,7 +2,7 @@ class HorizontalNavPresenter < BasePresenter
   presents :horizontal_nav
   
   def present
-    horizontal_nav_html
+    # horizontal_nav_html
   end
   
   def horizontal_nav_html

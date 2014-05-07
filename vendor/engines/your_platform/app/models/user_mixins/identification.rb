@@ -28,7 +28,11 @@ module UserMixins::Identification
     #
     def find_all_by_identification_string( identification_string )
       self.attributes_used_for_identification.collect do |attribute_name|
-        self.send( "find_all_by_#{attribute_name}".to_sym, identification_string )
+        if self.respond_to? "find_all_by_#{attribute_name}".to_sym
+          self.send( "find_all_by_#{attribute_name}".to_sym, identification_string )
+        else
+          self.where(attribute_name.to_sym => identification_string)
+        end
       end.flatten.uniq
     end
 
