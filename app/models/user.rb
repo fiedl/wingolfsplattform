@@ -4,7 +4,7 @@
 require_dependency YourPlatform::Engine.root.join( 'app/models/user' ).to_s
 
 # This class represents a user of the platform. A user may or may not have an account.
-# While the most part of the user class is contained in the your_platform engine, 
+# While the most part of the user class is contained in the your_platform engine,
 # this re-opened class contains all wingolf-specific additions to the user model.
 #
 class User
@@ -15,33 +15,33 @@ class User
   # Use this rather than the name attribute itself, since the title method is likely to be overridden
   # in the main application.
   # Notice: This method does *not* return the academic title of the user.
-  # 
+  #
   # Here, title returns the name and the aktivitaetszahl, e.g. "Max Mustermann E10 H12".
-  # 
+  #
   def title
     "#{name} #{cached_aktivitaetszahl} #{string_for_death_symbol}".gsub("  ", " ").strip
   end
-  
+
   # For dead users, there is a cross symbol in the title.
   # (✝,✞,✟)
-  # 
+  #
   # More characters in this table:
   # http://www.utf8-chartable.de/unicode-utf8-table.pl?start=9984&names=2&utf8=-&unicodeinhtml=hex
-  # 
+  #
   def string_for_death_symbol
     "(✟)" if dead?
   end
-  
+
   # This method returns the bv (Bezirksverband) the user is associated with.
   #
   def bv
     (Bv.all & self.groups).try(:first).try(:becomes, Bv)
   end
-  
+
   def bv_membership
     UserGroupMembership.find_by_user_and_group(self, bv) if bv
   end
-  
+
   # Diese Methode gibt die BVs zurück, denen der Benutzer zugewiesen ist. In der Regel
   # ist jeder Philister genau einem BV zugeordnet. Durch Fehler kann es jedoch dazu kommen,
   # dass er mehreren BVs zugeordnet ist.
@@ -51,11 +51,11 @@ class User
       UserGroupMembership.find_by_user_and_group(self, bv)
     end - [nil]
   end
-  
+
   def bv_beitrittsdatum
     bv_membership.valid_from if bv
   end
-  
+
   # Diese Methode gibt den BV zurück, dem der Benutzer aufgrund seiner Postanschrift
   # zugeordnet sein sollte. Der eingetragene BV kann und darf davon abweisen, da er
   # in Sonderfällen auch händisch zugewiesen werden kann.
@@ -64,7 +64,7 @@ class User
   # gibt diese Methode `nil` zurück.
   #
   def correct_bv
-    if self.philister? 
+    if self.philister?
       if postal_address_field_or_first_address_field.try(:value).try(:present?)
         postal_address_field_or_first_address_field.bv
       else
@@ -73,7 +73,7 @@ class User
       end
     end
   end
-  
+
   # Diese Methode passt den BV des Benutzers der aktuellen Postanschrift an.
   # Achtung: Nur Philister sind BVs zugeordnet. Wenn der Benutzer Aktiver ist,
   # tut diese Methode nichts.
@@ -81,14 +81,14 @@ class User
   def adapt_bv_to_postal_address
     self.groups(true) # reload groups
     new_bv = correct_bv
-    
+
     # Fall 0: Es konnte kein neuer BV identifiziert werden.
     # In diesem Fall wird aus Konsistenzgründen die aktuelle BV-Mitgliedschaft
     # zurückgegeben, da der BV dann nicht verändert werden soll.
     #
     if not new_bv
       new_membership = self.bv_membership
-    
+
     # Fall 1: Es ist noch kein BV zugewiesen. Es wird schlicht der neue zugewiesen.
     #
     elsif new_bv and not bv
@@ -105,7 +105,7 @@ class User
     #
     elsif new_bv and bv and (new_bv != bv)
 
-      # FIXME: For the moment, DagLinks have to be unique. Therefore, the old 
+      # FIXME: For the moment, DagLinks have to be unique. Therefore, the old
       # membership has to be destroyed if the user previously had been a member
       # of the new bv. When DagLinks are allowed to exist several times, remove
       # this hack:
@@ -118,7 +118,7 @@ class User
 
       new_membership = self.bv_membership.move_to new_bv
     end
-    
+
     # Korrekturlauf: Durch einen Fehler kann es sein, dass ein Benutzer mehreren
     # BVs zugeordnet ist. Deshalb werden hier die übrigen BV-Mitgliedschaften
     # deaktiviert, damit er nur noch dem neuen BV zugeordnet ist.
@@ -157,11 +157,11 @@ class User
   def cached_aktivitaetszahl
     Rails.cache.fetch([self, "aktivitaetszahl"]) { aktivitaetszahl }
   end
-  
+
   def delete_cached_aktivitaetszahl
     Rails.cache.delete [self, "aktivitaetszahl"]
   end
-  
+
   def aktivitaetszahl_addition_for( corporation )
     addition = ""
     addition += " Stft" if self.member_of? corporation.descendant_groups.find_by_name("Stifter"), also_in_the_past: true
@@ -193,7 +193,7 @@ class User
     self.profile_fields.create(label: :occupational_area, type: "ProfileFieldTypes::ProfessionalCategory")
     self.profile_fields.create(label: :employment_status, type: "ProfileFieldTypes::ProfessionalCategory")
     self.profile_fields.create(label: :languages, type: "ProfileFieldTypes::Competence")
-    
+
     pf = self.profile_fields.build(label: :bank_account, type: "ProfileFieldTypes::BankAccount")
     pf.becomes(ProfileFieldTypes::BankAccount).save
 
@@ -204,11 +204,25 @@ class User
 
     self.wingolfsblaetter_abo = true
   end
-  
-  
+
+
   # W-Nummer  (old uid)
   # ==========================================================================================
-  
+
+  def phone_numbers
+    numbers = []
+    self.profile_fields_by_type(ProfileFieldTypes::Phone).each do |number|
+      puts number.label
+      num = 0
+      if number.value.nil?
+        num = "--"
+      else
+        num = number.value
+      end
+      numbers.push({:label => number.label, :number => num})
+    end
+    return numbers
+  end
   def w_nummer
     self.profile_fields.where(label: "W-Nummer").first.try(:value)
   end
@@ -216,12 +230,12 @@ class User
     field = profile_fields.where(label: "W-Nummer").first || profile_fields.create(type: 'ProfileFieldTypes::General', label: 'W-Nummer')
     field.update_attribute(:value, str)
   end
-  
+
   def self.find_by_w_nummer(wnr)
     ProfileField.where(label: "W-Nummer", value: wnr).last.try(:profileable)
   end
-  
-  
+
+
   # Wingolfit?
   # ==========================================================================================
 
@@ -232,21 +246,21 @@ class User
   #   * Users with hospitant status are considered as wingolfit.
   #   * Users with guest status are not considered as wingolfit.
   #
-  # This all comes down to this: 
+  # This all comes down to this:
   # A user is a wingolfit if he has an aktivitätszahl.
   #
   def wingolfit?
     self.aktivitätszahl.present?
   end
-  
+
   def aktiver?
     (group_names & ["Aktivitas", "Activitas"]).count > 0
   end
-  
+
   def philister?
     group_names.include? "Philisterschaft"
   end
-  
+
   def group_names
     self.groups.collect { |group| group.name }
   end
@@ -260,7 +274,7 @@ class User
   end
   private :wbl_abo_group
 
-  def wingolfsblaetter_abo 
+  def wingolfsblaetter_abo
     self.member_of? wbl_abo_group
   end
   def wingolfsblaetter_abo=(new_abo_status)

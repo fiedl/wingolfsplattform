@@ -7,7 +7,7 @@
     %ul.dropdown-menu
       %li.nav-header= t :tables
       %li
-        = link_to group_path(@group, :format => :csv) do
+        = link_to group_path(@group, :format => :csv, :list => :name_list) do
           %i.icon-list-alt
           = t :name_list
       %li

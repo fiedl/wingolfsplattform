@@ -47,11 +47,11 @@ class User < ActiveRecord::Base
   before_save               :generate_alias_if_necessary, :capitalize_name
   before_save               :build_account_if_requested
   after_save                :add_to_group_if_requested
-  
-  
+
+
   # Mixins
   # ==========================================================================================
-  
+
   include UserMixins::Memberships
   include UserMixins::Identification
 
@@ -133,7 +133,7 @@ class User < ActiveRecord::Base
     date_of_birth_profile_field.try(:save)
   end
   private :save_date_of_birth_profile_field
-  
+
   def find_or_create_date_of_birth_profile_field
     date_of_birth_profile_field || ( build_date_of_birth_profile_field.save && date_of_birth_profile_field)
   end
@@ -148,14 +148,14 @@ class User < ActiveRecord::Base
       self.date_of_birth = nil
     end
   end
-  
+
   def age
     now = Time.now.utc.to_date
     dob = self.date_of_birth
     now.year - dob.year - ((now.month > dob.month || (now.month == dob.month && now.day >= dob.day)) ? 0 : 1)
   end
-  
-  
+
+
   # Date of Death
   #
   def date_of_death
@@ -173,9 +173,9 @@ class User < ActiveRecord::Base
   def alive?
     not dead?
   end
-  
+
   # Example:
-  # 
+  #
   #   user.mark_as_deceased at: "2014-03-05".to_datetime
   #
   def mark_as_deceased(options = {})
@@ -186,7 +186,7 @@ class User < ActiveRecord::Base
     end_all_non_corporation_memberships at: date
     set_date_of_death_if_unset(date)
   end
-  
+
   def end_all_non_corporation_memberships(options = {})
     date = options[:at] || Time.zone.now
     for group in (self.direct_groups - Group.corporations_parent.descendant_groups)
@@ -201,7 +201,7 @@ class User < ActiveRecord::Base
       address_field.postal_address? == true
     end.first
   end
-  
+
   # Primary Postal Address or, if not existent, the first address field.
   #
   def postal_address_field_or_first_address_field
@@ -215,11 +215,11 @@ class User < ActiveRecord::Base
   def postal_address
     postal_address_field_or_first_address_field.try(:value)
   end
-  
-  
+
+
   # Other infos from profile fields
   # ------------------------------------------------------------------------------------------
-  
+
   def profile_field_value(label)
     profile_fields.where(label: label).first.try(:value).try(:strip)
   end
@@ -237,7 +237,11 @@ class User < ActiveRecord::Base
     name_surrounding_profile_field.try(:text_above_name).try(:strip)
   end
   def text_below_name
-    name_surrounding_profile_field.try(:text_below_name).try(:strip)
+    tmp = name_surrounding_profile_field.try(:text_below_name).try(:strip)
+    if tmp
+      return tmp + "\n"
+    end
+    return ""
   end
   def name_prefix
     name_surrounding_profile_field.try(:name_prefix).try(:strip)
@@ -245,11 +249,11 @@ class User < ActiveRecord::Base
   def name_suffix
     name_surrounding_profile_field.try(:name_suffix).try(:strip)
   end
-  
+
   def postal_address_with_name_surrounding
     ("#{text_above_name}\n" +
     ("#{name_prefix} #{personal_title} #{name} #{name_suffix}").gsub("  ", " ").strip + "\n"
-    "#{text_below_name}\n" +
+    "#{text_below_name}" +
     postal_address).strip
   end
 
@@ -398,7 +402,7 @@ class User < ActiveRecord::Base
       Role.of(self).in(corporation).current_member?
     end || []
   end
-  
+
   # This returns the same as `current_corporations`, but sorted by the
   # date of joining the corporations, earliest joining first.
   #
@@ -407,7 +411,7 @@ class User < ActiveRecord::Base
       corporation.membership_of(self).valid_from || Time.zone.now
     end
   end
-    
+
   # This returns the first corporation where the user is still member of or nil
   #
   def first_corporation
@@ -419,10 +423,10 @@ class User < ActiveRecord::Base
     #     corporation.membership_of( self ).valid_from or Time.zone.now
     #   end.first
     # end
-    
+
     sorted_current_corporations.first
   end
-  
+
   # This returns the groups within the first corporation
   # where the user is still member of in the order of entering the group.
   # The groups must not be special and the user most not be a special member.
@@ -451,14 +455,14 @@ class User < ActiveRecord::Base
   # ==========================================================================================
 
   def corporate_vita_memberships_in(corporation)
-    
+
     # StatusGroupMembership
     #   .now_and_in_the_past
     #   .find_all_by_user_and_corporation( self, corporation )
-    
+
     groups = corporation.leaf_groups & self.parent_groups
     group_ids = groups.collect { |group| group.id }
-    
+
     UserGroupMembership.now_and_in_the_past.find_all_by_user(self).where( ancestor_id: group_ids, ancestor_type: 'Group' )
   end
 
@@ -487,7 +491,7 @@ class User < ActiveRecord::Base
       StatusGroupMembership.find_by_user_and_group(self, status_group)
     end
   end
-  
+
   def current_status_group_in( corporation )
     StatusGroup.find_by_user_and_corporation(self, corporation)
   end
@@ -568,16 +572,16 @@ class User < ActiveRecord::Base
     return :admin if self.admin_of? structureable
     return :member if self.member_of? structureable
   end
-  
+
   # Member Status
   # ------------------------------------------------------------------------------------------
-  
-  # This method is a dirty hack to preserve the obsolete role model mechanism, 
-  # which is currently not in use, since the abilities are defined directly in the 
+
+  # This method is a dirty hack to preserve the obsolete role model mechanism,
+  # which is currently not in use, since the abilities are defined directly in the
   # Ability class.
   #
   # Options:
-  # 
+  #
   #   with_invalid, also_in_the_past : true/false
   #
   # TODO: refactor it together with the role model mechanism.
@@ -675,9 +679,9 @@ class User < ActiveRecord::Base
   # Developer Status
   # ==========================================================================================
 
-  # This method returns whether the user is a developer. This is needed, for example, 
-  # to determine if some features are presented to the current_user. 
-  # 
+  # This method returns whether the user is a developer. This is needed, for example,
+  # to determine if some features are presented to the current_user.
+  #
   def developer?
     self.developer
   end
@@ -690,8 +694,8 @@ class User < ActiveRecord::Base
     else
       Group.developers.unassign_user self
     end
-  end  
-  
+  end
+
   # Hidden
   # ==========================================================================================
   #
@@ -718,21 +722,21 @@ class User < ActiveRecord::Base
   def former_member_of_corporation?( corporation )
     self.member_of? corporation.child_groups.find_by_flag(:former_members_parent)
   end
-  
+
 
   # Group Flags
   # ==========================================================================================
-  
+
   # This efficiently returns all flags of the groups the user is currently in.
   #
   # For example, ony can find out with one sql query whether a user is hidden:
-  # 
+  #
   #     user.group_flags.include? 'hidden_users'
-  # 
+  #
   def group_flags
     groups.joins(:flags).select('flags.key as flag').collect { |g| g.flag }
   end
-  
+
   # Finder Methods
   # ==========================================================================================
 
@@ -743,10 +747,10 @@ class User < ActiveRecord::Base
       user.title == title
     end.first
   end
-  
+
   def self.find_by_name( name )
     self.find_all_by_name(name).limit(1).first
-  end    
+  end
 
   # This method finds all users having the given name attribute.
   # notice: case insensitive
@@ -765,31 +769,31 @@ class User < ActiveRecord::Base
       .collect { |ef| ef.profileable }
     return matching_users.to_a
   end
-  
+
   def self.find_by_email( email )
     self.find_all_by_email(email).first
   end
-  
+
   def self.with_group_flags
     self.joins(:groups => :flags)
   end
-  
+
   def self.with_group_flag(flag)
     self.with_group_flags.where("flags.key = ?", flag)
   end
-  
+
   def self.hidden
     self.with_group_flag('hidden_users')
   end
-  
+
   def self.deceased
     self.joins(:profile_fields).where(:profile_fields => {label: 'date_of_death'})
   end
-  
+
   def self.deceased_ids
     self.deceased.select('users.id').collect { |user| user.id }
   end
-  
+
   def self.alive
     if self.deceased_ids.count > 0
       self.where('NOT users.id IN (?)', self.deceased_ids)
@@ -797,31 +801,31 @@ class User < ActiveRecord::Base
       self.where(true)
     end
   end
-  
+
   def self.without_account
     self.includes(:account).where(:user_accounts => { :user_id => nil })
   end
-  
+
   def self.with_email
     self.joins(:profile_fields).where('profile_fields.type = ? AND profile_fields.value != ?', 'ProfileFieldTypes::Email', '')
   end
-  
+
   def self.applicable_for_new_account
     self.without_account.alive.with_email
   end
-  
+
   def self.with_postal_address
     self.joins(:address_profile_fields).where('profile_fields.profileable_id IS NOT NULL AND profile_fields.value != ""').uniq
   end
-  
+
   def self.with_postal_address_ids
     self.with_postal_address.collect { |user| user.id }
   end
-  
+
   def self.without_postal_address
     self.where('NOT users.id IN (?)', self.with_postal_address_ids)
   end
-  
+
   def self.joins_groups
     self.joins(:groups).where('dag_links.valid_to IS NULL')
   end
@@ -837,6 +841,6 @@ class User < ActiveRecord::Base
   def inspect
     "User: " + self.alias
   end
-  
+
 end
 

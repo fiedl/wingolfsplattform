@@ -11,12 +11,13 @@ en:
   new_group: New Group
 
   edited_at: Edited at
-  
+
   imprint: Imprint
-  
+
   you_may_leave_out_www: 'Tip: You may leave out the "www." when you enter the web address into the browser.'
-  
+
   others: Others
 
   you_are_admin: You are administrator.
   feedback: Feedback
+  label: Label
