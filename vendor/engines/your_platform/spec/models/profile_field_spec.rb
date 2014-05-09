@@ -316,7 +316,15 @@ describe ProfileFieldTypes::BankAccount do
         [ I18n.t( :account_holder ), I18n.t( :account_number ), I18n.t( :bank_code ), 
           I18n.t( :credit_institution ), I18n.t( :iban ), I18n.t( :bic ) ]
     end
+  end
 
+  describe "#cached_children_count" do
+    subject { ProfileFieldTypes::BankAccount.create( label: "Bank Account" ) }
+    it "Cached children count should be updated on destruction or construction of a profile field" do
+      @bank_account.cached_children_count {should == 6}
+      @bank_account.children.first.destroy
+      @bank_account.cached_children_count {should == 5}
+    end
   end
 
   describe "#account_holder" do
@@ -436,3 +444,5 @@ describe ProfileFieldTypes::Date do
     end
   end
 end
+
+

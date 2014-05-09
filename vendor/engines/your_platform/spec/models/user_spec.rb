@@ -614,7 +614,58 @@ describe User do
       subject.should == @subgroup4
     end
   end
+
+  describe "#cached_corporations" do
+    before do
+      @corporation1 = create( :corporation )
+      @corporation1.name = "corporation1"
+      @corporation2 = create( :corporation )
+      @corporation2.name = "corporation2"
+      @user.save
+      @user.parent_groups << @corporation1
+    end
+    subject { @user.cached_corporations }
+    it "should update when user enters new corporation" do
+      subject.should_not include @corporation2
+      @user.parent_groups << @corporation2
+      subject.should include @corporation2
+    end
+  end
   
+  describe "#cached_corporations_and_memberships" do
+    before do
+      @corporation1 = create( :corporation )
+      @corporation1.name = "corporation1"
+      @corporation2 = create( :corporation )
+      @corporation2.name = "corporation2"
+      @user.save
+      @user.parent_groups << @corporation1
+    end
+    subject { @user.cached_corporations_and_memberships }
+    it "should update when user enters new corporation" do
+      subject.should_not include @corporation2
+      @user.parent_groups << @corporation2
+      subject.should include @corporation2
+    end
+  end
+  
+  describe "#cached_corporation_groups" do
+    before do
+      @corporation1 = create( :corporation )
+      @corporation1.name = "corporation1"
+      @corporation2 = create( :corporation )
+      @corporation2.name = "corporation2"
+      @user.save
+      @user.parent_groups << @corporation1
+    end
+    subject { @user.cached_corporation_groups }
+    it "should update when user enters new corporation" do
+      subject.should_not include @corporation2
+      @user.parent_groups << @corporation2
+      subject.should include @corporation2
+    end
+  end
+
   # Status Groups
   # ------------------------------------------------------------------------------------------
 
