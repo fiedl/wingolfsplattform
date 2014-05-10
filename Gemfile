@@ -112,7 +112,7 @@ group :test do
   gem 'database_cleaner'
   gem 'guard-spork'
   gem 'spork'
-  gem 'simplecov', require: false
+  gem 'simplecov', '~> 0.7.1', require: false
 end
 
 group :test do

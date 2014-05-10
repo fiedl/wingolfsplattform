@@ -21,6 +21,12 @@ RSpec::Core::RakeTask.new( :spec ) do |t|
   t.fail_on_error = true
 end
 
+# Alternative:
+#
+# task :spec do
+#   exit system("bundle exec rspec ./spec/**/*_spec.rb ./vendor/engines/**/spec/**/*_spec.rb")
+# end
+
 # The default rake task, i.e. when running just `rake`, is `rake spec`.
 #
 task :default => :spec
