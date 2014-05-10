@@ -3,16 +3,16 @@
 
 require 'active_support/core_ext'
 
-guard 'spork', :cucumber_env => { 'RAILS_ENV' => 'test' }, :rspec_env => { 'RAILS_ENV' => 'test' } do
-  watch('config/application.rb')
-  watch('config/environment.rb')
-  watch(%r{^config/environments/.+\.rb$})
-  watch(%r{^config/initializers/.+\.rb$})
-  watch('spec/spec_helper.rb')
-  watch(%r{^spec/support/.+\.rb$})
-  watch(%r{^spec/factories/.+\.rb$})
-  watch(%r{^vendor/engines/your_platform/spec/factories/.+\.rb$})
-end
+# guard 'spork', :cucumber_env => { 'RAILS_ENV' => 'test' }, :rspec_env => { 'RAILS_ENV' => 'test' } do
+#   watch('config/application.rb')
+#   watch('config/environment.rb')
+#   watch(%r{^config/environments/.+\.rb$})
+#   watch(%r{^config/initializers/.+\.rb$})
+#   watch('spec/spec_helper.rb')
+#   watch(%r{^spec/support/.+\.rb$})
+#   watch(%r{^spec/factories/.+\.rb$})
+#   watch(%r{^vendor/engines/your_platform/spec/factories/.+\.rb$})
+# end
 
 #guard( #'focus', # see https://github.com/supaspoida/guard-focus
        #on: :rspec, :version => 2, 
@@ -20,6 +20,7 @@ guard( 'rspec', :version => 2,
        :cli => '--drb --tag focus',
        :all_after_pass => false,
        :all_on_start => false,
+       :zeus => true,
        spec_paths: %w(spec vendor/engines/your_platform/spec)) do
 
   watch(%r{^spec/.+_spec\.rb$})

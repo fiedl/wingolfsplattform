@@ -91,3 +91,6 @@ Thumbs.db
 
 
 brakeman.html
+
+# zeus (http://railscasts.com/episodes/412-fast-rails-commands)
+.zeus.sock

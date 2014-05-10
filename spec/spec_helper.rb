@@ -17,6 +17,10 @@
 #                   in order to increase test performance, i.e. minimize the time
 #                   Guard needs to restart the tests.
 #                   https://github.com/sporkrb/spork
+#
+# Zeus              Preloading the rails application before starting the tests.
+#                   Alternative to Spork.
+#                   https://github.com/burke/zeus
 # 
 # Capybara          Simulating user interaction in order to write high level
 #                   integration tests. 
@@ -50,7 +54,7 @@
 # than being loaded for each run separately. 
 #
 require 'rubygems'
-require 'spork'
+# require 'spork'
 # uncomment the following line to use spork with the debugger
 # require 'spork/ext/ruby-debug'
 
@@ -61,7 +65,7 @@ require 'coveralls'
 Coveralls.wear! 'rails'
 
 
-# Requirements and Configurations Cached by Spork
+# Prefork (this is run only once)
 # ==========================================================================================
 
 # These requirements and configurations are loaded by Spork. Spork will cache them
@@ -71,8 +75,7 @@ Coveralls.wear! 'rails'
 # of the components. If you find yourself to often restarting guard because of this,
 # you should probably move the concerning component into the `Spork.each_run` block.
 #
-Spork.prefork do
-
+prefork = lambda {
 
   # Required Application Environment
   # ----------------------------------------------------------------------------------------
@@ -84,7 +87,7 @@ Spork.prefork do
   # ----------------------------------------------------------------------------------------
   
   require 'rspec/rails'
-  require 'rspec/autorun'
+  # require 'rspec/autorun'
   require 'nokogiri'
   require 'capybara/poltergeist'
   require 'rspec/expectations'
@@ -295,16 +298,16 @@ Spork.prefork do
   #
   # Capybara.app_host = "http://localhost"
 
-end
+}
 
 
-# Requirements and Configurations NOT Cached by Spork
+# This is run on each run of the test suite.
 # ==========================================================================================
 
 # These requirements and configurations are loaded on each run of the test suite
 # without being cached by Spork.
 #
-Spork.each_run do
+each_run = lambda {
 
   # There are some actions FactoryGirl needs to perform on every run.
   #
@@ -318,4 +321,34 @@ Spork.each_run do
     require 'simplecov'
   end
   
+}
+
+
+# Zeus vs. Spork vs. nothing
+# ==========================================================================================
+
+# The following code passes the defined blocks `prefork` and `each_run` to the
+# tool that is used, i.e. either spork or zeus. If none is used, they are simply
+# called causing the file to behave like a regular spec_helper.
+#
+# More information:
+# https://github.com/burke/zeus/wiki/Spork
+#
+if defined?(Zeus)
+  prefork.call
+  $each_run = each_run
+  class << Zeus.plan
+    def after_fork_with_test
+      after_fork_without_test
+      $each_run.call
+    end
+    alias_method_chain :after_fork, :test
+  end
+elsif ENV['spork'] || $0 =~ /\bspork$/
+  require 'spork'
+  Spork.prefork(&prefork)
+  Spork.each_run(&each_run)
+else
+  prefork.call
+  each_run.call
 end
