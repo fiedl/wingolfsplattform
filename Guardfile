@@ -3,24 +3,10 @@
 
 require 'active_support/core_ext'
 
-# guard 'spork', :cucumber_env => { 'RAILS_ENV' => 'test' }, :rspec_env => { 'RAILS_ENV' => 'test' } do
-#   watch('config/application.rb')
-#   watch('config/environment.rb')
-#   watch(%r{^config/environments/.+\.rb$})
-#   watch(%r{^config/initializers/.+\.rb$})
-#   watch('spec/spec_helper.rb')
-#   watch(%r{^spec/support/.+\.rb$})
-#   watch(%r{^spec/factories/.+\.rb$})
-#   watch(%r{^vendor/engines/your_platform/spec/factories/.+\.rb$})
-# end
-
-#guard( #'focus', # see https://github.com/supaspoida/guard-focus
-       #on: :rspec, :version => 2, 
-guard( 'rspec', :version => 2,
-       :cli => '--drb --tag focus',
+guard( 'rspec',
+       :cmd => 'spring rspec --tag focus',
        :all_after_pass => false,
        :all_on_start => false,
-       :zeus => true,
        spec_paths: %w(spec vendor/engines/your_platform/spec)) do
 
   watch(%r{^spec/.+_spec\.rb$})
@@ -36,7 +22,6 @@ guard( 'rspec', :version => 2,
   watch('app/controllers/application_controller.rb')  { 'spec/controllers' }
   # Capybara request specs
   watch(%r{^app/views/(.+)/.*\.(erb|haml)$})          { |m| "spec/requests/#{m[1]}_spec.rb" }
-
 
   # TODO: Move this into its own testing environment
   # Temporary integration of the your_platform engine's tests

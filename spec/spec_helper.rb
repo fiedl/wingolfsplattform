@@ -13,15 +13,12 @@
 #                   background during development.
 #                   https://github.com/guard/guard
 #
-# Spork             Keeping some less frequently changing components in memory
+# Spring            Keeping some less frequently changing components in memory
 #                   in order to increase test performance, i.e. minimize the time
 #                   Guard needs to restart the tests.
-#                   https://github.com/sporkrb/spork
+#                   This preloader is part of Rails 4.1. It replaces Spork and Zeus.
+#                   https://github.com/rails/spring
 #
-# Zeus              Preloading the rails application before starting the tests.
-#                   Alternative to Spork.
-#                   https://github.com/burke/zeus
-# 
 # Capybara          Simulating user interaction in order to write high level
 #                   integration tests. 
 #                   https://github.com/jnicklas/capybara
@@ -46,17 +43,7 @@
 # Required Basic Libraries
 # ==========================================================================================
 
-# These libraries are required to load Spork. Since every test requires, i.e. loads 
-# this spec helper, they are loaded separately for each test run.
-# 
-# In order to increase performance, loading of the other libraries takes place within
-# the `Spork.prefork` block. This causes the libraries being cached in memory rather 
-# than being loaded for each run separately. 
-#
 require 'rubygems'
-# require 'spork'
-# uncomment the following line to use spork with the debugger
-# require 'spork/ext/ruby-debug'
 
 # To create an online coverage report on coveralls.io, 
 # init their gem here.
@@ -68,12 +55,12 @@ Coveralls.wear! 'rails'
 # Prefork (this is run only once)
 # ==========================================================================================
 
-# These requirements and configurations are loaded by Spork. Spork will cache them
-# in memory. 
+# These requirements and configurations are loaded by Spork or Zeus.
+# They will be cached in memory.
 #
-# Remember to restart Spork (kill and restart guard) whenever you need to reload one
+# Remember to restart Spork/Zeus whenever you need to reload one
 # of the components. If you find yourself to often restarting guard because of this,
-# you should probably move the concerning component into the `Spork.each_run` block.
+# you should probably move the concerning component into the `each_run` block.
 #
 prefork = lambda {
 
@@ -87,7 +74,6 @@ prefork = lambda {
   # ----------------------------------------------------------------------------------------
   
   require 'rspec/rails'
-  # require 'rspec/autorun'
   require 'nokogiri'
   require 'capybara/poltergeist'
   require 'rspec/expectations'
@@ -305,7 +291,7 @@ prefork = lambda {
 # ==========================================================================================
 
 # These requirements and configurations are loaded on each run of the test suite
-# without being cached by Spork.
+# without being cached by Spork/Zeus.
 #
 each_run = lambda {
 

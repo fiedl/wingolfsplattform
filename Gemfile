@@ -104,7 +104,10 @@ group :test, :development do
 #  gem 'rspec-mocks'
 #  gem 'listen'
 #  gem 'rb-inotify', '0.8.8' if RUBY_PLATFORM.downcase.include?("linux")
+  gem 'spring' # already in Rails 4.1
+  gem 'spring-commands-rspec'
 end
+
 group :test do
   gem 'capybara'
   gem 'launchy'
@@ -113,7 +116,6 @@ group :test do
   gem 'guard-spork'
   gem 'spork'
   gem 'simplecov', '~> 0.7.1', require: false  # fixed to to return code issue.
-  gem 'zeus'
 end
 
 group :test do
