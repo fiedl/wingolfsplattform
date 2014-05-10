@@ -386,9 +386,9 @@ class User < ActiveRecord::Base
   # If a user is only guest in a corporation, `user.corporations` WILL list this corporation.
   #
   def corporations
-    my_corporations = ( self.groups & Group.corporations ) if Group.corporations_parent
+    my_corporations = ( self.groups.collect{ |group| group.becomes( Group ) } & Group.corporations.collect{ |group| group.becomes( Group ) } )
     my_corporations ||= []
-    my_corporations.collect { |group| group.becomes( Corporation ) }
+    my_corporations.collect{ |group| group.becomes( Corporation ) }
   end
 
   def cached_corporations
@@ -402,9 +402,7 @@ class User < ActiveRecord::Base
   # A list of corporations and after each corporation entry,
   # the list contains the memberships in the corporation.
   def corporations_and_memberships
-    my_corporations = ( self.groups & Group.corporations ) if Group.corporations_parent
-    my_corporations ||= []
-    my_corporations = my_corporations.collect{ |group| group.becomes( Corporation ) }
+    my_corporations = corporations
     my_corporations.collect do |corporation|
       [corporation] + corporate_vita_memberships_in( corporation )
     end.flatten
