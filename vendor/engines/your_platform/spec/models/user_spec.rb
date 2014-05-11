@@ -624,13 +624,13 @@ describe User do
       @corporation2.name = "corporation2"
       @corporation2.save
       @user.save
-      @user.parent_groups << @corporation1.becomes(Group)
+      @user.parent_groups << @corporation1
     end
     subject { @user.corporations }
     it "should update when user enters new corporation" do
-      subject.should_not include @corporation2.becomes(Group)
-      @user.parent_groups << @corporation2.becomes(Group)
-      subject.should include @corporation2.becomes(Group)
+      subject.should_not include @corporation2
+      @user.parent_groups << @corporation2
+      subject.should include @corporation2
     end
   end
   
@@ -643,13 +643,13 @@ describe User do
       @corporation2.name = "corporation2"
       @corporation2.save
       @user.save
-      @user.parent_groups << @corporation1.becomes(Group)
+      @user.parent_groups << @corporation1
     end
     subject { @user.corporations_and_memberships }
     it "should update when user enters new corporation" do
-      subject.should_not include @corporation2.becomes(Group)
-      @user.parent_groups << @corporation2.becomes(Group)
-      subject.should include @corporation2.becomes(Group)
+      subject.should_not include @corporation2
+      @user.parent_groups << @corporation2
+      subject.should include @corporation2
     end
   end
   
