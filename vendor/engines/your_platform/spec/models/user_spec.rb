@@ -624,6 +624,10 @@ describe User do
     end
     subject { @user.status_groups }
 
+    specify "prelims" do
+      Group.corporations.should include @corporation
+      @corporation.status_groups.should include @status_group
+    end
     it "should include the status groups of the user" do
       subject.should include @status_group
     end

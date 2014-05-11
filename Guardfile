@@ -4,7 +4,7 @@
 require 'active_support/core_ext'
 
 guard( 'rspec',
-       :cmd => 'spring rspec --tag focus',
+       :cmd => 'spring rspec --drb --tag focus',
        :all_after_pass => false,
        :all_on_start => false,
        spec_paths: %w(spec vendor/engines/your_platform/spec)) do
