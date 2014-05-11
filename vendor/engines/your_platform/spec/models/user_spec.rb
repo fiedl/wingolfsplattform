@@ -515,6 +515,7 @@ describe User do
   describe "#corporations" do
     before do
       @corporation = create( :corporation )
+      @corporation.parent_groups << Corporation.corporations_parent
       @subgroup = create( :group ); @subgroup.parent_groups << @corporation
       @user.save
       @user.parent_groups << @subgroup
@@ -619,15 +620,19 @@ describe User do
     before do
       @corporation1 = create( :corporation )
       @corporation1.name = "corporation1"
+      @corporation1.save
+      @corporation1.parent_groups << Corporation.corporations_parent
       @corporation2 = create( :corporation )
       @corporation2.name = "corporation2"
+      @corporation2.save
+      @corporation2.parent_groups << Corporation.corporations_parent
       @user.save
-      @user.groups << @corporation1
+      @user.parent_groups << @corporation1.becomes(Group)
     end
     subject { @user.cached_corporations }
     it "should update when user enters new corporation" do
       subject.should_not include @corporation2
-      @user.groups << @corporation2
+      @user.parent_groups << @corporation2.becomes(Group)
       subject.should include @corporation2
     end
   end
@@ -636,15 +641,19 @@ describe User do
     before do
       @corporation1 = create( :corporation )
       @corporation1.name = "corporation1"
+      @corporation1.save
+      @corporation1.parent_groups << Corporation.corporations_parent
       @corporation2 = create( :corporation )
       @corporation2.name = "corporation2"
+      @corporation2.save
+      @corporation2.parent_groups << Corporation.corporations_parent
       @user.save
-      @user.groups << @corporation1
+      @user.parent_groups << @corporation1.becomes(Group)
     end
-    subject { @user.cached_corporations_and_memberships }
+    subject { @user.corporations_and_memberships }
     it "should update when user enters new corporation" do
       subject.should_not include @corporation2
-      @user.groups << @corporation2
+      @user.parent_groups << @corporation2.becomes(Group)
       subject.should include @corporation2
     end
   end
@@ -653,15 +662,19 @@ describe User do
     before do
       @corporation1 = create( :corporation )
       @corporation1.name = "corporation1"
+      @corporation1.save
+      @corporation1.parent_groups << Corporation.corporations_parent
       @corporation2 = create( :corporation )
       @corporation2.name = "corporation2"
+      @corporation2.save
+      @corporation2.parent_groups << Corporation.corporations_parent
       @user.save
-      @user.groups << @corporation1
+      @user.parent_groups << @corporation1.becomes(Group)
     end
-    subject { @user.cached_corporation_groups }
+    subject { @user.corporation_groups }
     it "should update when user enters new corporation" do
       subject.should_not include @corporation2
-      @user.groups << @corporation2
+      @user.parent_groups << @corporation2.becomes(Group)
       subject.should include @corporation2
     end
   end
