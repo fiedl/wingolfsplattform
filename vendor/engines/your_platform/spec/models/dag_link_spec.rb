@@ -47,16 +47,16 @@ describe "Page (DagLinkNode)" do
 
   describe "#delete_cache" do
     it "Cached breadcrumbs should be updated on destruction or modification of a DAG link" do
-      @page.cached_breadcrumbs.should include( @parent )
+      @page.cached_breadcrumbs.to_s.should include( @parent.name )
       link = DagLink.where(:ancestor_id=>@page.id,:descendant_id=>@parent.id).first
       link.destroy if link and link.destroyable?
-      @page.cached_breadcrumbs.should_not include( @parent )
+      @page.cached_breadcrumbs.to_s.should_not include( @parent.name )
     end
     it "Cached ancestor navables should be updated on destruction or modification of a DAG link" do
-      @page.cached_ancestor_navables.should_not be_empty
+      @page.cached_ancestor_navables.to_s.should include( @parent.name )
       link = DagLink.where(:ancestor_id=>@page.id,:descendant_id=>@parent.id).first
       link.destroy if link and link.destroyable?
-      @page.cached_ancestor_navables.should be_empty
+      @page.cached_ancestor_navables.to_s.should_not include( @parent.name )
     end
   end
 
