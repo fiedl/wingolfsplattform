@@ -515,7 +515,6 @@ describe User do
   describe "#corporations" do
     before do
       @corporation = create( :corporation )
-      @corporation.parent_groups << Corporation.corporations_parent
       @subgroup = create( :group ); @subgroup.parent_groups << @corporation
       @user.save
       @user.parent_groups << @subgroup
@@ -621,11 +620,9 @@ describe User do
       @corporation1 = create( :corporation )
       @corporation1.name = "corporation1"
       @corporation1.save
-      @corporation1.parent_groups << Corporation.corporations_parent
       @corporation2 = create( :corporation )
       @corporation2.name = "corporation2"
       @corporation2.save
-      @corporation2.parent_groups << Corporation.corporations_parent
       @user.save
       @user.parent_groups << @corporation1.becomes(Group)
     end
@@ -642,11 +639,9 @@ describe User do
       @corporation1 = create( :corporation )
       @corporation1.name = "corporation1"
       @corporation1.save
-      @corporation1.parent_groups << Corporation.corporations_parent
       @corporation2 = create( :corporation )
       @corporation2.name = "corporation2"
       @corporation2.save
-      @corporation2.parent_groups << Corporation.corporations_parent
       @user.save
       @user.parent_groups << @corporation1.becomes(Group)
     end
@@ -663,11 +658,9 @@ describe User do
       @corporation1 = create( :corporation )
       @corporation1.name = "corporation1"
       @corporation1.save
-      @corporation1.parent_groups << Corporation.corporations_parent
       @corporation2 = create( :corporation )
       @corporation2.name = "corporation2"
       @corporation2.save
-      @corporation2.parent_groups << Corporation.corporations_parent
       @user.save
       @user.parent_groups << @corporation1.becomes(Group)
     end
