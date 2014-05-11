@@ -419,8 +419,8 @@ class User < ActiveRecord::Base
   # Find corporation groups of a certain user.
   #
   def corporation_groups
-    ancestor_groups_of_user = self.groups
-    corporation_groups = Group.find_corporation_groups if Group.find_corporations_parent_group
+    ancestor_groups_of_user = self.groups.collect{ |group| group.becomes( Group ) }
+    corporation_groups = Group.find_corporation_groups.collect{ |group| group.becomes( Group ) } if Group.find_corporations_parent_group
     return ancestor_groups_of_user & corporation_groups if ancestor_groups_of_user and corporation_groups
   end
 

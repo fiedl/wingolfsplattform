@@ -626,11 +626,11 @@ describe User do
       @user.save
       @user.parent_groups << @corporation1.becomes(Group)
     end
-    subject { @user.cached_corporations }
+    subject { @user.corporations }
     it "should update when user enters new corporation" do
-      subject.should_not include @corporation2
+      subject.should_not include @corporation2.becomes(Group)
       @user.parent_groups << @corporation2.becomes(Group)
-      subject.should include @corporation2
+      subject.should include @corporation2.becomes(Group)
     end
   end
   
@@ -647,9 +647,9 @@ describe User do
     end
     subject { @user.corporations_and_memberships }
     it "should update when user enters new corporation" do
-      subject.should_not include @corporation2
+      subject.should_not include @corporation2.becomes(Group)
       @user.parent_groups << @corporation2.becomes(Group)
-      subject.should include @corporation2
+      subject.should include @corporation2.becomes(Group)
     end
   end
   
@@ -666,9 +666,9 @@ describe User do
     end
     subject { @user.corporation_groups }
     it "should update when user enters new corporation" do
-      subject.should_not include @corporation2
+      subject.should_not include @corporation2.becomes(Group)
       @user.parent_groups << @corporation2.becomes(Group)
-      subject.should include @corporation2
+      subject.should include @corporation2.becomes(Group)
     end
   end
 
