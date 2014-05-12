@@ -97,7 +97,7 @@ end
 
 # RSpec, see: http://ruby.railstutorial.org/chapters/static-pages#sec:first_tests
 group :test, :development do
-  gem 'guard', '~> 2.2.5'
+  gem 'guard', '>= 2.2.5'
   gem 'guard-focus'
   gem 'rspec-rails'
   gem 'guard-rspec'

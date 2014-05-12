@@ -4,9 +4,13 @@
 require 'active_support/core_ext'
 
 guard( 'rspec',
-       :cmd => 'spring rspec --drb --tag focus',
+       :cmd => 'bundle exec spring rspec --tag focus',
        :all_after_pass => false,
        :all_on_start => false,
+       :failed_mode => :none, # What to do with failed specs:
+                              #  :focus (default) - focus on the first 10 failed specs, rerun till they pass
+                              #  :keep - keep failed specs until they pass (add them to new ones)
+                              #  :none - just report
        spec_paths: %w(spec vendor/engines/your_platform/spec)) do
 
   watch(%r{^spec/.+_spec\.rb$})
