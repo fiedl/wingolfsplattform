@@ -652,7 +652,7 @@ describe User do
       subject.should_not include @corporation2
       @user.parent_groups << @corporation2.becomes(Group)
       @user.reload
-      @user.parent_groups.should include @corporation2
+      @user.parent_groups.should include @corporation2.becomes(Group)
       @user.groups.should include @corporation2
       Group.corporations.should include @corporation2
       subject.should include @corporation2
@@ -675,7 +675,7 @@ describe User do
       subject.should_not include @corporation2.becomes(Group)
       @user.parent_groups << @corporation2.becomes(Group)
       @user.reload
-      @user.parent_groups.should include @corporation2
+      @user.parent_groups.should include @corporation2.becomes(Group)
       subject.should include @corporation2.becomes(Group)
     end
   end

@@ -8,10 +8,10 @@ class DagLink < ActiveRecord::Base
 
   def delete_cache
     if(descendant is_a? Navable) 
-      descendant.delete_cache
+      Navable.delete_cache
     end
     if(ancestor is_a? Navable) 
-      ancestor.delete_cache
+      Navable.delete_cache
     end
 
     if self.descendant_type == "Group"

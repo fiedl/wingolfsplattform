@@ -42,12 +42,12 @@ module Navable
 
     def cached_breadcrumbs
       breadcrumbs_navables = Rails.cache.fetch("breadcrumbs_navables") { [] }
-      breadcrumbs_navables << self
+      breadcrumbs_navables << self unless breadcrumbs_navables.include? self
       Rails.cache.write("breadcrumbs_navables", breadcrumbs_navables)
       Rails.cache.fetch([self, "breadcrumbs"]) { nav_node.breadcrumbs }
     end
 
-    def delete_cached_breadcrumbs
+    def self.delete_cached_breadcrumbs
       breadcrumbs_navables = Rails.cache.fetch("breadcrumbs_navables") { [] }
       breadcrumbs_navables.collect do |navable|
         Rails.cache.delete([navable, "breadcrumbs"])
@@ -57,12 +57,12 @@ module Navable
 
     def cached_ancestor_navables
       ancestor_navables_navables = Rails.cache.fetch("ancestor_navables_navables") { [] }
-      ancestor_navables_navables << self
+      ancestor_navables_navables << self unless ancestor_navables_navables.include? self
       Rails.cache.write("ancestor_navables_navables", ancestor_navables_navables)
       Rails.cache.fetch([self, "ancestor_navables"]) { nav_node.ancestor_navables }
     end
 
-    def delete_cached_ancestor_navables
+    def self.delete_cached_ancestor_navables
       ancestor_navables_navables = Rails.cache.fetch("ancestor_navables_navables") { [] }
       ancestor_navables_navables.collect do |navable|
         Rails.cache.delete([navable, "ancestor_navables"])
@@ -70,9 +70,9 @@ module Navable
       Rails.cache.delete("ancestor_navables_navables")
     end
 
-    def delete_cache
-      delete_cached_breadcrumbs
-      delete_cached_ancestor_navables
+    def self.delete_cache
+      self.delete_cached_breadcrumbs
+      self.delete_cached_ancestor_navables
     end
 
     private
