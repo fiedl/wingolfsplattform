@@ -386,7 +386,7 @@ class User < ActiveRecord::Base
   # If a user is only guest in a corporation, `user.corporations` WILL list this corporation.
   #
   def corporations
-    my_corporations = ( self.parent_groups.collect{ |group| group.becomes( Group ) } & Group.corporations.collect{ |group| group.becomes( Group ) } )
+    my_corporations = ( self.groups.collect{ |group| group.becomes( Group ) } & Group.corporations.collect{ |group| group.becomes( Group ) } )
     my_corporations ||= []
     my_corporations.collect{ |group| group.becomes( Corporation ) }
   end
@@ -419,7 +419,7 @@ class User < ActiveRecord::Base
   # Find corporation groups of a certain user.
   #
   def corporation_groups
-    ancestor_groups_of_user = self.parent_groups.collect{ |group| group.becomes( Group ) }
+    ancestor_groups_of_user = self.groups.collect{ |group| group.becomes( Group ) }
     corporation_groups = Group.find_corporation_groups.collect{ |group| group.becomes( Group ) } if Group.find_corporations_parent_group
     return ancestor_groups_of_user & corporation_groups if ancestor_groups_of_user and corporation_groups
   end

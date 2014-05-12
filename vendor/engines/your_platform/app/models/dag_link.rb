@@ -2,15 +2,15 @@
 class DagLink < ActiveRecord::Base
 
   attr_accessible :ancestor_id, :ancestor_type, :count, :descendant_id, :descendant_type, :direct
+  after_commit      :delete_cache, prepend: true
+  before_destroy    :delete_cache, prepend: true
   acts_as_dag_links polymorphic: true
-  after_commit      :delete_cache
-  before_destroy    :delete_cache
 
   def delete_cache
-    if(descendant.is_navable?) 
+    if(descendant is_a? Navable) 
       descendant.delete_cache
     end
-    if(ancestor.is_navable?)
+    if(ancestor is_a? Navable) 
       ancestor.delete_cache
     end
 
