@@ -629,7 +629,8 @@ describe User do
     subject { @user.corporations }
     it "should update when user enters new corporation" do
       subject.should_not include @corporation2
-      @user.parent_groups << @corporation2
+      @user.parent_groups << @corporation2.becomes(Group)
+      @user.reload
       subject.should include @corporation2
     end
   end
@@ -648,7 +649,8 @@ describe User do
     subject { @user.corporations_and_memberships }
     it "should update when user enters new corporation" do
       subject.should_not include @corporation2
-      @user.parent_groups << @corporation2
+      @user.parent_groups << @corporation2.becomes(Group)
+      @user.reload
       subject.should include @corporation2
     end
   end
@@ -668,6 +670,7 @@ describe User do
     it "should update when user enters new corporation" do
       subject.should_not include @corporation2.becomes(Group)
       @user.parent_groups << @corporation2.becomes(Group)
+      @user.reload
       subject.should include @corporation2.becomes(Group)
     end
   end
