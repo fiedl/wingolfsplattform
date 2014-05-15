@@ -7,19 +7,23 @@ require_dependency YourPlatform::Engine.root.join( 'app/models/corporation' ).to
 class Corporation 
 
   def aktivitas
-    self.child_groups.select { |child| child.name == "Aktivitas" or child.name == "Activitas" }.first
+    #self.child_groups.select { |child| child.name == "Aktivitas" or child.name == "Activitas" }.first
+    self.child_groups.where(name: ['Aktivitas', 'Activitas']).first
   end
 
   def philisterschaft
-    self.child_groups.select { |child| child.name == "Philisterschaft" }.first
+    # self.child_groups.select { |child| child.name == "Philisterschaft" }.first
+    self.child_groups.where(name: 'Philisterschaft').first
   end
 
   def hausverein
-    self.child_groups.select{ |child| child.name == "Hausverein" or child.name == "Wohnheimsverein" }.first
+    # self.child_groups.select{ |child| child.name == "Hausverein" or child.name == "Wohnheimsverein" }.first
+    self.child_groups.where(name: ['Hausverein', 'Wohnheimsverein']).first
   end
   
   def verstorbene
-    self.child_groups.where(name: "Verstorbene").first
+    # self.child_groups.where(name: "Verstorbene").first
+    self.child_groups.where(name: 'Verstorbene').first
   end
   
   def self.find_all_wingolf_corporations

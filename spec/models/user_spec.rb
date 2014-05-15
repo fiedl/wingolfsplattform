@@ -147,7 +147,7 @@ describe User do
         @corporation = create(:corporation_with_status_groups)
         @membership = @corporation.status_groups.first.assign_user @user
       end
-      it { should == true}
+      it { should == true } 
       describe "when the member has died" do
         before { @user.set_date_of_death_if_unset "01.01.2006" }
         it { should == true }
