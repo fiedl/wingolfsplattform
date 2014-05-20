@@ -1,24 +1,24 @@
 - if user
   %table{ id: 'corporate_vita' }
-    - for corporation in user.corporations
-      %tr
-        %th{ colspan: 3}= corporation.title
-        - memberships = user.corporate_vita_memberships_in corporation
-        - for membership in memberships
-          - needs_review = (can?(:manage, user) && membership.needs_review?)
-          - needs_review_class = needs_review ? 'needs_review' : ''
-          %tr{ class: "membership #{needs_review_class}" }
-            %td
-              - if needs_review
-                = link_to(user_group_membership_path(membership, "user_group_membership[needs_review]" => false), method: :put, remote: true, :class => "btn btn-small btn-success confirm-review-button", title: I18n.t(:confirm_review)) do
-                  %i.icon-ok.icon-white 
-            %td.membership_valid_from
-              - if can? :update, membership
-                = status_group_membership_valid_from_best_in_place( membership )
-              - else
-                = membership.valid_from_localized_date
-            %td.membership_group= link_to membership.group.title.singularize, membership.group, :class => 'status_group_label'
-            -# %td= status_group_membership_promoted_on_event( membership )
+    - for corporation_or_membership in user.cached_corporations_and_memberships
+      - if corporation_or_membership.is_a? Corporation
+        %tr
+          %th{ colspan: 3}= corporation_or_membership.title
+      - if corporation_or_membership.is_a? UserGroupMembership
+        - needs_review = (can?(:manage, user) && corporation_or_membership.needs_review?)
+        - needs_review_class = needs_review ? 'needs_review' : ''
+        %tr{ class: "membership #{needs_review_class}" }
+          %td
+            - if needs_review
+              = link_to(user_group_membership_path(corporation_or_membership, "user_group_membership[needs_review]" => false), method: :put, remote: true, :class => "btn btn-small btn-success confirm-review-button", title: I18n.t(:confirm_review)) do
+                %i.icon-ok.icon-white
+          %td.membership_valid_from
+            - if can? :update, corporation_or_membership
+              = status_group_membership_valid_from_best_in_place( corporation_or_membership )
+            - else
+              = corporation_or_membership.valid_from_localized_date
+          %td.membership_group= link_to corporation_or_membership.group.title.singularize, corporation_or_membership.group, :class => 'status_group_label'
+          -# %td= status_group_membership_promoted_on_event( corporation_or_membership )
   - if user == current_user
     %hr
     %p

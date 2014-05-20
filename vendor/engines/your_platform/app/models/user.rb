@@ -47,8 +47,8 @@ class User < ActiveRecord::Base
   before_save               :generate_alias_if_necessary, :capitalize_name
   before_save               :build_account_if_requested
   after_save                :add_to_group_if_requested
-  
-  
+
+
   # Mixins
   # ==========================================================================================
   
@@ -386,15 +386,57 @@ class User < ActiveRecord::Base
   # If a user is only guest in a corporation, `user.corporations` WILL list this corporation.
   #
   def corporations
-    my_corporations = ( self.groups & Group.corporations ) if Group.corporations_parent
+    my_corporations = ( self.groups.collect{ |group| group.becomes( Group ) } & Group.corporations.collect{ |group| group.becomes( Group ) } )
     my_corporations ||= []
-    my_corporations.collect { |group| group.becomes( Corporation ) }
+    my_corporations.collect{ |group| group.becomes( Corporation ) }
   end
+
+  def cached_corporations
+    Rails.cache.fetch([self, "corporations"]) { corporations }
+  end
+
+  def delete_cached_corporations
+    Rails.cache.delete [self, "corporations"]
+  end
+
+  # A list of corporations and after each corporation entry,
+  # the list contains the memberships in the corporation.
+  def corporations_and_memberships
+    my_corporations = corporations
+    my_corporations.collect do |corporation|
+      [corporation] + corporate_vita_memberships_in( corporation )
+    end.flatten
+  end
+
+  def cached_corporations_and_memberships
+    Rails.cache.fetch([self, "corporations_and_memberships"]) { corporations_and_memberships }
+  end
+
+  def delete_cached_corporations_and_memberships
+    Rails.cache.delete [self, "corporations_and_memberships"]
+  end
+
+  # Find corporation groups of a certain user.
+  #
+  def corporation_groups
+    ancestor_groups_of_user = self.groups.collect{ |group| group.becomes( Group ) }
+    corporation_groups = Group.find_corporation_groups.collect{ |group| group.becomes( Group ) } if Group.find_corporations_parent_group
+    return ancestor_groups_of_user & corporation_groups if ancestor_groups_of_user and corporation_groups
+  end
+
+  def cached_corporation_groups
+    Rails.cache.fetch([self, "corporation_groups"]) { corporation_groups }
+  end
+
+  def delete_cached_corporation_groups
+    Rails.cache.delete [self, "corporation_groups"]
+  end
+
 
   # This returns the corporations the user is currently member of.
   #
   def current_corporations
-    self.corporations.select do |corporation|
+    self.cached_corporations.select do |corporation|
       Role.of(self).in(corporation).current_member?
     end || []
   end
@@ -446,6 +488,23 @@ class User < ActiveRecord::Base
     end
   end
 
+  def delete_cached_last_group_in_first_corporation
+    Rails.cache.delete [self, "last_group_in_first_corporation"]
+  end
+
+  def delete_cache
+    delete_cached_corporations
+    delete_cached_corporation_groups
+    delete_cached_last_group_in_first_corporation
+    delete_cached_corporations_and_memberships
+  end
+
+  def fetch_cache
+    cached_corporations
+    cached_corporation_groups
+    cached_last_group_in_first_corporation
+    cached_corporations_and_memberships
+  end
 
   # Corporate Vita
   # ==========================================================================================
@@ -525,7 +584,7 @@ class User < ActiveRecord::Base
   def workflows_by_corporation
     hash = {}
     other_workflows = self.workflows
-    self.corporations.each do |corporation|
+    self.cached_corporations.each do |corporation|
       corporation_workflows = self.workflows_for(corporation)
       hash.merge!( corporation.title.to_s => corporation_workflows )
       other_workflows -= corporation_workflows

@@ -13,7 +13,7 @@ module VerticalNavHelper
     if navable
       html_code = ""
       active_navable = navable
-      ancestor_navables = navable.nav_node.ancestor_navables
+      ancestor_navables = navable.cached_ancestor_navables
       child_navables = navable.navable_children
       html_code += menu_elements( ancestor_navables, :ancestor )
       html_code += menu_element( active_navable, :active )

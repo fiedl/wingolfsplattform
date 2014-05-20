@@ -595,9 +595,13 @@ describe User do
       @subgroup3 = create( :group )
       @subgroup3.name = "subgroup3"
       @subgroup3.parent_groups << @corporation1
+      @subgroup4 = create( :group )
+      @subgroup4.name = "subgroup4"
+      @subgroup4.parent_groups << @corporation1
       @user.save
       @user.parent_groups << @subgroup1
       @user.parent_groups << @subgroup3
+      @user.parent_groups << @subgroup4
       @user.parent_groups << @subgroup1.admins_parent
       @user.parent_groups << @corporation1.admins_parent
       @user.parent_groups << @subgroup2
@@ -607,10 +611,75 @@ describe User do
     end
     subject { @user.cached_last_group_in_first_corporation }
     it "should return the last non special group of user's first corporation" do
-      subject.should == @subgroup3
+      subject.should == @subgroup4
+    end
+  end
+
+  describe "#cached_corporations" do
+    before do
+      @corporation1 = create( :corporation )
+      @corporation1.name = "corporation1"
+      @corporation1.save
+      @corporation2 = create( :corporation )
+      @corporation2.name = "corporation2"
+      @corporation2.save
+      @user.save
+      @user.parent_groups << @corporation1
+    end
+    subject { @user.corporations }
+    it "should update when user enters new corporation" do
+      subject.should_not include @corporation2
+      @user.parent_groups << @corporation2.becomes(Group)
+      @user.reload
+      @user.parent_groups.should include @corporation2
+      subject.should include @corporation2
     end
   end
   
+  describe "#cached_corporations_and_memberships" do
+    before do
+      @corporation1 = create( :corporation )
+      @corporation1.name = "corporation1"
+      @corporation1.save
+      @corporation2 = create( :corporation )
+      @corporation2.name = "corporation2"
+      @corporation2.save
+      @user.save
+      @user.parent_groups << @corporation1
+    end
+    subject { @user.corporations_and_memberships }
+    it "should update when user enters new corporation" do
+      subject.should_not include @corporation2
+      @user.parent_groups << @corporation2.becomes(Group)
+      @user.reload
+      @user.parent_groups.should include @corporation2.becomes(Group)
+      @user.groups.should include @corporation2
+      Group.corporations.should include @corporation2
+      subject.should include @corporation2
+    end
+  end
+  
+  describe "#cached_corporation_groups" do
+    before do
+      @corporation1 = create( :corporation )
+      @corporation1.name = "corporation1"
+      @corporation1.save
+      @corporation2 = create( :corporation )
+      @corporation2.name = "corporation2"
+      @corporation2.save
+      @user.save
+      @user.parent_groups << @corporation1.becomes(Group)
+    end
+    subject { @user.corporation_groups }
+    it "should update when user enters new corporation" do
+      subject.should_not include @corporation2.becomes(Group)
+      @user.parent_groups << @corporation2.becomes(Group)
+      @user.reload
+      @user.parent_groups.should include @corporation2.becomes(Group)
+      subject.should include @corporation2.becomes(Group)
+    end
+  end
+
   # Status Groups
   # ------------------------------------------------------------------------------------------
 
@@ -1344,6 +1413,23 @@ describe User do
       it { should include @user_without_address }
       it { should include @user_with_empty_address }
       it { should_not include @user_with_address }
+    end
+  end
+
+
+  describe "#delete_cache" do
+    before do
+      @user.fetch_cache
+    end
+    subject { @user.delete_cache }
+    it "should delete the caches" do
+      Rails.cache.exist?([@user, "corporation_groups"]).should be_true
+      Rails.cache.exist?([@user, "corporations"]).should be_true
+      Rails.cache.exist?([@user, "last_group_in_first_corporation"]).should be_true
+      subject
+      Rails.cache.exist?([@user, "corporation_groups"]).should be_false
+      Rails.cache.exist?([@user, "corporations"]).should be_false
+      Rails.cache.exist?([@user, "last_group_in_first_corporation"]).should be_false
     end
   end
 

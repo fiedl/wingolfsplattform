@@ -111,6 +111,7 @@ describe User do
     before do
       @corporationE = create( :corporation_with_status_groups, :token => "E" )
       @corporationH = create( :corporation_with_status_groups, :token => "H" )
+      @corporationT = create( :corporation_with_status_groups, :token => "T" )
 
       @first_membership_E = StatusGroupMembership.create( user: @user, group: @corporationE.status_groups.first )
       @first_membership_E.update_attributes(valid_from: "2006-12-01".to_datetime)
@@ -129,6 +130,16 @@ describe User do
     end
     it "should not use the wrong order (bug fix)" do
       subject.should_not == "H08 E06"
+    end
+    describe "new membership" do
+      before do
+        @second_membership_T = StatusGroupMembership.create( user: @user, group: @corporationT.status_groups.last )
+        @second_membership_T.update_attributes(valid_from: "2014-03-13".to_datetime)
+      end
+      it "should update cached aktivitaetszahl" do
+        @user.aktivitaetszahl.should == "E06 H08 T14"
+        subject.should == "E06 H08 T14"
+      end
     end
   end
   
@@ -364,12 +375,15 @@ describe User do
           @user.postal_address_field.should == @address_field2
         end
         it "should assign the user to the new BV" do
+          sleep 1.1  # because of the time comparison of valid_from/valid_to.
           subject
           sleep 1.1  # because of the validity range time comparison
           @user.reload.bv.should == @bv2
         end
         it "should end the current BV membership" do
+          sleep 1.1  # because of the time comparison of valid_from/valid_to.
           subject
+          sleep 1.1  # because of the time comparison of valid_from/valid_to.
           @membership1.reload.valid_to.should_not == nil
         end
         it "should return the new membership" do
@@ -517,6 +531,18 @@ describe User do
       end
     end
     
+  end
+
+  describe "#delete_cache" do
+    before do
+      @user.fetch_cache
+    end
+    subject { @user.delete_cache }
+    it "should delete the caches" do
+      Rails.cache.exist?([@user, "aktivitaetszahl"]).should be_true
+      subject
+      Rails.cache.exist?([@user, "aktivitaetszahl"]).should be_false
+    end
   end
   
 end

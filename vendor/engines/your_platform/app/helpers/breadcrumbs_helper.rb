@@ -10,7 +10,7 @@ module BreadcrumbsHelper
   
   def breadcrumb_ul_for_navable( navable )
     content_tag :ul do
-      breadcrumbs = navable.nav_node.breadcrumbs   # => [ { title: 'foo', navable: ... }, ... ]
+      breadcrumbs = navable.cached_breadcrumbs   # => [ { title: 'foo', navable: ... }, ... ]
       breadcrumb_lis_for_breadcrumb_hashes( breadcrumbs )
     end
   end

@@ -2,11 +2,18 @@
 class DagLink < ActiveRecord::Base
 
   attr_accessible :ancestor_id, :ancestor_type, :count, :descendant_id, :descendant_type, :direct
+  after_commit      :delete_cache, prepend: true
+  before_destroy    :delete_cache, prepend: true
   acts_as_dag_links polymorphic: true
-  after_commit      :flush_cache_dag
-  before_destroy    :flush_cache_dag
 
-  def flush_cache_dag
+  def delete_cache
+    if(descendant is_a? Navable) 
+      Navable.delete_cache
+    end
+    if(ancestor is_a? Navable) 
+      Navable.delete_cache
+    end
+
     if self.descendant_type == "Group"
       if Group.exists?( self.descendant_id )
         desc_group = Group.find( self.descendant_id )
