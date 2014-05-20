@@ -55,6 +55,28 @@ namespace :fix do
       log.success "Fertig."
     end
     
+    task :remove_multiple_bv_assignments => [:environment, :requirements, :print_info] do
+      log.section "BV-Doppel-Mitgliedschaften entfernen"
+      log.info "Ein Philister soll genau einem BV zugeordnet sein. Dieser Task"
+      log.info "entfernt eventuelle zusätzliche BV-Mitgliedschaften."
+      log.info ""
+      log.info "Das Betrifft #{alle_philister_mit_mehreren_bvs.count} Philister:"
+      log.info ""
+
+      for user in alle_philister_mit_mehreren_bvs
+        print "#{user.w_nummer} ... "
+        
+        correct_membership = user.adapt_bv_to_postal_address
+        raise 'no membership' unless correct_membership.kind_of? UserGroupMembership
+        
+        if user.reload.bv
+          log.info "#{user.reload.bv.token} ist korrekt."
+        else
+          log.failure "konnte keinem BV zugeordnet werden. Kontrolle erforderlich!"
+        end
+      end
+    end
+    
     task :list_users_without_postal_address => [:environment, :requirements, :print_info] do
       log.section "Wingolfiten ohne Postanschrift"
       log.info "Die folgenden Wingolfiten haben keine Postanschrift hinterlegt:"
@@ -100,6 +122,13 @@ namespace :fix do
     User.joins_groups.where(:groups => {name: "Bezirksverbände"}).uniq
   end
   
+  def alle_philister_mit_mehreren_bvs
+    bv_ids = Bv.all.collect { |bv| bv.id }
+    bv_users = User.joins_groups.where(:groups => {id: bv_ids})
+    users_in_multiple_bvs = bv_users - bv_users.uniq
+    return users_in_multiple_bvs
+  end
+
   def alle_philister_ohne_bv
     alle_philister - alle_bv_philister - [nil]
   end
