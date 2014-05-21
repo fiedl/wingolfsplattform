@@ -116,6 +116,7 @@ group :test do
   gem 'guard-spork'
   gem 'spork'
   gem 'simplecov', '~> 0.7.1', require: false  # fixed to to return code issue.
+  gem 'fuubar'
 end
 
 group :test do
