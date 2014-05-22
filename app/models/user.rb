@@ -10,7 +10,7 @@ require_dependency YourPlatform::Engine.root.join( 'app/models/user' ).to_s
 class User
   attr_accessible :wingolfsblaetter_abo, :hidden
   
-  include UserMixins::Bv
+  include UserMixins::Bvs
 
 
   # This method returns a kind of label for the user, e.g. for menu items representing the user.

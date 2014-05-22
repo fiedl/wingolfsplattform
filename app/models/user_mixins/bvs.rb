@@ -1,4 +1,4 @@
-module UserMixins::Bv
+module UserMixins::Bvs
   extend ActiveSupport::Concern
   
   # This method returns the bv (Bezirksverband) the user is associated with.
