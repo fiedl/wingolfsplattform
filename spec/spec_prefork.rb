@@ -108,6 +108,10 @@ RSpec.configure do |config|
   # This introduces the methods `send_key(field_id, key)` and `press_enter(field_id)`.
   #
   config.include PressEnter
+  
+  # This allows direct time travel (`time_travel 2.seconds`), which is needed for 
+  # testing validity ranges.
+  config.include TimeTravel
 
   # Devise test helper for controller tests
   config.include Devise::TestHelpers, :type => :controller

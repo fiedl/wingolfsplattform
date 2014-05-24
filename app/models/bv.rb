@@ -11,7 +11,7 @@ class Bv < Group
   def self.all
     Group.find_bv_groups
   end
-
+  
   def self.by_plz( plz )
     bv_token = BvMapping.find_by_plz( plz ).bv_name if BvMapping.find_by_plz( plz )
     bv_group = ( Bv.all.select { |group| group.token == bv_token } ).first if bv_token
@@ -19,8 +19,8 @@ class Bv < Group
   end
 
   def self.by_address( address )
-    geo_location = GeoLocation.find_or_create_by_address( address )
-    self.by_geo_location(geo_location)
+    geo_location = GeoLocation.find_or_create_by(address: address)
+    self.by_geo_location(geo_location).try(:becomes, Bv)
   end
 
   def self.by_geo_location( geo_location )
@@ -29,19 +29,19 @@ class Bv < Group
     return self.by_plz(geo_location.plz) if geo_location.country_code == "DE"
 
     # Austria => BV 43
-    return self.find_by_token("BV 43") if geo_location.country_code == "AT"
+    return self.find_by(token: 'BV 43') if geo_location.country_code == "AT"
 
     # Estonia => BV 44
-    return self.find_by_token("BV 44") if geo_location.country_code == "EE"
+    return self.find_by(token: 'BV 44') if geo_location.country_code == "EE"
 
     # Rest of Europe => BV 45
-    return self.find_by_token("BV 45") if geo_location.in_europe?
+    return self.find_by(token: 'BV 45') if geo_location.in_europe?
 
     # Rest of the World => BV 46
-    return self.find_by_token("BV 46") if geo_location.country_code
+    return self.find_by(token: 'BV 46') if geo_location.country_code
 
     # No valid address given => BV 00
-    return self.find_by_token("BV 00")
+    return self.find_by(token: 'BV 00')
 
   end
 
@@ -60,5 +60,12 @@ class Bv < Group
     old_bv = user.bv
     old_bv.try(:unassign_user, user)
   end
-
+  
+  # TODO: Remove this as soon as group STI is properly in place.
+  # Trello: https://trello.com/c/1lZfwCxd/623-gruppen-sti
+  #
+  def self.find_by(params)
+    super(params).becomes Bv
+  end
+  
 end

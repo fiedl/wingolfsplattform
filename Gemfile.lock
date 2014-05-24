@@ -417,6 +417,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.3)
     tilt (1.4.1)
+    timecop (0.7.1)
     timers (1.1.0)
     tins (1.1.0)
     treetop (1.4.15)
@@ -510,6 +511,7 @@ DEPENDENCIES
   spring-commands-rspec
   therubyracer
   tilt (~> 1.4.1)
+  timecop
   turbolinks (>= 1.0)
   turnout
   uglifier (>= 1.0.3)

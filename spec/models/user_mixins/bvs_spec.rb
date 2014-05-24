@@ -112,6 +112,7 @@ RSpec.describe UserMixins::Bv do
     subject { user.adapt_bv_to_postal_address }
     
     specify "prelims" do
+      Bv.by_address(@address1).should be_kind_of Bv
       Bv.by_address(@address1).should == @bv1
       Bv.by_address(@address2).should == @bv2
     end
@@ -161,9 +162,15 @@ RSpec.describe UserMixins::Bv do
           @address_field2.bv.should == @bv2
           user.postal_address_field.should == @address_field2
         end
-        it "should assign the user to the new BV" do
+        it "should assign the user to the new BV", :focus do
+          
+          p 1, user.reload.bv_membership.read_attribute_before_type_cast(:valid_from), Time.zone.now
+          
           subject
-          sleep 1.1  # because of the validity range time comparison
+          time_travel 2.seconds # because of the validity range time comparison
+
+          p 2, user.reload.bv_membership.read_attribute_before_type_cast(:valid_from), Time.zone.now
+          
           user.reload.bv.should == @bv2
         end
         it "should end the current BV membership" do

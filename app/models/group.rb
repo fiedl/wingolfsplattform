@@ -8,6 +8,14 @@ require_dependency YourPlatform::Engine.root.join( 'app/models/group' ).to_s
 # this re-opened class contains all wingolf-specific additions to the group model.
 
 class Group
+  
+  
+  def type
+    return 'Bv' if parent_groups.include? Group.bvs_parent!
+    return 'Corporation' if parent_group.sinclude? Group.corporations_parent!
+    return ''
+  end
+  
 
 
   # Special Groups

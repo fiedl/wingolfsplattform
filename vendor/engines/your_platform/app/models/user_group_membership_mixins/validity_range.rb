@@ -131,8 +131,8 @@ module UserGroupMembershipMixins::ValidityRange
     # This is the default bahaviour. 
     #
     def only_valid
-      where("valid_from IS NULL OR valid_from <= ?", Time.zone.now)
-      .where("valid_to IS NULL OR valid_to >= ?", Time.zone.now)
+      where("valid_from IS NULL OR valid_from <= ?", Time.zone.now.round)
+      .where("valid_to IS NULL OR valid_to >= ?", Time.zone.now.round)
     end
     
     # This scope widens the query such that also memberships that are not valid at the

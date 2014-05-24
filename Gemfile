@@ -204,3 +204,8 @@ gem 'turnout'
 gem 'best_in_place', git: 'git://github.com/bernat/best_in_place.git'
 gem 'protected_attributes'
 gem 'activerecord-deprecated_finders'
+
+
+# for time travels during tests
+gem 'timecop'
+
