@@ -36,6 +36,7 @@ Gem::Specification.new do |s|
   # DAG Structure, https://github.com/resgraph/acts-as-dag
   s.add_dependency 'acts-as-dag', '>= 2.5.7'                                           # MIT License
   s.add_dependency 'acts_as_tree'                                                      # MIT License
+  s.add_dependency 'temporal_scopes', '>= 0.0.3'                                       # MIT License
 
   # Authentification
   s.add_dependency 'devise'

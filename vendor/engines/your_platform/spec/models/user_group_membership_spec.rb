@@ -27,7 +27,7 @@ describe UserGroupMembership do
   end
 
   def find_membership_now_and_in_the_past
-    UserGroupMembership.find_all_by( user: @user, group: @group ).now_and_in_the_past.first
+    UserGroupMembership.find_all_by( user: @user, group: @group ).with_past.first
   end
 
   def find_indirect_membership
@@ -35,7 +35,7 @@ describe UserGroupMembership do
   end
 
   def find_indirect_membership_now_and_in_the_past
-    UserGroupMembership.find_all_by( user: @user, group: @super_group ).now_and_in_the_past.first
+    UserGroupMembership.find_all_by( user: @user, group: @super_group ).with_past.first
   end
 
   def create_other_membership
@@ -51,7 +51,7 @@ describe UserGroupMembership do
   end
 
   def find_other_membership_now_and_in_the_past
-    UserGroupMembership.find_all_by( user: @user, group: @other_group).now_and_in_the_past.first
+    UserGroupMembership.find_all_by( user: @user, group: @other_group).with_past.first
   end
 
   def create_memberships
@@ -107,9 +107,9 @@ describe UserGroupMembership do
       end
     end
     describe ".find_all_by.now_and_in_the_past" do
-      before { find_membership.make_invalid }
+      before { find_membership.archive }
       it "should find all memberships, including the ones that are invalid at the present time" do
-        UserGroupMembership.find_all_by( user: @user ).now_and_in_the_past
+        UserGroupMembership.find_all_by( user: @user ).with_past
           .should include( find_membership_now_and_in_the_past, find_indirect_membership, find_other_membership )
       end
     end
@@ -207,6 +207,7 @@ describe UserGroupMembership do
         @group = @corporation.child_groups.create
         @user = create( :user )
         @group.assign_user @user
+        time_travel 2.seconds
       end
       subject { UserGroupMembership.find_by_user_and_group( @user, @group ).corporation }
       it { should == @corporation }
@@ -225,6 +226,7 @@ describe UserGroupMembership do
         @corporation = create( :corporation )
         @user = create( :user )
         @corporation.assign_user @user
+        time_travel 2.seconds
       end
       subject { UserGroupMembership.find_by_user_and_group( @user, @corporation ).corporation }
       it { should == @corporation }
@@ -376,7 +378,7 @@ describe UserGroupMembership do
     before do
       create_membership
       find_membership.move_to_group( @other_group )
-      sleep 1.1 # just to make sure the time comparison works
+      time_travel 2.seconds
     end
     it "should hide old direct membership" do
       find_membership.should == nil
@@ -412,13 +414,17 @@ describe UserGroupMembership do
         @membership_1 = @status_1.assign_user @user, at: 1.year.ago
         @membership_2 = @membership_1.promote_to @status_2, at: 10.minutes.ago
         @membership_3 = @membership_2.promote_to @status_3, at: 2.minutes.ago
+        time_travel 2.seconds
       end
       subject do
-        @user.parent_groups.each do |group|
-          UserGroupMembership.with_invalid.find_by_user_and_group(@user, group).destroy
+        #@user.direct_memberships.with_past.each do |membership|
+        #  membership.destroy
+        #end
+        @user.reload.parent_groups.each do |group|
+          UserGroupMembership.with_past.find_all_by_user_and_group(@user, group).first.destroy
         end
       end
-      it "should not raise an error (bug fix)" do
+      it "should not raise an error (bug fix)" , :focus do
         expect { subject }.not_to raise_error
       end
     end

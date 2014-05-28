@@ -29,6 +29,12 @@ GIT
       treetop (~> 1.4.8)
 
 PATH
+  remote: ../temporal_scopes
+  specs:
+    temporal_scopes (0.0.4)
+      rails (~> 4.1.1)
+
+PATH
   remote: vendor/engines/your_platform
   specs:
     your_platform (0.0.1)
@@ -60,6 +66,7 @@ PATH
       rails-i18n
       redcarpet
       slim_breadcrumb (>= 0.0.3)
+      temporal_scopes (>= 0.0.3)
       twitter-bootstrap-rails (= 2.2.4)
       will_paginate (> 3.0)
       workflow_kit (~> 0.0.7)
@@ -287,7 +294,7 @@ GEM
       mini_portile (~> 0.5.0)
     orm_adapter (0.5.0)
     passgen (1.0.2)
-    phony (2.2.8)
+    phony (2.2.13)
     poltergeist (1.5.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -509,6 +516,7 @@ DEPENDENCIES
   spork
   spring
   spring-commands-rspec
+  temporal_scopes!
   therubyracer
   tilt (~> 1.4.1)
   timecop

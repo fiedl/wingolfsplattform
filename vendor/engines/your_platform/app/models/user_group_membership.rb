@@ -103,7 +103,7 @@ class UserGroupMembership < DagLink
     user ||= User.find_by_title params[:user_title] if params[:user_title]
     group = params[ :group ]
     group ||= Group.find params[:group_id] if params[:group_id]
-    links = UserGroupMembership
+    links = self
       .where( :descendant_type => "User" )
       .where( :ancestor_type => "Group" )
     links = links.where( :descendant_id => user.id ) if user
@@ -233,7 +233,7 @@ class UserGroupMembership < DagLink
       # If the membership itself is invalidated, also consider the invalidated direct memberships.
       # Otherwise, one has to call `direct_memberships_now_and_in_the_past` rather than
       # `direct_memberships` in order to have the invalidated direct memberships included.
-      memberships = memberships.with_invalid 
+      memberships = memberships.with_past 
     end
     
     memberships = memberships
@@ -262,7 +262,7 @@ class UserGroupMembership < DagLink
 
   def indirect_memberships
     self.group.ancestor_groups.collect do |ancestor_group|
-      UserGroupMembership.with_invalid.find_by_user_and_group(self.user, ancestor_group)
+      UserGroupMembership.with_past.find_by_user_and_group(self.user, ancestor_group)
     end.select do |item|
       item != nil
     end

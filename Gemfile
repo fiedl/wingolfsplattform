@@ -209,3 +209,4 @@ gem 'activerecord-deprecated_finders'
 # for time travels during tests
 gem 'timecop'
 
+gem 'temporal_scopes', path: '../temporal_scopes'

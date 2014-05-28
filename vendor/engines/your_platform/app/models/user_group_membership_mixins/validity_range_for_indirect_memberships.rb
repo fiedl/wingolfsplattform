@@ -53,11 +53,11 @@ module UserGroupMembershipMixins::ValidityRangeForIndirectMemberships
   # latest direct membership.
   #
   def earliest_direct_membership
-    @earliest_direct_membership ||= direct_memberships(with_invalid: true).reorder(:valid_from).first
+    @earliest_direct_membership ||= direct_memberships.with_past.reorder(:valid_from).first
   end
   
   def latest_direct_membership
-    @latest_direct_membership ||= direct_memberships.only_valid.last
+    @latest_direct_membership ||= direct_memberships.now.last
     @latest_direct_membership ||= direct_memberships(with_invalid: true).reorder(:valid_to).last
   end
   
@@ -153,7 +153,7 @@ module UserGroupMembershipMixins::ValidityRangeForIndirectMemberships
   # Only direct memberships can be invalidated. The validity of the indirect memberships
   # inherts from the direct ones.
   #
-  def make_invalid(time = Time.zone.now)
+  def archive(options = {})
     raise 'An indirect membership cannot be invalidated. ' + self.user.id.to_s + ' ' + self.group.id.to_s unless direct?
     super
   end
