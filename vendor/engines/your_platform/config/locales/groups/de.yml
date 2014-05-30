@@ -1,7 +1,7 @@
 de:
   group: Gruppe
   groups: Gruppen
-  
+
   everyone: Jeder
   officers_parent: Amtsträger
   officers: Amtsträger
@@ -16,7 +16,7 @@ de:
   deceased_parent: Verstorbene
   former_members_parent: Ehemalige
   hidden_users: Versteckte Benutzer
-  
+
   my_groups:                      Meine Gruppen
   sub_groups:                     Untergruppen
   members:                        Mitglieder
@@ -28,7 +28,7 @@ de:
   extensive_name:                 Ausführliche Bezeichnung
 
   add_member:                     Mitglied hinzufügen
-  
+
   download_list:                  Liste herunterladen
   tables:                         Tabellen
   name_list:                      Namensliste
@@ -38,6 +38,6 @@ de:
   email_list:                     E-Mail-Liste
   current_age:                    Aktuelles Alter
   last_updated_at:                Zuletzt aktualisiert am
-  
-  
-  
+
+
+

@@ -1,7 +1,7 @@
 en:
   group: Group
   groups: Groups
-  
+
   everyone: Everyone
   officers_parent: Officers
   officers: Officers
@@ -15,7 +15,7 @@ en:
   main_admins: Main Administrators
   deceased_parent: Deceased
   former_members_parent: Former Members
-  
+
   my_groups:                      My Groups
   sub_groups:                     Sub Groups
   members:                        Members
@@ -27,7 +27,7 @@ en:
   extensive_name:                 Extensive Name
 
   add_member:                     Add Member
-  
+
   download_list:                  Download list
   tables:                         Tables
   name_list:                      Name list
@@ -36,4 +36,4 @@ en:
   phone_list:                     Phone list
   email_list:                     Email list
   current_age:                    Current age
-  
+

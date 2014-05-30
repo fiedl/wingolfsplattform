@@ -2,13 +2,13 @@
 module ProfileFieldMixins::HasChildProfileFields
 
   # This creates an easier way to access a composed ProfileField's child field
-  # values. Instead of calling 
+  # values. Instead of calling
   #
   #    bank_account.children.where( :label => :account_number ).first.value
   #    bank_account.children.where( :label => :account_number ).first.value = "12345"
   #
   # you may call
-  # 
+  #
   #    bank_account.account_number
   #    bank_account.account_number = "12345"
   #
@@ -19,7 +19,7 @@ module ProfileFieldMixins::HasChildProfileFields
   #      has_child_profile_fields :account_holder, :account_number, ...
   #      ...
   #    end
-  # 
+  #
   # Furthermore, this method modifies the intializer to build the child fields
   # on build of the main profile_field.
   #
@@ -27,7 +27,7 @@ module ProfileFieldMixins::HasChildProfileFields
 
     before_save :build_child_fields_if_absent
     after_save :save_child_profile_fields
-    
+
     attr_accessible *keys
 
     include HasChildProfileFieldsInstanceMethods
