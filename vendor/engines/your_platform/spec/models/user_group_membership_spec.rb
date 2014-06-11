@@ -171,11 +171,11 @@ describe UserGroupMembership do
       subject { @membership.user_id }
       it { should == @user.id }
     end
-    describe "#user_title" do
+    describe "#user_title", :focus do  # !!!
       subject { @membership.user_title }
       it { should == @user.title }
     end
-    describe "#user_title=" do
+    describe "#user_title=" do  # !!!
       subject { @membership.user_title = @other_user.title }
       it "should assign the user matching the title to the membership" do
         @membership.user.should == @user
@@ -200,7 +200,7 @@ describe UserGroupMembership do
   #     |-------- group
   #                 |---( membership )---- user
   #
-  describe "#corporation" do
+  describe "#corporation", :focus do
     describe "for the group having a corporation" do
       before do
         @corporation = create( :corporation )
@@ -417,14 +417,11 @@ describe UserGroupMembership do
         time_travel 2.seconds
       end
       subject do
-        #@user.direct_memberships.with_past.each do |membership|
-        #  membership.destroy
-        #end
-        @user.reload.parent_groups.each do |group|
-          UserGroupMembership.with_past.find_all_by_user_and_group(@user, group).first.destroy
+        @user.direct_memberships.with_past.each do |membership|
+          membership.destroy
         end
       end
-      it "should not raise an error (bug fix)" , :focus do
+      it "should not raise an error (bug fix)" do
         expect { subject }.not_to raise_error
       end
     end

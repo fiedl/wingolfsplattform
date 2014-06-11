@@ -13,6 +13,13 @@ GIT
     gmaps4rails (2.0.1)
 
 GIT
+  remote: git://github.com/fiedl/temporal_scopes.git
+  revision: 8806425195911a5f2e4bfd282fb8fc87f76cfdc5
+  specs:
+    temporal_scopes (0.0.4)
+      rails (~> 4.1.1)
+
+GIT
   remote: git://github.com/jejacks0n/mercury
   revision: 1cc637b0bccea19085f824d2881c6513ed5ee8ae
   specs:
@@ -27,12 +34,6 @@ GIT
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-
-PATH
-  remote: ../temporal_scopes
-  specs:
-    temporal_scopes (0.0.4)
-      rails (~> 4.1.1)
 
 PATH
   remote: vendor/engines/your_platform
