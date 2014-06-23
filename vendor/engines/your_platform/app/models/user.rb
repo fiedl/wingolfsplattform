@@ -47,15 +47,19 @@ class User < ActiveRecord::Base
   before_save               :generate_alias_if_necessary, :capitalize_name
   before_save               :build_account_if_requested
   after_save                :add_to_group_if_requested
-  # after_commit     					:delete_cache, prepend: true
-  # before_destroy    				:delete_cache, prepend: true
+
   
   def delete_cache
     delete_cached_last_group_in_first_corporation
     delete_cached_current_corporations
     delete_cached_corporations
+    delete_cached_most_special_category
   end
-
+  
+  def delete_cached_most_special_category
+    Rails.cache.delete( [self, "most_special_category"] )
+  end
+  
   # Mixins
   # ==========================================================================================
   
