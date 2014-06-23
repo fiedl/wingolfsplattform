@@ -29,4 +29,24 @@ class HorizontalNav
   def logged_in?
     return true if @user
   end
+
+  def categories_the_current_navable_falls_in
+    if current_navable
+      navables.select do |navable|
+        ( current_navable.ancestors + [ current_navable ] ).include? navable
+      end
+    end
+  end
+
+  def most_special_category
+    categories_the_current_navable_falls_in.try(:select) do |navable|
+      (navable.descendants & categories_the_current_navable_falls_in).empty?
+    end.try(:first)
+  end
+
+  def cached_most_special_category
+    Rails.cache.fetch( [@user, "most_special_category"] ) do
+      most_special_category
+    end  
+  end
 end
