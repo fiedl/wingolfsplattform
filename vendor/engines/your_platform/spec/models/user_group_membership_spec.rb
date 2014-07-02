@@ -171,7 +171,7 @@ describe UserGroupMembership do
       subject { @membership.user_id }
       it { should == @user.id }
     end
-    describe "#user_title", :focus do  # !!!
+    describe "#user_title" do  # !!!
       subject { @membership.user_title }
       it { should == @user.title }
     end
@@ -200,7 +200,7 @@ describe UserGroupMembership do
   #     |-------- group
   #                 |---( membership )---- user
   #
-  describe "#corporation", :focus do
+  describe "#corporation" do
     describe "for the group having a corporation" do
       before do
         @corporation = create( :corporation )

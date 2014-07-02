@@ -162,7 +162,7 @@ RSpec.describe UserMixins::Bv do
           @address_field2.bv.should == @bv2
           user.postal_address_field.should == @address_field2
         end
-        it "should assign the user to the new BV", :focus do
+        it "should assign the user to the new BV" do
           
           p 1, user.reload.bv_membership.read_attribute_before_type_cast(:valid_from), Time.zone.now
           
