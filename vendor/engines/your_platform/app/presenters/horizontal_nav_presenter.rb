@@ -58,21 +58,7 @@ class HorizontalNavPresenter < BasePresenter
   end
   
   def navable_is_most_special_category?( navable )
-    navable == most_special_category
-  end
-  
-  def most_special_category
-    categories_the_current_navable_falls_in.try(:select) do |navable|
-      (navable.descendants & categories_the_current_navable_falls_in).empty?
-    end.try(:first)
-  end  
-  
-  def categories_the_current_navable_falls_in
-    if horizontal_nav.current_navable
-      horizontal_nav.navables.select do |navable|
-        ( horizontal_nav.current_navable.ancestors + [ horizontal_nav.current_navable ] ).include? navable
-      end
-    end
+    navable == horizontal_nav.cached_most_special_category
   end
   
   def possibly_shortened_title_for(object)
