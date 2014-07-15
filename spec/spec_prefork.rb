@@ -142,6 +142,9 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
+    
+    # Delete cache
+    Rails.cache.clear
 
     # This distinction reduces the run time of the test suite by over a factor of 4:
     # From 40 to a couple of minutes, since the truncation method, which is slower,
