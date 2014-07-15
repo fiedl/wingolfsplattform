@@ -145,6 +145,7 @@ RSpec.configure do |config|
     
     # Delete cache
     Rails.cache.clear
+    ActiveRecord::Base.connection.clear_query_cache
 
     # This distinction reduces the run time of the test suite by over a factor of 4:
     # From 40 to a couple of minutes, since the truncation method, which is slower,
