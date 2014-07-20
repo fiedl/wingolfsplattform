@@ -157,7 +157,9 @@ describe StatusGroupMembership do
       @intermediate_group.parent_groups << @corporation
       @status_group.parent_groups << @intermediate_group
       @user = create( :user )
-      @status_group.assign_user @user
+      @status_group.assign_user @user, at: 5.seconds.ago
+      
+      time_travel 2.minutes
 
       @membership = UserGroupMembership.find_by_user_and_group( @user, @status_group )
         .becomes( StatusGroupMembership )
@@ -211,6 +213,13 @@ describe StatusGroupMembership do
         subject.should_not include @intermediate_group_membership
       end
       it "should return current memberships, but not expired memberships" do
+        p 1, Time.zone.now
+        p 2, @membership
+        p 3, StatusGroupMembership.where(id: @membership.id).to_sql
+        p 4, StatusGroupMembership.find_all_by_user( @user ).to_sql
+        p 5, @membership.user
+        p 6, @user
+        
         subject.should include @membership
         @membership.invalidate at: 2.minutes.ago
         StatusGroupMembership.find_all_by_user( @user ).should_not include @membership
@@ -314,13 +323,13 @@ describe StatusGroupMembership do
     end
     
     def status_groups_of_user_and_corporation
-      StatusGroupMembership.now_and_in_the_past.find_all_by_user_and_corporation(@user, @corporation)
+      StatusGroupMembership.with_past.find_all_by_user_and_corporation(@user, @corporation)
     end
     def first_status_group_membership
-      StatusGroupMembership.with_invalid.find_by_user_and_group(@user, @first_status_group)
+      StatusGroupMembership.with_past.find_by_user_and_group(@user, @first_status_group)
     end
     def second_status_group_membership
-      StatusGroupMembership.with_invalid.find_by_user_and_group(@user, @second_status_group)
+      StatusGroupMembership.with_past.find_by_user_and_group(@user, @second_status_group)
     end
     
     describe "prelims" do

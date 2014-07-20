@@ -12,6 +12,17 @@ class StatusGroup < Group
   
   def self.find_all_by_user(user, options = {})
     user_groups = options[:with_invalid] ? user.ancestor_groups : user.groups
+    
+    
+    p "user_groups", user_groups
+    
+    p "corporations", user.corporations
+    
+    p "corporation status groups", user.corporations.collect do |corporation|
+      StatusGroup.find_all_by_corporation(corporation)
+    end.flatten
+    
+    #user_groups = options[:with_invalid] ? user.groups.with_past : user.groups
     user.corporations.collect do |corporation|
       StatusGroup.find_all_by_corporation(corporation)
     end.flatten & user_groups

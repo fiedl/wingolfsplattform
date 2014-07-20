@@ -91,13 +91,16 @@ class StatusGroupMembership < UserGroupMembership
   #
   def self.find_all_by_user( user )
     raise 'Expect parameter to be a User' unless user.kind_of? User
-    status_groups = user.status_groups(with_invalid: true)
+    
+    #status_groups = user.status_groups(with_invalid: true)
+    status_groups = Corporation.all.collect { |corporation| corporation.status_groups }.flatten
+    
     status_group_ids = status_groups.collect { |group| group.id }
     links = self
       .where( :descendant_type => "User" )
       .where( :descendant_id => user.id )
       .where( :ancestor_type => "Group" )
-      .where( :ancestor_id => status_group_ids )
+      .where( :ancestor_id => status_group_ids )  # THIS LINE INDUCES "AND 1=0"
       .order( :valid_from )
     return links
   end
