@@ -121,7 +121,7 @@ module Structureable
     end
     
     def delete_cache_structureable
-#      delete_cached_descendants
+      delete_cached_descendants
       delete_cache_roles
     end
 
