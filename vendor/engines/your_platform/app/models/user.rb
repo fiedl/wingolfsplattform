@@ -719,7 +719,7 @@ class User < ActiveRecord::Base
     objects = directly_administrated_objects( role )
     if objects
       objects += objects.collect do |directly_administrated_object|
-        directly_administrated_object.descendants
+        directly_administrated_object.cached_descendants
       end.flatten
       objects
     else

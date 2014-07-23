@@ -41,6 +41,7 @@ class Group < ActiveRecord::Base
   after_create     :import_default_group_structure  # from GroupMixins::Import
 
   def delete_cache
+    Structureable
     delete_cache_structureable
     delete_cached_leaf_groups
   end

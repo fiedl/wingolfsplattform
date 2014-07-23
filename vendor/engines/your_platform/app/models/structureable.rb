@@ -121,7 +121,20 @@ module Structureable
     end
     
     def delete_cache_structureable
+#      delete_cached_descendants
       delete_cache_roles
+    end
+
+    def delete_cached_descendants
+      Rails.cache.delete([self, 'descendants'])
+    end
+
+    def cached_descendants
+      Rails.cache.fetch([self, 'descendants'], expires_in: 1.week) do
+        descendant_pages(true) if self.respond_to?(:descendant_pages) 
+        descendant_groups(true) if self.respond_to?(:descendant_groups)
+        descendants
+      end
     end
   end
 end

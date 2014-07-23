@@ -63,7 +63,7 @@ class HorizontalNavPresenter < BasePresenter
   
   def most_special_category
     categories_the_current_navable_falls_in.try(:select) do |navable|
-      (navable.descendants & categories_the_current_navable_falls_in).empty?
+      (navable.cached_descendants & categories_the_current_navable_falls_in).empty?
     end.try(:first)
   end  
   
