@@ -78,7 +78,7 @@ group :development do
   # debugger: http://guides.rubyonrails.org/debugging_rails_applications.html
   #gem 'debugger'
 
-  gem 'better_errors'              # see Railscasts #402
+  #gem 'better_errors'              # see Railscasts #402
   gem 'binding_of_caller'
   gem 'meta_request'
 end
@@ -92,15 +92,15 @@ end
 # Documentation Tools
 group :development, :test do
   gem 'yard'
-  gem 'redcarpet'
+  #gem 'redcarpet'
 end
 
 # RSpec, see: http://ruby.railstutorial.org/chapters/static-pages#sec:first_tests
 group :test, :development do
-  gem 'guard', '>= 2.2.5'
+  #gem 'guard', '>= 2.2.5'
   gem 'guard-focus'
-  gem 'rspec-rails'
-  gem 'guard-rspec'
+  #gem 'rspec-rails'
+  #gem 'guard-rspec'
 #  gem 'rspec-mocks'
 #  gem 'listen'
 #  gem 'rb-inotify', '0.8.8' if RUBY_PLATFORM.downcase.include?("linux")
@@ -109,11 +109,11 @@ group :test, :development do
 end
 
 group :test do
-  gem 'capybara'
+  #gem 'capybara'
   gem 'launchy'
-  gem 'factory_girl_rails', '>= 4.0.0' # '1.4.0'
-  gem 'database_cleaner'
-  gem 'guard-spork'
+  #gem 'factory_girl_rails', '>= 4.0.0' # '1.4.0'
+  #gem 'database_cleaner'
+  #gem 'guard-spork'
   gem 'spork'
   gem 'simplecov', '~> 0.7.1', require: false  # fixed to to return code issue.
   gem 'fuubar'
@@ -151,13 +151,13 @@ gem 'passgen'                                                           # MIT Li
 gem 'your_platform', path: 'vendor/engines/your_platform'
 
 # Pry Console Addon
-gem 'pry', group: :development
+#gem 'pry', group: :development
 
 # Turbolinks
 gem 'turbolinks', '>= 1.0'
 
 # Angular JS
-gem 'angularjs-rails'
+#gem 'angularjs-rails'
 
 # Receiving Mails
 gem 'mailman', require: false
@@ -171,7 +171,7 @@ gem 'rb-inotify', '~> 0.9', group: :production
 gem 'charlock_holmes'
 
 # Manage Workers
-gem 'foreman', group: [:development, :production]
+#gem 'foreman', group: [:development, :production]
 
 # CMS: Mercury Editor
 gem 'mercury-rails', git: 'git://github.com/jejacks0n/mercury'
@@ -209,7 +209,33 @@ gem 'activerecord-deprecated_finders'
 # for time travels during tests
 gem 'timecop'
 
-#gem 'temporal_scopes', git: 'git://github.com/fiedl/temporal_scopes.git'
-gem 'temporal_scopes', path: '../temporal_scopes'
+gem 'temporal_scopes', git: 'git://github.com/fiedl/temporal_scopes.git'
+#gem 'temporal_scopes', path: '../temporal_scopes'
 
 gem 'cancancan', '~> 1.8'
+
+# fix version for rails 4 transition (minimal update)
+# TODO: remove these when http://stackoverflow.com/questions/24877058 is resolved.
+#
+gem 'acts_as_tree', '1.6.0'
+gem 'angularjs-rails', '1.2.13'
+#gem 'best_in_place', '2.1.0'
+gem 'better_errors', '0.7.0'
+gem 'capybara', '2.2.0'
+gem 'database_cleaner', '0.9.1'
+gem 'factory_girl', '4.3.0'
+gem 'factory_girl_rails', '4.3.0'
+gem 'foreman', '0.63.0'
+gem 'geocoder', '1.2.1'
+gem 'guard', '2.2.5'
+gem 'guard-rspec', '0.5.5'
+gem 'guard-spork', '1.0.1'
+gem 'phony', '2.2.8'
+gem 'pry', '0.9.12.4'
+gem 'rack-mini-profiler', '0.9.1'
+gem 'redcarpet', '3.0.0'
+gem 'rspec-core', '2.14.7'
+gem 'rspec-expectations', '2.14.4'
+gem 'rspec-mocks', '2.14.4'
+gem 'rspec-rails', '2.14.1'
+gem 'will_paginate', '3.0.5'
