@@ -40,7 +40,7 @@ class Page < ActiveRecord::Base
   #
   def <<(child)
     unless child.in? self.children
-      if child.in? self.cached_descendants
+      if child.in? self.descendants(true)
         link = DagLink.where(
           ancestor_type: 'Page', ancestor_id: self.id, 
           descendant_type: child.class.name, descendant_id: child.id
