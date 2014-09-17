@@ -10,6 +10,7 @@ class Page < ActiveRecord::Base
   belongs_to :author, :class_name => "User", foreign_key: 'author_user_id'
   
   def delete_cache
+    Structureable
     delete_cache_structureable
   end
 
@@ -39,7 +40,7 @@ class Page < ActiveRecord::Base
   #
   def <<(child)
     unless child.in? self.children
-      if child.in? self.descendants
+      if child.in? self.descendants(true)
         link = DagLink.where(
           ancestor_type: 'Page', ancestor_id: self.id, 
           descendant_type: child.class.name, descendant_id: child.id
