@@ -231,7 +231,7 @@ describe UserGroupMembershipMixins::ValidityRangeForIndirectMemberships do
   # ====================================================================================================
   
   describe "#valid_at?(time)" do
-    subject { @indirect_membership.valid_at? @time_to_check }
+    subject { @indirect_membership.reload.valid_at? @time_to_check }
     specify "preliminaries" do
       @indirect_membership.earliest_direct_membership.valid_from.to_i.should == @t1.to_i
       @indirect_membership.earliest_direct_membership.valid_to.to_i.should == @t2.to_i

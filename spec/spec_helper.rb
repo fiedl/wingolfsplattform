@@ -236,6 +236,11 @@ Spork.prefork do
       
       # Clear the cache.
       Rails.cache.clear
+      
+      # Freeze the time. Whenever time progression is needed during a spec,
+      # it should be done using the `time_travel` support method: `time_travel 2.seconds`.
+      #
+      Timecop.freeze
 
       # create the basic objects that are needed for all specs
       Group.find_or_create_everyone_group
