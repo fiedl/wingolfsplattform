@@ -19,6 +19,8 @@ module StructureableMixins::Roles
     super
     if respond_to?(:child_groups) # TODO: Refactor this. It should be possible to find the admins for a user.
       find_admins
+      admins_of_ancestors
+      admins_of_self_and_ancestors
       officers_of_self_and_parent_groups
       officers_groups_of_self_and_descendant_groups
     end
@@ -41,6 +43,10 @@ module StructureableMixins::Roles
       if has_flag?(:officers_parent) || has_flag?(:admins_parent)
         parent_groups.each { |group| group.delete_cache }
       end
+    end
+    descendants.each do |descendant| 
+      descendant.delete_cached :admins_of_ancestors
+      descendant.delete_cached :admins_of_self_and_ancestors
     end
   end    
   
@@ -171,6 +177,18 @@ module StructureableMixins::Roles
 
   def find_admins
     cached { find_admins_parent_group.try( :descendant_users ) } || []
+  end
+  
+  def admins_of_ancestors
+    cached { ancestors.collect { |ancestor| ancestor.find_admins }.flatten }
+  end
+  
+  def admins_of_ancestor_groups
+    cached { ancestor_groups.collect { |ancestor| ancestor.find_admins }.flatten }
+  end
+  
+  def admins_of_self_and_ancestors
+    cached { find_admins + admins_of_ancestors }
   end
 
 
