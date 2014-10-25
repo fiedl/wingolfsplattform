@@ -47,29 +47,38 @@ describe Structureable do
     it "should have descendants" do
       @parent = create( :page )
       @parent.child_pages << @node
-      @parent.descendants.count.should == 1
+      @grandparent = create( :page )
+      @grandparent.child_pages << @parent
+      @grandparent.descendants.count.should == 2
     end      
 
     it "should update the descendants after a reload" do
       @parent = create( :page )
       @parent.child_pages << @node
-      @parent.descendants.count.should == 1
+      @grandparent = create( :page )
+      @grandparent.child_pages << @parent
+      @grandparent.descendants.count.should == 2
       @brother = create( :page )
       @parent.child_pages << @brother
       @parent.reload
-      @parent.descendants.count.should == 2
+      @grandparent.reload
+      @grandparent.descendants.count.should == 3
     end      
 
     it "should cache the descendants" do
       @parent = create( :page )
-      @parent.descendants.count.should == 0
-      @parent.reload
+      @parent.child_pages << @node
+      @grandparent = create( :page )
+      @grandparent.child_pages << @parent
+      @grandparent.descendants.count.should == 2
+      @grandparent.reload
       t1 = Time.now
-      @parent.descendants.count.should == 0
+      @grandparent.descendants.count.should == 2
       t2 = Time.now
       t3 = t2-t1
-      # without caching it took 0.009 seconds. With caching it took 0.0007 seconds
-      t3.should < 0.001
+      # without caching it took on my machine  0.009 seconds, on travis 0.004
+      # With caching it took 0.0007 seconds, on travis 0.000x seconds
+      t3.should < 0.002
     end      
   end
   
