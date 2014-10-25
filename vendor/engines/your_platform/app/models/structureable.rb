@@ -122,6 +122,10 @@ module Structureable
     def destroy_links
       self.destroy_dag_links
     end
-    
+
+    def descendants
+      cached { super }
+    end
+        
   end
 end

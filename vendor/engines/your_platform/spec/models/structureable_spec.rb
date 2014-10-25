@@ -28,7 +28,58 @@ describe Structureable do
       @node.destroy
       @parent.links_as_parent.count.should == 0
     end
+    
+    it "should have children" do
+      @parent = create( :page )
+      @parent.child_pages << @node
+      @parent.children.count.should == 1
+    end      
 
+    it "should update the children" do
+      @parent = create( :page )
+      @parent.child_pages << @node
+      @parent.children.count.should == 1
+      @brother = create( :page )
+      @parent.child_pages << @brother
+      @parent.children.count.should == 2
+    end      
+    
+    it "should have descendants" do
+      @parent = create( :page )
+      @parent.child_pages << @node
+      @grandparent = create( :page )
+      @grandparent.child_pages << @parent
+      @grandparent.descendants.count.should == 2
+    end      
+
+    it "should update the descendants after a reload" do
+      @parent = create( :page )
+      @parent.child_pages << @node
+      @grandparent = create( :page )
+      @grandparent.child_pages << @parent
+      @grandparent.descendants.count.should == 2
+      @brother = create( :page )
+      @parent.child_pages << @brother
+      @parent.reload
+      @grandparent.reload
+      @grandparent.descendants.count.should == 3
+    end      
+
+    it "should cache the descendants" do
+      @parent = create( :page )
+      @parent.child_pages << @node
+      @grandparent = create( :page )
+      @grandparent.child_pages << @parent
+      @grandparent.descendants.count.should == 2
+      @grandparent.reload
+      t1 = Time.now
+      @grandparent.descendants.count.should == 2
+      t2 = Time.now
+      t3 = t2-t1
+      # without caching it took on my machine  0.009 seconds, on travis 0.004
+      # With caching it took 0.0007 seconds, on travis 0.000x seconds
+      t3.should < 0.002
+    end      
   end
   
 end
