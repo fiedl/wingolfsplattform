@@ -25,6 +25,7 @@ class DagLink < ActiveRecord::Base
     super
     if direct?
       ancestor.delete_cache
+      ancestor.ancestors.collect { |x| x.delete_cache }
       descendant.delete_cache
     end
   end
