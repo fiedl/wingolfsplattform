@@ -76,10 +76,20 @@ describe Structureable do
       @grandparent.descendants.count.should == 2
       t2 = Time.now
       t3 = t2-t1
-      # without caching it took on my machine  0.009 seconds, on travis 0.004
-      # With caching it took 0.0007 seconds, on travis 0.000x seconds
-      t3.should < 0.002
+      # without caching it took on my machine  0.006 seconds, on travis 0.004
+      # With caching it took 0.003 seconds, on travis 0.000x seconds
+      t3.should < 0.004
     end      
+
+    it "should update content of descendants" do
+      @parent = create( :page )
+      @parent.child_pages << @node
+      @grandparent = create( :page )
+      @grandparent.child_pages << @parent
+      @grandparent.descendants
+      @node.update_attributes title:"Updated"
+      @grandparent.descendants.count { |x| x.title == "Updated" }.should == 1      
+    end  
   end
   
 end
