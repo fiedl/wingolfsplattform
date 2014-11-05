@@ -25,14 +25,17 @@ Gem::Specification.new do |s|
   # --------------------------------------------------------------------------------
 
   # Rails and Rails Additions
-  s.add_dependency "rails", "~> 3.2.11"
+  s.add_dependency "rails", "~> 3.2"
   s.add_dependency 'rack-ssl', '>= 1.3.4'
   s.add_dependency "rails-i18n"                                                        # MIT License
   s.add_dependency "strong_parameters"                                                 # MIT License
+  s.add_dependency "activerecord", '~> 3.2.20'
+  s.add_dependency "railties", '~> 3.2.20'
 
   # JavaScript 
   s.add_dependency "jquery-rails"
   s.add_dependency "jquery-ui-rails", '~> 4.2.0'                                       # MIT, GPL2
+  s.add_dependency "sprockets", '~> 2.2.3' # TODO: Update to cover CVE-2014-7819
 
   # Data Structures
   # DAG Structure, https://github.com/resgraph/acts-as-dag
@@ -43,7 +46,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'redis-rails'
 
   # Authentification
-  s.add_dependency 'devise', '~> 2.2.5'                           # MIT License
+  s.add_dependency 'devise', '~> 2.2.8'                           # MIT License
 
   # Authorization
   s.add_dependency 'cancan'                                                            # MIT License
@@ -57,9 +60,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'redcarpet'  # for Markdown                                         # MIT License
   
   # Layout: Twitter Bootstrap
-  s.add_dependency 'twitter-bootstrap-rails', '2.2.4'                                  # MIT License
-  s.add_dependency 'less', '2.2.0'
-  s.add_dependency 'less-rails', '2.2.6'
+  s.add_dependency 'twitter-bootstrap-rails', '~> 2.2.7'                                  # MIT License
+  s.add_dependency 'less', '>= 2.2.0'
+  s.add_dependency 'less-rails', '>= 2.2.6'
   # s.add_dependency 'bootstrap-sass'                                                  # Apache License 2.0
   s.add_dependency 'font-awesome-rails', '3.2.1.1'
 

@@ -13,18 +13,10 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/workflow_kit.git
-  revision: 4c1b9df9dbee7799b6afb8510f0b10128c59bcc1
+  revision: 90fed7e940c905132667160f637f1f5fed2a13ee
   specs:
     workflow_kit (0.0.7)
-      rails (~> 3.2.6)
-
-GIT
-  remote: git://github.com/jejacks0n/mercury
-  revision: d3b085e1b7e1e801efe298bb826a4730179455af
-  specs:
-    mercury-rails (0.9.0)
-      coffee-rails (~> 3.2.2)
-      railties (~> 3.2)
+      rails (~> 3.2)
 
 GIT
   remote: git://github.com/jeremy/mail.git
@@ -54,6 +46,7 @@ PATH
   remote: vendor/engines/your_platform
   specs:
     your_platform (0.0.1)
+      activerecord (~> 3.2.20)
       acts-as-dag (>= 2.5.7)
       acts_as_tree
       bcrypt (>= 3.0.1)
@@ -61,7 +54,7 @@ PATH
       cancan
       carrierwave
       delocalize
-      devise (~> 2.2.5)
+      devise (~> 2.2.8)
       edit_mode (>= 1.0.0)
       fnordmetric
       font-awesome-rails (= 3.2.1.1)
@@ -74,35 +67,37 @@ PATH
       jquery-fileupload-rails
       jquery-rails
       jquery-ui-rails (~> 4.2.0)
-      less (= 2.2.0)
-      less-rails (= 2.2.6)
+      less (>= 2.2.0)
+      less-rails (>= 2.2.6)
       mini_magick
       phony
       prawn
       public_activity (~> 1.4.1)
       rack-mini-profiler (>= 0.9.0.pre)
       rack-ssl (>= 1.3.4)
-      rails (~> 3.2.11)
+      rails (~> 3.2)
       rails-gallery (>= 0.3.3)
       rails-i18n
+      railties (~> 3.2.20)
       redcarpet
       redis-rails
       slim_breadcrumb (>= 0.0.3)
+      sprockets (~> 2.2.3)
       strong_parameters
       to_xls
-      twitter-bootstrap-rails (= 2.2.4)
+      twitter-bootstrap-rails (~> 2.2.7)
       will_paginate (> 3.0)
       workflow_kit (~> 0.0.7)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    actionmailer (3.2.19)
-      actionpack (= 3.2.19)
+    actionmailer (3.2.20)
+      actionpack (= 3.2.20)
       mail (~> 2.5.4)
-    actionpack (3.2.19)
-      activemodel (= 3.2.19)
-      activesupport (= 3.2.19)
+    actionpack (3.2.20)
+      activemodel (= 3.2.20)
+      activesupport (= 3.2.20)
       builder (~> 3.0.0)
       erubis (~> 2.7.0)
       journey (~> 1.0.4)
@@ -110,18 +105,18 @@ GEM
       rack-cache (~> 1.2)
       rack-test (~> 0.6.1)
       sprockets (~> 2.2.1)
-    activemodel (3.2.19)
-      activesupport (= 3.2.19)
+    activemodel (3.2.20)
+      activesupport (= 3.2.20)
       builder (~> 3.0.0)
-    activerecord (3.2.19)
-      activemodel (= 3.2.19)
-      activesupport (= 3.2.19)
+    activerecord (3.2.20)
+      activemodel (= 3.2.20)
+      activesupport (= 3.2.20)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
-    activeresource (3.2.19)
-      activemodel (= 3.2.19)
-      activesupport (= 3.2.19)
-    activesupport (3.2.19)
+    activeresource (3.2.20)
+      activemodel (= 3.2.20)
+      activesupport (= 3.2.20)
+    activesupport (3.2.20)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
     acts-as-dag (3.0.0)
@@ -175,10 +170,10 @@ GEM
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
-    coffee-script (2.2.0)
+    coffee-script (2.3.0)
       coffee-script-source
       execjs
-    coffee-script-source (1.7.0)
+    coffee-script-source (1.8.0)
     colored (1.2)
     commonjs (0.2.7)
     connection_pool (2.0.0)
@@ -210,7 +205,7 @@ GEM
       eventmachine (>= 0.12.9)
     erubis (2.7.0)
     eventmachine (1.0.3)
-    execjs (2.0.2)
+    execjs (2.2.2)
     factory_girl (4.3.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.3.0)
@@ -287,11 +282,11 @@ GEM
     kgio (2.9.2)
     launchy (2.2.0)
       addressable (~> 2.3)
-    less (2.2.0)
-      commonjs (~> 0.2.6)
-    less-rails (2.2.6)
+    less (2.5.1)
+      commonjs (~> 0.2.7)
+    less-rails (2.5.0)
       actionpack (>= 3.1)
-      less (~> 2.2.0)
+      less (~> 2.5.0)
     letter_opener (1.2.0)
       launchy (~> 2.2)
     libv8 (3.16.14.3)
@@ -353,23 +348,23 @@ GEM
     rack-test (0.6.2)
       rack (>= 1.0)
     rack-timeout (0.0.4)
-    rails (3.2.19)
-      actionmailer (= 3.2.19)
-      actionpack (= 3.2.19)
-      activerecord (= 3.2.19)
-      activeresource (= 3.2.19)
-      activesupport (= 3.2.19)
+    rails (3.2.20)
+      actionmailer (= 3.2.20)
+      actionpack (= 3.2.20)
+      activerecord (= 3.2.20)
+      activeresource (= 3.2.20)
+      activesupport (= 3.2.20)
       bundler (~> 1.0)
-      railties (= 3.2.19)
+      railties (= 3.2.20)
     rails-gallery (0.3.3)
       hashie (>= 2.0.0)
       rails (>= 3.1)
     rails-i18n (3.0.1)
       i18n (~> 0.5)
       rails (>= 3.0.0, < 4.0.0)
-    railties (3.2.19)
-      actionpack (= 3.2.19)
-      activesupport (= 3.2.19)
+    railties (3.2.20)
+      actionpack (= 3.2.20)
+      activesupport (= 3.2.20)
       rack-ssl (~> 1.3.2)
       rake (>= 0.8.7)
       rdoc (~> 3.4)
@@ -384,7 +379,7 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     redcarpet (3.0.0)
-    redis (3.0.7)
+    redis (3.1.0)
     redis-actionpack (3.2.4)
       actionpack (~> 3.2.0)
       redis-rack (~> 1.4.4)
@@ -429,7 +424,7 @@ GEM
       sexp_processor (~> 4.0)
     ruby_parser (3.2.2)
       sexp_processor (~> 4.1)
-    sass (3.2.14)
+    sass (3.4.7)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
@@ -461,7 +456,7 @@ GEM
     spork (0.9.2)
     spreadsheet (1.0.0)
       ruby-ole (>= 1.0)
-    sprockets (2.2.2)
+    sprockets (2.2.3)
       hike (~> 1.2)
       multi_json (~> 1.0)
       rack (~> 1.0)
@@ -504,11 +499,12 @@ GEM
     turnout (0.2.5)
       nokogiri (~> 1.3)
       rack
-    twitter-bootstrap-rails (2.2.4)
+    twitter-bootstrap-rails (2.2.8)
       actionpack (>= 3.1)
       execjs
+      rails (>= 3.1)
       railties (>= 3.1)
-    tzinfo (0.3.41)
+    tzinfo (0.3.42)
     uglifier (2.4.0)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -540,7 +536,7 @@ DEPENDENCIES
   brakeman (>= 2.3.1)
   capybara
   charlock_holmes
-  coffee-rails (>= 3.2.1)
+  coffee-rails (~> 3.2.2)
   colored
   coveralls
   database_cleaner
@@ -564,7 +560,6 @@ DEPENDENCIES
   letter_opener
   mail!
   mailman
-  mercury-rails!
   meta_request
   mysql2
   newrelic_rpm
@@ -580,7 +575,7 @@ DEPENDENCIES
   redcarpet
   rspec-rails
   rspec-rerun!
-  sass-rails (>= 3.2.3)
+  sass-rails (~> 3.2.6)
   sidekiq
   simplecov
   spork

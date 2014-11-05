@@ -20,8 +20,8 @@ gem 'transaction_retry' # rescue from deadlocks
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets, :production, 'testing-aki' do
-  gem 'sass-rails',   '>= 3.2.3'					# MIT License
-  gem 'coffee-rails', '>= 3.2.1'					# MIT License
+  gem 'sass-rails',   '~> 3.2.6'					# MIT License
+  gem 'coffee-rails', '~> 3.2.2'					# MIT License
 #  gem 'coffee-script', '1.4.0' # need this at 1.4.0 for mercury, at the moment
     # see https://github.com/jejacks0n/mercury/issues/349
 
@@ -177,7 +177,7 @@ gem 'foreman', group: [:development, :production]
 gem 'sidekiq'
 
 # CMS: Mercury Editor
-gem 'mercury-rails', git: 'git://github.com/jejacks0n/mercury'
+# gem 'mercury-rails', git: 'git://github.com/jejacks0n/mercury'
 
 # readline (for rails console)
 # see https://github.com/luislavena/rb-readline/issues/84#issuecomment-17335885
