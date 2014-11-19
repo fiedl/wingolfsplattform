@@ -56,6 +56,8 @@ gem 'nokogiri'								# MIT License
 #gem 'acts-as-dag', git: "git://github.com/resgraph/acts-as-dag.git"	# MIT License
 #gem 'acts-as-dag', '>= 2.5.7'  # now in your_platform
 
+gem 'acts-as-dag', github: 'fiedl/acts-as-dag', branch: 'sf/remove-uniq'  # without duplicate duplication
+
 # Formtastic Form Helper,
 # see: https://github.com/justinfrench/formtastic,
 # http://rubydoc.info/gems/formtastic/frames
