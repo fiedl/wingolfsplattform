@@ -46,6 +46,24 @@ class Group < ActiveRecord::Base
     ancestor_groups(true).each { |g| g.delete_cached(:leaf_groups); g.delete_cached(:status_groups) }
   end
     
+  # This method is called by a nightly rake task to renew the cache of this object.
+  #
+  def fill_cache
+    # from GroupMixins::Memberships
+    memberships_for_member_list
+    memberships_for_member_list_count
+    latest_memberships
+    memberships_this_year
+        
+    # Other Groups
+    leaf_groups
+    corporation
+    
+    # Address Labels
+    members_postal_addresses
+    cached_members_postal_addresses_created_at
+  end
+  
   # General Properties
   # ==========================================================================================
 

@@ -75,7 +75,7 @@ module GroupMixins::Corporations
     # Find corporation groups of a certain user.
     #
     def find_corporation_groups_of( user )
-      ancestor_groups_of_user = user.groups
+      ancestor_groups_of_user = user.ancestor_groups
       corporation_groups = Group.find_corporation_groups if Group.find_corporations_parent_group
       return ancestor_groups_of_user & corporation_groups if ancestor_groups_of_user and corporation_groups
     end
@@ -112,7 +112,7 @@ module GroupMixins::Corporations
     # are displayed separately.
     #
     def find_corporations_branch_groups_of( user )
-      ancestor_groups = user.groups
+      ancestor_groups = user.ancestor_groups
       corporations_branch = self.find_corporations_branch_groups
       return ancestor_groups & corporations_branch if ancestor_groups and corporations_branch
     end
@@ -127,7 +127,7 @@ module GroupMixins::Corporations
     # in the groups list, e.g. attendee groups of corporation events.
     #
     def find_non_corporations_branch_groups_of( user )
-      ancestor_groups = user.groups
+      ancestor_groups = user.ancestor_groups
       corporations_branch = self.find_corporations_branch_groups
       corporations_branch = [] unless corporations_branch
       return ancestor_groups - 

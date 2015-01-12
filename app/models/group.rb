@@ -8,26 +8,7 @@ require_dependency YourPlatform::Engine.root.join( 'app/models/group' ).to_s
 # this re-opened class contains all wingolf-specific additions to the group model.
 
 class Group
-  
-  # This method is called by a nightly rake task to renew the cache of this object.
-  #
-  def fill_cache
-
-    # Memberships
-    memberships_for_member_list
-    memberships_this_year
-    latest_memberships
-        
-    # Other Groups
-    leaf_groups
-    corporation
-    
-    # Address Labels
-    members_postal_addresses
-    cached_members_postal_addresses_created_at
-
-  end
-  
+ 
 
   # Special Groups
   # ==========================================================================================
