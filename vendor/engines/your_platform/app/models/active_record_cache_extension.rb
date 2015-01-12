@@ -102,6 +102,13 @@ module ActiveRecordCacheExtension
     Rails.cache.delete_matched "#{self.cache_key}/#{method_name}/*"
   end
   
+  def renew_cached(method_name)
+    # p "DEBUG RENEW CACHED #{self} #{method_name}"
+    Rails.cache.delete [self, method_name]
+    Rails.cache.delete_matched "#{self.cache_key}/#{method_name}/*"
+    self.delay.fill_cache if defined? fill_cache
+  end
+  
   def bulk_delete_cached(method_name, objects)
     ids = objects.map &:id
     regex = /.*\/(#{ids.join('|')})(-.*|)\/#{method_name}.*/
@@ -109,11 +116,25 @@ module ActiveRecordCacheExtension
     Rails.cache.delete_regex regex
   end
   
+  def bulk_renew_cached(method_name, objects)
+    ids = objects.map &:id
+    regex = /.*\/(#{ids.join('|')})(-.*|)\/#{method_name}.*/
+    # p "DEBUG BULK RENEW CACHE #{regex}"
+    Rails.cache.delete_regex regex
+    self.delay.fill_cache if defined? fill_cache
+  end
+  
   def delete_cache
     # p "DEBUG DELETE CACHE #{self}"
     Rails.cache.delete_matched "#{self.cache_key}/*"
   end
   
+  def renew_cache
+    # p "DEBUG RENEW CACHE #{self}"
+    Rails.cache.delete_matched "#{self.cache_key}/*"
+    self.delay.fill_cache if defined? fill_cache
+  end
+    
   def cache_created_at(method_name, arguments = nil)
     CacheAdditions
     Rails.cache.created_at [self, method_name, arguments]
@@ -146,7 +167,7 @@ module ActiveRecordCacheExtension
       end
     end
   end
-  
+
   module ClassMethods
   end
 end

@@ -7,6 +7,8 @@ describe ActiveRecordCacheExtension do
   #
   before do
     @user = create(:user)
+    @group = create( :group )
+    @user.parent_groups << @group
   end
   
   describe "#cached" do
@@ -155,6 +157,7 @@ describe ActiveRecordCacheExtension do
         subject.should_not == @cached_title
       end
       
+      
       it "should be the same as Rails.cache.uncached { ... }" do
         subject.should == Rails.cache.uncached { @user.reload.title }
       end
@@ -174,4 +177,82 @@ describe ActiveRecordCacheExtension do
       end
     end
   end
+  
+  describe '#renew_cache' do
+    subject { @user.renew_cache }
+    describe 'should delete the cache, so' do
+      before do
+        @user.cached(:title)
+        @user.last_name = "Dinglebinger"
+        @user.save
+      end
+      it "cached calls should return the changed value" do
+        subject
+        @user.cached(:title).should == "John Dinglebinger"
+      end
+    end
+    describe 'should fill the cache, so' do
+      before do
+        @user.cached(:title)
+        @user.last_name = "Dinglebinger"
+        @user.save
+      end
+      it "the cache should not be empty" do
+        subject
+        Rails.cache.exist? [@user, "title"].should be_true
+      end
+    end
+  end
+  
+  describe '#renew_cached' do
+    subject { @user.renew_cached(:title) }
+    describe 'should delete the cache, so' do
+      before do
+        @user.cached(:title)
+        @user.last_name = "Dinglebinger"
+        @user.save
+      end
+      it "cached calls should return the changed value" do
+        subject
+        @user.cached(:title).should == "John Dinglebinger"
+      end
+    end
+    describe 'should fill the cache, so' do
+      before do
+        @user.cached(:title)
+        @user.last_name = "Dinglebinger"
+        @user.save
+      end
+      it "the cache should not be empty" do
+        subject
+        Rails.cache.exist? [@user, "title"].should be_true
+      end
+    end
+  end
+  
+  describe '#bulk_renew_cached' do
+    subject { @group.bulk_renew_cached(:title, @group.child_users) }
+    describe 'should delete the cache, so' do
+      before do
+        @user.cached(:title)
+        @user.last_name = "Dinglebinger"
+        @user.save
+      end
+      it "cached calls should return the changed value" do
+        subject
+        @user.cached(:title).should == "John Dinglebinger"
+      end
+    end
+    describe 'should fill the cache, so' do
+      before do
+        @user.cached(:title)
+        @user.last_name = "Dinglebinger"
+        @user.save
+      end
+      it "the cache should not be empty" do
+        subject
+        Rails.cache.exist? [@user, "title"].should be_true
+      end
+    end
+  end  
 end
