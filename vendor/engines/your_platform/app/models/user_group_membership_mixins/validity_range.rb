@@ -66,6 +66,8 @@ module UserGroupMembershipMixins::ValidityRange
   def make_invalid(time = Time.zone.now)
     time = time[:at] if time.kind_of?(Hash) && time[:at]
     self.update_attribute(:valid_to, time)
+# force evaluation of User#groups to fill cache
+    self.user.groups(true)
     return self
   end
   

@@ -150,6 +150,8 @@ module GroupMixins::Memberships
         membership = UserGroupMembership.create(user: user, group: self)
         time_of_joining = options[:joined_at] || options[:at] || options[:time] || Time.zone.now
         membership.update_attribute(:valid_from, time_of_joining)
+# force evaluation of User#groups to fill cache
+        user.groups(true)
         return membership
       end
     end
