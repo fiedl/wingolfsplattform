@@ -18,7 +18,7 @@ before_install:
   - travis_retry gem install bundler
 install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -y install pwgen libicu-dev; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install pwgen; brew install icu4c; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install pwgen; brew install mysql; brew install icu4c; fi
   - travis_retry bundle install
 before_script:
   - cp config/database.travis.yml config/database.yml
