@@ -24,6 +24,7 @@ before_script:
   - cp config/database.travis.yml config/database.yml
   - mkdir -p public/uploads
   - mkdir -p tmp/cache
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then mysql.server start; fi
   - bundle exec rake db:create db:migrate db:test:prepare
 script:
   - bundle exec rake rspec-rerun:spec
