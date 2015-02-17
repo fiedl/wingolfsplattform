@@ -19,8 +19,8 @@ class DagLink < ActiveRecord::Base
   
   def fill_cache
     valid_from
-    ancestor.try(:fill_cache)
-    descendant.try(:fill_cache)
+    ancestor.try(:fill_cache) if defined? ancestor.fill_cache
+    descendant.try(:fill_cache) if defined? descendant.fill_cache
   end
 
   def delete_cache
