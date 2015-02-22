@@ -91,8 +91,9 @@ class ProfileField < ActiveRecord::Base
   # Overwrite save to ensure that the cache is deleted in case of changes.
   #
   def save( *args )
+    result = super( *args )
     delete_cache
-    super( *args )
+    result
   end
 
   def delete_cache

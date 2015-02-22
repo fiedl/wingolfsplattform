@@ -18,7 +18,7 @@ describe GroupMixins::Corporations do
       @corporation_group_of_user.parent_groups << @corporations_parent_group
       @subgroup = create( :group ); @subgroup.parent_groups << @corporation_group_of_user
       @user = create( :user ); @user.parent_groups << @subgroup
-      @non_corporations_branch_group = create( :group ); @non_corporations_branch_group.child_users << @user
+      @non_corporations_branch_group = create( :group ); @non_corporations_branch_group.assign_user(@user)
     end
 
     describe ".create_corporations_parent_group" do
@@ -65,7 +65,33 @@ describe GroupMixins::Corporations do
 
     describe ".find_corporation_groups_of( user )" do
       subject { Group.find_corporation_groups_of( @user ) }
-      it { should == [ @corporation_group_of_user ] }
+      describe "at the begin" do
+        it "should contain all groups of user which are at the same time corporations" do
+          subject.should == [ @corporation_group_of_user ]
+        end
+      end
+      describe "with a second corporation" do
+        before do
+# force evaluation of User#groups to fill cache
+          @user.groups.collect{|x|x.title}
+          @second_corporation_group_of_user = create( :group )
+          @second_corporation_group_of_user.parent_groups << @corporations_parent_group
+          @subgroup2 = create( :group ); @subgroup2.parent_groups << @second_corporation_group_of_user
+          @subgroup2.assign_user(@user)
+        end
+        it "should also contain the second corporation" do
+          subject.should include @second_corporation_group_of_user
+        end
+      end
+      describe "with ended membership" do
+        before do
+          @ugm = UserGroupMembership.find_by_user_and_group(@user, @subgroup)
+          @ugm.invalidate(Time.zone.now - 10.seconds)
+        end
+        it "should no longer contain the corporation" do
+          subject.should_not include @corporation_group_of_user
+        end
+      end
     end
 
     describe ".find_corporations_branch_groups_of( user )" do
@@ -77,6 +103,27 @@ describe GroupMixins::Corporations do
       it "should include the corporations_parent_group" do
         subject.should include( @corporations_parent_group )
       end
+      describe "with a second corporation" do
+        before do
+          @user.groups.collect{|x|x.title}
+          @second_corporation_group_of_user = create( :group )
+          @second_corporation_group_of_user.parent_groups << @corporations_parent_group
+          @subgroup2 = create( :group ); @subgroup2.parent_groups << @second_corporation_group_of_user
+          @subgroup2.assign_user(@user)
+        end
+        it "should also contain the second corporation" do
+          subject.should include @second_corporation_group_of_user
+        end
+      end
+      describe "with ended membership" do
+        before do
+          @ugm = UserGroupMembership.find_by_user_and_group(@user, @subgroup)
+          @ugm.invalidate(Time.zone.now - 10.seconds)
+        end
+        it "should no longer contain the corporation" do
+          subject.should_not include @corporation_group_of_user
+        end
+      end
     end
 
     describe ".find_non_corporations_branch_groups_of( user )" do
@@ -87,6 +134,27 @@ describe GroupMixins::Corporations do
       end
       it "should not include the corporations_parent_group" do
         subject.should_not include( @corporations_parent_group )
+      end
+      describe "with a second corporation" do
+        before do
+          @user.groups.collect{|x|x.title}
+          @second_non_corporations_branch_group = create( :group ); 
+          @second_non_corporations_branch_group.assign_user(@user)
+        end
+        it "should also contain the second non corporation group" do
+          subject.should include @second_non_corporations_branch_group
+        end
+      end
+      describe "with ended membership" do
+        before do
+          @ugm = UserGroupMembership.find_by_user_and_group(@user, @non_corporations_branch_group)
+          @ugm.invalidate(Time.zone.now - 10.seconds)
+          p @ugm.valid_to
+          p @user.groups
+        end
+        it "should no longer contain the non corporation group" do
+          subject.should_not include @non_corporations_branch_group
+        end
       end
     end
     

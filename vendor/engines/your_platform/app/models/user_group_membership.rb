@@ -30,6 +30,12 @@ class UserGroupMembership < DagLink
   may_need_review
   attr_accessible :needs_review
   
+  # This method is called by a nightly rake task to renew the cache of this object.
+  #
+  def fill_cache
+    # from UserGroupMembershipMixins::ValidityRangeForIndirectMemberships
+    valid_from
+  end
 
   # General Properties
   # ====================================================================================================

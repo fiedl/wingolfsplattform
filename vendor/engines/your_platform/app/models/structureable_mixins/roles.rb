@@ -16,15 +16,19 @@ module StructureableMixins::Roles
   end
   
   def fill_cache
-    super
+    super if defined?(super)
     if respond_to?(:child_groups) # TODO: Refactor this. It should be possible to find the admins for a user.
-      find_admins
-      admins_of_ancestors
-      admins_of_self_and_ancestors
       officers_of_self_and_parent_groups
       officers_groups_of_self_and_descendant_groups
+      find_officers
+      officers_of_ancestors
+      officers_of_ancestor_groups
       officers_of_self_and_ancestors
       officers_of_self_and_ancestor_groups
+      find_admins
+      admins_of_ancestors
+      admins_of_ancestor_groups
+      admins_of_self_and_ancestors
     end
   end
   
@@ -115,7 +119,11 @@ module StructureableMixins::Roles
   
   def officers_of_self_and_parent_groups
     cached do
-      direct_officers + (parent_groups.collect { |parent_group| parent_group.direct_officers }.flatten)
+      if defined? parent_groups
+        direct_officers + (parent_groups.collect { |parent_group| parent_group.direct_officers }.flatten)
+      else
+        direct_officers
+      end
     end
   end
   
@@ -140,7 +148,13 @@ module StructureableMixins::Roles
   end
   
   def officers_of_ancestor_groups
-    cached { ancestor_groups.collect { |ancestor| ancestor.find_officers }.flatten }
+    cached do
+      if defined? ancestor_groups
+        ancestor_groups.collect { |ancestor| ancestor.find_officers }.flatten
+      else
+        []
+      end
+    end
   end
   
   def officers_of_self_and_ancestors
@@ -182,15 +196,17 @@ module StructureableMixins::Roles
   end
 
   def create_admins_parent_group
+    result = create_special_group(:admins_parent, parent_element: find_or_create_officers_parent_group )
     delete_cached(:find_admins)
-    create_special_group(:admins_parent, parent_element: find_or_create_officers_parent_group )
+    result
   end
 
   def find_or_create_admins_parent_group
       find_special_group(:admins_parent, parent_element: find_or_create_officers_parent_group) or
       begin
+        result = create_special_group(:admins_parent, parent_element: find_or_create_officers_parent_group)
         delete_cached(:find_admins)
-        create_special_group(:admins_parent, parent_element: find_or_create_officers_parent_group)
+        result
       rescue
         nil
       end
