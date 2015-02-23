@@ -72,9 +72,9 @@ describe ActiveRecordCacheExtension do
           wait_for_cache
           @new_membership = @membership.move_to @corporation.status_groups.last
           wait_for_cache
+          time_travel 2.seconds
         end
         it "should return the new value" do
-          subject.should == @user.reload.corporate_vita_memberships_in(@corporation)
           subject.should include @new_membership
         end
       end

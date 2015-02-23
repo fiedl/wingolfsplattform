@@ -269,8 +269,8 @@ class UserGroupMembership < DagLink
   def move_to_group( group_to_move_in, options = {} )
     time = (options[:time] || options[:date] || options[:at] || Time.zone.now).to_datetime
     invalidate at: time
-    new_membership = UserGroupMembership.create(user: self.user, group: group_to_move_in)
-    new_membership.update_attribute(:valid_from, time)
+    new_membership = UserGroupMembership.create(user: self.user, group: group_to_move_in, valid_from: time)
+    self.user.delay.renew_cache
     return new_membership
   end
   def move_to(group, options = {})
