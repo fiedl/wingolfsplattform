@@ -140,8 +140,6 @@ end
 #  end
 #end
 
-# YourPlatform
-gem 'your_platform', path: 'vendor/engines/your_platform'
 
 # Pry Console Addon
 gem 'pry', group: :development
@@ -209,3 +207,7 @@ gem 'newrelic_rpm'
 gem 'prawn', github: 'prawnpdf/prawn'
 
 gem 'formtastic', '~> 2.2.1'
+
+
+# YourPlatform
+gem 'your_platform', github: 'fiedl/your_platform', branch: 'master'
