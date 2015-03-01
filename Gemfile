@@ -20,7 +20,6 @@ gem 'transaction_retry' # rescue from deadlocks
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets, :production, 'testing-aki' do
-  gem 'sass-rails',   '>= 3.2.3'					# MIT License
   gem 'coffee-rails', '>= 3.2.1'					# MIT License
 #  gem 'coffee-script', '1.4.0' # need this at 1.4.0 for mercury, at the moment
     # see https://github.com/jejacks0n/mercury/issues/349
@@ -55,13 +54,6 @@ gem 'nokogiri'								# MIT License
 #gem 'acts-as-dag', path: '../acts-as-dag'
 #gem 'acts-as-dag', git: "git://github.com/resgraph/acts-as-dag.git"	# MIT License
 #gem 'acts-as-dag', '>= 2.5.7'  # now in your_platform
-
-gem 'acts-as-dag', github: 'fiedl/acts-as-dag', branch: 'sf/remove-uniq'  # without duplicate duplication
-
-# Formtastic Form Helper,
-# see: https://github.com/justinfrench/formtastic,
-# http://rubydoc.info/gems/formtastic/frames
-gem 'formtastic'							# MIT License
 
 # JSON
 gem 'json'								# Ruby License
@@ -119,6 +111,7 @@ group :test do
   gem 'guard-spork'
   gem 'spork'
   gem 'simplecov', require: false
+  gem 'email_spec'
   gem 'timecop'  # time_travel
   gem 'fuubar' # better progress bar for specs
 end
@@ -147,13 +140,6 @@ end
 #end
 
 
-# password generator. it's not pwgen, but it's a gem.
-# TODO: if we ever find a way to properly include pwgen, let's do it.
-gem 'passgen'                                                           # MIT License
-
-# YourPlatform
-gem 'your_platform', path: 'vendor/engines/your_platform'
-
 # Pry Console Addon
 gem 'pry', group: :development
 
@@ -166,7 +152,10 @@ gem 'angularjs-rails'
 # Receiving Mails
 gem 'mailman', require: false
 gem 'mail', git: 'git://github.com/jeremy/mail.git'
-gem 'rb-inotify', '~> 0.9', group: :production
+# gem 'rb-inotify', '~> 0.9', group: :production
+  # https://github.com/fiedl/wingolfsplattform/commit/2dafbda71af2bed2be46c79b558cbff8548b0df2
+  # Removed rb-inotify due to asset compilation issues after updating to rails 3.2.21.
+
 
 # View Helpers
 # gem 'rails-gallery', git: 'https://github.com/kristianmandrup/rails-gallery'
@@ -203,6 +192,9 @@ gem 'tilt', '~> 1.4.1'
 # Maintenance Mode
 gem 'turnout'
 
+# Sidekiq Error Web UI
+gem 'sidekiq-failures'
+
 
 # fix workflow kit until the update to rails 4.
 # workflow_kit 0.0.8 only supports rails 4.
@@ -210,5 +202,18 @@ gem 'turnout'
 gem 'workflow_kit', github: 'fiedl/workflow_kit'
 
 gem 'newrelic_rpm'
-gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
+#gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
 gem 'prawn', github: 'prawnpdf/prawn'
+
+gem 'formtastic', '~> 2.2.1'
+
+
+# === THIS IS A TEST ===
+# https://github.com/fiedl/wingolfsplattform/commit/43694081aabccfc6fe0ba873a7d6ccd2cdc787dc
+# https://trello.com/c/84R7LS8g/564-multiple-daglinks-erlauben
+#
+gem 'acts-as-dag', github: 'fiedl/acts-as-dag', branch: 'sf/remove-uniq'  # without duplicate duplication
+# === ============== ===
+
+# YourPlatform
+gem 'your_platform', github: 'fiedl/your_platform', branch: 'master'

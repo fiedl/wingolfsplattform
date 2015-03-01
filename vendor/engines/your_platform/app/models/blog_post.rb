@@ -1,2 +1,0 @@
-class BlogPost < Page
-end

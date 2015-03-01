@@ -49,12 +49,12 @@ feature 'User page', js: false do
 
       scenario "the section #{I18n.t(:contact_information)} should be editable", js: true do
         within('.box.section.contact_information') do
-          page.should have_selector('.wingolfspost', :visible => true)
+          page.should have_selector('.postal_address', :visible => true)
           page.should have_no_selector('.radio', :visible => true )
 
           click_on I18n.t(:edit)
 
-          page.should have_selector('.wingolfspost', :visible => true)
+          page.should have_selector('.postal_address', :visible => true)
           page.should have_selector('.radio', :visible => true)
 
           page.should have_selector('a.add_button', visible: true)
@@ -151,7 +151,7 @@ feature 'User page', js: false do
             subject.should have_selector('input[type=text]', count: 6)
           end
 
-          find('.remove_button').click
+          find('.remove_button').trigger :click # the button has no size in the spec.
           page.should have_no_selector('.profile_field')
         end
       end
@@ -186,7 +186,7 @@ feature 'User page', js: false do
 
         scenario 'the profile sections should not be editable', js: true do
           within('.box.section.contact_information') do
-            page.should have_selector('.wingolfspost', :visible => true)
+            page.should have_selector('.postal_address', :visible => true)
             page.should have_no_selector('.radio', :visible => true)
             subject.should have_no_selector('a.edit_button', visible: true)
             subject.should have_no_selector('a.add_button', visible: true)
@@ -250,12 +250,12 @@ feature 'User page', js: false do
 
         scenario "the section #{I18n.t(:contact_information)} should be editable", js: true do
           within('.box.section.contact_information') do
-            page.should have_selector('.wingolfspost', :visible => true)
+            page.should have_selector('.postal_address', :visible => true)
             page.should have_no_selector('.radio', :visible => true)
 
             click_on I18n.t(:edit)
 
-            page.should have_selector('.wingolfspost', :visible => true)
+            page.should have_selector('.postal_address', :visible => true)
 
             page.should have_selector('.radio', :visible => true)
 
@@ -300,19 +300,14 @@ feature 'User page', js: false do
             page.should have_text @user.email
             
             click_on I18n.t(:edit)
-            page.should have_selector "input[type=text]", count: 3  # alias, first_name, email
+            page.should have_selector "input[type=text]", count: 1  # alias
             page.should have_text "Zugang zur Plattform"
             page.should have_text "Der Zugang zur Plattform (Benutzerkonto) wurde erstellt am"
-            page.should have_text "Zuletzt wurde am"
-            page.should have_text "ein neues Passwort per E-Mail übersandt."
-            
-            page.should have_selector '.request_new_password'
+            page.should have_text "Die Zugangsdaten wurden zuletzt am"
+
+            page.should have_link I18n.t(:change_password)
             page.should have_no_selector '.lock_account'
-            
-            click_on I18n.t(:send_new_password)
           end
-          page.should have_no_selector '.request_new_password', visible: true
-          page.should have_text "Zugriff nicht gestattet. Bitte melden Sie sich zunächst am System an." # Denn: Das alte Passwort ist ja nun nicht mehr gültig!
         end
       end
     end

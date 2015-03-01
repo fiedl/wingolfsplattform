@@ -15,7 +15,7 @@ Wingolfsplattform::Application.configure do
   #config.cache_store = :file_store, Rails.root.join("tmp/app_cache")
   config.cache_store = :redis_store, 'redis://localhost:6379/0/', { expires_in: 1.day, namespace: 'development_cache' }
   
-  # Don't care if the mailer can't send
+  # Care if the mailer can't send
   config.action_mailer.raise_delivery_errors = true
 
   # Print deprecation notices to the Rails logger
@@ -46,7 +46,16 @@ Wingolfsplattform::Application.configure do
 
 
   # Mailer Settings
-  config.action_mailer.delivery_method = :letter_opener # :sendmail
+  config.action_mailer.delivery_method = :letter_opener
+  # config.action_mailer.delivery_method = :sendmail
+  # config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = {
+  #   address: 'smtp.1und1.de',
+  #   user_name: 'wingolfsplattform@wingolf.org',
+  #   password: '',
+  #   domain: 'wingolfsplattform.org',
+  #   enable_starttls_auto: true
+  # }
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000, protocol: 'https' }
 
 end

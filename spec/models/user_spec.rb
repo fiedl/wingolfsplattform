@@ -230,9 +230,68 @@ describe User do
         it { should == false }
       end
     end
-    
-  end  
-
+  end
+  
+  describe "#aktivmeldungsdatum" do
+    before { @user = create :user }
+    subject { @user.aktivmeldungsdatum }
+    describe "für Ein-Band-Träger" do
+      before do
+        @date_of_joining_the_corporation = 1.year.ago
+        @corporation = create :wingolf_corporation
+        @corporation.status_groups.first.assign_user @user, at: @date_of_joining_the_corporation
+      end
+      it { should == @date_of_joining_the_corporation.to_date }
+    end
+    describe "für Mehr-Band-Träger" do
+      before do
+        @date_of_joining_the_first_corporation = 2.years.ago
+        @date_of_joining_the_second_corporation = 1.year.ago
+        @first_corporation = create :wingolf_corporation
+        @second_corporation = create :wingolf_corporation
+        @first_corporation.status_groups.first.assign_user @user, at: @date_of_joining_the_first_corporation
+        @second_corporation.status_groups.first.assign_user @user, at: @date_of_joining_the_second_corporation
+        
+        # Promote the user in order to make sure this does not cause problems.
+        @date_of_promotion_in_first_corporation = 20.days.ago
+        UserGroupMembership.find_by_user_and_group(@user, @first_corporation.status_groups.first).move_to(@first_corporation.status_groups.second, at: @date_of_promotion_in_first_corporation)
+      end
+      it { should == @date_of_joining_the_first_corporation.to_date }
+    end
+    describe "für Nicht-Wingolfiten" do
+      it { should == nil }
+    end
+  end
+  describe "#aktivmeldungsdatum=" do
+    before { @user = create(:user); @new_date = "2003-10-27".to_datetime }
+    subject { @user.aktivmeldungsdatum = @new_date }
+    describe "für Wingolfiten" do
+      before do
+        @date_of_joining_the_first_corporation = "2003-01-01".to_datetime
+        @date_of_joining_the_second_corporation = "2008-01-01".to_datetime
+        @first_corporation = create :wingolf_corporation
+        @second_corporation = create :wingolf_corporation
+        @first_corporation.status_groups.first.assign_user @user, at: @date_of_joining_the_first_corporation
+        @second_corporation.status_groups.first.assign_user @user, at: @date_of_joining_the_second_corporation
+        
+        # Promote the user in order to make sure this does not cause problems.
+        @date_of_promotion_in_first_corporation = "2010-02-21".to_datetime
+        UserGroupMembership.find_by_user_and_group(@user, @first_corporation.status_groups.first).move_to(@first_corporation.status_groups.second, at: @date_of_promotion_in_first_corporation)
+      end
+      it "should update the membership date correctly" do
+        @membership = UserGroupMembership.with_invalid.find_by_user_and_group(@user, @first_corporation.status_groups.first)
+        @membership.valid_from.to_date.should == @date_of_joining_the_first_corporation.to_date
+        subject
+        @membership.reload.valid_from.to_date.should == @new_date.to_date
+      end
+    end
+    describe "für Nicht-Wingolfiten" do
+      it "should raise an error" do
+        expect { subject }.to raise_error
+      end
+    end
+  end
+  
   describe "#fill_in_template_profile_information" do
 
     before do
@@ -492,7 +551,7 @@ describe User do
         specify "the user should only have ONE bv membership, now" do
           subject
           time_travel 2.seconds
-          (@user.groups(true) & Bv.all).count.should == 1
+          (@user.group_ids & Bv.pluck(:id)).count.should == 1
         end
         it "should assign the user to the correct bv" do
           subject
@@ -553,7 +612,7 @@ describe User do
     describe "the user being a former member of a corporation" do
       before do
         @corporation_a = create(:wingolf_corporation)
-        @membership = @corporation_a.assign_user @user, at: 2.years.ago
+        @membership = @corporation_a.status_groups.first.assign_user @user, at: 2.years.ago
         @membership.promote_to @corporation_a.status_group("Schlicht Ausgetretene"), at: 1.year.ago
       end
       it "should not set the status to deceased in this corporation" do

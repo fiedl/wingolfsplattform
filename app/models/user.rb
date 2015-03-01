@@ -44,6 +44,8 @@ class User
     hidden
     personal_title
     academic_degree
+    
+    administrated_aktivitates
   end
 
   # This method returns a kind of label for the user, e.g. for menu items representing the user.
@@ -74,7 +76,13 @@ class User
   # This method returns the bv (Bezirksverband) the user is associated with.
   #
   def bv
-    cached { (Bv.all & self.groups).try(:first).try(:becomes, Bv) }
+    cached { Bv.find(bv_id) if bv_id }
+  end
+  def bv_ids
+    Bv.pluck(:id) & self.group_ids
+  end
+  def bv_id
+    bv_ids.first
   end
   
   def bv_membership
@@ -86,8 +94,8 @@ class User
   # dass er mehreren BVs zugeordnet ist.
   #
   def bv_memberships
-    (Bv.all & self.groups).collect do |bv|
-      UserGroupMembership.find_by_user_and_group(self, bv)
+    bv_ids.collect do |id|
+      UserGroupMembership.find_by_user_and_group(self, Group.find(id))
     end - [nil]
   end
   
@@ -165,6 +173,10 @@ class User
     for membership in self.bv_memberships
       membership.invalidate at: 1.minute.ago if membership != new_membership
     end
+    
+    # Cache zurücksetzen
+    self.delay.delete_cached :bv
+    self.delay.delete_cached :bv_membership
 
     self.groups(true) # reload groups
     return new_membership
@@ -209,6 +221,14 @@ class User
   def klammerung
     self.profile_fields.where(label: :klammerung).first.try(:value)
   end
+  
+  def aktivmeldungsdatum
+    first_corporation.try(:membership_of, self).try(:valid_from).try(:to_date)
+  end
+  def aktivmeldungsdatum=(date)
+    (first_corporation || raise('user is not member of a corporation')).membership_of(self).update_attribute(:valid_from, date.to_datetime)
+  end
+  
 
   # Fill-in default profile.
   #
@@ -218,10 +238,10 @@ class User
     self.profile_fields.create(label: :cognomen, type: "ProfileFieldTypes::General")
     self.profile_fields.create(label: :klammerung, type: "ProfileFieldTypes::Klammerung")
 
-    self.profile_fields.create(label: :home_address, type: "ProfileFieldTypes::Address")
-    self.profile_fields.create(label: :work_or_study_address, type: "ProfileFieldTypes::Address")
-    self.profile_fields.create(label: :phone, type: "ProfileFieldTypes::Phone")
-    self.profile_fields.create(label: :mobile, type: "ProfileFieldTypes::Phone")
+    self.profile_fields.create(label: :home_address, type: "ProfileFieldTypes::Address") unless self.home_address
+    self.profile_fields.create(label: :work_or_study_address, type: "ProfileFieldTypes::Address") unless self.work_or_study_address
+    self.profile_fields.create(label: :phone, type: "ProfileFieldTypes::Phone") unless self.phone
+    self.profile_fields.create(label: :mobile, type: "ProfileFieldTypes::Phone") unless self.mobile
     self.profile_fields.create(label: :fax, type: "ProfileFieldTypes::Phone")
     self.profile_fields.create(label: :homepage, type: "ProfileFieldTypes::Homepage")
 
@@ -287,8 +307,21 @@ class User
   end
   
   def group_names
-    self.groups.collect { |group| group.name }
+    self.groups.pluck(:name)
   end
+  
+  # Defines whether the user can be marked as deceased (by a workflow).
+  #
+  # Nur Wingolfiten dürfen als verstorben markiert werden, da wir davon ausgehen, dass
+  # eine Mitgliedschaft im Wingolf durch Austritt endet. Doch auch verstorbene Wingolfiten
+  # sind noch Wingoliten. Jeders Mitglied in unserer Verstorbenen-Gruppe ist also noch
+  # Wingolift. Daher darf aus Konsistenzgründen für Nicht-Wingolfiten kein Tod eingetragen 
+  # werden.
+  #
+  def markable_as_deceased?
+    alive? and wingolfit?
+  end
+  
 
 
   # Abo Wingolfsblätter
@@ -311,5 +344,69 @@ class User
   end
 
 
+  # Besondere Admin-Hilfs-Methoden
+  
+  def administrated_aktivitates
+    cached { Role.of(self).administrated_aktivitates }
+  end
+  
+  # Damit können wir einen Benutzer in der Konsole schnell finden:
+  # 
+  #   User.find("Max Schmidt")
+  #   User.find(12)
+  #
+  def self.find(*args)
+    if args.first.kind_of?(String) and args.first.include?(" ")
+      User.find_all_by_identification_string(args.first).first
+    else
+      super(*args)
+    end
+  end
+  
+  # Damit können wir in der Konsole besondere Statusänderungen
+  # schnell eintragen.
+  # 
+  # Als Parameter wird der Name der Statusgruppe angegeben.
+  # Gegebenenfalls muss man auch das Band noch mit angeben.
+  # 
+  #   user.change_status "Konkneipanten"
+  #   user.change_status "Konkneipanten", in: "Be"
+  #   user.change_status "Konkneipanten", in: "Be", at: "13.02.2015"
+  #
+  def change_status(new_status, options = {})
+    corporation_token = options[:in]
+    corp = if self.current_corporations.count == 1
+      print "Ignoriere :in-Option, da nur ein Band vorliegt.\n" if corporation_token
+      self.current_corporations.first
+    else
+      Corporation.find_by_token(corporation_token || raise('Der Benutzer ist Mehrbandträger. Bitte Band mit "in: \'Be\'" angeben.')) || raise('Keine passende Verbindung gefunden.')
+    end
+    current_status_membership = self.current_status_membership_in(corp) || raise('Aktuelle Status-Gruppe nicht gefunden.')
+    new_status_group = corp.status_group(new_status) || raise('Neue Status-Gruppe nicht gefunden.')
+    
+    if options[:at]
+      date = options[:at].to_datetime || raise('Datum nicht gültig.')
+      current_status_membership.move_to new_status_group, at: date
+    else
+      current_status_membership.move_to new_status_group
+    end
+    
+    self.uncached(:status)
+  end
+  
+  # So können wir schnell den aktuellen Status in der Konsole abfragen.
+  #
+  #   user.status
+  #
+  def status
+    status_memberships = []
+    self.corporations.each do |c|
+      print "#{c.name}\n".blue
+      print " -> #{self.current_status_group_in(c).name}\n".green
+      status_memberships << self.current_status_membership_in(c)
+    end
+    return status_memberships
+  end
+  
 end
 

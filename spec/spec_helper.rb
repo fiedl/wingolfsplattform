@@ -136,7 +136,7 @@ Spork.prefork do
     # inspector in the browser that allows you to see the current DOM structure and 
     # other information useful for debugging tests.
     # 
-    Capybara::Poltergeist::Driver.new(app, inspector: true)
+    Capybara::Poltergeist::Driver.new(app, inspector: true, js_errors: (not ENV['NO_JS_ERRORS'].present?))
   end
   Capybara.javascript_driver = :poltergeist
   
@@ -171,7 +171,9 @@ Spork.prefork do
     config.include RSpec::Matchers
     config.include Rails.application.routes.url_helpers
     config.include FactoryGirl::Syntax::Methods
-    
+    config.include EmailSpec::Helpers
+    config.include EmailSpec::Matchers
+
     # TimeTravel abilities: time_travel 2.seconds
     # This can be used for caching, validity range, etc.
     #
