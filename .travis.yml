@@ -24,3 +24,6 @@ notifications:
     on_success: always  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
     on_start: false     # default: false
+addons:
+  code_climate:
+    repo_token: e0efa94b3c7a8a2049f5ff1ded51a21e922bf29845e658de598b01c964c17275
