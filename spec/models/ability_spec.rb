@@ -481,9 +481,9 @@ describe Ability do
     he "should be able to manage this page" do
       the_user.should be_able_to :manage, @page
     end
-    he "should be able to manage subgroups of this page" do
+    he "should be able to update subgroups of this page" do
       @subgroup = @page.child_groups.create
-      the_user.should be_able_to :manage, @subgroup
+      the_user.should be_able_to :update, @subgroup
     end
     he "should NOT be able to manage descendant users" do
       @subgroup = @page.child_groups.create
@@ -502,8 +502,8 @@ describe Ability do
       @group = create(:group)
       @group.admins << user
     end
-    he "should be able to manage the group he is admin of" do
-      the_user.should be_able_to :manage, @group
+    he "should be able to update the group he is admin of" do
+      the_user.should be_able_to :update, @group
     end
     he "should be able to manage the users in the group he is admin of" do
       @other_user = create(:user)
@@ -528,11 +528,11 @@ describe Ability do
       @profile_field = @group.profile_fields.create(label: "Bank Account", type: 'ProfileFieldTypes::BankAccount').becomes(ProfileFieldTypes::BankAccount)
       the_user.should be_able_to :manage, @profile_field
     end
-    he "should be able to manage subgroups" do
+    he "should be able to update subgroups" do
       @subgroup = create(:group)
       @subgroup.parent_groups << @group
       @subgroup.reload
-      the_user.should be_able_to :manage, @subgroup
+      the_user.should be_able_to :update, @subgroup
     end
     he "should be able to manage users of subgroups" do
       @subgroup = create(:group)
@@ -622,10 +622,10 @@ describe Ability do
       # 1. The user is no admin.
       #
       the_user.should_not be_able_to :manage, @parent_group
-      the_user.should_not be_able_to :manage, @group
+      the_user.should_not be_able_to :update, @group
       the_user.should_not be_able_to :manage, @page
       the_user.should_not be_able_to :manage, @sub_page
-      the_user.should_not be_able_to :manage, @sub_group
+      the_user.should_not be_able_to :update, @sub_group
       the_user.should_not be_able_to :manage, @sub_group_page
       the_user.should_not be_able_to :manage, @sub_group_user
       
@@ -633,10 +633,10 @@ describe Ability do
       #
       @group.admins_parent.assign_user user; wait_for_cache
       the_user.should_not be_able_to :manage, @parent_group
-      the_user.should be_able_to :manage, @group
+      the_user.should be_able_to :update, @group
       the_user.should be_able_to :manage, @page
       the_user.should be_able_to :manage, @sub_page
-      the_user.should be_able_to :manage, @sub_group
+      the_user.should be_able_to :update, @sub_group
       the_user.should be_able_to :manage, @sub_group_page
       the_user.should be_able_to :manage, @sub_group_user
 
@@ -644,10 +644,10 @@ describe Ability do
       #
       @group.admins_parent.unassign_user user; wait_for_cache
       the_user.should_not be_able_to :manage, @parent_group
-      the_user.should_not be_able_to :manage, @group
+      the_user.should_not be_able_to :update, @group
       the_user.should_not be_able_to :manage, @page
       the_user.should_not be_able_to :manage, @sub_page
-      the_user.should_not be_able_to :manage, @sub_group
+      the_user.should_not be_able_to :update, @sub_group
       the_user.should_not be_able_to :manage, @sub_group_page
       the_user.should_not be_able_to :manage, @sub_group_user
       
