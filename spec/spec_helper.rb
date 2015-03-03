@@ -38,6 +38,14 @@
 # Coveralls         Tool to add a code coverage badge.
 #                   https://coveralls.io/docs/ruby
 #
+# CodeClimate       Code Evaluation and Test Coverage
+#                   https://codeclimate.com/github/fiedl/wingolfsplattform
+#
+#
+
+# CodeClimate
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start 
 
 # Required Basic Libraries
 # ==========================================================================================

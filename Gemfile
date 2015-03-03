@@ -115,6 +115,7 @@ group :test do
   gem 'email_spec'
   gem 'timecop'  # time_travel
   gem 'fuubar' # better progress bar for specs
+  gem "codeclimate-test-reporter", require: nil
 end
 
 group :test do

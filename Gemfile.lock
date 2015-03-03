@@ -178,6 +178,8 @@ GEM
       timers (~> 4.0.0)
     charlock_holmes (0.6.9.4)
     cliver (0.3.2)
+    codeclimate-test-reporter (0.4.7)
+      simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.0)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
@@ -558,6 +560,7 @@ DEPENDENCIES
   brakeman (>= 2.3.1)
   capybara
   charlock_holmes
+  codeclimate-test-reporter
   coffee-rails (>= 3.2.1)
   colored
   coveralls
