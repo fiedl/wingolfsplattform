@@ -96,8 +96,9 @@ Spork.prefork do
 
   # Requires supporting ruby files with custom matchers and macros, etc,
   # in spec/support/ and its subdirectories.
-  #Dir[Rails.root.join('spec/support/**/*.rb')].each {|f| require f}
-  Dir[Rails.root.join('vendor/engines/your_platform/spec/support/**/*.rb')].each {|f| require f}
+  
+  Dir[Rails.root.join('spec/support/**/*.rb')].each {|f| require f}
+  Dir[YourPlatform::Engine.root.join('spec/support/**/*.rb')].each {|f| require f}
 
 
   # SimpleCov: Code Coverage
@@ -119,7 +120,10 @@ Spork.prefork do
   # 
   # Rather than `rspec-mocks` fixtures, we use FactoryGirl instead.
   #
-  FactoryGirl.definition_file_paths = %w(spec/factories vendor/engines/your_platform/spec/factories)
+  FactoryGirl.definition_file_paths = [
+    'spec/factories',
+    YourPlatform::Engine.root.join('spec/factories')
+  ]
 
   # In order to not hit the geocoding API, we use stub data for geocoding.
   #
