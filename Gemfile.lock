@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 2c05300152d12332c23fb8ccafe563fb0ffc0b8a
+  revision: d84ccc9b444118f6f2952071649ac7a040c99b95
   branch: master
   specs:
     your_platform (0.0.1)

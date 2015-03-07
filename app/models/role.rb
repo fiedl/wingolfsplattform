@@ -6,7 +6,7 @@ class Role
   #   Role.of(user).administrated_aktivitates
   #
   def administrated_aktivitates
-    administrated_objects & Aktivitas.all.collect { |a| a.becomes(Group) }
+    administrated_objects & Aktivitas.all
   end
   
 end

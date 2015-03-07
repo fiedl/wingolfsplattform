@@ -18,7 +18,7 @@ describe HorizontalNav do
   
     describe "for the user being member of one corporation" do
       before { @corporation_a.status_group("Hospitanten") << @user }
-      it { should include @corporation_a.becomes(Group) }
+      it { should include @corporation_a }
     end
     
     describe "for the user being member of several corporations" do
@@ -27,8 +27,8 @@ describe HorizontalNav do
         @corporation_b.status_group("Philister") << @user
       end
       it "should include all corporations" do
-        subject.should include @corporation_a.becomes(Group)
-        subject.should include @corporation_b.becomes(Group)        
+        subject.should include @corporation_a
+        subject.should include @corporation_b
       end
     end
     
@@ -40,10 +40,10 @@ describe HorizontalNav do
         time_travel 2.seconds
       end
       it "should include the corporations the user is still member in" do
-        subject.should include @corporation_a.becomes(Group)
+        subject.should include @corporation_a
       end
       it "should not include the former corporations" do
-        subject.should_not include @corporation_b.becomes(Group)
+        subject.should_not include @corporation_b
       end
     end
     

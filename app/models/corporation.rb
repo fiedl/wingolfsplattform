@@ -1,19 +1,15 @@
-# -*- coding: utf-8 -*-
-
 # This extends the your_platform Corporation model.
 require_dependency YourPlatform::Engine.root.join( 'app/models/corporation' ).to_s
-require_dependency Rails.root.join( 'app/models/aktivitas' ).to_s
-require_dependency Rails.root.join( 'app/models/philisterschaft' ).to_s
 
 # Wingolf-am-Hochschulort-Gruppe
 class Corporation 
   
   def aktivitas
-    self.child_groups.aktivitates.first
+    child_groups.where(type: 'Aktivitas').first
   end
 
   def philisterschaft
-    self.child_groups.philisterschaften.first
+    child_groups.where(type: 'Philisterschaft').first
   end
 
   def hausverein

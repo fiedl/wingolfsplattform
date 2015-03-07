@@ -12,18 +12,18 @@ describe GroupMixins::Erstbandphilister do
 
       @some_group = create( :group )
 
-      @corporation_a = create( :wah_group )
+      @corporation_a = create :wingolf_corporation
       @philisterschaft_a = @corporation_a.philisterschaft
       
       @philister_a = @corporation_a.status_group("Philister")
       @erstbandphilister_a = @philisterschaft_a.create_erstbandphilister_parent_group
 
-      @corporation_b = create( :wah_group )
+      @corporation_b = create :wingolf_corporation
       @philisterschaft_b = @corporation_b.philisterschaft
       @philister_b = @corporation_b.status_group("Philister")
       @erstbandphilister_b = @philisterschaft_b.create_erstbandphilister_parent_group
 
-      @corporation_c = create( :wah_group )
+      @corporation_c = create :wingolf_corporation
       @philisterschaft_c = @corporation_c.philisterschaft
 
       @user = create( :user )

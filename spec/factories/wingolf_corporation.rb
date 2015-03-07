@@ -8,17 +8,18 @@ FactoryGirl.define do
     sequence( :internal_token ) { |n| "#{token.to_s}W" }
 
     after( :create ) do |corporation|
-      Group.create_everyone_group unless Group.find_everyone_group
-      Group.create_corporations_parent_group unless Group.find_corporations_parent_group
-      Group.corporations << corporation
-      
       corporation.import_default_group_structure "default_group_sub_structures/wingolf_am_hochschulort_children.yml"
       corporation.reload
       
-      corporation.child_groups.where(name: ['Aktivitas', 'Philisterschaft']).each { |g| g.add_flag :full_members }
+      aktivitas = corporation.child_groups.where(name: 'Aktivitas').first
+      aktivitas.update_attribute(:type, 'Aktivitas')
+      aktivitas.add_flag :full_members
+      Group.alle_aktiven << aktivitas
       
-      Group.alle_aktiven << corporation.child_groups.where(name: 'Aktivitas').first
-      Group.alle_philister << corporation.child_groups.where(name: 'Philisterschaft').first
+      philisterschaft = corporation.child_groups.where(name: 'Philisterschaft').first
+      philisterschaft.update_attribute(:type, 'Philisterschaft')
+      philisterschaft.add_flag :full_members
+      Group.alle_philister << philisterschaft
     end
   end
 end

@@ -1,14 +1,6 @@
 class Bv < Group
+  after_save { Bv.bvs_parent << self }
   
-  default_scope -> { joins(:links_as_child).where(dag_links: {ancestor_type: 'Group', ancestor_id: Group.find_bvs_parent_group.try(:id)}) }
-  
-  # Override the model name. This is used for the generation of paths, i.e.
-  # group_path rather than bv_path.
-  # 
-  def self.model_name
-    Group.model_name
-  end
-
   def self.by_plz( plz )
     bv_token = BvMapping.find_by_plz( plz ).bv_name if BvMapping.find_by_plz( plz )
     bv_group = ( Bv.all.select { |group| group.token == bv_token } ).first if bv_token
