@@ -408,5 +408,23 @@ class User
     return status_memberships
   end
   
+  
+  # ## Firmenname
+  # 
+  # YourPlatform erlaubt, per Zuweisung an `corporation_name` den Benutzer einer neuen Firma
+  # (= Organisation, = Corporation) zuzuweisen. Wenn die Firma nicht existiert, wird sie erstellt.
+  # 
+  # Siehe: https://github.com/fiedl/your_platform/blob/master/app/models/concerns/user_corporations.rb
+  # 
+  # Damit wir keine Verbindungen on-the-fly erstellen, wird dies für die Wingolfsplattform
+  # blockiert.
+  #
+  def corporation_name
+    nil
+  end
+  def corporation_name=(new_name)
+    raise 'We do not allow to create corporations on the fly in Wingolfsplattform.'
+  end
+  
 end
 
