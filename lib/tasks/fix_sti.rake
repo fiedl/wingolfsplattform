@@ -23,7 +23,7 @@ namespace :fix do
     
     task :corporations => [:environment, :requirements, :print_info] do
       log.section "Corporations"
-      Corporation.corporations_parent.child_groups.where(type: '').each do |group|
+      Corporation.corporations_parent.child_groups.where(type: nil).each do |group|
         unless group.has_flag? :officers_parent
           log.info group.name
           group.update_attribute :type, 'Corporation'
@@ -34,7 +34,7 @@ namespace :fix do
 
     task :bvs => [:environment, :requirements, :print_info] do
       log.section "BVs"
-      Bv.bvs_parent.child_groups.where(type: '').each do |group|
+      Bv.bvs_parent.child_groups.where(type: nil).each do |group|
         unless group.has_flag? :officers_parent
           log.info group.name
           group.update_attribute :type, 'Bv'
@@ -45,9 +45,9 @@ namespace :fix do
 
     task :aktivitates => [:environment, :requirements, :print_info] do
       log.section "Aktivitates"
-      Group.alle_aktiven.child_groups.where(type: '').each do |group|
+      Group.alle_aktiven.child_groups.where(type: nil).each do |group|
         unless group.has_flag? :officers_parent
-          log.info group.name
+          log.info "#{group.name}, #{group.corporation.try(:name)}"
           group.update_attribute :type, 'Aktivitas'
         end
       end
@@ -56,9 +56,9 @@ namespace :fix do
 
     task :philisterschaften => [:environment, :requirements, :print_info] do
       log.section "Philisterschaften"
-      Group.alle_philister.child_groups.where(type: '').each do |group|
+      Group.alle_philister.child_groups.where(type: nil).each do |group|
         unless group.has_flag? :officers_parent
-          log.info group.name
+          log.info "#{group.name}, #{group.corporation.try(:name)}"
           group.update_attribute :type, 'Philisterschaft'
         end
       end
