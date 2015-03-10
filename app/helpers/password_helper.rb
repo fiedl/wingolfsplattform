@@ -2,6 +2,7 @@ module PasswordHelper
   
   def password_strength_container
     content_tag(:div, '', class: 'password_strength_container', data: {
+      lib_script_path: asset_path('password_strength.js'),
       min_score: 4,
       password_strength_advice: t('password_strength.advice'),
       score_descriptions: t([:s0, :s1, :s2, :s3, :s4],

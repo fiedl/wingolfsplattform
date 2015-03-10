@@ -107,9 +107,3 @@
       gespeichert, sodass sie von niemandem ausgelesen werden können.
     %p
       Bitte achte aber darauf, dass du dein Passwort niemals an andere Personen weitergibst, auch nicht zur Hilfestellung bei der Arbeit mit der Plattform!
-
-= javascript_include_tag 'password_strength', :type => 'text/javascript', :charset => 'utf-8'
-:javascript
-  var validate = function () { return $('#user_account_agreement').prop('checked'); };
-  PasswordStrength.watch("#user_account_password", "#user_account_password_confirmation", validate);
-
