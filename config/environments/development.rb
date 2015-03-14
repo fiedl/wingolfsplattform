@@ -37,6 +37,8 @@ Wingolfsplattform::Application.configure do
   # Expands the lines which load the assets
   # When set to false, compiled assets would be used in development.
   config.assets.debug = true
+  
+  config.asset_host = "http://localhost:3000"
 
 
   # Plugin Reload
