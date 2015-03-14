@@ -31,6 +31,7 @@
                 %b.caret
                 %ul.dropdown-menu
                   %li= link_to t(:my_profile), current_user
+                  %li= link_to t(:change_avatar), user_path(current_user, trigger_change_avatar: true)
                   %li= link_to t(:change_password), change_password_path
                   %li= link_to t(:sign_out), sign_out_path
               %li.backendBarItem
