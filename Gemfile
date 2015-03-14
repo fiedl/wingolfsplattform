@@ -20,12 +20,13 @@ gem 'transaction_retry' # rescue from deadlocks
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets, :production, 'testing-aki' do
-  gem 'coffee-rails', '>= 3.2.1'					# MIT License
-#  gem 'coffee-script', '1.4.0' # need this at 1.4.0 for mercury, at the moment
-    # see https://github.com/jejacks0n/mercury/issues/349
+
+  # locked due to https://github.com/jashkenas/coffeescript/issues/3829
+  gem 'coffee-rails', '~> 3.2.1'
+  gem 'coffee-script', '~> 2.2.0'
+  gem 'coffee-script-source', '~> 1.7.0'
 
   gem 'uglifier', '>= 1.0.3'						# MIT License
-
 end
 
 # See https://github.com/sstephenson/execjs#readme for more

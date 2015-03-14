@@ -185,10 +185,10 @@ GEM
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
-    coffee-script (2.3.0)
+    coffee-script (2.2.0)
       coffee-script-source
       execjs
-    coffee-script-source (1.9.1)
+    coffee-script-source (1.7.1)
     colored (1.2)
     connection_pool (2.1.2)
     coveralls (0.7.0)
@@ -564,7 +564,9 @@ DEPENDENCIES
   capybara
   charlock_holmes
   codeclimate-test-reporter
-  coffee-rails (>= 3.2.1)
+  coffee-rails (~> 3.2.1)
+  coffee-script (~> 2.2.0)
+  coffee-script-source (~> 1.7.0)
   colored
   coveralls
   database_cleaner
