@@ -1,3 +1,7 @@
-= render partial: 'root/latest_members_box', locals: {box_heading: 'Aktivmeldungen', group: Group.alle_aktiven}
-= render partial: 'root/latest_members_box', locals: {box_heading: 'Philistrationen', group: Group.alle_philister}
-= render partial: 'root/latest_members_box', locals: {box_heading: 'Todesfälle', group: Group.where(name: 'Alle verstorbenen Wingolfiten').first}
+.row
+  .col-md-12.col-sm-4
+    = render partial: 'root/latest_members_box', locals: {box_heading: 'Aktivmeldungen', group: Group.alle_aktiven}
+  .col-md-12.col-sm-4  
+    = render partial: 'root/latest_members_box', locals: {box_heading: 'Philistrationen', group: Group.alle_philister}
+  .col-md-12.col-sm-4  
+    = render partial: 'root/latest_members_box', locals: {box_heading: 'Todesfälle', group: Group.where(name: 'Alle verstorbenen Wingolfiten').first}
