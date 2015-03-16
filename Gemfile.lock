@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: cccc6200a958f23f09f09c6a955ec9359119d5ad
+  revision: 34bcb1c7560eb0e38904b4a59336e7e6eb74f8cb
   branch: master
   specs:
     your_platform (0.0.1)
@@ -70,6 +70,7 @@ GIT
       slim_breadcrumb (>= 0.0.3)
       strong_parameters
       to_xls
+      turbolinks (~> 2.5.3)
       will_paginate (> 3.0)
       workflow_kit (~> 0.0.7)
 
