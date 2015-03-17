@@ -210,6 +210,7 @@ gem 'prawn', github: 'prawnpdf/prawn'
 
 gem 'formtastic', '~> 2.2.1'
 
+gem 'bootstrap-sass', '3.3.3'  # locking this for now due to icon problems.
 
 # YourPlatform
 gem 'your_platform', github: 'fiedl/your_platform', branch: 'master'
