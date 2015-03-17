@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 34bcb1c7560eb0e38904b4a59336e7e6eb74f8cb
+  revision: 4533330b79bf2f35950290ba531b6316b3b7b5ef
   branch: master
   specs:
     your_platform (0.0.1)
@@ -561,7 +561,6 @@ DEPENDENCIES
   angularjs-rails
   better_errors
   binding_of_caller
-  bootstrap-sass (= 3.3.3)
   brakeman (>= 2.3.1)
   capybara
   charlock_holmes
