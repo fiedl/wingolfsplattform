@@ -1,0 +1,18 @@
+%h4= link_to obj.name, obj
+%p
+  Telefon:
+  = obj.profile_fields.where(type: 'ProfileFieldTypes::Phone').first.try(:value)
+
+%h5= link_to "Aktivitas", obj.aktivitas
+%p
+  - senior_group = obj.descendant_groups.find_by_flag(:senior)
+  = senior_group.name + ":"
+  - if senior_group.members.first
+    = link_to senior_group.members.first.title, senior_group.members.first
+  
+%h5= link_to "Philisterschaft", obj.philisterschaft
+%p
+  - phil_x_group = obj.descendant_groups.find_by_flag(:phil_x)
+  = phil_x_group.name + ":"
+  - if phil_x_group.members.first
+    = link_to phil_x_group.members.first.title, phil_x_group.members.first

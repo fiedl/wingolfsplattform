@@ -1,0 +1,8 @@
+%h4= link_to obj.name, obj
+%p
+  BV-Leiter:
+  - bv_leiter = obj.descendant_groups.find_by_flag(:bv_leiter).members.first
+  = link_to bv_leiter.title, bv_leiter
+%p
+  Telefon:
+  = bv_leiter.phone
