@@ -667,18 +667,36 @@ describe Ability do
       @any_group = create :group
       @any_page = create :page
       @any_user = create :user
+      
+      @event = @any_group.child_events.create name: 'Special Event'
     end
     he { should be_able_to :export_member_list, @any_group }
     he { should be_able_to :create_post_for, @any_group }
+    he { should be_able_to :create_event_for, @any_group }
+    he { should be_able_to :create_post, @any_group }
+    he { should be_able_to :create_event, @any_group }
     he { should_not be_able_to :update, @any_group }
     he { should_not be_able_to :update, @any_page }
     he { should_not be_able_to :update, @any_user }
+
+    context "when he is contact person for an event" do
+      before { @event.contact_people_group.child_users << user }
+      he { should be_able_to :update, @event }
+      he { should be_able_to :destroy, @event }
+      context "when the event has been created more than 10 minutes ago" do
+        before { @event.update_attribute :created_at, 11.minutes.ago }
+        he { should_not be_able_to :destroy, @event }
+      end
+    end
+    context "when he is no contact person" do
+      he { should_not be_able_to :update, @event }
+      he { should_not be_able_to :destroy, @event }
+    end
   end
 
   # 
   # Global Admins
   #
-  
   context "when the user is a global admin" do
     before { user.global_admin = true }
     he "should be able to manage everything" do

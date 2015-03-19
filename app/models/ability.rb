@@ -244,8 +244,7 @@ module AbilityDefinitions
   #   - Nachrichten an beliebige Gruppen schicken
   #
   def rights_for_global_officers
-    can :export_member_list, Group
-    can :create_post_for, Group if not read_only_mode?
+    super
   end
   
   # ===============================================================================================
