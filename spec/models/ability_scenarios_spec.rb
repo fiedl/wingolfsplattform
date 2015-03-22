@@ -40,6 +40,38 @@ describe Ability do
       the_user.should be_able_to :update, @attachment
       the_user.should be_able_to :destroy, @attachment
     end
+    
+    describe "Der Seminarbeauftragte ist ein Bundesamtsträger" do
+      before do
+        @seminarbeauftragter_group.add_flag :global_officer
+      end
+      
+      he { should be_able_to :create_event_for, Group.everyone }
+      he { should be_able_to :create_event_for, Group.alle_wingolfiten }
+      
+      he { should be_able_to :create_post_for, Group.alle_aktiven }
+      
+      describe "Wenn er ein Seminar als Veranstaltung eingetragen hat" do
+        before do
+          @seminar_event = Group.alle_wingolfiten.child_events.create name: "75. Wingolfsseminar"
+          @seminar_event.contact_people_group.child_users << user
+        end
+        
+        he { should be_able_to :update, @seminar_event }
+        he { should be_able_to :upload_image, @seminar_event }
+        he { should be_able_to :create_page_for, @seminar_event }
+
+        describe "Wenn er eine Unterseite mit Tagungsunterlagen erstellt hat" do
+          before do
+            @tagungsunterlagen_page = @seminar_event.child_pages.create name: "Tagungsunterlagen"
+            @tagungsunterlagen_page.update_attribute :author_user_id, user.id
+          end
+          
+          he { should be_able_to :update, @tagungsunterlagen_page }
+          he { should be_able_to :create_attachment_for, @tagungsunterlagen_page }
+        end
+      end
+    end
   end
   
   describe "Mitglied des Philisterrates" do
