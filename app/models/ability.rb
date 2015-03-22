@@ -205,6 +205,7 @@ module AbilityDefinitions
     # - export member list for groups the user is officer of
     # - sending group mails
     # - creating events
+    # - edit their pages if they are page officer
     # 
     super
     
@@ -217,9 +218,6 @@ module AbilityDefinitions
       can :update, Page do |page|
         (page.author == user) && (page.group) && (page.group.officers_of_self_and_ancestors.include?(user))
       end
-      can :destroy, Page do |page|
-        can? :update, page
-      end
       
       # Create, update and destroy Attachments
       #
@@ -227,11 +225,9 @@ module AbilityDefinitions
         (page.group) && (page.group.officers_of_self_and_ancestors.include?(user))
       end
       can :update, Attachment do |attachment|
+        can?(:read, attachment) &&
         (attachment.parent.group) && (attachment.parent.group.officers_of_self_and_ancestors.include?(user)) &&
         ((attachment.author == user) || (attachment.parent.author == user))
-      end
-      can :destroy, Attachment do |attachment|
-        can? :update, attachment
       end
     end
   end

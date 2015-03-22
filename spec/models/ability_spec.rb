@@ -349,20 +349,20 @@ describe Ability do
         end
       end
       
-      describe "(destroy pages)" do
-        he "should be able to destroy his own pages within his group" do
-          @page = @group.child_pages.create author: user
-          the_user.should be_able_to :destroy, @page
-        end
-        he "should not be able to destroy his page when he is not an officer" do
-          @page = create :page, author: user
-          the_user.should_not be_able_to :destroy, @page
-        end
-        he "should not be able to destroy pages of other users" do
-          @page = @group.child_pages.create author: create(:user)
-          the_user.should_not be_able_to :destroy, @page
-        end
-      end
+      # describe "(destroy pages)" do
+      #   he "should be able to destroy his own pages within his group" do
+      #     @page = @group.child_pages.create author: user
+      #     the_user.should be_able_to :destroy, @page
+      #   end
+      #   he "should not be able to destroy his page when he is not an officer" do
+      #     @page = create :page, author: user
+      #     the_user.should_not be_able_to :destroy, @page
+      #   end
+      #   he "should not be able to destroy pages of other users" do
+      #     @page = @group.child_pages.create author: create(:user)
+      #     the_user.should_not be_able_to :destroy, @page
+      #   end
+      # end
       
       describe "(adding attachments)" do
         describe "(while officer)" do
@@ -408,18 +408,18 @@ describe Ability do
             the_user.should_not be_able_to :create, Attachment
           end
         end
-        describe "(when no officer)" do
-          he "should not be able to update his attachments" do
-            @page = create :page
-            @attachment = @page.attachments.create author: user
-            the_user.should_not be_able_to :update, @attachment
-          end
-          he "should not be able to update attachments of pages he has created" do
-            @page = create :page, author: user
-            @attachment = @page.attachments.create
-            the_user.should_not be_able_to :update, @attachment
-          end
-        end
+        # describe "(when no officer)" do
+        #   he "should not be able to update his attachments" do
+        #     @page = create :page
+        #     @attachment = @page.attachments.create author: user
+        #     the_user.should_not be_able_to :update, @attachment
+        #   end
+        #   he "should not be able to update attachments of pages he has created" do
+        #     @page = create :page, author: user
+        #     @attachment = @page.attachments.create
+        #     the_user.should_not be_able_to :update, @attachment
+        #   end
+        # end
       end
       
       describe "(destroying attachments)" do
@@ -440,18 +440,18 @@ describe Ability do
             the_user.should_not be_able_to :destroy, @attachment
           end
         end
-        describe "(when no officer)" do
-          he "should not be able to destroy his attachments" do
-            @page = create :page  # he is no officer for this page
-            @attachment = @page.attachments.create author: user  # but author
-            the_user.should_not be_able_to :destroy, @attachment
-          end
-          he "should not be able to destroy attachments of pages he has created" do
-            @page = create :page, author: user  # author, but no officer
-            @attachment = @page.attachments.create
-            the_user.should_not be_able_to :destroy, @attachment
-          end
-        end
+        # describe "(when no officer)" do
+        #   he "should not be able to destroy his attachments" do
+        #     @page = create :page  # he is no officer for this page
+        #     @attachment = @page.attachments.create author: user  # but author
+        #     the_user.should_not be_able_to :destroy, @attachment
+        #   end
+        #   he "should not be able to destroy attachments of pages he has created" do
+        #     @page = create :page, author: user  # author, but no officer
+        #     @attachment = @page.attachments.create
+        #     the_user.should_not be_able_to :destroy, @attachment
+        #   end
+        # end
       end
       
     end
