@@ -132,15 +132,6 @@ module AbilityDefinitions
     can :read, :statistics
     can :export, :statistics
     
-    if not read_only_mode?
-      # Regular users can update their own profile.
-      # They can change their first but not their surnames.
-      #
-      can [:update, :change_first_name, :change_alias], User, :id => user.id
-      
-      can :update, UserAccount, :user_id => user.id
-    end
-    
     can :read, ProfileField do |profile_field|
       # Some profile fields have parent profile fields.
       # They determine what kind of profile field this is.
