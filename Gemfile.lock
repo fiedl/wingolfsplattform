@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: ccf763d7e067bfa0c0f4e601913ffa4e3641b3ce
+  revision: 3543029d3bfb63e99dcc1b6d60db02f4bac61d4f
   branch: master
   specs:
     your_platform (0.0.1)
@@ -92,9 +92,9 @@ GIT
 
 GIT
   remote: git://github.com/prawnpdf/prawn.git
-  revision: a4e1d29210e5bc24063acf6014864c38dbab4a59
+  revision: dee9dcf819f73c6c78cb6a46c219939b31c3ded3
   specs:
-    prawn (2.0.1)
+    prawn (2.0.2)
       pdf-core (~> 0.5.1)
       ttfunk (~> 1.4.0)
 
@@ -350,7 +350,7 @@ GEM
     orm_adapter (0.5.0)
     passgen (1.0.2)
     pdf-core (0.5.1)
-    phony (2.12.3)
+    phony (2.12.4)
     poltergeist (1.5.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)

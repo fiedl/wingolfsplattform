@@ -58,7 +58,7 @@ describe Ability do
         end
         
         he { should be_able_to :update, @seminar_event }
-        he { should be_able_to :upload_image, @seminar_event }
+        he { should be_able_to :create_attachment_for, @seminar_event }
         he { should be_able_to :create_page_for, @seminar_event }
 
         describe "Wenn er eine Unterseite mit Tagungsunterlagen erstellt hat" do
@@ -224,7 +224,7 @@ describe Ability do
     end
     
     he { should be_able_to :join, @event }
-    he { should_not be_able_to :upload_image, @event }
+    he { should_not be_able_to :create_attachment_for, @event }
     
     describe "Als Teilnehmer der Veranstaltung" do
       before do
@@ -232,7 +232,7 @@ describe Ability do
       end
       
       he { should be_able_to :leave, @event }
-      he { should be_able_to :upload_image, @event }
+      he { should be_able_to :create_attachment_for, @event }
       
       describe "Als Bereitsteller eines Veranstaltungs-Fotos" do
         before do
