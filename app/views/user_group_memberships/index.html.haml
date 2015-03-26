@@ -18,8 +18,14 @@
   %h2 Wingolfit?
   %p
     = @user.wingolfit? ? "Ja." : "Nein, da keine aktuelle Mitgliedschaft in einer Wingolfsverbindung eingetragen ist."
+  %h2 Besondere Rollen
+  %p
+    Globaler Administrator:
+    = @user.global_admin? ? "Ja" : "Nein"
+  %p
+    Globaler Amtsträger (Bundesamtsträger):
+    = Role.of(@user).global_officer? ? "Ja" : "Nein"
       
-
 %h1.memberships= "Gruppen-Mitgliedschaften von #{@user.title}"
 %div
   = render partial: 'memberships_table', locals: {memberships: @memberships}
