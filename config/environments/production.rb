@@ -98,7 +98,7 @@ Rails.application.configure do
   # SMTP Settings
   config.action_mailer.delivery_method = :smtp
 
-  smtp_password = ::SECRETS["wingolfsplattform@wingolf.org_smtp_password"]
+  smtp_password = Rails.application.secrets.wingolfsplattform@wingolf.org_smtp_password
   unless smtp_password
     raise "
       No smtp password set in config/secrets.yml.

@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 9ee73ddabc3e725698db083cd8cfb69675abe300
+  revision: 7d8d1e03d5a97c6b5e2fb0b82e95949e74f870dd
   branch: rails4
   specs:
     your_platform (0.0.1)

@@ -111,6 +111,10 @@ end
 
 # READ IN SECRETS FILE
 # config/secrets.yml
+#
+# FIXME: The syntax has changed in rails 4.1. 
+# The keys may have changed!
+#
 require 'yaml'
 secrets_file = File.expand_path('../../config/secrets.yml', __FILE__)
 if File.exists?(secrets_file)
