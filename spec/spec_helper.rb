@@ -97,7 +97,11 @@ Spork.prefork do
   # ----------------------------------------------------------------------------------------
   ENV['RAILS_ENV'] ||= 'test'
   require File.expand_path('../../config/environment', __FILE__)
-
+  
+  # Stop if the database is not migrated.
+  #
+  ActiveRecord::Migration.check_pending!
+  
 
   # Required Libraries
   # ----------------------------------------------------------------------------------------

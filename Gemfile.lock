@@ -182,7 +182,7 @@ GEM
       term-ansicolor
       thor
     daemons (1.2.2)
-    database_cleaner (0.9.1)
+    database_cleaner (1.4.1)
     debug_inspector (0.0.2)
     delocalize (0.4.0)
       rails (>= 3.0)
