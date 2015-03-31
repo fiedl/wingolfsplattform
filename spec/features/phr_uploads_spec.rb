@@ -89,8 +89,7 @@ feature "PhR Uploads" do
       visit page_path(@phr_documents)
       page.should have_text 'secret content'
       
-      within '.box.attachments' do
-        click_on I18n.t :edit
+      within '#attachments' do
         attach_file :attachment_file, File.expand_path(File.join(__FILE__, '../../support/uploads/pdf-upload.pdf'))
       end
       

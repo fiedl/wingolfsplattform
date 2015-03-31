@@ -164,7 +164,5 @@ gem 'newrelic_rpm'
 #gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
 gem 'prawn', github: 'prawnpdf/prawn'
 
-gem 'formtastic', '~> 2.2.1'
-
 # YourPlatform
 gem 'your_platform', github: 'fiedl/your_platform', branch: 'rails4'

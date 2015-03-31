@@ -458,6 +458,13 @@ describe User do
         before do
           @bv1.assign_user @user
           @address_field1.wingolfspost = true
+          time_travel 2.seconds
+          @user.reload
+        end
+        specify "requirements" do
+          @user.philister?.should == true
+          @user.correct_bv.should == @bv1
+          @user.bv.should == @bv1
         end
         it "should keep the memberships as they are" do
           subject
@@ -475,6 +482,7 @@ describe User do
         before do
           @membership1 = @bv1.assign_user @user, at: 1.year.ago
           @address_field2.wingolfspost = true
+          @user.reload
         end
         specify "prelims" do
           @address_field2.bv.should == @bv2
@@ -501,6 +509,8 @@ describe User do
           @membership2 = @bv2.assign_user @user, at: 1.year.ago
           BvMapping.destroy_all
           @address_field1.wingolfspost = true
+          time_travel 2.seconds
+          @user.reload
         end
         specify "prelims" do
           Bv.by_address(@address1).should == nil
@@ -541,6 +551,8 @@ describe User do
           @membership0 = @bv0.assign_user @user
           @membership1 = @bv1.assign_user @user
           @address_field2.wingolfspost = true  # the correct bv is @bv2.
+          time_travel 2.seconds
+          @user.reload
         end
         it "should remove all old memberships" do
           subject

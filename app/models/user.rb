@@ -175,8 +175,9 @@ class User
     end
     
     # Cache zurücksetzen
-    self.delay.delete_cached :bv
-    self.delay.delete_cached :bv_membership
+    self.delay.delete_cache
+    #self.delay.delete_cached :bv
+    #self.delay.delete_cached :bv_membership
 
     self.groups(true) # reload groups
     return new_membership
@@ -240,8 +241,8 @@ class User
 
     self.profile_fields.create(label: :home_address, type: "ProfileFieldTypes::Address") unless self.home_address
     self.profile_fields.create(label: :work_or_study_address, type: "ProfileFieldTypes::Address") unless self.work_or_study_address
-    self.profile_fields.create(label: :phone, type: "ProfileFieldTypes::Phone") unless self.phone
-    self.profile_fields.create(label: :mobile, type: "ProfileFieldTypes::Phone") unless self.mobile
+    self.profile_fields.create(label: :phone, type: "ProfileFieldTypes::Phone") unless self.phone.present?
+    self.profile_fields.create(label: :mobile, type: "ProfileFieldTypes::Phone") unless self.mobile.present?
     self.profile_fields.create(label: :fax, type: "ProfileFieldTypes::Phone")
     self.profile_fields.create(label: :homepage, type: "ProfileFieldTypes::Homepage")
 
@@ -262,6 +263,8 @@ class User
     pf.save
 
     self.wingolfsblaetter_abo = true
+    
+    self.delete_cache
   end
   
   
@@ -274,6 +277,8 @@ class User
   def w_nummer=(str)
     field = profile_fields.where(label: "W-Nummer").first || profile_fields.create(type: 'ProfileFieldTypes::General', label: 'W-Nummer')
     field.update_attribute(:value, str)
+    field.delete_cache
+    self.delete_cache
   end
   
   def self.find_by_w_nummer(wnr)
