@@ -80,7 +80,7 @@ module GroupMixins::Erstbandphilister
       if not philisterschaft.name == "Philisterschaft" 
         raise error 'the parent_group if this erstbandphilister group is not a philisterschaft group'
       end
-      corporation = philisterschaft.parent_groups.first.becomes( Corporation )
+      corporation = philisterschaft.parent_groups.find_by type: 'Corporation'
 
       erstbandphilister_user_ids = philisterschaft.members.select do |user|
         # a user is erstbandphilister of a corporation if the corporation is the

@@ -2,44 +2,29 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 require 'csv'
+require 'colored'
 
-# ENGINE LOAD PATCH
-# This code loads the engine codes before the main app. This makes it possible
-# to re-open engine classes in the main app.
-# Reference: http://www.cowboycoded.com/2011/02/28/why-you-cant-reopen-rails-3-engine-classes-from-the-parent-app/
-#require 'active_support/dependencies'
-#module ActiveSupport::Dependencies
-#  alias_method :require_or_load_without_multiple, :require_or_load
-#  def require_or_load(file_name, const_path = nil)
-#    if file_name.starts_with?(Rails.root.to_s + '/app')
-#      relative_name = file_name.gsub(Rails.root.to_s, '')
-#      @engine_paths ||= Rails::Application::Railties.engines.collect{|engine| engine.config.root.to_s }
-#      @engine_paths.each do |path|
-#        engine_file = File.join(path, relative_name)
-#        require_or_load_without_multiple(engine_file, const_path) if File.file?(engine_file)
-#      end
-#    end
-#    require_or_load_without_multiple(file_name, const_path)
-#  end
-#end
-# /ENGINE LOAD PATCH
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
 
-
-
-if defined?(Bundler)
-  # If you precompile assets before deploying to production, use this line
-  Bundler.require(*Rails.groups(:assets => %w(development test)))
-  # If you want your assets lazily compiled in production, use this line
-  # Bundler.require(:default, :assets, Rails.env)
-end
-
-# config/secrets.yml
-require 'yaml'
-secrets_file = File.expand_path('../secrets.yml', __FILE__)
-if File.exists?(secrets_file)
-  ::SECRETS = YAML.load(File.read(secrets_file)) 
-else
-  ::SECRETS = {}
+# Raise an error if the config/secrets.yml file does not exist.
+# In production, this file is provided by our ops scripts.
+# In development, the developer may copy the file
+# config/secrets.example.yml.
+if not File.exist?(File.expand_path('../secrets.yml', __FILE__))
+  print "Please create the file config/secrets.yml.\n\n".blue
+  print "If you are in development, copy the config/secrets.example.yml\n".bold
+  print "to config/secrets.yml and set a secret_key_base there.\n\n".bold
+  print "Suggestions:\n"
+  print "  cp config/secrets.example.yml config/secrets.yml\n".green
+  print "  pwgen 100".green
+  print "  # to generate the secret_key_base. Put it into the config/secrets.yml.\n\n"
+  print "More Info:\n"
+  print "  * http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#action-pack\n"
+  print "  * http://guides.rubyonrails.org/4_1_release_notes.html#config-secrets-yml\n"
+  print "  * https://trello.com/c/Dlio0wG9/281-rails-4\n\n"
+  raise 'The file config/secrets.yml does not exist.'
 end
 
 # Determine a possible staging environment.
@@ -88,22 +73,6 @@ module Wingolfsplattform
     # This is necessary if your schema can't be completely dumped by the schema dumper,
     # like if you have constraints or database-specific column types
     # config.active_record.schema_format = :sql
-
-    # Enforce whitelist mode for mass assignment.
-    # This will create an empty whitelist of attributes available for mass-assignment for all models
-    # in your app. As such, your models will need to explicitly whitelist or blacklist accessible
-    # parameters by using an attr_accessible or attr_protected declaration.
-    # 
-    # This is to be deactivated, when we are using strong_parameters.
-    # https://github.com/rails/strong_parameters
-    #
-    config.active_record.whitelist_attributes = true
-
-    # Enable the asset pipeline
-    config.assets.enabled = true
-
-    # http://stackoverflow.com/questions/7577236/actionviewtemplateerror-960-css-isnt-precompiled
-    config.assets.precompile += ['wingolf_layout.css', 'bootstrap_layout.css', 'bootstrap_setup.css', 'galleria-classic.css', 'galleria-classic.js', 'password_strength.js', 'zxcvbn.js']
     
     # # If assets do not refresh properly using sass in development, use this.
     # # http://www.tkalin.com/blog_posts/rails-4-disable-assets-caching-for-development-test-environments/
@@ -118,9 +87,6 @@ module Wingolfsplattform
     #     env.cache = ActiveSupport::Cache.lookup_store(:memory_store)
     #   end
     # end
-
-    # Version of your assets, change this if you want to expire all your assets
-    config.assets.version = '1.0'
 
     # fix for field_with_errors in form helper, see: http://www.rabbitcreative.com/2010/09/20/rails-3-still-fucking-up-field_with_errors/
     config.action_view.field_error_proc = Proc.new { |html_tag, instance| "<span class=\"field_with_errors\">#{html_tag}</span>".html_safe }

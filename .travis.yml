@@ -1,5 +1,6 @@
 rvm:
   - "2.1.2"
+  - "2.2.0"
 env: 
   - "RAILS_ENV=test CI_CATEGORY=features DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=4 RSPEC_RERUN_PATTERN=./spec/features/*_spec.rb"
   - "RAILS_ENV=test CI_CATEGORY=models DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=4 RSPEC_RERUN_PATTERN=./spec/models/*_spec.rb"
@@ -15,9 +16,10 @@ install:
   - travis_retry bundle install
 before_script:
   - cp config/database.travis.yml config/database.yml
+  - cp config/secrets.example.yml config/secrets.yml
   - mkdir -p public/uploads
   - mkdir -p tmp/cache
-  - bundle exec rake db:create db:migrate db:test:prepare
+  - bundle exec rake db:create db:migrate
 script:
   - bundle exec rake rspec-rerun:spec
 notifications:

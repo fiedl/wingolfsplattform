@@ -1,33 +1,14 @@
-# -*- coding: utf-8 -*-
+source 'https://rubygems.org'  # Ruby License, http://www.ruby-lang.org/en/LICENSE.txt
 
-                                                                                           # Licenses
-                                                                                           # =======================================
+gem 'rails', '~> 4.1.7'	 # MIT License
 
-source 'https://rubygems.org'						                                                   # Ruby License,
-                                                                                           # http://www.ruby-lang.org/en/LICENSE.txt
-
-
-
-gem 'rails', '~> 3.2'						# MIT License,
-    	     								# http://www.opensource.org/licenses/mit-license.php
-
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
-gem 'mysql2'								# MIT License
+gem 'mysql2'	# MIT License
 gem 'transaction_retry' # rescue from deadlocks
 
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets, :production, 'testing-aki' do
+gem 'sass-rails', '~> 4.0.3'
+gem 'uglifier', '>= 1.3.0'  # MIT License
+gem 'coffee-rails', '~> 4.0.0'
 
-  # locked due to https://github.com/jashkenas/coffeescript/issues/3829
-  gem 'coffee-rails', '~> 3.2.1'
-  gem 'coffee-script', '~> 2.2.0'
-  gem 'coffee-script-source', '~> 1.7.0'
-
-  gem 'uglifier', '>= 1.0.3'						# MIT License
-end
 
 # See https://github.com/sstephenson/execjs#readme for more
 # supported runtimes.
@@ -44,6 +25,10 @@ gem 'jquery-rails'							# MIT License
 
 # Use unicorn as the app server
 gem 'unicorn'
+
+# RAILS-3-MIGRATION TEMPORARY GEMS, TODO: REMOVE THOSE
+gem 'protected_attributes', require: 'protected_attributes'
+gem 'activerecord-deprecated_finders', require: 'active_record/deprecated_finders'
 
 # Deploy with Capistrano
 # gem 'capistrano'
@@ -123,26 +108,6 @@ group :test do
   gem 'poltergeist', '1.5.0'
 end
 
-# Automatische Anzeige des Red-Green-Refactor-Zyklus.
-# Packages: see: http://ruby.railstutorial.org/chapters/static-pages
-# Diese Pakete scheinen nicht mehr notwendig zu sein und vielmehr Guard zum Absturz zu bringen (SF 2012-06-06)
-#group :test do
-#  if RUBY_PLATFORM.downcase.include?("linux")
-#    gem 'rb-inotify' #, '0.8.8'
-#    gem 'libnotify' #, '0.5.9'
-#  end
-#  if RUBY_PLATFORM.downcase.include?("darwin") # Mac
-#    gem 'rb-fsevent', :require => false
-#    gem 'growl'
-#  end
-#  if RUBY_PLATFORM.downcase.include?("windows")
-#   gem 'rb-fchange'
-#    gem 'rb-notifu'
-#    gem 'win32console'
-#  end
-#end
-
-
 # Pry Console Addon
 gem 'pry', group: :development
 
@@ -165,9 +130,6 @@ gem 'mail', git: 'git://github.com/jeremy/mail.git'
 
 # Encoding Detection
 gem 'charlock_holmes'
-
-# CMS: Mercury Editor
-gem 'mercury-rails', git: 'git://github.com/jejacks0n/mercury'
 
 # readline (for rails console)
 # see https://github.com/luislavena/rb-readline/issues/84#issuecomment-17335885
@@ -198,17 +160,9 @@ gem 'turnout'
 # Sidekiq Error Web UI
 gem 'sidekiq-failures'
 
-
-# fix workflow kit until the update to rails 4.
-# workflow_kit 0.0.8 only supports rails 4.
-# TODO: remove this line when migrating to rails 4:
-gem 'workflow_kit', github: 'fiedl/workflow_kit'
-
 gem 'newrelic_rpm'
 #gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
 gem 'prawn', github: 'prawnpdf/prawn'
 
-gem 'formtastic', '~> 2.2.1'
-
 # YourPlatform
-gem 'your_platform', github: 'fiedl/your_platform', branch: 'master'
+gem 'your_platform', github: 'fiedl/your_platform', branch: 'rails4'
