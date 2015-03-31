@@ -1,12 +1,13 @@
 source 'https://rubygems.org'  # Ruby License, http://www.ruby-lang.org/en/LICENSE.txt
 
-gem 'rails', '~> 4.1.7'		# MIT License
+gem 'rails', '~> 4.1.7'	 # MIT License
 
 gem 'mysql2'	# MIT License
 gem 'transaction_retry' # rescue from deadlocks
 
-gem 'coffee-rails'
-gem 'uglifier', '>= 1.0.3'						# MIT License
+gem 'sass-rails', '~> 4.0.3'
+gem 'uglifier', '>= 1.3.0'  # MIT License
+gem 'coffee-rails', '~> 4.0.0'
 
 
 # See https://github.com/sstephenson/execjs#readme for more
@@ -24,6 +25,10 @@ gem 'jquery-rails'							# MIT License
 
 # Use unicorn as the app server
 gem 'unicorn'
+
+# RAILS-3-MIGRATION TEMPORARY GEMS, TODO: REMOVE THOSE
+gem 'protected_attributes', require: 'protected_attributes'
+gem 'activerecord-deprecated_finders', require: 'active_record/deprecated_finders'
 
 # Deploy with Capistrano
 # gem 'capistrano'
