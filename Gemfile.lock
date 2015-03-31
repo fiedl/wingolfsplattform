@@ -13,10 +13,10 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 28e808fab1cb7143e5f034702609abf4f1281a3a
-  branch: rails4
+  revision: 3b8e7cac280fd7ae648ad96b0aacc92e3ae02e8f
+  branch: master
   specs:
-    your_platform (0.0.1)
+    your_platform (1.0.0)
       acts-as-dag (>= 2.5.7)
       acts_as_tree
       bcrypt (>= 3.0.1)

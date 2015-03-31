@@ -165,4 +165,4 @@ gem 'newrelic_rpm'
 gem 'prawn', github: 'prawnpdf/prawn'
 
 # YourPlatform
-gem 'your_platform', github: 'fiedl/your_platform', branch: 'rails4'
+gem 'your_platform', github: 'fiedl/your_platform', branch: 'master'
