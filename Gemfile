@@ -31,7 +31,6 @@ gem 'unicorn'
 
 # RAILS-3-MIGRATION TEMPORARY GEMS, TODO: REMOVE THOSE
 gem 'protected_attributes', require: 'protected_attributes'
-gem 'activerecord-deprecated_finders', require: 'active_record/deprecated_finders'
 
 # Deploy with Capistrano
 # gem 'capistrano'

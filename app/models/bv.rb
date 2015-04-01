@@ -8,7 +8,7 @@ class Bv < Group
   end
 
   def self.by_address( address )
-    geo_location = GeoLocation.find_or_create_by_address( address )
+    geo_location = GeoLocation.find_or_create_by address: address
     self.by_geo_location(geo_location)
   end
 
