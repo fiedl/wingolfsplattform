@@ -34,8 +34,9 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
   config.action_mailer.default_url_options = { :host => 'localhost' }
-  ActionMailer::Base.default from: 'Wingolfsplattform <wingolfsplattform@wingolf.org>'
-  
+  config.action_mailer.default_options = {    
+    from: 'Wingolfsplattform <wingolfsplattform@wingolf.org>'
+  }
 
   # Raise exception on mass assignment protection for Active Record models
   # This is deactivated, now, since we use strong_parameters.

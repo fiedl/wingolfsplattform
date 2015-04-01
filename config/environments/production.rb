@@ -98,32 +98,29 @@ Rails.application.configure do
   # SMTP Settings
   config.action_mailer.delivery_method = :smtp
 
-  smtp_password = Rails.application.secrets.wingolfsplattform@wingolf.org_smtp_password
-  unless smtp_password
+  unless Rails.application.secrets.smtp_password
     raise "
       No smtp password set in config/secrets.yml.
-      Please have a look at config/secrets.yml.example and set the key
-        wingolfsplattform@wingolf.org_smtp_password
+      Please have a look at config/secrets.example.yml and set the keys
+        smtp_user and stmp_password
       in config/secrets.yml.
     "
   end
 
   config.action_mailer.smtp_settings = {
     address: 'smtp.1und1.de',
-    user_name: 'wingolfsplattform@wingolf.org',
-    password: smtp_password,
+    user_name: Rails.application.secrets.smtp_user,
+    password: Rails.application.secrets.smtp_password,
     domain: 'wingolfsplattform.org',
     enable_starttls_auto: true,
     # only if certificate malfunctions:
     # openssl_verify_mode: OpenSSL::SSL::VERIFY_NONE
   }
   
-  # Rails-4 syntax:  (see http://stackoverflow.com/a/12609856/2066546)
-  #   config.action_mailer.default_options = {    
-  #     from: 'Wingolfsplattform <wingolfsplattform@wingolf.org>'
-  #   }
-  # Rails-3 syntax:
-  ActionMailer::Base.default from: 'Wingolfsplattform <wingolfsplattform@wingolf.org>'
+  # See: http://stackoverflow.com/a/12609856/2066546
+  config.action_mailer.default_options = {    
+    from: 'Wingolfsplattform <wingolfsplattform@wingolf.org>'
+  }
   
   config.action_mailer.default_url_options = { host: 'wingolfsplattform.org', protocol: 'https' }
 
