@@ -27,7 +27,7 @@ feature 'Change Password', :js => true do
       it { should have_field('user_account_password_confirmation') }
       it { should have_field('user_account_current_password') }
       it { should have_field(I18n.t(:i_agree_i_do_not_use_the_same_password_on_other_services), :checked => false) }
-      it { should have_button(I18n.t(:submit_changed_password), disabled: true) }
+      it { should have_button(I18n.t(:submit_changed_password), visible: false) }
 
       describe 'and matching complex password and confirmation' do
         before do
@@ -58,7 +58,7 @@ feature 'Change Password', :js => true do
           end
 
           describe 'but not having checked the agreement' do
-            it { should have_button(I18n.t('submit_changed_password'), disabled: true) }
+            it { should have_button(I18n.t('submit_changed_password'), visible: false) }
           end
         end
 
@@ -67,7 +67,7 @@ feature 'Change Password', :js => true do
             fill_in 'user_account_current_password', with: 'invalid'
           end
 
-          it { should have_button(I18n.t('submit_changed_password'), disabled: true) }
+          it { should have_button(I18n.t('submit_changed_password'), visible: false) }
         end
 
       end
@@ -82,7 +82,7 @@ feature 'Change Password', :js => true do
         end
 
         it { should have_no_notice(I18n.t('devise.registrations.updated')) }
-        it { should have_button(I18n.t('submit_changed_password'), disabled: true) }
+        it { should have_button(I18n.t('submit_changed_password'), visible: false) }
 
       end
 
@@ -94,7 +94,7 @@ feature 'Change Password', :js => true do
           fill_in 'user_account_current_password', with: @current_password
         end
 
-        it { should have_button(I18n.t('submit_changed_password'), disabled: true) }
+        it { should have_button(I18n.t('submit_changed_password'), visible: false) }
       end
 
     end
