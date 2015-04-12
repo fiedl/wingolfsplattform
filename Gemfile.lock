@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 81d7f288f69345089f3773f1a3f3f89bc09f0862
+  revision: 7a2c9acd6b8e04c0755b754e2dbc93a9c435c409
   branch: master
   specs:
     your_platform (1.0.1)
@@ -471,7 +471,6 @@ GEM
     spork (0.9.2)
     spreadsheet (1.0.3)
       ruby-ole (>= 1.0)
-    spring (1.3.3)
     sprockets (2.12.3)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -594,7 +593,6 @@ DEPENDENCIES
   sidekiq-failures
   simplecov
   spork
-  spring
   therubyracer
   tilt (~> 1.4.1)
   timecop

@@ -10,9 +10,6 @@ gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '>= 1.3.0'  # MIT License
 gem 'coffee-rails', '~> 4.0.0'
 
-gem 'spring', group: :development
-
-
 # See https://github.com/sstephenson/execjs#readme for more
 # supported runtimes.
 # This is also needed by twitter-bootstrap-rails in production.
