@@ -192,6 +192,8 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
+    domain_name (0.5.23)
+      unf (>= 0.0.5, < 1.0.0)
     edit_mode (1.0.1)
       jquery-rails
       jquery-turbolinks
@@ -270,6 +272,8 @@ GEM
     hike (1.2.3)
     hiredis (0.5.2)
     hitimes (1.2.2)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
     i18n (0.7.0)
     icalendar (2.2.2)
     immigrant (0.1.8)
@@ -413,7 +417,8 @@ GEM
       sinatra (~> 1.4.5)
     responders (1.1.2)
       railties (>= 3.2, < 4.2)
-    rest-client (1.7.3)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
     rspec (2.14.1)
@@ -522,6 +527,9 @@ GEM
     uglifier (2.4.0)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.6)
     unicorn (4.8.2)
       kgio (~> 2.6)
       rack
