@@ -248,7 +248,7 @@ module AbilityDefinitions
     # Also creating events for those groups is not good.
     # 
     cannot [:create_post_for, :create_event], Group do |group|
-      group.name.include? "Verstorbene"
+      group.name.try(:include?, "Verstorbene")
     end
   end
   
