@@ -6,7 +6,7 @@
   width: 600px
   text-align: right
 
-  ul
+  ul.nav
     position: absolute
     right: 0
     bottom: 0
@@ -18,29 +18,29 @@
     display: block
     line-height: 30px
 
-    li
+    li.horizontal-nav-link
       margin-left: 3px
       color: #000
       display: inline-block
 
-      a
+      > a
         color: inherit
         padding: 6px 4px 3px 8px
         padding-bottom: 3px
         padding-top: 6px
         border-bottom: solid 2px transparent
 
-    li.under_this_category
-      a 
+    li.horizontal-nav-link.under_this_category
+      > a 
         background: #888
         color: #fff
 
-    li.active
-      a
+    li.horizontal-nav-link.active
+      > a
         background: #333
         color: #fff
 
-    li:hover
-      a 
+    li.horizontal-nav-link:hover
+      > a 
         border-bottom: solid 2px orange
 
