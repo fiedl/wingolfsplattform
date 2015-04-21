@@ -1,5 +1,5 @@
 source 'https://rubygems.org'  # Ruby License, http://www.ruby-lang.org/en/LICENSE.txt
-ruby '2.2.1'
+ruby '2.2.2'
 
 gem 'rails', '~> 4.1.7'	 # MIT License
 
