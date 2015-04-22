@@ -111,7 +111,7 @@ end
 gem 'pry', group: :development
 
 # Turbolinks
-gem 'turbolinks', '>= 1.0'
+gem 'turbolinks', '>= 3.0', github: 'rails/turbolinks'
 
 # Angular JS
 gem 'angularjs-rails'
