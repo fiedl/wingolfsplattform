@@ -12,7 +12,7 @@ module AbilityDefinitions
   # If you want to circumvent the authorization process from your_platform
   # including role preview etc., you can override the `initialize` method:
   #
-  #   def initialize(user, params = {}, options = {})
+  #   def initialize(user, options = {})
   #     user.try(:admin?)
   #       can :manage, all
   #     else
@@ -79,8 +79,8 @@ module AbilityDefinitions
         group.descendant_users.count > 0
       end
       
-      can :manage, User, id: Role.of(user).administrated_users.map(&:id)
-      can :manage, UserAccount, user_id: Role.of(user).administrated_users.map(&:id)
+      can :manage, User, id: user.administrated_user_ids
+      can :manage, UserAccount, user_id: user.administrated_user_ids
 
       can :execute, Workflow do |workflow|
         # Local admins can execute workflows of groups they're admins of.
