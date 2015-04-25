@@ -1,7 +1,7 @@
 source 'https://rubygems.org'  # Ruby License, http://www.ruby-lang.org/en/LICENSE.txt
 ruby '2.2.2'
 
-gem 'rails', '~> 4.1.7'	 # MIT License
+gem 'rails', '~> 4.2.1'	 # MIT License
 
 gem 'mysql2'	# MIT License
 gem 'transaction_retry' # rescue from deadlocks
@@ -58,8 +58,8 @@ group :development do
 
   # debugger: http://guides.rubyonrails.org/debugging_rails_applications.html
   #gem 'debugger'
-
-  gem 'better_errors'              # see Railscasts #402
+  gem 'web-console', '>= 2.0'
+  
   gem 'binding_of_caller'
   gem 'meta_request'
   
