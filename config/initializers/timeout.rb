@@ -1,2 +1,2 @@
 # config/initializers/timeout.rb
-Rack::Timeout.timeout = 120  # seconds
+Rack::Timeout.timeout = 600  # seconds
