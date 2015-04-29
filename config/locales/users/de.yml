@@ -1,6 +1,8 @@
 
 de:
   add_to_corporation:            Zu dieser Verbindung hinzufügen
+  
+  corporate_info:                Wingolf
 
   activerecord:
     attributes:
