@@ -197,29 +197,11 @@ module AbilityDefinitions
     # - sending group mails
     # - creating events
     # - edit their pages if they are page officer
-    # 
+    # - create and destroy pages and attachments 
+    #
     super
     
     if not read_only_mode?
-      # Create, update and destroy Pages
-      #
-      can :create_page_for, [Group, Page] do |parent|
-        parent.officers_of_self_and_ancestors.include?(user)
-      end
-      can :update, Page do |page|
-        (page.author == user) && (page.group) && (page.group.officers_of_self_and_ancestors.include?(user))
-      end
-      
-      # Create, update and destroy Attachments
-      #
-      can :create_attachment_for, Page do |page|
-        (page.group) && (page.group.officers_of_self_and_ancestors.include?(user))
-      end
-      can :update, Attachment do |attachment|
-        can?(:read, attachment) &&
-        (attachment.parent.group) && (attachment.parent.group.officers_of_self_and_ancestors.include?(user)) &&
-        ((attachment.author == user) || (attachment.parent.author == user))
-      end
     end
   end
   

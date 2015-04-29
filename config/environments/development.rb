@@ -64,6 +64,6 @@ Rails.application.configure do
   #   domain: 'wingolfsplattform.org',
   #   enable_starttls_auto: true
   # }
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000, protocol: 'https' }
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000, protocol: 'http' }
 
 end
