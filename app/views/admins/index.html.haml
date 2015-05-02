@@ -1,0 +1,43 @@
+%h1 Administratoren
+%div
+
+  %h2 Administratoren eintragen
+  %p= markup "Um Administratoren eintragen zu lassen, wendet euch bitte an support@wingolf.org oder sendet eine Nachricht über den blauen Hilfe-Knopf im Kopfbereich der Plattform."
+  
+  %h2= link_to "Globale Administratoren", @global_admins_parent_group
+  %div
+    = render partial: 'officers/officer_group_members', locals: {officer_group: @global_admins_parent_group}
+    
+%h1 Administratoren der Verbindungen und Philistervereine
+%div
+  %p Für jede Aktivitas und jede Philisterschaft müssen Administratoren benannt werden. Es ist aber auch in Ordnung, wenn ein gemeinsamer Administrator (Aktivitas + Philisterschaft) benannt wird. Die Administratoren-Ämter können auch an andere Ämter gekoppelt werden (z.B. "bei uns ist immer der Schriftwart Administrator").
+  
+  %table.admins.officers.datatable.display
+    %thead
+      %tr
+        %th Verbindung
+        %th Administratoren für Aktivitas und Philisterschaft zusammen
+        %th Administratoren nur für die Aktivitas
+        %th Administratoren nur für die Philisterschaft
+    %tbody
+      - @corporations.each do |corporation|
+        %tr{class: ((corporation.admins_parent.members.count > 0) || (corporation.aktivitas.admins_parent.members.count > 0 && corporation.philisterschaft.admins_parent.members.count > 0)) ? 'good' : 'bad'}
+          %td= link_to corporation.title, corporation
+          %td= render partial: 'officers/officer_group_members', locals: {officer_group: corporation.admins_parent}
+          %td= render partial: 'officers/officer_group_members', locals: {officer_group: corporation.aktivitas.admins_parent}
+          %td= render partial: 'officers/officer_group_members', locals: {officer_group: corporation.philisterschaft.admins_parent}
+          
+%h1 Administratoren der Bezirksverbände
+%div
+  %p Für jeden Bezirksverband muss ein Administrator benannt werden. Das Administratoren-Amt kann hierbei auch an ein Amt (z.B. das Schriftwart-Amt) gekoppelt werden.
+  
+  %table.admins.officers.datatable.display
+    %thead
+      %tr
+        %th Bezirksverband
+        %th Administratoren
+    %tbody
+      - @bvs.each do |bv|
+        %tr{class: bv.admins_parent.members.count > 0 ? 'good' : 'bad'}
+          %td= link_to bv.title, bv
+          %td= render partial: 'officers/officer_group_members', locals: {officer_group: bv.admins_parent}

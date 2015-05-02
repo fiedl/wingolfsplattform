@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   get 'aktivitates/:id(.:format)', to: 'groups#show', as: 'aktivitas'
   get 'philisterschaften/:id(.:format)', to: 'groups#show', as: 'philisterschaft'
   get 'bvs/:id(.:format)', to: 'groups#show', as: 'bv'
+  
+  get :admins, to: 'admins#index'
 
   get "map/show"
   
