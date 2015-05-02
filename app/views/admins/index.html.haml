@@ -1,4 +1,4 @@
-%h1 Administratoren
+%h1= link_to "Administratoren", Group.alle_administratoren
 %div
 
   %h2 Administratoren eintragen
@@ -8,7 +8,7 @@
   %div
     = render partial: 'officers/officer_group_members', locals: {officer_group: @global_admins_parent_group}
     
-%h1 Administratoren der Verbindungen und Philistervereine
+%h1= link_to "Administratoren der Verbindungen und Philistervereine", Group.alle_administratoren
 %div
   %p Für jede Aktivitas und jede Philisterschaft müssen Administratoren benannt werden. Es ist aber auch in Ordnung, wenn ein gemeinsamer Administrator (Aktivitas + Philisterschaft) benannt wird. Die Administratoren-Ämter können auch an andere Ämter gekoppelt werden (z.B. "bei uns ist immer der Schriftwart Administrator").
   
@@ -27,7 +27,7 @@
           %td= render partial: 'officers/officer_group_members', locals: {officer_group: corporation.aktivitas.admins_parent}
           %td= render partial: 'officers/officer_group_members', locals: {officer_group: corporation.philisterschaft.admins_parent}
           
-%h1 Administratoren der Bezirksverbände
+%h1= link_to "Administratoren der Bezirksverbände", Group.alle_bv_administratoren
 %div
   %p Für jeden Bezirksverband muss ein Administrator benannt werden. Das Administratoren-Amt kann hierbei auch an ein Amt (z.B. das Schriftwart-Amt) gekoppelt werden.
   

@@ -143,21 +143,30 @@ class Group
   #               |                          |------- Alle Aktiven-Schriftwarte
   #               |                          |------- Alle Aktiven-Kassenwarte
   #               |                          |------- Alle Fuxen-Seniores
+  #               |                          |------- Alle Aktiven-Administratoren
   #               |                          |------- + alle übrigen WV-Amtsträger
   #               |
   #               |----------- Alle PhV-Amtsträger
   #               |                      |------------- Alle Phil-x
   #               |                      |------------- Alle Phil-Schriftwarte
-  #               |                      |------------- Alle Phil-Kassenwarte 
+  #               |                      |------------- Alle Phil-Kassenwarte
+  #               |                      |------------- Alle Phil-Administratoren
   #               |
   #               |----------- Alle BV-Amtsträger
   #               |                      |------------- Alle BV-Leiter
   #               |                      |------------- Alle BV-Schriftwarte
-  #               |                      |------------- Alle BV-Kassenwarte 
+  #               |                      |------------- Alle BV-Kassenwarte
+  #               |                      |------------- Alle BV-Administratoren
   #               |
   #               |----------- Alle Vorsitzenden (Seniores, Phil-x, BV-Leiter, Bundes-x, VAW-x)
   #               |----------- Alle Schriftwarte (Schriftwarte + Bundes-xx + GfdW)
   #               |----------- Alle Kassenwarte  (Kassenwarte + Bundes-xxx + GfdW)
+  #               |
+  #               |----------- Alle Administratoren 
+  #                                      |------------- Alle Korporationen-Administretoren
+  #                                      |------------- Alle Aktiven-Administratoren
+  #                                      |------------- Alle Phil-Administratoren
+  #                                      |------------- Alle BV-_Administratoren
   #
   #
   def self.alle_wingolfiten
@@ -229,6 +238,21 @@ class Group
   def self.alle_bv_kassenwarte
     alle_bv_amtstraeger.find_or_create_special_group :alle_bv_kassenwarte
   end
-
+  def self.alle_administratoren
+    alle_amtstraeger.find_or_create_special_group :alle_administratoren
+  end
+  def self.alle_korporationen_administratoren
+    alle_administratoren.find_or_create_special_group :alle_korporationen_administratoren
+  end
+  def self.alle_wv_administratoren
+    alle_administratoren.find_or_create_special_group :alle_wv_administratoren
+  end
+  def self.alle_phv_administratoren
+    alle_administratoren.find_or_create_special_group :alle_phv_administratoren
+  end
+  def self.alle_bv_administratoren
+    alle_administratoren.find_or_create_special_group :alle_bv_administratoren
+  end
+  
 end
 

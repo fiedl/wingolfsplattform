@@ -175,6 +175,15 @@ namespace :patch do
       log.info "  |--- Alle Amtsträger"
       Group.alle_amtstraeger
       
+      # Zur Erhaltung der Reihenfolge die Obergruppen vorher erstellen:
+      Group.alle_wv_amtstraeger
+      Group.alle_phv_amtstraeger
+      Group.alle_bv_amtstraeger
+      Group.alle_vorsitzenden
+      Group.alle_schriftwarte
+      Group.alle_kassenwarte
+      Group.alle_administratoren
+      
       log.info "         |"
       log.info "         |---- Alle Verbindungsamtsträger"
       Group.alle_wv_amtstraeger
@@ -226,8 +235,15 @@ namespace :patch do
 
       log.info "         |                   |------- Alle Fuxen-Seniores"
       Group.alle_fuxen_seniores
-      if Group.alle_fuxen_seniores.descendant_users.count == 0
+      if Group.alle_fuxen_seniores.descendant_groups.count == 0
         Aktivitas.all.each { |aktivitas| Group.alle_fuxen_seniores << aktivitas.descendant_groups.find_by_flag(:fuxen_x) }
+      end
+      
+      log.info "         |                   |------- Alle Aktiven-Administratoren"
+      Group.alle_wv_administratoren
+      if Group.alle_wv_administratoren.descendant_users.count == 0
+        Group.alle_wv_amtstraeger << Group.alle_wv_administratoren
+        Aktivitas.all.each { |aktivitas| Group.alle_wv_administratoren << aktivitas.admins_parent }
       end
 
       log.info "         |                   |------- + alle übrigen WV-Amtsträger"
@@ -259,6 +275,13 @@ namespace :patch do
         Philisterschaft.all.each { |philisterschaft| Group.alle_phv_kassenwarte << philisterschaft.descendant_groups.find_by_flag(:kassenwart) }
       end
       
+      log.info "         |               |------------- Alle Phil-Administratoren"
+      Group.alle_phv_administratoren
+      if Group.alle_phv_administratoren.descendant_users.count == 0
+        Group.alle_phv_amtstraeger << Group.alle_phv_administratoren
+        Philisterschaft.all.each { |philisterschaft| Group.alle_phv_administratoren << philisterschaft.admins_parent }
+      end
+            
       log.info "         |"
       log.info "         |---- Alle BV-Amtsträger"
       Group.alle_bv_amtstraeger
@@ -279,6 +302,13 @@ namespace :patch do
       Group.alle_bv_kassenwarte
       if Group.alle_bv_kassenwarte.descendant_users.count == 0
         Bv.all.each { |bv| Group.alle_bv_kassenwarte << bv.descendant_groups.find_by_flag(:kassenwart) if bv.descendant_groups.find_by_flag(:kassenwart) }
+      end
+      
+      log.info "         |               |------------- Alle BV-Administratoren"
+      Group.alle_bv_administratoren
+      if Group.alle_bv_administratoren.descendant_users.count == 0
+        Group.alle_bv_amtstraeger << Group.alle_bv_administratoren
+        Bv.all.each { |bv| Group.alle_bv_administratoren << bv.admins_parent }
       end
       
       log.info "         |"
@@ -311,7 +341,25 @@ namespace :patch do
         Group.alle_kassenwarte << Group.find_by_flag(:bundes_xxx) if Group.find_by_flag(:bundes_xxx)
         Group.alle_kassenwarte << Group.find_by_flag(:gfdw) if Group.find_by_flag(:gfdw)
       end
-
+      
+      log.info "         |---- Alle Administratoren"
+      Group.alle_administratoren
+      
+      log.info "                         |------------- Alle Korporationen-Administretoren"
+      Group.alle_korporationen_administratoren
+      if Group.alle_korporationen_administratoren.descendant_users.count == 0
+        Corporation.all.each { |corporation| Group.alle_korporationen_administratoren << corporation.admins_parent }
+      end
+            
+      log.info "                         |------------- Alle Aktiven-Administratoren"
+      Group.alle_wv_administratoren
+      
+      log.info "                         |------------- Alle Phil-Administratoren"
+      Group.alle_phv_administratoren
+      
+      log.info "                         |------------- Alle BV-_Administratoren"
+      Group.alle_bv_administratoren
+      
       log.info "    "
     end
     
@@ -361,7 +409,12 @@ namespace :patch do
       Group.alle_phv_kassenwarte,
       Group.alle_bv_leiter,
       Group.alle_bv_schriftwarte,
-      Group.alle_bv_kassenwarte
+      Group.alle_bv_kassenwarte,
+      Group.alle_administratoren,
+      Group.alle_korporationen_administratoren,
+      Group.alle_wv_administratoren,
+      Group.alle_phv_administratoren,
+      Group.alle_bv_administratoren
     ]
   end
   
