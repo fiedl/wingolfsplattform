@@ -3,7 +3,8 @@
 #
 
 namespace :patch do
-  task :officers => [                                                                                                  
+  task :officers => [
+    'fix:dag_links',
     'officers:flags_ergaenzen',
     'officers:aemter_umbenennen',
     'officers:aemter_anlegen',
