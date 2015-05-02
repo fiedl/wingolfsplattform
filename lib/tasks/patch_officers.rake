@@ -359,6 +359,10 @@ namespace :patch do
       
       log.info "                         |------------- Alle BV-_Administratoren"
       Group.alle_bv_administratoren
+
+      log.info "                         |------------- Globale Administratoren"
+      Group.alle_administratoren << Group.global_admins
+
       
       log.info "    "
     end

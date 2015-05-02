@@ -132,6 +132,10 @@ module AbilityDefinitions
     can :read, :statistics
     can :export, :statistics
     
+    # Any logged-in user can view, who are the admins.
+    #
+    can :index, :admins
+    
     can :read, ProfileField do |profile_field|
       # Some profile fields have parent profile fields.
       # They determine what kind of profile field this is.

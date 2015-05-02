@@ -3,9 +3,7 @@ class AdminsController < ApplicationController
   before_action :find_resources
   
   def index
-    authorize! :read, @global_admins_parent_group
-    authorize! :read, @corporations
-    authorize! :read, @bvs
+    authorize! :index, :admins
   end
   
   def find_resources
