@@ -2,6 +2,13 @@
 
 %h1= link_to "Administratoren", Group.alle_administratoren
 %div
+  
+  %h2 Zuständige Administratoren
+  %p
+    Für Dich
+    = "(#{current_user.title})"
+    sind folgende Administratoren zuständig:
+    = user_links(@admins_responsible_for_me)
 
   %h2 Administratoren eintragen
   %p= markup "Um Administratoren eintragen zu lassen, wendet euch bitte an support@wingolf.org oder sendet eine Nachricht über den blauen Hilfe-Knopf im Kopfbereich der Plattform."
