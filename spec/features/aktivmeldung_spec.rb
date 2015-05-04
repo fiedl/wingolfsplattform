@@ -414,7 +414,25 @@ feature "Aktivmeldung" do
 
     visit root_path
     within('.aktivmeldung_eintragen') do
-      click_on first("Aktivmeldung eintragen")
+      # 
+      # Currently, we experience an issue with the edge version of turbolinks:
+      # 
+      #     TypeError: 'undefined' is not an object (evaluating 'currentState.url')
+      #     TypeError: 'undefined' is not an object (evaluating 'currentState.url')
+      #         at http://127.0.0.1:61891/assets/application.js:64080
+      #         at http://127.0.0.1:61891/assets/application.js:63963
+      #         at http://127.0.0.1:61891/assets/application.js:64566 in Click
+      #         at http://127.0.0.1:61891/assets/application.js:64555
+      # 
+      # This does only occur in the specs, not when run in the browser.
+      # Threfore, we circumvent turbolinks at this point in this spec.
+      #
+      # # click_on first("Aktivmeldung eintragen")
+      #
+      # TODO: Revert back to `click_on first("Aktivmeldung eintragen")` when updating turbolinks
+      # to the 3.0 release.
+      #
+      visit new_user_path
     end
 
     fill_in I18n.t(:first_name), with: "Bundesbruder"

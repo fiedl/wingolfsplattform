@@ -99,7 +99,7 @@ feature 'User page', js: false do
 
           wait_for_ajax
           @user.profile_fields.where(type: 'ProfileFieldTypes::Study').count.should == 1
-          study_field = @user.profile_fields.where(type: 'ProfileFieldTypes::Study').first.becomes(ProfileFieldTypes::Study)
+          study_field = @user.profile_fields.last
           study_field.label.should == "Undergraduate Studies"
           study_field.from.should == "2006"
           study_field.to.should == "2008"

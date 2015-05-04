@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'cancan/matchers'
 
 describe User do
-  before { @user = create(:user) }
+  before { @user = create(:user_with_account) }
   subject { @user }
   describe "for the user being hidden: " do
     before { @user.hidden = true }
@@ -16,7 +16,7 @@ describe User do
       ability.should be_able_to :read, subject
     end
     specify "a non-admin should not see the hidden user" do
-      ability = Ability.new( create(:user) )
+      ability = Ability.new( create(:user_with_account) )
       ability.should_not be_able_to :read, subject
     end
   end

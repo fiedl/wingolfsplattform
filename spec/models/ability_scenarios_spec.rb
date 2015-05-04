@@ -19,6 +19,7 @@ describe Ability do
   describe "Seminarbeauftragter des Wingolfs" do
     before do
       @wingolfsseminar_page = Page.intranet_root.child_pages.create name: "Wingolfsseminar"  # no author!
+      @wingolfsseminar_page.update_attribute :created_at, 10.days.ago
       @seminarbeauftragter_group = @wingolfsseminar_page.officers_parent.child_groups.create name: "Seminarbeauftragter des Wingolfs"
       @seminarbeauftragter_group << user
     end
