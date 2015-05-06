@@ -13,12 +13,13 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 1d4bdd372ad49f66e3973e454c00c17057f1cd1e
+  revision: c772a01ba6556729f53407b92559697fcb0c8603
   branch: master
   specs:
     your_platform (1.0.1)
       acts-as-dag (>= 2.5.7)
       acts_as_tree
+      autosize-rails
       bcrypt (>= 3.0.1)
       best_in_place (>= 2.1.0)
       bootstrap-sass (= 3.3.3)
@@ -78,7 +79,7 @@ GIT
 
 GIT
   remote: git://github.com/prawnpdf/prawn.git
-  revision: c866ebe32468c422f5859c0f1a37ce57c4af0aba
+  revision: e7bbbdc6c3e5fbe46f06ae1545bfe38fcc3d2eff
   specs:
     prawn (2.0.2)
       pdf-core (~> 0.5.1)
@@ -86,7 +87,7 @@ GIT
 
 GIT
   remote: git://github.com/rails/turbolinks.git
-  revision: 69e2034992036609137725d7e3e11a1f8f76a61e
+  revision: 09e47f46f5127bf98337ec9a28dc16aec1d06ed1
   specs:
     turbolinks (3.0.0)
       coffee-rails
@@ -140,6 +141,8 @@ GEM
     autoprefixer-rails (5.1.11)
       execjs
       json
+    autosize-rails (1.18.17)
+      rails (>= 3.1)
     bcrypt (3.1.10)
     best_in_place (3.0.3)
       actionpack (>= 3.2)
@@ -322,7 +325,7 @@ GEM
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
-    loofah (2.0.1)
+    loofah (2.0.2)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.4)
     maildir (2.1.0)
@@ -349,7 +352,7 @@ GEM
     orm_adapter (0.5.0)
     passgen (1.0.2)
     pdf-core (0.5.1)
-    phony (2.12.12)
+    phony (2.12.13)
     poltergeist (1.5.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)

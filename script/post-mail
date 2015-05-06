@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# This script posts an email message to the json api.
+# Use it like this:
+# 
+#   cat testmail.txt | /bin/bash /path/to/script/post-mail http://example.com/posts.json
+# 
+#   # /etc/aliases
+#   plattform: "|/bin/bash /path/to/script/post-mail http://example.com/posts.json"
+#
+# We've taken this file from:
+# https://github.com/ivaldi/brimir
+#
+exec curl --silent --output /dev/null --data-urlencode message@- $1
