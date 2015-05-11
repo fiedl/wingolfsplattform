@@ -1,0 +1,11 @@
+- if @group.kind_of? Corporation
+  %h1= "#{@group.name}: #{t(:officers_overview)}"
+  %div
+    %ul.attributes
+      - @chargen.each do |charge|
+        %li.attribute
+          %span.label-wrapper= charge.name
+          %span.value-warpper= user_links(charge.members)
+      %li.attribute
+        %span.label-wrapper= @phil_x.name
+        %span.value-warpper= user_links(@phil_x.members)
