@@ -14,7 +14,7 @@
     = gmaps4rails_api_script_tags
     = csrf_meta_tags
     = yield :head
-  %body{:class => controller.controller_name, data: { locale: I18n.locale }}
+  %body{:class => controller.controller_name, data: {locale: I18n.locale, navable: @navable.try(:to_global_id)}}
     - if user_account_signed_in?
       #logged-in-bar
         #backendBar
@@ -63,7 +63,7 @@
               = link_to group_path(Group.find_by_flag(:beta_testers)) do
                 %span.badge.beta_badge.has_tooltip{title: "Du hast Zugriff auf Funktionen, die sich in der Erprobungsphase befinden.", data: {placement: 'right'}} +Beta
           #header_help
-            = render partial: 'layouts/help_button'
+            = render partial: 'support_requests/help_button'
           #header_search
             = render partial: 'shared/search_box'
           %span#category_indicator

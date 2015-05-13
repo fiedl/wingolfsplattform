@@ -15,7 +15,7 @@ feature "Help Button" do
     visit page_path(@start_page)
     click_on I18n.t(:help)
 
-    page.should have_selector('div.uv-popover-iframe-container', visible: true)
+    page.should have_selector('#help_form', visible: true)
   end
 end
   
