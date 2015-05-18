@@ -89,9 +89,10 @@ feature "PhR Uploads" do
       visit page_path(@phr_documents)
       page.should have_text 'secret content'
       
-      within '#attachments' do
-        attach_file :attachment_file, File.expand_path(File.join(__FILE__, '../../support/uploads/pdf-upload.pdf'))
-      end
+      # # This is only shown on smaller (mobile) displays:
+      # within '#attachments' do
+      #   attach_file :attachment_file, File.expand_path(File.join(__FILE__, '../../support/uploads/pdf-upload.pdf'))
+      # end
       
       # # Not sure, why this is failing, now.
       #

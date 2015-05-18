@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: a2e164ba9501995faf539909bbe3610b2d1419cf
+  revision: 940bc94455695262bee8ab20c4ff73d788953af0
   branch: master
   specs:
     your_platform (1.0.1)
@@ -130,6 +130,8 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    activesupport-json_encoder (1.1.0)
+      activesupport (>= 4.1.0, < 5.0)
     acts-as-dag (4.0.0)
       activemodel
       activerecord (~> 4.0, >= 4.0.0)
@@ -586,6 +588,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport-json_encoder
   angularjs-rails
   binding_of_caller
   brakeman (>= 2.3.1)
@@ -600,7 +603,6 @@ DEPENDENCIES
   execjs
   factory_girl_rails (>= 4.0.0)
   flamegraph
-  fnordmetric
   fuubar
   gmaps4rails (~> 2.0.1)!
   guard (~> 2.2.5)

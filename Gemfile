@@ -28,6 +28,7 @@ gem 'unicorn'
 
 # RAILS-3-MIGRATION TEMPORARY GEMS, TODO: REMOVE THOSE
 gem 'protected_attributes', require: 'protected_attributes'
+gem 'activesupport-json_encoder'
 
 # Deploy with Capistrano
 # gem 'capistrano'
@@ -140,7 +141,7 @@ gem 'gmaps4rails', '~> 2.0.1', git: 'git://github.com/fiedl/Google-Maps-for-Rail
 gem 'rack-timeout'
 
 # Metrics
-gem 'fnordmetric'
+#gem 'fnordmetric'
 
 # Profiling
 gem 'rack-mini-profiler'

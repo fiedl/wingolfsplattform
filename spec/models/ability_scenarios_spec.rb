@@ -225,7 +225,7 @@ describe Ability do
     end
     
     he { should be_able_to :join, @event }
-    he { should_not be_able_to :create_attachment_for, @event }
+    he { should be_able_to :create_attachment_for, @event }
     
     describe "Als Teilnehmer der Veranstaltung" do
       before do
