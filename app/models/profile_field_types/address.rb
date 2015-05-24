@@ -9,7 +9,7 @@ module ProfileFieldTypes
 
     attr_accessible :wingolfspost
     
-    after_save { self.profileable.adapt_bv_to_postal_address if self.profileable.kind_of? User }
+    after_save { self.profileable.adapt_bv_to_postal_address if self.profileable.kind_of?(User) and self.profileable.alive? and self.profileable.wingolfit? }
 
     # This method returns the Bv associated with the given address.
     #

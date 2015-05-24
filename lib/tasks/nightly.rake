@@ -5,6 +5,7 @@ namespace :nightly do
   #
   task :all => [
     :print_info,
+    'issues:all',
     :cache,
     :print_info_finish
   ]
