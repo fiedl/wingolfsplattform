@@ -39,12 +39,11 @@ feature "PhR Uploads" do
     page.should have_no_text 'secret content'
   end
   
-  scenario 'non-members do not see the documents in the what_is_new box' do
+  scenario 'non-members do not see the documents in the news' do
     login @non_member
     
     visit root_path
-    page.should have_selector '.box.what_is_new'
-    within '.box.what_is_new' do
+    within '#content' do
       page.should have_text 'VAW'
       page.should have_no_text @phr_documents.title
     end
