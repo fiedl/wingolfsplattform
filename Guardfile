@@ -1,56 +1,54 @@
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
 
-require 'active_support/core_ext'
+## Uncomment and set this to only include directories you want to watch
+# directories %w(app lib config test spec features)
 
-guard 'spork', :cucumber_env => { 'RAILS_ENV' => 'test' }, :rspec_env => { 'RAILS_ENV' => 'test' } do
-  watch('config/application.rb')
-  watch('config/environment.rb')
-  watch(%r{^config/environments/.+\.rb$})
-  watch(%r{^config/initializers/.+\.rb$})
-  watch('spec/spec_helper.rb')
-  watch(%r{^spec/support/.+\.rb$})
-  watch(%r{^spec/factories/.+\.rb$})
-  watch(%r{^vendor/engines/your_platform/spec/factories/.+\.rb$})
-end
+## Uncomment to clear the screen before every task
+# clearing :on
 
-#guard( #'focus', # see https://github.com/supaspoida/guard-focus
-       #on: :rspec, :version => 2, 
-guard( 'rspec', :version => 2,
-       :cli => '--drb --tag focus --format Fuubar',
-       :all_after_pass => false,
-       :all_on_start => false,
-       spec_paths: %w(spec vendor/engines/your_platform/spec)) do
+## Guard internally checks for changes in the Guardfile and exits.
+## If you want Guard to automatically start up again, run guard in a
+## shell loop, e.g.:
+##
+##  $ while bundle exec guard; do echo "Restarting Guard..."; done
+##
+## Note: if you are using the `directories` clause above and you are not
+## watching the project directory ('.'), then you will want to move
+## the Guardfile to a watched dir and symlink it back, e.g.
+#
+#  $ mkdir config
+#  $ mv Guardfile config/
+#  $ ln -s config/Guardfile .
+#
+# and, you'll have to watch "config/Guardfile" instead of "Guardfile"
 
+# Note: The cmd option is now required due to the increasing number of ways
+#       rspec may be run, below are examples of the most common uses.
+#  * bundler: 'bundle exec rspec'
+#  * bundler binstubs: 'bin/rspec'
+#  * spring: 'bin/rsspec' (This will use spring if running and you have
+#                          installed the spring binstubs per the docs)
+#  * zeus: 'zeus rspec' (requires the server to be started separetly)
+#  * 'just' rspec: 'rspec'
+guard :rspec, cmd: 'bundle exec rspec --tag focus', all_after_pass: false, all_on_start: false do
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$})     { |m| "spec/lib/#{m[1]}_spec.rb" }
-  watch('spec/spec_helper.rb')  { 'spec' }
+  watch('spec/spec_helper.rb')  { "spec" }
 
   # Rails example
   watch(%r{^app/(.+)\.rb$})                           { |m| "spec/#{m[1]}_spec.rb" }
-  watch(%r{^app/(.*)(\.erb|\.haml)$})                 { |m| "spec/#{m[1]}#{m[2]}_spec.rb" }
-  watch(%r{^app/controllers/(.+)_(controller)\.rb$})  { |m| %W(spec/routing/#{m[1]}_routing_spec.rb spec/#{m[2]}s/#{m[1]}_#{m[2]}_spec.rb spec/acceptance/#{m[1]}_spec.rb) }
-  watch(%r{^spec/support/(.+)\.rb$})                  { 'spec' }
-  watch('config/routes.rb')                           { 'spec/routing' }
-  watch('app/controllers/application_controller.rb')  { 'spec/controllers' }
-  # Capybara request specs
-  watch(%r{^app/views/(.+)/.*\.(erb|haml)$})          { |m| "spec/requests/#{m[1]}_spec.rb" }
+  watch(%r{^app/(.*)(\.erb|\.haml|\.slim)$})          { |m| "spec/#{m[1]}#{m[2]}_spec.rb" }
+  watch(%r{^app/controllers/(.+)_(controller)\.rb$})  { |m| ["spec/routing/#{m[1]}_routing_spec.rb", "spec/#{m[2]}s/#{m[1]}_#{m[2]}_spec.rb", "spec/acceptance/#{m[1]}_spec.rb"] }
+  watch(%r{^spec/support/(.+)\.rb$})                  { "spec" }
+  watch('config/routes.rb')                           { "spec/routing" }
+  watch('app/controllers/application_controller.rb')  { "spec/controllers" }
+  watch('spec/rails_helper.rb')                       { "spec" }
 
+  # Capybara features specs
+  watch(%r{^app/views/(.+)/.*\.(erb|haml|slim)$})     { |m| "spec/features/#{m[1]}_spec.rb" }
 
-  # TODO: Move this into its own testing environment
-  # Temporary integration of the your_platform engine's tests
-  watch(%r{^vendor/engines/your_platform/spec/.+_spec\.rb$})
-  watch(%r{^vendor/engines/your_platform/app/(.+)\.rb$})    { |m| "vendor/engines/your_platform/spec/#{m[1]}_spec.rb" }
-
-end
-
-guard 'brakeman', :run_on_start => true do
-  watch(%r{^app/.+\.(erb|haml|rhtml|rb)$})
-  watch(%r{^config/.+\.rb$})
-  watch(%r{^lib/.+\.rb$})
-  watch(%r{^vendor/engines/your_platform/app/.+\.(erb|haml|rhtml|rb)$})
-  watch(%r{^vendor/engines/your_platform/lib/.+\.(rb)$})
-  watch(%r{^vendor/engines/your_platform/config/.+\.(rb)$})
-  watch('vendor/engines/your_platform/your_platform.gemspec')
-  watch('Gemfile')
+  # Turnip features and steps
+  watch(%r{^spec/acceptance/(.+)\.feature$})
+  watch(%r{^spec/acceptance/steps/(.+)_steps\.rb$})   { |m| Dir[File.join("**/#{m[1]}.feature")][0] || 'spec/acceptance' }
 end
