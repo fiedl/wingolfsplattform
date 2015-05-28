@@ -74,12 +74,18 @@ module AbilityDefinitions
       can :create_memberships, Group do |group|
         can? :update, group
       end
-      # cannot :create_officers_group_for, Group
+      can :create_officer_group_for, Group do |group|
+        can? :update, group
+      end
+      
       can :destroy, Group do |group|
         group.admins_of_self_and_ancestors.include?(user) and
         
         # One can't destroy a group with members.
-        group.descendant_users.count > 0
+        group.descendant_users.count == 0 and
+        
+        # The group must have no flags. Otherwise, it's used by the system.
+        group.flags.count == 0
       end
       
       can :manage, User, id: Role.of(user).administrated_users.map(&:id)
