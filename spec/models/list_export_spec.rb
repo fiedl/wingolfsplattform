@@ -53,15 +53,15 @@ describe ListExport do
     describe "#headers" do
       subject { @list_export.headers }
       it { should == ['Nachname', 'Vorname', 'Namenszusatz', 'Postanschrift mit Name', 'Postanschrift', 
-        'Letzte Änderung der Postanschrift am', 'Postleitzahl (PLZ)', 'Stadt', 'Land', 'Länder-Kennzeichen', 'Persönlicher Titel',
+        'Letzte Änderung der Postanschrift am', 'Straße und Hausnummer', 'Postleitzahl (PLZ)', 'Stadt', 'Bundesland', 'Land', 'Länder-Kennzeichen', 'Persönlicher Titel',
         'Zeile über dem Namen', 'Zeile unter dem Namen', 'Text vor dem Namen', 'Text hinter dem Namen', 'Bezirksverband']
       }
     end
     describe "#to_csv" do
       subject { @list_export.to_csv }
       it { should == 
-        "Nachname;Vorname;Namenszusatz;Postanschrift mit Name;Postanschrift;Letzte Änderung der Postanschrift am;Postleitzahl (PLZ);Stadt;Land;Länder-Kennzeichen;Persönlicher Titel;Zeile über dem Namen;Zeile unter dem Namen;Text vor dem Namen;Text hinter dem Namen;Bezirksverband\n" + 
-        "#{@user.last_name};#{@user.first_name};#{@user_title_without_name};\"Herrn\nDr. #{@user.name} M.Sc.\nPariser Platz 1\n10117 Berlin\";\"#{@user.postal_address}\";20.06.2014;10117;Berlin;Germany;DE;;Herrn;\"\";Dr.;M.Sc.;BV 01\n"
+        "Nachname;Vorname;Namenszusatz;Postanschrift mit Name;Postanschrift;Letzte Änderung der Postanschrift am;Straße und Hausnummer;Postleitzahl (PLZ);Stadt;Bundesland;Land;Länder-Kennzeichen;Persönlicher Titel;Zeile über dem Namen;Zeile unter dem Namen;Text vor dem Namen;Text hinter dem Namen;Bezirksverband\n" + 
+        "#{@user.last_name};#{@user.first_name};#{@user_title_without_name};\"Herrn\nDr. #{@user.name} M.Sc.\nPariser Platz 1\n10117 Berlin\";\"#{@user.postal_address}\";20.06.2014;Pariser Platz 1;10117;Berlin;Berlin;Germany;DE;;Herrn;\"\";Dr.;M.Sc.;BV 01\n"
       }
     end
   end
