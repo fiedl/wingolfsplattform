@@ -1,11 +1,15 @@
 namespace :notifications do
   
   task :process => [:environment] do
-    process_notifications
+    Time.use_zone("Berlin") do
+      process_notifications
+    end
   end
   
   task :worker => [:environment] do
-    loop_process_notifications interval: 60.seconds
+    Time.use_zone("Berlin") do
+      loop_process_notifications interval: 60.seconds
+    end
   end
   
   def loop_process_notifications(options = {interval: 60.seconds})
