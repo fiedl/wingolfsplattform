@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 4a0489ccf9ed1bcd2c739113abe20be742cca59a
+  revision: 11ef1b7ecf9a30d80673227ceef8184764017485
   branch: master
   specs:
     your_platform (1.0.1)
@@ -138,7 +138,6 @@ GEM
     acts_as_tree (2.1.0)
       activerecord (>= 3.0.0)
     addressable (2.3.8)
-    angularjs-rails (1.2.13)
     arel (6.0.0)
     autoprefixer-rails (5.1.11)
       execjs
@@ -589,7 +588,6 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport-json_encoder
-  angularjs-rails
   binding_of_caller
   brakeman (>= 2.3.1)
   capybara

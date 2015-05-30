@@ -114,9 +114,6 @@ gem 'pry', group: :development
 # Turbolinks
 gem 'turbolinks', '>= 3.0', github: 'rails/turbolinks'
 
-# Angular JS
-gem 'angularjs-rails'
-
 # Receiving Mails
 gem 'mailman', require: false
 gem 'mail', git: 'git://github.com/jeremy/mail.git'
