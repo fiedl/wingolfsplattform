@@ -32,10 +32,6 @@ config/database
 # Ignore secret password and key file.
 config/secrets.yml
 
-# mailer passwords and configuration
-config/mailer_passwords.yml
-config/group-mail-worker.yml
-
 # Ignore uploads folder content folder
 public/uploads/*
 uploads
@@ -70,8 +66,6 @@ pickle-email-*.html
 # documentation
 .yardoc/*
 doc
-vendor/engines/your_platform/doc
-vendor/engines/your_platform/.yardoc/
 
 # bundler_stubs, see: http://ruby.railstutorial.org/chapters/static-pages#sec:eliminating_bundle_exec
 bundler_stubs
