@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 155f1b039fd2aed1dca2e8dc04a5272070d854e1
+  revision: 47f74526fe843ec2ff168c7d28dbaf47b81cd780
   branch: master
   specs:
     your_platform (1.0.1)
@@ -88,7 +88,7 @@ GIT
 
 GIT
   remote: git://github.com/rails/turbolinks.git
-  revision: c0fffe0193a1327ed52fb6f022d787f596189459
+  revision: 63c78377985245704f89cb847a1758c357731257
   specs:
     turbolinks (3.0.0)
       coffee-rails
@@ -212,7 +212,7 @@ GEM
     diff-lcs (1.2.5)
     domain_name (0.5.23)
       unf (>= 0.0.5, < 1.0.0)
-    edit_mode (1.0.1)
+    edit_mode (1.0.2)
       jquery-rails
       jquery-turbolinks
       rails (>= 3.2)
@@ -314,7 +314,7 @@ GEM
       turbolinks
     jquery-ui-rails (4.2.1)
       railties (>= 3.2.16)
-    json (1.8.2)
+    json (1.8.3)
     judge (2.1.0)
       rails (>= 3.1)
     kgio (2.9.2)

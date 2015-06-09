@@ -15,6 +15,7 @@ feature "Groups Page" do
       @former_members = @corporation.descendant_groups.find_by_flag(:former_members_parent)
         
       visit group_path(@corporation)
+      within('.group_tabs') { click_on I18n.t(:members) }
 
       page.should have_text @user.last_name
     

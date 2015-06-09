@@ -50,47 +50,6 @@ describe GroupsController do
     end
 
     describe 'GET #show' do
-      it 'assigns the requested group to @group' do
-        group = create(:group)
-        get :show, id: group
-        assigns(:group).should eq(group)
-      end
-
-      it 'renders the show template' do
-        get :show, id: create(:group)
-        response.should render_template :show
-      end
-
-      it 'assigns members of the requested group to @members' do
-        group = create(:group, :with_members)
-        get :show, id: group
-        assigns(:members).should_not be_empty
-      end
-
-      it 'assigns hidden members to @members' do
-        group = create(:group, :with_hidden_member)
-        get :show, id: group
-        assigns(:members).should_not be_empty
-      end
-
-      it 'assigns dead members to @members' do
-        group = create(:group, :with_dead_member)
-        get :show, id: group
-        assigns(:members).should_not be_empty
-      end
-
-      # it 'assigns addresses of members of the requested group to @large_map_address_fields' do
-      #   group = create(:group, :with_members)
-      #   get :show, id: group
-      #   assigns(:large_map_address_fields).should_not be_empty
-      # end
-      # 
-      # it 'assigns addresses of hidden members to @large_map_address_fields' do
-      #   group = create(:group, :with_hidden_member)
-      #   get :show, id: group
-      #   assigns(:large_map_address_fields).should_not be_empty
-      # end
-      
       describe "(list exports)" do
         let(:group) { create :group, :with_members }
         
@@ -223,37 +182,6 @@ describe GroupsController do
       # it 'returns 302 not authorized' do
       #   get :index
       #   response.status.should eq(302)
-      # end
-    end
-
-    describe 'GET #show' do
-      it 'assigns the requested group to @group' do
-        group = create(:group)
-        get :show, id: group
-        assigns(:group).should eq(group)
-      end
-
-      it 'renders the show template' do
-        get :show, id: create(:group)
-        response.should render_template :show
-      end
-
-      it 'assigns members of the requested group to @members' do
-        group = create(:group, :with_members)
-        get :show, id: group
-        assigns(:members).should_not be_empty
-      end
-
-      # it 'assigns addresses of members of the requested group to @large_map_address_fields' do
-      #   group = create(:group, :with_members)
-      #   get :show, id: group
-      #   assigns(:large_map_address_fields).should_not be_empty
-      # end
-      # 
-      # it 'does not assign addresses of hidden members to @large_map_address_fields' do
-      #   group = create(:group, :with_hidden_member)
-      #   get :show, id: group
-      #   assigns(:large_map_address_fields).should be_empty
       # end
     end
 

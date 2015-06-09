@@ -23,6 +23,7 @@ feature "Erstbandphilister" do
     visit group_path(@corporation)
     within(".vertical_menu") { click_on "Philisterschaft" }
     within(".vertical_menu") { click_on "Erstbandphilister" }
+    within('.group_tabs') { click_on I18n.t(:members) }
     within("#content_area") do
       page.should have_content "Erstbandphilister"
       page.should have_content @philister_user.last_name

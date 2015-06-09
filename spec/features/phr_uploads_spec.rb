@@ -30,6 +30,8 @@ feature "PhR Uploads" do
     visit root_path
     within('.vertical_menu') { click_on 'VAW' }
     within('.vertical_menu') { click_on 'PhR' }
+    within('.group_tabs') { click_on I18n.t(:members) }
+
     page.should have_text @member.last_name
     page.should have_text @other_member.last_name
     page.should have_no_text @phr_documents.title
@@ -55,6 +57,8 @@ feature "PhR Uploads" do
     visit root_path
     within('.vertical_menu') { click_on 'VAW' }
     within('.vertical_menu') { click_on 'PhR' }
+    within('.group_tabs') { click_on I18n.t(:members) }
+
     page.should have_text I18n.t :members
     page.should have_text @member.last_name
     page.should have_text @member.first_name
@@ -70,6 +74,8 @@ feature "PhR Uploads" do
     visit root_path
     within('.vertical_menu') { click_on 'VAW' }
     within('.vertical_menu') { click_on 'PhR' }
+    within('.group_tabs') { click_on I18n.t(:members) }
+
     page.should have_text @member.last_name
     page.should have_text @other_member.last_name
     page.should have_text @phr_documents.title
