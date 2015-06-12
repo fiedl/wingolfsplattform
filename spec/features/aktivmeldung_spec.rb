@@ -109,6 +109,10 @@ feature "Aktivmeldung" do
     
     page.should have_content I18n.t(:name_field_wingolfspost)
     page.should have_content I18n.t(:wbl_abo)
+    
+    # Sicherstellen, dass der Benutzer die gewünschten Eigenschaften aufweist:
+    User.last.wingolfsblaetter_abo.should == true
+    User.last.notification_policy.to_s.should == 'letter_bundle'
 
   end
   
