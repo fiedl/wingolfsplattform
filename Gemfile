@@ -8,7 +8,7 @@ gem 'transaction_retry' # rescue from deadlocks
 
 gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '>= 1.3.0'  # MIT License
-gem 'coffee-rails', '~> 4.0.0'
+gem 'coffee-rails', '>= 4.0.0'
 
 # See https://github.com/sstephenson/execjs#readme for more
 # supported runtimes.
@@ -59,8 +59,7 @@ group :development do
 
   # debugger: http://guides.rubyonrails.org/debugging_rails_applications.html
   #gem 'debugger'
-  gem 'web-console', '>= 2.0'
-  
+
   gem 'binding_of_caller'
   gem 'meta_request'
   
