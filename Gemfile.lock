@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 83744e0e2bfc56ff2a9b18fdcb297685a08311ad
+  revision: 5b4c789454be5c97105e3abdd96c4d654173987a
   branch: master
   specs:
     your_platform (1.0.1)
@@ -22,7 +22,7 @@ GIT
       autosize-rails
       bcrypt (>= 3.0.1)
       best_in_place (>= 2.1.0)
-      bootstrap-sass (>= 3.3.5)
+      bootstrap-sass (= 3.3.3)
       bundler (>= 1.9.4)
       cancan
       carrierwave
@@ -35,12 +35,14 @@ GIT
       font-awesome-rails (~> 4.3.0)
       foreman
       formtastic
+      gemoji (>= 2.1.0)
       geocoder
       gmaps4rails (= 2.0.2)
       gravatar_image_tag
       haml
       i18n-js (>= 3.0.0.rc8)
       icalendar
+      jquery-atwho-rails (>= 1.1.0)
       jquery-datatables-rails (~> 3.1.1)
       jquery-fileupload-rails
       jquery-rails (>= 3.1.3)
@@ -94,7 +96,7 @@ GIT
 
 GIT
   remote: git://github.com/rails/turbolinks.git
-  revision: 08865722bf2b492ddf1f90f6e32bbb6a4d044d5d
+  revision: 3c3626717ebd0a198b2e860558b0296708f3d5d2
   specs:
     turbolinks (3.0.0)
       coffee-rails
@@ -157,7 +159,7 @@ GEM
       railties (>= 3.2)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
-    bootstrap-sass (3.3.5)
+    bootstrap-sass (3.3.3)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
     brakeman (3.0.1)
@@ -270,6 +272,7 @@ GEM
     fuubar (1.3.3)
       rspec (>= 2.14.0, < 3.1.0)
       ruby-progressbar (~> 1.4)
+    gemoji (2.1.0)
     geocoder (1.2.9)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
@@ -302,6 +305,7 @@ GEM
     i18n-js (3.0.0.rc10)
       i18n (~> 0.6)
     icalendar (2.3.0)
+    jquery-atwho-rails (1.1.0)
     jquery-datatables-rails (3.1.1)
       actionpack (>= 3.1)
       jquery-rails
@@ -360,7 +364,7 @@ GEM
     orm_adapter (0.5.0)
     passgen (1.0.2)
     pdf-core (0.5.1)
-    phony (2.14.4)
+    phony (2.14.5)
     poltergeist (1.5.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -378,7 +382,7 @@ GEM
       activerecord (>= 3.0)
       i18n (>= 0.5.0)
       railties (>= 3.0.0)
-    rack (1.6.2)
+    rack (1.6.4)
     rack-contrib (1.1.0)
       rack (>= 0.9.1)
     rack-mini-profiler (0.9.3)
@@ -487,8 +491,8 @@ GEM
       sprockets (~> 2.8, < 3.0)
       sprockets-rails (~> 2.0)
     sexp_processor (4.4.5)
-    sidekiq (3.3.4)
-      celluloid (>= 0.16.0)
+    sidekiq (3.4.1)
+      celluloid (~> 0.16.0)
       connection_pool (>= 2.1.1)
       json
       redis (>= 3.0.6)

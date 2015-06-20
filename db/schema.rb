@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150530224106) do
+ActiveRecord::Schema.define(version: 20150619215357) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -160,6 +160,17 @@ ActiveRecord::Schema.define(version: 20150530224106) do
   end
 
   add_index "last_seen_activities", ["user_id"], name: "last_seen_activities_user_id_fk", using: :btree
+
+  create_table "mentions", force: :cascade do |t|
+    t.integer  "who_user_id",    limit: 4
+    t.integer  "whom_user_id",   limit: 4
+    t.string   "reference_type", limit: 255
+    t.integer  "reference_id",   limit: 4
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "mentions", ["whom_user_id"], name: "index_mentions_on_whom_user_id", using: :btree
 
   create_table "nav_nodes", force: :cascade do |t|
     t.string   "url_component",   limit: 255

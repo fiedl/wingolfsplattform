@@ -21,3 +21,7 @@ task default: 'rspec-rerun:spec'
 # RSpec::Core::RakeTask.new( :spec ) do |t|
 #   t.pattern = pattern
 # end
+
+# https://github.com/github/gemoji
+# run `rake emoji` to copy emoji files to `public/emoji`
+load 'tasks/emoji.rake'

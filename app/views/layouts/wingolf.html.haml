@@ -84,6 +84,8 @@
               - #   = star_tool( current_user, @navable )
               %span#breadcrumb
                 = breadcrumb_ul
+              %span#access_indicator
+                = access_indicator if current_user
             %span#content_area
             - Rack::MiniProfiler.step("#content") do
               #content
