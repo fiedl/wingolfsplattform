@@ -9,6 +9,11 @@ namespace :notifications do
     end
   end
   
+  task :process => [:environment] do
+    detect_environment
+    Rake::Task["your_platform:notifications:process"].invoke
+  end
+  
   def production_stage_or_development_environment?
     if @production_stage_or_development_environment
       return true
