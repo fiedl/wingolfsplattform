@@ -101,12 +101,12 @@
                           convert_to_content_box { yield }                    |
                         )                                                     |
                     \ 
-                    .clear
                 - else
                   = flash_area
                   = replace_unicode_special_chars_by_html_escape_strings( |
                       convert_to_content_box { yield }                    |
                     )                                                     |
+                .clear
     = render partial: 'layouts/footer'
     = debug(params) if Rails.env.development?
     = yield :scripts
