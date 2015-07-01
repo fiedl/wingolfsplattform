@@ -160,5 +160,9 @@ gem 'newrelic_rpm'
 #gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
 gem 'prawn', github: 'prawnpdf/prawn'
 
+# get emails for exceptions.
+# http://railscasts.com/episodes/104
+gem 'exception_notification'
+
 # YourPlatform
 gem 'your_platform', github: 'fiedl/your_platform', branch: 'master'
