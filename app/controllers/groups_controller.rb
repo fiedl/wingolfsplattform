@@ -7,6 +7,8 @@ module GroupsControllerOverride
   #
   def group_params
     params[:group] ||= params[:bv]  # for Bv objects
+    params[:group] ||= params[:aktivitas]
+    params[:group] ||= params[:philisterschaft]
     super
   end
   
