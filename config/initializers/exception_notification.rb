@@ -3,6 +3,7 @@ Rails.application.config.middleware.use ExceptionNotification::Rack, {
   :email => {
     :email_prefix => "[ERROR] ",
     :sender_address => %{"Plattform-Fehler" <noreply@wingolfsplattform.org>},
-    :exception_recipients => %w{root@wingolfsplattform.org}
+    :exception_recipients => %w{root@wingolfsplattform.org},
+    :sections => %w(request current_user session environment backtrace)
   }
 }

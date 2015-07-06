@@ -4,6 +4,7 @@ require_dependency YourPlatform::Engine.root.join('app/controllers/application_c
 class ApplicationController
 
   before_action :new_relic_params
+  before_action :collect_data_for_exception_notifier
 
   layout             :find_layout
 
@@ -33,6 +34,12 @@ class ApplicationController
       user_id: (current_user ? current_user.id : nil),
       role_view: current_role_view
     })
+  end
+  
+  def collect_data_for_exception_notifier
+    request.env["exception_notifier.exception_data"] = {
+      :current_user => current_user
+    }
   end
 
 end
