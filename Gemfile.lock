@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 94c025b8513a6f2535fd82db73f29bd4bf8cf72c
+  revision: 6491f0ea514918ec22f759312b82043a1799d58c
   branch: master
   specs:
     your_platform (1.0.1)
@@ -433,7 +433,7 @@ GEM
     rb-fsevent (0.9.3)
     rb-inotify (0.9.3)
       ffi (>= 0.5.0)
-    redcarpet (3.3.1)
+    redcarpet (3.3.2)
     redis (3.2.1)
     redis-actionpack (4.0.0)
       actionpack (~> 4)
