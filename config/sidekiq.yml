@@ -1,8 +1,0 @@
-:queues:
-  - default
-  - notification
-  - mailgate
-:limits:
-  default: 25
-  mailgate: 1
-  notification: 1
