@@ -16,7 +16,7 @@ class StatusGroup
   def self.find_all_by_corporation(corporation)
     raise 'no corporation given' unless corporation
     orig_find_all_by_corporation(corporation).select do |group|
-      not group.name.in? ["Stifter", "Neustifter"] and
+      not group.name.in? ["Stifter", "Neustifter", "Althäusercollegium", "Althäusercollegium (AHC)"] and
       not group.ancestor_groups.where(name: 'Thematische Gruppen').pluck(:id).any?
     end
   end
