@@ -3,8 +3,8 @@ ruby '2.2.2'
 
 gem 'rails', '~> 4.2.1'	 # MIT License
 
-gem 'mysql2'	# MIT License
-gem 'transaction_retry' # rescue from deadlocks
+gem 'pg'
+#gem 'transaction_retry' # rescue from deadlocks
 
 gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '>= 1.3.0'  # MIT License
@@ -165,4 +165,4 @@ gem 'prawn', github: 'prawnpdf/prawn'
 gem 'exception_notification'
 
 # YourPlatform
-gem 'your_platform', github: 'fiedl/your_platform', branch: 'master'
+gem 'your_platform', github: 'fiedl/your_platform', branch: 'sf/postgres'
