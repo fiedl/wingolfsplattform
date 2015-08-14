@@ -9,7 +9,7 @@ class ListExport
     # Im Wingolf soll für alle Benutzer der BV angezeigt werden, dem der Benutzer
     # zugeordnet ist. Für Aktive ist dieser Eintrag leer.
     #
-    if @data.respond_to?(:first) && @data.first.kind_of?(User)
+    if @data.respond_to?(:first) && @data.first.kind_of?(User) && preset != 'dpag_internetmarke'
       original_columns + [:cached_bv_name]
     else
       original_columns
