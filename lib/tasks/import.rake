@@ -30,7 +30,7 @@ namespace :import do
     $log.section "Agenda"
     display_agenda_for tasks_to_execute
     
-    execute tasks_to_execute
+    execute_tasks tasks_to_execute
     
     $log.section "Import Complete."
     $log.info "All import tasks executed. We are done."
@@ -41,6 +41,8 @@ namespace :import do
     $log.info ""
     
   end
+  
+  private
     
   def display_agenda_for(tasks_to_execute)
     system("bundle exec rake -T > /tmp/rake_toc")
@@ -49,7 +51,7 @@ namespace :import do
     end
   end
   
-  def execute(tasks_to_execute)
+  def execute_tasks(tasks_to_execute)
     tasks_to_execute.each do |task_to_execute|
       Rake::Task[task_to_execute].invoke
     end

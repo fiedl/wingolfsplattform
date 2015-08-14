@@ -56,6 +56,12 @@ module Wingolfsplattform
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
     
+    # Use SQL instead of Active Record's schema dumper when creating the database.
+    # This is necessary if your schema can't be completely dumped by the schema dumper,
+    # like if you have constraints or database-specific column types.
+    # http://railscasts.com/episodes/343-full-text-search-in-postgresql
+    config.active_record.schema_format = :sql
+    
     # fix for field_with_errors in form helper, see: http://www.rabbitcreative.com/2010/09/20/rails-3-still-fucking-up-field_with_errors/
     config.action_view.field_error_proc = Proc.new { |html_tag, instance| "<span class=\"field_with_errors\">#{html_tag}</span>".html_safe }
 
