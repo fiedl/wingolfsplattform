@@ -7,6 +7,7 @@
     = stylesheet_link_tag    'bootstrap_setup', :media => 'all'
     = stylesheet_link_tag    'wingolf_layout', :media => 'all'
     = stylesheet_link_tag    'application', :media => 'all'
+    = stylesheet_link_tag    'print', :media => 'print'
 
     = favicon_link_tag 'favicon.ico'
     = favicon_link_tag 'fahne-144x144.png', rel: 'apple-touch-icon', type: 'image/png'
@@ -20,7 +21,7 @@
   %body{:class => controller.controller_name, data: {locale: I18n.locale, navable: @navable.try(:to_global_id)}}
     - if user_account_signed_in?
       - Rack::MiniProfiler.step("#logged-in-bar") do
-        #logged-in-bar
+        #logged-in-bar.hidden-print
           #backendBar
             .content
               %ul.backendBarItems
@@ -63,7 +64,7 @@
             .clear
     - Rack::MiniProfiler.step("#header-bar") do
       #header-bar
-        #headerBg
+        #headerBg.hidden-print
           #header
             #header_claim
               = image_tag( 'claim.png' )
@@ -77,6 +78,8 @@
             %span#category_indicator
               - Rack::MiniProfiler.step("#horizontal_nav") do
                 #horizontal_nav= horizontal_nav
+        #print-logo.visible-print
+          .right= image_tag('logo.png')
     #contentBgLayer1
       #contentBgLayer2
         #contentBgLayer3
@@ -93,7 +96,7 @@
               #content
                 - if show_vertical_nav?
                   .content_twoCols.content_twoCols-20-80
-                    .content_twoCols_left
+                    .content_twoCols_left.hidden-print
                       = vertical_nav
                       = render partial: 'last_seen_activities/index'
                     .content_twoCols_right
@@ -109,6 +112,7 @@
                       convert_to_content_box { yield }                    |
                     )                                                     |
                 .clear
-    = render partial: 'layouts/footer'
-    = debug(params) if Rails.env.development?
+
+    .hidden-print= render partial: 'layouts/footer'
+    .hidden-print= debug(params) if Rails.env.development?
     = yield :scripts
