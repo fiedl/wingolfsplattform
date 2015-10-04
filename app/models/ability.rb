@@ -88,7 +88,7 @@ module AbilityDefinitions
         group.flags.count == 0
       end
       
-      can :manage, User, id: Role.of(user).administrated_users.map(&:id)
+      can [:update, :change_first_name, :change_alias], User, id: Role.of(user).administrated_users.map(&:id)
       can :manage, UserAccount, user_id: Role.of(user).administrated_users.map(&:id)
 
       can :execute, Workflow do |workflow|
@@ -106,7 +106,7 @@ module AbilityDefinitions
 
       can :manage, ProfileField do |profile_field|
         profile_field.profileable.nil? ||  # in order to create profile fields
-          can?(:update, profile_field.profileable)
+          (can?(:update, profile_field.profileable) && profile_field.key != "W-Nummer")
       end
       can :manage, UserGroupMembership do |membership|
         can? :update, membership.user

@@ -28,6 +28,24 @@ class Group
 
   end
   
+  
+  # Mailing lists
+  #
+  alias_method :original_mailing_list_sender_filter_settings, :mailing_list_sender_filter_settings
+  def mailing_list_sender_filter_settings
+    [:wingolfiten] + original_mailing_list_sender_filter_settings
+  end
+  
+  alias_method :original_user_matches_mailing_list_sender_filter?, :user_matches_mailing_list_sender_filter?
+  def user_matches_mailing_list_sender_filter?(user)
+    case self.mailing_list_sender_filter.to_s
+    when 'wingolfiten'
+      user.wingolfit?
+    else
+      original_user_matches_mailing_list_sender_filter?(user)
+    end
+  end
+  
 
   # Special Groups
   # ==========================================================================================
