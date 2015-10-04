@@ -11,7 +11,7 @@ class AdminsController < ApplicationController
     @corporations = Corporation.all
     @bvs = Bv.all
     
-    @admins_responsible_for_me = current_user.responsible_admins 
+    @admins_responsible_for_me = current_user.try(:responsible_admins)
   end
   
 end
