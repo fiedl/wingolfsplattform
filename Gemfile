@@ -6,7 +6,7 @@ gem 'rails', '~> 4.2.1'	 # MIT License
 gem 'mysql2'	# MIT License
 gem 'transaction_retry' # rescue from deadlocks
 
-gem 'sass-rails', '~> 4.0.3'
+gem 'sass-rails', '>= 4.0.3'
 gem 'uglifier', '>= 1.3.0'  # MIT License
 gem 'coffee-rails', '>= 4.0.0'
 
@@ -164,5 +164,11 @@ gem 'prawn', github: 'prawnpdf/prawn'
 # http://railscasts.com/episodes/104
 gem 'exception_notification'
 
+#gem 'bootstrap', git: 'https://github.com/twbs/bootstrap-rubygem'
+
 # YourPlatform
 gem 'your_platform', github: 'fiedl/your_platform', branch: 'master'
+
+#source 'https://rails-assets.org' do
+#  gem 'rails-assets-tether', '>= 1.1.0'
+#end
