@@ -14,7 +14,7 @@ module AktivmeldungsbuttonHelper
   private
   
   def current_user_has_necessary_permissions?
-    can? :create, :aktivmeldung
+    can? :create, User
   end
   
   def currently_showing_the_form_for_aktivmeldung?

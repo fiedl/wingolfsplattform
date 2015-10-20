@@ -111,7 +111,11 @@ module AbilityDefinitions
       can :manage, UserGroupMembership do |membership|
         can? :update, membership.user
       end
-      can :create, :aktivmeldung do
+      
+      # Lokale Administratoren dürfen Aktivmeldungen eintragen, wenn sie mindestens
+      # eine Aktivitas administrieren.
+      #
+      can :create, User do
         user.administrated_aktivitates.count > 0
       end
     end
