@@ -242,7 +242,7 @@ module AbilityDefinitions
     # Nobody, not even global admins, can send posts to deceased-groups.
     # Also creating events for those groups is not good.
     # 
-    cannot [:create_post_for, :create_event], Group do |group|
+    cannot [:create_post_for, :create_post, :create_event_for, :create_event], Group do |group|
       group.name.try(:include?, "Verstorbene")
     end
   end

@@ -503,15 +503,22 @@ describe Ability do
       before do
         @group = create(:group)
         @group.admins << user
+        
+        @other_user = create(:user)
+        @group.assign_user @other_user
       end
       he "should be able to update the group he is admin of" do
         the_user.should be_able_to :update, @group
       end
-      he "should be able to manage the users in the group he is admin of" do
-        @other_user = create(:user)
-        @group.assign_user @other_user
-        the_user.should be_able_to :manage, @other_user
+      he "should not be able to manage the users in the group he is admin of (changed behaviour as of 2015-10)" do
+        the_user.should_not be_able_to :manage, @other_user
       end
+      he { should be_able_to :update, @other_user }
+      he { should be_able_to :change_first_name, @other_user }
+      he { should be_able_to :change_alias, @other_user }
+      he { should_not be_able_to :change_last_name, @other_user }
+      he { should_not be_able_to :change_hidden, @other_user }
+      
       he "should be able to manage the users' profile fields" do
         @other_user = create(:user)
         @group.assign_user @other_user
@@ -536,12 +543,19 @@ describe Ability do
         @subgroup.reload
         the_user.should be_able_to :update, @subgroup
       end
-      he "should be able to manage users of subgroups" do
-        @subgroup = create(:group)
-        @subgroup.parent_groups << @group
-        @other_user = create(:user)
-        @subgroup.assign_user @other_user
-        the_user.should be_able_to :manage, @other_user
+      describe "for other users of subgroups" do
+        before do
+          @subgroup = create(:group)
+          @subgroup.parent_groups << @group
+          @other_user = create(:user)
+          @subgroup.assign_user @other_user
+        end
+        he { should_not be_able_to :manage, @other_user }
+        he { should be_able_to :update, @other_user }
+        he { should be_able_to :change_first_name, @other_user }
+        he { should be_able_to :change_alias, @other_user }
+        he { should_not be_able_to :change_last_name, @other_user }
+        he { should_not be_able_to :change_hidden, @other_user }
       end
       he "should be able to execute workflows of his group" do
         @workflow = create(:workflow)
@@ -552,11 +566,15 @@ describe Ability do
         @workflow = Workflow.find_or_create_mark_as_deceased_workflow
         the_user.should be_able_to :execute, @workflow
       end
-      he "should not be able to manage unrelated groups or users" do
-        @other_group = create(:group)
-        the_user.should_not be_able_to :manage, @other_group
-        @other_user = create(:user)
-        the_user.should_not be_able_to :manage, @other_user
+      describe "for unrelated groups" do
+        before { @other_group = create(:group) }
+        he { should_not be_able_to :update, @other_group }
+        he { should_not be_able_to :manage, @other_group }
+      end
+      describe "for members of unrelated groups" do
+        before { @other_user = create(:user) }
+        he { should_not be_able_to :update, @other_user }
+        he { should_not be_able_to :manage, @other_user }
       end
       he "should be able to manage the group's users' memberships" do
         @other_user = create(:user)
@@ -629,7 +647,7 @@ describe Ability do
         the_user.should_not be_able_to :manage, @sub_page
         the_user.should_not be_able_to :update, @sub_group
         the_user.should_not be_able_to :manage, @sub_group_page
-        the_user.should_not be_able_to :manage, @sub_group_user
+        the_user.should_not be_able_to :update, @sub_group_user
         
         # 2. The user becomes admin of @group.
         #
@@ -640,7 +658,7 @@ describe Ability do
         the_user.should be_able_to :manage, @sub_page
         the_user.should be_able_to :update, @sub_group
         the_user.should be_able_to :manage, @sub_group_page
-        the_user.should be_able_to :manage, @sub_group_user
+        the_user.should be_able_to :update, @sub_group_user
     
         # 3. The user loses his admin status.
         #
@@ -651,7 +669,7 @@ describe Ability do
         the_user.should_not be_able_to :manage, @sub_page
         the_user.should_not be_able_to :update, @sub_group
         the_user.should_not be_able_to :manage, @sub_group_page
-        the_user.should_not be_able_to :manage, @sub_group_user
+        the_user.should_not be_able_to :update, @sub_group_user
         
       end
     end

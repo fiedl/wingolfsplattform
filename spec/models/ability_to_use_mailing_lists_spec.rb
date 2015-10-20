@@ -42,11 +42,11 @@ describe Ability do
       describe "sender filter" do
         describe '(empty)' do
           before { group.mailing_list_sender_filter = ""; group.save }
-          he { should be_able_to :create_post_for, group }
+          he { should_not be_able_to :create_post_for, group }
         end
         describe '(nil)' do
           before { group.mailing_list_sender_filter = nil; group.save }
-          he { should be_able_to :create_post_for, group }
+          he { should_not be_able_to :create_post_for, group }
         end
         describe 'open' do
           before { group.mailing_list_sender_filter = :open; group.save }

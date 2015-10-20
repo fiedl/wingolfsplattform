@@ -18,7 +18,8 @@ gem 'execjs'
 # https://github.com/seyhunak/twitter-bootstrap-rails/issues/336
 gem 'therubyracer', :platform => :ruby
 
-gem 'jquery-rails'							# MIT License
+# Fix version due to datatables issue (http://stackoverflow.com/a/31150030/2066546)
+gem 'jquery-rails', '4.0.4'							# MIT License
 
 # To use Jbuilder templates for JSON
 # gem 'jbuilder'
