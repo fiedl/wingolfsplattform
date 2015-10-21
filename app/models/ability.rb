@@ -88,16 +88,15 @@ module AbilityDefinitions
         group.flags.count == 0
       end
       
-      can [:update, :change_first_name, :change_alias], User, id: Role.of(user).administrated_users.map(&:id)
+      can [:update, :change_first_name, :change_alias, :change_status], User, id: Role.of(user).administrated_users.map(&:id)
       can :manage, UserAccount, user_id: Role.of(user).administrated_users.map(&:id)
 
       can :execute, Workflow do |workflow|
         # Local admins can execute workflows of groups they're admins of.
         # And they can execute the mark_as_deceased workflow, which is a global workflow.
-        # if they do administrate a group.
         #
-        (workflow == Workflow.find_mark_as_deceased_workflow) ||
-          workflow.admins_of_ancestors.include?(user)
+        (workflow == Workflow.find_mark_as_deceased_workflow) or
+        (workflow.admins_of_ancestors.include?(user))
       end
 
       can :manage, Page do |page|

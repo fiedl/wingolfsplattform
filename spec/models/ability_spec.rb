@@ -516,6 +516,7 @@ describe Ability do
       he { should be_able_to :update, @other_user }
       he { should be_able_to :change_first_name, @other_user }
       he { should be_able_to :change_alias, @other_user }
+      he { should be_able_to :change_status, @other_user }
       he { should_not be_able_to :change_last_name, @other_user }
       he { should_not be_able_to :change_hidden, @other_user }
       
