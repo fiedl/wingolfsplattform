@@ -1,3 +1,6 @@
+- # popover_placement = (@hide_footer ? 'left' : 'top')
+- popover_placement = 'top'
+
 #footer
   #footer_bg
   #footer_navi
@@ -6,7 +9,7 @@
         %a(href="https://github.com/fiedl/wingolfsplattform") Github
       - if current_user
         %li
-          %a.has_popover{href: 'irc://kornbluth.freenode.net/wingolfsplattform', data: {placement: 'top', title: 'IRC-Chat'}} IRC
+          %a.has_popover{href: 'irc://kornbluth.freenode.net/wingolfsplattform', data: {placement: popover_placement, title: 'IRC-Chat'}} IRC
           -# kornbluth.freenode.net, Frankfurt
           .popover_content
             %ul
@@ -15,9 +18,9 @@
               %li
                 %a(href="http://de.wikipedia.org/wiki/IRC-Client#G.C3.A4ngige_IRC-Clients") Client herunterladen
               %li
-                %a.btn(href="irc://kornbluth.freenode.net/wingolfsplattform") Mit Chat verbinden
+                %a.btn.btn-default(href="irc://kornbluth.freenode.net/wingolfsplattform") Mit Chat verbinden
         %li
-          %a.has_popover{href: 'mumble://wingolfsplattform.org', data: {placement: 'top', title: 'Mumble-Konferenz'}} Mumble
+          %a.has_popover{href: 'mumble://wingolfsplattform.org', data: {placement: popover_placement, title: 'Mumble-Konferenz'}} Mumble
           -# kornbluth.freenode.net, Frankfurt
           .popover_content
             %ul
@@ -25,7 +28,7 @@
               %li
                 %a(href="http://www.mumble.com/mumble-download.php") Client herunterladen
               %li
-                %a.btn(href="mumble://wingolfsplattform.org") Mit Konferenz verbinden
+                %a.btn.btn-default(href="mumble://wingolfsplattform.org") Mit Konferenz verbinden
       %li
         = link_to t(:imprint), Page.find_by_flag(:imprint)
       - if current_user
