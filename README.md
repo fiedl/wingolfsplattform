@@ -16,7 +16,7 @@ Sebastian Fiedlschuster  E 06  (B-xx)
 
 ### Production
 
-Die laufende Seite ist erreichbar unter http://wingolfsplattform.org.
+Die laufende Seite ist erreichbar unter https://wingolfsplattform.org.
 
 **Continuous Deployment**: Der `production`-Branch wird nach einem Push automatisch auf wingolfsplattform.org bereitgestellt.
 Den aktuell bereitgestellten Commit kann man hier abfragen: http://wingolfsplattform.org:4567
@@ -24,7 +24,7 @@ Den aktuell bereitgestellten Commit kann man hier abfragen: http://wingolfsplatt
 
 ### Contribution
 
-Als Server-Side-Framework verwenden wir [Ruby on Rails](http://rubyonrails.org/) 3.2 mit Ruby 2.1. Wir empfehlen die Verwendung von [rbenv](https://github.com/sstephenson/rbenv/).
+Als Server-Side-Framework verwenden wir [Ruby on Rails](http://rubyonrails.org/) 4.2 mit Ruby 2.2. Wir empfehlen die Verwendung von [rbenv](https://github.com/sstephenson/rbenv/).
 
 **[GETTING STARTED](https://github.com/fiedl/wingolfsplattform/wiki/Getting-Started)** -- von der Installation der Entwicklungsumgebung bis zum Durchführen der automatisierten Tests.
 
@@ -47,12 +47,10 @@ bundle exec rails server
 
 ### your_platform
 
-Der abstrakte Teil des Quellcodes, d.h. derjenige Teil, der auch von anderen Organisationen als dem Wingolf verwendet werden kann, ist in der [`your_platform`-Engine](vendor/engines/your_platform) unterzubringen. Die Konkretisierung und Anpassung auf die wingolfitischen Bedürfnisse erfolgt in der Haupt-Applikation. 
-
-Dieser aufgespaltete Zustand ist noch nicht vollständig erreicht. Der aktuelle Stand ist der [Migrations-Matrix](https://docs.google.com/spreadsheet/ccc?key=0ApsXX8JdKfoOdFVOSXdoSWp6MkVxWmVCUXU2U0IteWc&pli=1#gid=0) zu entnehmen.
+Der abstrakte Teil des Quellcodes, d.h. derjenige Teil, der auch von anderen Organisationen als dem Wingolf verwendet werden kann, ist in der [`your_platform`-Engine](https://github.com/fiedl/your_platform) unterzubringen. Die Konkretisierung und Anpassung auf die wingolfitischen Bedürfnisse erfolgt in der Haupt-Applikation. 
 
 
-### Code Documentation
+### Code-Dokumentation
 
 * [Code-Dokumentation auf rubydoc.info](http://rubydoc.info/github/fiedl/wingolfsplattform/master/frames)
 * Lokal kann die Dokumentation mit dem Kommando `yardoc` erzeugt werden.
@@ -80,12 +78,11 @@ Dieser aufgespaltete Zustand ist noch nicht vollständig erreicht. Der aktuelle 
 * http://wingolf.org/ak-internet
 
 [![Travis-CI-Server](https://raw.githubusercontent.com/fiedl/wingolfsplattform/master/public/images/supporttravis.png)](http://travis-ci.org)  
-[![UserVoice-Ticket-System](http://upload.wikimedia.org/wikipedia/en/d/d3/UserVoice_logo.png)](http://uservoice.com)
 
 
 ### Urheber, Mitarbeiter und Lizenz
 
-Copyright (c) 2012-2014, Sebastian Fiedlschuster
+Copyright (c) 2012-2015, Sebastian Fiedlschuster
 
 Mitarbeiter: Jörg Reichardt, Manuel Zerpies, Joachim Back
 
