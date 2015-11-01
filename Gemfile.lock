@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 1b459b92e366b1b71b377912450d78e8478d27b2
+  revision: 88de2b4eecad95890b50b447e0466b08cc02c668
   branch: master
   specs:
     your_platform (1.0.1)
@@ -101,7 +101,7 @@ GIT
 
 GIT
   remote: git://github.com/rails/turbolinks.git
-  revision: 83d4b3d2c52a681f07900c28adb28bc8da604733
+  revision: 90d4132be6275edd997beeb66bf3876b0207291d
   specs:
     turbolinks (3.0.0)
       coffee-rails
