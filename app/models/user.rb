@@ -86,7 +86,7 @@ class User
   end
   
   def bv_membership
-    cached { UserGroupMembership.find_by_user_and_group(self, bv) if bv }
+    @bv_membership ||= UserGroupMembership.find_by_user_and_group(self, bv) if bv
   end
   
   # Diese Methode gibt die BVs zurück, denen der Benutzer zugewiesen ist. In der Regel
