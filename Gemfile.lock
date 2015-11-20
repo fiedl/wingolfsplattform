@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 2095ca55d13a3761ddd66904eff0d2577840a784
+  revision: b00fb00e6f40633fa0a46661eefa90312665c1af
   branch: master
   specs:
     your_platform (1.0.1)
@@ -149,7 +149,7 @@ GEM
     acts-as-dag (4.0.0)
       activemodel
       activerecord (~> 4.0, >= 4.0.0)
-    acts_as_tree (2.2.0)
+    acts_as_tree (2.3.0)
       activerecord (>= 3.0.0)
     addressable (2.3.8)
     ambry (0.3.1)
@@ -157,7 +157,7 @@ GEM
     auto_html (1.6.4)
       redcarpet (~> 3.1)
       rinku (~> 1.5.0)
-    autoprefixer-rails (6.0.3)
+    autoprefixer-rails (6.1.0.1)
       execjs
       json
     autosize-rails (1.18.17)
@@ -302,7 +302,7 @@ GEM
       rspec (>= 2.14.0, < 3.1.0)
       ruby-progressbar (~> 1.4)
     gemoji (2.1.0)
-    geocoder (1.2.11)
+    geocoder (1.2.12)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     gravatar_image_tag (1.2.0)
@@ -394,7 +394,7 @@ GEM
     orm_adapter (0.5.0)
     passgen (1.0.2)
     pdf-core (0.6.0)
-    phony (2.15.6)
+    phony (2.15.8)
     poltergeist (1.5.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -466,7 +466,7 @@ GEM
       actionpack (~> 4)
       redis-rack (~> 1.5.0)
       redis-store (~> 1.1.0)
-    redis-activesupport (4.1.4)
+    redis-activesupport (4.1.5)
       activesupport (>= 3, < 5)
       redis-store (~> 1.1.0)
     redis-namespace (1.5.2)
@@ -478,7 +478,7 @@ GEM
       redis-actionpack (~> 4)
       redis-activesupport (~> 4)
       redis-store (~> 1.1.0)
-    redis-store (1.1.6)
+    redis-store (1.1.7)
       redis (>= 2.2)
     ref (1.0.5)
     refile (0.5.5)
