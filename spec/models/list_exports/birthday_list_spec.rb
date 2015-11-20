@@ -25,14 +25,14 @@ describe ListExports::BirthdayList do
   
   describe "#headers" do
     subject { @list_export.headers }
-    specify { subject.join(";").should == "Nachname;Vorname;Namenszusatz;Diesjähriger Geburtstag;Geburtsdatum;Aktuelles Alter;Bezirksverband" }
+    specify { subject.join(";").should == "Nachname;Vorname;Aktivitätszahl;Geburtsdatum;Nächster Geburtstag;Geburtstag;BV" }
   end
   
   describe "#to_csv" do
     subject { @list_export.to_csv }
-    it { should == 
-      "Nachname;Vorname;Namenszusatz;Diesjähriger Geburtstag;Geburtsdatum;Aktuelles Alter;Bezirksverband\n" +
-      "Doe;Jonathan;Z10;13.11.2015;13.11.1986;28;BV 01\n"
+    it { Timecop.travel "2015-08-20".to_datetime { should == 
+      "Nachname;Vorname;Aktivitätszahl;Geburtsdatum;Nächster Geburtstag;Geburtstag;BV\n" +
+      "Doe;Jonathan;Z10;13.11.2015;13.11.1986;28;BV 01\n" }
     }
   end
   

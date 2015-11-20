@@ -6,8 +6,8 @@ namespace :issues do
   #
   task :all => [
     :print_info,
-    :auto_fix_postal_addresses,
-    :scan_for_issues
+    :scan_for_issues,
+    :notify_admins
   ]
   
   task :print_info => [:environment] do
@@ -15,10 +15,14 @@ namespace :issues do
     log.info "Probleme, die nicht behoben werden konnten, werden Administratoren als "
     log.info "'Verwaltungsaufgaben' angezeigt."
   end
-  task :auto_fix_postal_addresses => [:environment] do
-    ProfileFieldTypes::Address.fix_one_liner_addresses
-  end
   task :scan_for_issues => [:environment] do
     Issue.scan
+  end
+  task :notify_admins => [:environment, :scan_for_issues] do
+    log.section "Administratoren informieren."
+    log.info "Jeden Dienstag informieren wir Administratoren über ausstehende Verwaltungsprobleme."
+    if Time.zone.now.tuesday?
+      Issue.notify_admins
+    end
   end
 end

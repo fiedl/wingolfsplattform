@@ -1,0 +1,4 @@
+de:
+  there_are_n_unresolved_issues_in_your_domain: "Es gibt %{n} Verwaltungsprobleme in Deinem Zuständigkeitsbereich."
+  please_click_above_link_and_resolve_issues: "Bitte klicke auf obigen Link und löse die dort aufgelisteten Problme. Danke!\n\nAls zuständiger Administrator wirst Du wöchentlich an ausstehende Verwaltungsaufgaben erinnert."
+  

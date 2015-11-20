@@ -6,6 +6,10 @@ module ListExports
     def cached_bv_name
       bv.try(:name)
     end
+
+    def cached_bv_token
+      bv.try(:token)
+    end
     
   end
 end

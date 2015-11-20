@@ -3,6 +3,7 @@ de:
   add_to_corporation:            Zu dieser Verbindung hinzufügen
   
   corporate_info:                Wingolf
+  name_affix:                    Aktivitätszahl
 
   activerecord:
     attributes:

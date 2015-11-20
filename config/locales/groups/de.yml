@@ -2,6 +2,7 @@ de:
   corporations_parent:            Wingolf am Hochschulort
   bvs_parent:                     Bezirksverbände
   bv_name:                        Bezirksverband
+  bv_token:                       BV
 
   alle_wingolfiten:               Alle Wingolfiten
   alle_aktiven:                   Alle Aktiven
