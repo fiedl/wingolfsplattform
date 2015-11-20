@@ -34,6 +34,8 @@
       - if current_user
         %li
           = link_to t(:terms_of_use), terms_path
+        %li
+          = link_to t(:privacy), privacy_path
       %li
         = language_switcher_html
     .clear
