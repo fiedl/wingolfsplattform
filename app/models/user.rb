@@ -79,7 +79,7 @@ class User
     cached { Bv.find(bv_id) if bv_id }
   end
   def bv_ids
-    Bv.pluck(:id) & self.group_ids
+    Bv.pluck(:id) & self.parent_group_ids
   end
   def bv_id
     bv_ids.first
