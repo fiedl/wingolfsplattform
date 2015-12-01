@@ -232,6 +232,7 @@ module AbilityDefinitions
     super
     
     can :export, :wingolfsblaetter_export_format
+    can :index, :wingolfsblaetter_dashboard
   end
   
   # ===============================================================================================
