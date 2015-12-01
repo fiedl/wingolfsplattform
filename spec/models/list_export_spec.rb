@@ -5,7 +5,7 @@ describe ListExport do
   before do
     @group = create :group
     @corporation = create :corporation_with_status_groups
-    @bv = create :bv_group, name: 'BV 01'
+    @bv = create :bv_group, name: 'BV 01', token: 'BV 01'
     @user = create :user
     
     @group.assign_user @user
@@ -31,15 +31,15 @@ describe ListExport do
     end
     describe "#headers" do
       subject { @list_export.headers }
-      it { should == ['Nachname', 'Vorname', 'Namenszusatz', 'Postanschrift mit Name', 'Postanschrift', 
+      it { should == ['Nachname', 'Vorname', 'Aktivitätszahl', 'Postanschrift mit Name', 'Postanschrift', 
         'Letzte Änderung der Postanschrift am', 'Straße und Hausnummer', 'Postleitzahl (PLZ)', 'Stadt', 'Bundesland', 'Land', 'Länder-Kennzeichen', 'Persönlicher Titel',
-        'Zeile über dem Namen', 'Zeile unter dem Namen', 'Text vor dem Namen', 'Text hinter dem Namen', 'Bezirksverband']
+        'Zeile über dem Namen', 'Zeile unter dem Namen', 'Text vor dem Namen', 'Text hinter dem Namen', 'BV']
       }
     end
     describe "#to_csv" do
       subject { @list_export.to_csv }
       it { should == 
-        "Nachname;Vorname;Namenszusatz;Postanschrift mit Name;Postanschrift;Letzte Änderung der Postanschrift am;Straße und Hausnummer;Postleitzahl (PLZ);Stadt;Bundesland;Land;Länder-Kennzeichen;Persönlicher Titel;Zeile über dem Namen;Zeile unter dem Namen;Text vor dem Namen;Text hinter dem Namen;Bezirksverband\n" + 
+        "Nachname;Vorname;Aktivitätszahl;Postanschrift mit Name;Postanschrift;Letzte Änderung der Postanschrift am;Straße und Hausnummer;Postleitzahl (PLZ);Stadt;Bundesland;Land;Länder-Kennzeichen;Persönlicher Titel;Zeile über dem Namen;Zeile unter dem Namen;Text vor dem Namen;Text hinter dem Namen;BV\n" + 
         "#{@user.last_name};#{@user.first_name};#{@user_title_without_name};\"Herrn\nDr. #{@user.name} M.Sc.\nPariser Platz 1\n10117 Berlin\";\"#{@user.postal_address}\";20.06.2014;Pariser Platz 1;10117;Berlin;Berlin;Germany;DE;;Herrn;\"\";Dr.;M.Sc.;BV 01\n"
       }
     end
@@ -54,11 +54,11 @@ describe ListExport do
     end
     describe "#headers" do
       subject { @list_export.headers }
-      it { should == ['Nachname', 'Vorname', 'Namenszusatz', 'Persönlicher Titel', 'Akademischer Grad', 'Bezirksverband'] }
+      it { should == ['Nachname', 'Vorname', 'Aktivitätszahl', 'Persönlicher Titel', 'Akademischer Grad', 'BV'] }
     end
     describe "#to_csv" do
       subject { @list_export.to_csv }
-      it { should == "Nachname;Vorname;Namenszusatz;Persönlicher Titel;Akademischer Grad;Bezirksverband\n" +
+      it { should == "Nachname;Vorname;Aktivitätszahl;Persönlicher Titel;Akademischer Grad;BV\n" +
         "#{@user.last_name};#{@user.first_name};#{@user_title_without_name};Dr.;Dr. rer. nat.;BV 01\n" }
     end
   end

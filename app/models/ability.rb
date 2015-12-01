@@ -230,6 +230,8 @@ module AbilityDefinitions
   #
   def rights_for_global_officers
     super
+    
+    can :export, :wingolfsblaetter_export_format
   end
   
   # ===============================================================================================

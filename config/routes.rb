@@ -7,6 +7,9 @@ Rails.application.routes.draw do
   resources :groups, path: :bvs, as: :bvs
 
   get :admins, to: 'admins#index'
+  
+  get :wingolfsblaetter, to: 'wingolfsblaetter#index'
+  get :wbl, to: 'wingolfsblaetter#index'
 
   get "map/show"
   

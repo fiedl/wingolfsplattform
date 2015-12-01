@@ -10,7 +10,7 @@ class ListExport
     # zugeordnet ist. Für Aktive ist dieser Eintrag leer.
     #
     if @data.respond_to?(:first) && @data.first.kind_of?(User) && preset != 'dpag_internetmarke'
-      original_columns + [:cached_bv_name]
+      original_columns + [:cached_bv_token]
     else
       original_columns
     end
@@ -21,5 +21,9 @@ end
 class ListExportUser
   def cached_bv_name
     bv.try(:name)
+  end
+
+  def cached_bv_token
+    bv.try(:token)
   end
 end

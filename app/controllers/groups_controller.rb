@@ -12,6 +12,15 @@ module GroupsControllerOverride
     super
   end
   
+  def list_export_by_preset(list_preset)
+    case list_preset
+    when 'wingolfsblaetter'
+      ListExports::Wingolfsblaetter.from_group(@group)
+    else
+      super(list_preset)  
+    end
+  end
+  
 end
 
 class GroupsController
