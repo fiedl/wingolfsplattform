@@ -167,6 +167,8 @@ gem 'exception_notification'
 
 #gem 'bootstrap', git: 'https://github.com/twbs/bootstrap-rubygem'
 
+gem 'sidekiq', '~> 3.5.1'
+
 # YourPlatform
 gem 'your_platform', github: 'fiedl/your_platform', branch: 'master'
 
