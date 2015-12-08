@@ -79,7 +79,15 @@ class User
     cached { Bv.find(bv_id) if bv_id }
   end
   def bv_ids
-    Bv.pluck(:id) & self.direct_group_ids
+    # TODO: Sobald ActsAsDag obsolet ist, müssen nur noch direkte Mitgliedschaften
+    # berücksichtigt werden. Im Moment ist aber noch ein "Hack" nötig, weil ActsAsDag
+    # nicht damit klarkommt, dass man Amtsträger und direktes Mitglied in einem BV ist.
+    # Der direkte BV soll aber Vorrang vor dem Amts-BV haben. Deshalb so umständlich.
+    #
+    # Nach der Umstellung wird es einfach:
+    # # Bv.pluck(:id) & self.direct_group_ids
+    
+    ((Bv.pluck(:id) & self.direct_group_ids) + (Bv.pluck(:id) & self.group_ids)).uniq
   end
   def bv_id
     bv_ids.first
