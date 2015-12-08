@@ -6,9 +6,14 @@ class Bv < Group
     bv_group = ( Bv.all.select { |group| group.token == bv_token } ).first if bv_token
     return bv_group.becomes Bv if bv_group
   end
+  
+  def self.by_address(address_string)
+    geo_location = GeoLocation.find_or_create_by address: address_string
+    self.by_geo_location(geo_location)
+  end
 
-  def self.by_address( address )
-    self.by_country_code_and_plz address.country_code, address.plz
+  def self.by_address_field(address_field)
+    self.by_country_code_and_plz address_field.country_code, address_field.plz
   end
 
   def self.by_geo_location( geo_location )
