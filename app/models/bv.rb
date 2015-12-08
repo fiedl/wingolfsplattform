@@ -8,31 +8,35 @@ class Bv < Group
   end
 
   def self.by_address( address )
-    geo_location = GeoLocation.find_or_create_by address: address
-    self.by_geo_location(geo_location)
+    self.by_country_code_and_plz address.country_code, address.plz
   end
 
   def self.by_geo_location( geo_location )
-    
+    self.by_country_code_and_plz geo_location.country_code, geo_location.plz
+  end
+  
+  def self.by_country_code_and_plz(country_code, plz)
+    country_code = country_code.upcase
+
     # Germany: Use PLZ to identify BV
-    return self.by_plz(geo_location.plz) if geo_location.country_code == "DE"
+    return self.by_plz(plz) if country_code == "DE"
 
     # Austria => BV 43
-    return self.find_by_token("BV 43") if geo_location.country_code == "AT"
+    return self.find_by_token("BV 43") if country_code == "AT"
 
     # Estonia => BV 44
-    return self.find_by_token("BV 44") if geo_location.country_code == "EE"
+    return self.find_by_token("BV 44") if country_code == "EE"
 
     # Rest of Europe => BV 45
-    return self.find_by_token("BV 45") if geo_location.in_europe?
+    return self.find_by_token("BV 45") if country_code.in? GeoLocation.european_country_codes
 
     # Rest of the World => BV 46
-    return self.find_by_token("BV 46") if geo_location.country_code
+    return self.find_by_token("BV 46") if country_code.present?
 
     # No valid address given => BV 00
     return self.find_by_token("BV 00")
-
   end
+
 
   # Ordnet den +user+ diesem BV zu und trägt ihn ggf. aus seinem vorigen BV aus.
   #
