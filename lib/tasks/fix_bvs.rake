@@ -22,8 +22,8 @@ namespace :fix do
       'print_info',
       'assign_unassigned_philistres_to_bvs',
       'list_users_without_postal_address',
-      'list_addresses_without_bv'
-      # 'correct_bv_assignments_of_all_philistres'  # Deactivated for now. There are manual assignments for a reason.
+      'list_addresses_without_bv',
+      'correct_bv_assignments_of_all_philistres'
     ]
     
     task :assign_unassigned_philistres_to_bvs => [:environment, :requirements, :print_info] do
@@ -37,7 +37,7 @@ namespace :fix do
 
       for user in alle_philister_ohne_bv
         if user.alive? and user.wingolfit?
-          print "* (#{user.id}) #{user.w_nummer} #{user.cached_title} ... "
+          print "* (#{user.id}) #{user.w_nummer} #{user.title} ... "
           
           user.adapt_bv_to_postal_address
           
@@ -65,7 +65,7 @@ namespace :fix do
       log.info ""
 
       for user in alle_philister_mit_mehreren_bvs
-        print "* (#{user.id}) #{user.w_nummer} #{user.cached_title} ... "
+        print "* (#{user.id}) #{user.w_nummer} #{user.title} ... "
         
         correct_membership = user.adapt_bv_to_postal_address
         raise 'no membership' unless correct_membership.kind_of? UserGroupMembership
@@ -85,7 +85,7 @@ namespace :fix do
       
       for user in alle_benutzer_ohne_postanschrift
         if user.alive? and user.wingolfit?
-          log.info "* (#{user.id}) #{user.w_nummer} #{user.cached_title}"
+          log.info "* (#{user.id}) #{user.w_nummer} #{user.title}"
         end
       end
     end
@@ -117,13 +117,32 @@ namespace :fix do
       log.info ""
       
       for user in alle_philister.reorder(:id)
-        if user.postal_address_field.try(:bv) && user.bv && (user.postal_address_field.bv != user.bv)
-          log.info "* (#{user.id}) #{user.cached_title}, wohnhaft in #{user.postal_address_field.plz} #{user.postal_address_field.city}: #{user.bv.token} -> #{user.postal_address_field.bv.token}"
+        
+        # Nur, wenn kein Wunsch-BV # TODO
+        # Oder, wenn im BV 00.
+        
+        user.delete_cached :bv
+        if user.postal_address_field_or_first_address_field && (user.correct_bv != user.bv)
+          log.info "* (#{user.id}) #{user.title}, wohnhaft in #{user.postal_address_field_or_first_address_field.plz} #{user.postal_address_field_or_first_address_field.city}: #{user.bv.try(:token)} -> #{user.correct_bv.try(:token)}"
+
+          if user.bv == Bv.find_by_token("BV 00")
+            if user.bv_membership.nil?
+              log.error "    -> Kein bv_membership. DAG-Links fehlerhaft?"
+            else
+              
+              begin
+                user.adapt_bv_to_postal_address
+              rescue ActiveRecord::ActiveRecordError
+                log.error "    -> ActiveRecord::ActiveRecordError. DAG-Links fehlerhaft?"
+              end
           
-          user.adapt_bv_to_postal_address
-          
-          if user.postal_address_field.bv != user.reload.bv
-            log.warning "    -> BV-Neuzuordnung fehlgeschlagen. Bitte manuell überprüfen."
+              user.delete_cached :bv
+              if user.postal_address_field.bv != user.reload.bv
+                log.warning "    -> BV-Neuzuordnung fehlgeschlagen. Bitte manuell überprüfen."
+              end
+            end
+          else
+            log.warning "    -> BV-Neuzuordnung nicht vorgenommen, da derzeit nicht im BV 00. Bitte händisch prüfen, ob es sich um einen Wunsch-BV-Philister handelt."
           end
         end
       end
