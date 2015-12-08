@@ -129,6 +129,17 @@ class User
     end
   end
   
+  # Es gibt Philister, die einen Wunsch-BV haben, d.h. nicht ihrem eigentlichen
+  # BV zugeordnet werden sollen, da sie lieber in einem anderen BV sind.
+  #
+  def wunsch_bv?
+    manual_bv?
+  end
+  def manual_bv?
+    member_of? (Group.flagged(:philister_mit_wunsch_bv).first || Group.where(name: 'Philister mit Wunsch-BV').first)
+  end
+  
+  
   # Diese Methode passt den BV des Benutzers der aktuellen Postanschrift an.
   # Achtung: Nur Philister sind BVs zugeordnet. Wenn der Benutzer Aktiver ist,
   # tut diese Methode nichts.
@@ -136,6 +147,11 @@ class User
   def adapt_bv_to_postal_address
     self.groups(true) # reload groups
     new_bv = correct_bv
+    
+    # Wenn der Philister einen Wunsch-BV hat, wird die automatische Zuordnung
+    # nicht vorgenommen.
+    #
+    return false if wunsch_bv?
     
     # Fall 0: Es konnte kein neuer BV identifiziert werden.
     # In diesem Fall wird aus Konsistenzgründen die aktuelle BV-Mitgliedschaft
