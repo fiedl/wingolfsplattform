@@ -17,7 +17,9 @@ module ListExports
     
     def data_rows
       super.select do |user|
-        user.wingolfit? and user.alive?
+        user.wingolfit? and 
+        user.alive? and
+        user.postal_address_field_or_first_address_field.issues.none?
       end.uniq
     end
     
