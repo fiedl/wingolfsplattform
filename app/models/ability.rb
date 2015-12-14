@@ -88,7 +88,7 @@ module AbilityDefinitions
         group.flags.count == 0
       end
       
-      can [:update, :change_first_name, :change_alias, :change_status], User, id: Role.of(user).administrated_users.map(&:id)
+      can [:update, :change_first_name, :change_alias, :change_status, :create_account_for], User, id: Role.of(user).administrated_users.map(&:id)
       can :manage, UserAccount, user_id: Role.of(user).administrated_users.map(&:id)
 
       can :execute, Workflow do |workflow|

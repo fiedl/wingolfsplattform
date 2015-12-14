@@ -248,4 +248,14 @@ describe Ability do
       end
     end
   end
+  
+  describe "Lokaler Admin" do
+    before do
+      @corporation = create :wingolf_corporation
+      @corporation.admins << user
+      @other_member = create :user; @corporation.aktivitas << @other_member
+    end
+    
+    he { should be_able_to :create_account_for, @other_member }
+  end
 end
