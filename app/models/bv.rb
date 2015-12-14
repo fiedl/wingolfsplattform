@@ -1,10 +1,18 @@
 class Bv < Group
   after_save { Bv.bvs_parent << self }
   
-  def self.by_plz( plz )
-    bv_token = BvMapping.find_by_plz( plz ).bv_name if BvMapping.find_by_plz( plz )
-    bv_group = ( Bv.all.select { |group| group.token == bv_token } ).first if bv_token
-    return bv_group.becomes Bv if bv_group
+  # def self.by_plz( plz )
+  #   bv_token = BvMapping.find_by_plz( plz ).bv_name if BvMapping.find_by_plz( plz )
+  #   bv_group = ( Bv.all.select { |group| group.token == bv_token } ).first if bv_token
+  #   return bv_group.becomes Bv if bv_group
+  # end
+  
+  def self.by_town(town)
+    bv_tokens = BvMapping.where(town: town).pluck(:bv_name).uniq
+    raise("Der Wohnort #{town} kann nicht eindeutig einem BV zugeordnet werden.") if bv_tokens.count > 1
+    
+    bv_token = bv_tokens.first
+    Bv.where(token: bv_token).first
   end
   
   def self.by_address(address_string)
@@ -13,18 +21,23 @@ class Bv < Group
   end
 
   def self.by_address_field(address_field)
-    self.by_country_code_and_plz address_field.country_code, address_field.plz
+    self.by_country_code_and_town_and_plz address_field.country_code, address_field.city, address_field.plz
   end
 
   def self.by_geo_location( geo_location )
-    self.by_country_code_and_plz geo_location.country_code, geo_location.plz
+    self.by_country_code_and_town_and_plz geo_location.country_code, geo_location.city, geo_location.plz
   end
   
-  def self.by_country_code_and_plz(country_code, plz)
+  def self.by_country_code_and_town_and_plz(country_code, town, plz)
     country_code = country_code.upcase
 
-    # Germany: Use PLZ to identify BV
-    return self.by_plz(plz) if country_code == "DE"
+    # Deutschland: BV per Wohnort (`town`) identifizieren.
+    #
+    # Derzeit wird die PLZ auf Wunsch von Neusel nicht berücksichtigt.
+    #   Trello: https://trello.com/c/GynIkAfo/945
+    #   Ticket: http://support.wingolfsplattform.org/tickets/500
+    #
+    return self.by_town(town) if country_code == "DE"
 
     # Austria => BV 43
     return self.find_by_token("BV 43") if country_code == "AT"
