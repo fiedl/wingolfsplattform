@@ -99,12 +99,29 @@ namespace :fix do
       log.info "Danach muss der Task 'rake fix:bvs' erneut ausgeführt werden.".yellow
       log.info ""
       
+      need_review = []
       for address_field in ProfileField.where(type: 'ProfileFieldTypes::Address')
         unless address_field.bv
           if address_field.plz
             address = address_field.value.gsub("\n", ", ")
-            log.info "* PLZ #{address_field.plz} : #{address}"
+            need_review << [address_field.plz, Bv.modify_town_for_loopup(address_field.city)]
+            log.info "* #{address_field.plz} #{Bv.modify_town_for_loopup(address_field.city)} : #{address}"
           end
+        end
+      end
+      
+      if need_review.count > 0
+        log.info ""
+        log.warning "Zusammengefasst benötigen die folgenden Wohnorte eine BV-Zuordnung:"
+        need_review.uniq.sort.each do |plz_and_town|
+          log.info "* #{plz_and_town[0]} #{plz_and_town[1]}"
+        end
+        
+        log.info ""
+        log.success "Bitte ausfüllen:"
+        log.info ""
+        need_review.uniq.sort.each do |plz_and_town|
+          log.info "    BvMapping.find_or_create plz: '#{plz_and_town[0]}', town: '#{plz_and_town[1]}', bv_name: 'BV 00'"
         end
       end
     end
