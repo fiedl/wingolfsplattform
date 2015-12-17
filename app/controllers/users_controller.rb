@@ -85,6 +85,10 @@ class UsersController
     user.mobile = all_user_params["mobile"]
     user.save
     
+    user.address_profile_fields.each do |address_field|
+      address_field.convert_to_format_with_separate_fields
+    end
+    
     user.send_welcome_email if user.account
     
     # FIXME: This may raise 'stack level too deep' when run through sidekiq:
