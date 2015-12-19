@@ -51,7 +51,7 @@ feature "Aktivmeldung" do
     select "Dezember", from: 'user_aktivmeldungsdatum_2i' # formtastic month
     select @aktivmeldungsjahr, from: 'user_aktivmeldungsdatum_1i' # formtastic year
     
-    fill_in I18n.t('activerecord.attributes.user.study_address'), with: "Some Address"
+    fill_in I18n.t('activerecord.attributes.user.study_address'), with: "Pariser Platz 1\n 10117 Berlin"
     fill_in I18n.t('activerecord.attributes.user.home_address'), with: "44 Rue de Stalingrad, Grenoble, Frankreich"
     fill_in I18n.t(:email), with: "bbr.kanne@example.com"
     fill_in I18n.t(:phone), with: "09131 123 45 56"
@@ -82,10 +82,10 @@ feature "Aktivmeldung" do
     page.should have_content "bbr.kanne@example.com"
     
     page.should have_content "Heimatanschrift"
-    page.should have_content "44 Rue de Stalingrad, Grenoble, Frankreich"
+    page.should have_content "44 Rue de Stalingrad\n38100 Grenoble\nFrance"
     
     page.should have_content "Semesteranschrift"
-    page.should have_content "Some Address"
+    page.should have_content "Pariser Platz 1\n10117 Berlin"
     page.should have_no_content I18n.t(:work_or_study_address)
     
     page.should have_content I18n.t(:phone)
@@ -113,6 +113,7 @@ feature "Aktivmeldung" do
     # Sicherstellen, dass der Benutzer die gewünschten Eigenschaften aufweist:
     User.last.wingolfsblaetter_abo.should == true
     User.last.notification_policy.to_s.should == 'letter_bundle'
+    User.last.address_fields.first.children.count.should > 0
 
   end
   
@@ -168,10 +169,10 @@ feature "Aktivmeldung" do
     page.should have_content "bbr.kanne@example.com"
     
     page.should have_content "Heimatanschrift"
-    page.should have_content "44 Rue de Stalingrad, Grenoble, Frankreich"
+    page.should have_content "44 Rue de Stalingrad\n38100 Grenoble\nFrance"
     
     page.should have_content "Semesteranschrift"
-    page.should have_content "Some Address"
+    page.should have_content "Pariser Platz 1\n10117 Berlin"
     page.should have_no_content I18n.t(:work_or_study_address)
     
     page.should have_content I18n.t(:phone)
@@ -222,7 +223,7 @@ feature "Aktivmeldung" do
     select "Dezember", from: 'user_aktivmeldungsdatum_2i' # formtastic month
     select @aktivmeldungsjahr, from: 'user_aktivmeldungsdatum_1i' # formtastic year
     
-    fill_in I18n.t('activerecord.attributes.user.study_address'), with: "Some Address"
+    fill_in I18n.t('activerecord.attributes.user.study_address'), with: "Pariser Platz 1\n10117 Berlin"
     fill_in I18n.t('activerecord.attributes.user.home_address'), with: "44 Rue de Stalingrad, Grenoble, Frankreich"
     fill_in I18n.t(:email), with: "bbr.kanne@example.com"
     fill_in I18n.t(:phone), with: "09131 123 45 56"
@@ -254,10 +255,10 @@ feature "Aktivmeldung" do
     page.should have_content "bbr.kanne@example.com"
     
     page.should have_content "Heimatanschrift"
-    page.should have_content "44 Rue de Stalingrad, Grenoble, Frankreich"
+    page.should have_content "44 Rue de Stalingrad\n38100 Grenoble\nFrance"
     
     page.should have_content "Semesteranschrift"
-    page.should have_content "Some Address"
+    page.should have_content "Pariser Platz 1\n10117 Berlin"
     page.should have_no_content I18n.t(:work_or_study_address)
     
     page.should have_content I18n.t(:phone)
@@ -307,7 +308,7 @@ feature "Aktivmeldung" do
     select "Dezember", from: 'user_aktivmeldungsdatum_2i' # formtastic month
     select @aktivmeldungsjahr, from: 'user_aktivmeldungsdatum_1i' # formtastic year
     
-    fill_in I18n.t('activerecord.attributes.user.study_address'), with: "Some Address"
+    fill_in I18n.t('activerecord.attributes.user.study_address'), with: "Pariser Platz 1\n10117 Berlin"
     fill_in I18n.t('activerecord.attributes.user.home_address'), with: "44 Rue de Stalingrad, Grenoble, Frankreich"
     fill_in I18n.t(:email), with: "bbr.kanne@example.com"
     fill_in I18n.t(:phone), with: "09131 123 45 56"
@@ -351,7 +352,7 @@ feature "Aktivmeldung" do
     # select "Dezember", from: 'user_aktivmeldungsdatum_2i' # formtastic month
     # select @aktivmeldungsjahr, from: 'user_aktivmeldungsdatum_1i' # formtastic year
     
-    fill_in I18n.t('activerecord.attributes.user.study_address'), with: "Some Address"
+    fill_in I18n.t('activerecord.attributes.user.study_address'), with: "Pariser Platz 1\n10117 Berlin"
     fill_in I18n.t('activerecord.attributes.user.home_address'), with: "44 Rue de Stalingrad, Grenoble, Frankreich"
     fill_in I18n.t(:email), with: "bbr.kanne@example.com"
     fill_in I18n.t(:phone), with: "09131 123 45 56"
@@ -380,10 +381,10 @@ feature "Aktivmeldung" do
     page.should have_content "bbr.kanne@example.com"
     
     page.should have_content "Heimatanschrift"
-    page.should have_content "44 Rue de Stalingrad, Grenoble, Frankreich"
+    page.should have_content "44 Rue de Stalingrad\n38100 Grenoble\nFrance"
     
     page.should have_content "Semesteranschrift"
-    page.should have_content "Some Address"
+    page.should have_content "Pariser Platz 1\n10117 Berlin"
     page.should have_no_content I18n.t(:work_or_study_address)
     
     page.should have_content I18n.t(:phone)
