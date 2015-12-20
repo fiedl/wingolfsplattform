@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 49406333b50dd4538f9c95f03204bdf876a38a29
+  revision: 957da1bf12aa96df821812fdf02f718ceb0f5eed
   branch: master
   specs:
     your_platform (1.0.1)
@@ -46,14 +46,13 @@ GIT
       i18n-js (>= 3.0.0.rc8)
       icalendar
       jquery-atwho-rails (>= 1.1.0)
-      jquery-datatables-rails (~> 3.1.1)
       jquery-fileupload-rails
-      jquery-rails (>= 3.1.3, <= 4.0.4)
       jquery-turbolinks
-      jquery-ui-rails (~> 4.2.0)
       judge
+      mail (>= 2.6.0)
       merit
       mini_magick
+      nokogiri (>= 1.6.7.1)
       passgen
       phony
       prawn
@@ -62,6 +61,9 @@ GIT
       rack-mini-profiler (>= 0.9.0.pre)
       rack-ssl (>= 1.3.4)
       rails (>= 4.2.2)
+      rails-assets-datatables (>= 1.10.10)
+      rails-assets-jquery-ui
+      rails-assets-jquery-ujs
       rails-i18n
       rails-settings-cached
       redcarpet (>= 3.3.2)
@@ -73,7 +75,7 @@ GIT
       sidekiq (>= 3.4.2)
       sidekiq-limit_fetch
       slim_breadcrumb (>= 0.0.3)
-      strong_parameters
+      sprockets-rails (~> 2.3)
       sugar-rails
       to_xls
       transaction_retry
@@ -85,16 +87,8 @@ GIT
       workflow_kit (~> 0.0.7)
 
 GIT
-  remote: git://github.com/jeremy/mail.git
-  revision: 4875bc2ba1670289a34a155569af2f51abddc316
-  specs:
-    mail (2.5.4)
-      mime-types (~> 1.16)
-      treetop (~> 1.4.8)
-
-GIT
   remote: git://github.com/prawnpdf/prawn.git
-  revision: 8d36954eef8e6250246ffc2964b8d49d4eab55e7
+  revision: 18c3d4746b9408a35c3f37deeafe12d9cc3ae7bd
   specs:
     prawn (2.0.3)
       pdf-core (~> 0.6.0)
@@ -108,6 +102,7 @@ GIT
       coffee-rails
 
 GEM
+  remote: https://rails-assets.org/
   remote: https://rubygems.org/
   specs:
     actionmailer (4.2.5)
@@ -152,19 +147,19 @@ GEM
       activerecord (~> 4.0, >= 4.0.0)
     acts_as_tree (2.3.0)
       activerecord (>= 3.0.0)
-    addressable (2.3.8)
+    addressable (2.4.0)
     ambry (0.3.1)
     arel (6.0.3)
     auto_html (1.6.4)
       redcarpet (~> 3.1)
       rinku (~> 1.5.0)
-    autoprefixer-rails (6.1.2)
+    autoprefixer-rails (6.2.0)
       execjs
       json
     autosize-rails (1.18.17)
       rails (>= 3.1)
     bcrypt (3.1.10)
-    best_in_place (3.0.3)
+    best_in_place (3.1.0)
       actionpack (>= 3.2)
       railties (>= 3.2)
     biggs (0.3.3)
@@ -174,17 +169,20 @@ GEM
     bootstrap-sass (3.3.3)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
-    brakeman (3.0.1)
+    brakeman (3.1.3)
       erubis (~> 2.6)
       fastercsv (~> 1.5)
       haml (>= 3.0, < 5.0)
-      highline (~> 1.6.20)
+      highline (>= 1.6.20, < 2.0)
       multi_json (~> 1.2)
-      ruby2ruby (~> 2.1.1)
-      ruby_parser (~> 3.5.0)
+      ruby2ruby (>= 2.1.1, < 2.3.0)
+      ruby_parser (~> 3.7.0)
+      safe_yaml (>= 1.0)
       sass (~> 3.0)
+      slim (>= 1.3.6, < 4.0)
       terminal-table (~> 1.4)
     builder (3.2.2)
+    callsite (0.0.11)
     cancan (1.6.10)
     capybara (2.2.0)
       mime-types (>= 1.16)
@@ -219,14 +217,15 @@ GEM
     codeclimate-test-reporter (0.4.7)
       simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.0)
-    coffee-rails (4.1.0)
+    coffee-rails (4.1.1)
       coffee-script (>= 2.2.0)
-      railties (>= 4.0.0, < 5.0)
+      railties (>= 4.0.0, < 5.1.x)
     coffee-script (2.4.1)
       coffee-script-source
       execjs
     coffee-script-source (1.10.0)
     colored (1.2)
+    concurrent-ruby (1.0.0)
     connection_pool (2.2.0)
     coveralls (0.7.0)
       multi_json (~> 1.3)
@@ -237,7 +236,7 @@ GEM
     daemons (1.2.3)
     database_cleaner (1.4.1)
     debug_inspector (0.0.2)
-    devise (3.5.2)
+    devise (3.5.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 3.2.6, < 5)
@@ -305,7 +304,8 @@ GEM
       rspec (>= 2.14.0, < 3.1.0)
       ruby-progressbar (~> 1.4)
     gemoji (2.1.0)
-    geocoder (1.2.12)
+    geocoder (1.2.13)
+    git-version-bump (0.15.1)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     gravatar_image_tag (1.2.0)
@@ -315,19 +315,20 @@ GEM
       lumberjack (~> 1.0)
       pry (>= 0.9.12)
       thor (>= 0.18.1)
-    guard-brakeman (0.8.1)
+    guard-brakeman (0.8.3)
       brakeman (>= 2.1.1)
-      guard (>= 1.1.0)
+      guard (>= 2.0.0)
     guard-focus (0.0.1)
       guard
-    guard-rspec (0.5.5)
-      guard (>= 0.8.4)
+    guard-rspec (4.3.1)
+      guard (~> 2.1)
+      rspec (>= 2.14, < 4.0)
     guard-spork (1.0.1)
       guard (>= 1.0.0)
       spork (>= 0.8.4)
     haml (4.0.7)
       tilt
-    highline (1.6.21)
+    highline (1.7.8)
     hiredis (0.5.2)
     hitimes (1.2.3)
     http-cookie (1.0.2)
@@ -337,33 +338,26 @@ GEM
       i18n (~> 0.6)
     icalendar (2.3.0)
     jquery-atwho-rails (1.3.2)
-    jquery-datatables-rails (3.1.1)
-      actionpack (>= 3.1)
-      jquery-rails
-      railties (>= 3.1)
-      sass-rails
     jquery-fileupload-rails (0.4.6)
       actionpack (>= 3.1)
       railties (>= 3.1)
       sass (>= 3.2)
-    jquery-rails (4.0.4)
+    jquery-rails (4.0.5)
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     jquery-turbolinks (2.1.0)
       railties (>= 3.1.0)
       turbolinks
-    jquery-ui-rails (4.2.1)
-      railties (>= 3.2.16)
     json (1.8.3)
     judge (2.1.1)
       rails (>= 3.1)
-    kgio (2.9.2)
+    kgio (2.10.0)
     launchy (2.2.0)
       addressable (~> 2.3)
-    letter_opener (1.2.0)
+    letter_opener (1.4.1)
       launchy (~> 2.2)
-    libv8 (3.16.14.3)
+    libv8 (3.16.14.13)
     listen (2.4.0)
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
@@ -371,6 +365,8 @@ GEM
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.4)
+    mail (2.6.3)
+      mime-types (>= 1.16, < 3)
     maildir (2.1.0)
     mailman (0.7.0)
       activesupport (>= 2.3.4)
@@ -380,31 +376,31 @@ GEM
       maildir (>= 0.5.0)
     merit (2.3.2)
       ambry (~> 0.3.0)
-    meta_request (0.2.2)
-      rack-contrib
-      railties
+    meta_request (0.3.4)
+      callsite (~> 0.0, >= 0.0.11)
+      rack-contrib (~> 1.1)
+      railties (>= 3.0.0, < 5.0.0)
     method_source (0.8.2)
-    mime-types (1.25.1)
+    mime-types (2.99)
     mini_magick (4.3.6)
     mini_portile2 (2.0.0)
     minitest (5.8.3)
     multi_json (1.11.2)
-    mysql2 (0.3.15)
+    mysql2 (0.4.2)
     netrc (0.11.0)
     newrelic_rpm (3.8.1.221)
-    nokogiri (1.6.7)
+    nokogiri (1.6.7.1)
       mini_portile2 (~> 2.0.0.rc2)
     orm_adapter (0.5.0)
     passgen (1.0.2)
     pdf-core (0.6.0)
-    phony (2.15.9)
+    phony (2.15.10)
     poltergeist (1.5.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
       multi_json (~> 1.0)
       websocket-driver (>= 0.2.0)
-    polyglot (0.3.5)
-    protected_attributes (1.0.9)
+    protected_attributes (1.1.3)
       activemodel (>= 4.0.1, < 5.0)
     pry (0.9.12.4)
       coderay (~> 1.0)
@@ -416,8 +412,9 @@ GEM
       i18n (>= 0.5.0)
       railties (>= 3.0.0)
     rack (1.6.4)
-    rack-contrib (1.1.0)
-      rack (>= 0.9.1)
+    rack-contrib (1.4.0)
+      git-version-bump (~> 0.15)
+      rack (~> 1.4)
     rack-mini-profiler (0.9.8)
       rack (>= 1.1.3)
     rack-protection (1.5.3)
@@ -438,6 +435,13 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 4.2.5)
       sprockets-rails
+    rails-assets-datatables (1.10.10)
+      rails-assets-jquery (>= 1.7.0)
+    rails-assets-jquery (2.1.4)
+    rails-assets-jquery-ui (1.11.4)
+      rails-assets-jquery (>= 1.6)
+    rails-assets-jquery-ujs (1.1.0)
+      rails-assets-jquery (> 1.8)
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
     rails-dom-testing (1.0.7)
@@ -456,7 +460,7 @@ GEM
       activesupport (= 4.2.5)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    raindrops (0.13.0)
+    raindrops (0.15.0)
     rake (10.4.2)
     rake-compiler (0.9.2)
       rake
@@ -483,7 +487,7 @@ GEM
       redis-store (~> 1.1.0)
     redis-store (1.1.7)
       redis (>= 2.2)
-    ref (1.0.5)
+    ref (2.0.0)
     refile (0.5.5)
       mime-types
       rest-client (~> 1.8)
@@ -513,19 +517,20 @@ GEM
       rspec-mocks (~> 2.14.0)
     ruby-ole (1.2.11.8)
     ruby-progressbar (1.5.1)
-    ruby2ruby (2.1.3)
+    ruby2ruby (2.2.0)
       ruby_parser (~> 3.1)
       sexp_processor (~> 4.0)
-    ruby_parser (3.5.0)
+    ruby_parser (3.7.2)
       sexp_processor (~> 4.1)
-    sass (3.4.19)
+    safe_yaml (1.0.4)
+    sass (3.4.20)
     sass-rails (5.0.4)
       railties (>= 4.0.0, < 5.0)
       sass (~> 3.1)
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
-    sexp_processor (4.4.5)
+    sexp_processor (4.6.0)
     sidekiq (3.5.3)
       celluloid (~> 0.17.2)
       connection_pool (~> 2.2, >= 2.2.0)
@@ -540,10 +545,13 @@ GEM
       multi_json (~> 1.0)
       simplecov-html (~> 0.7.1)
     simplecov-html (0.7.1)
-    sinatra (1.4.6)
+    sinatra (1.4.5)
       rack (~> 1.4)
       rack-protection (~> 1.4)
-      tilt (>= 1.3, < 3)
+      tilt (~> 1.3, >= 1.3.4)
+    slim (3.0.6)
+      temple (~> 0.7.3)
+      tilt (>= 1.3.3, < 2.1)
     slim_breadcrumb (0.0.3)
       coffee-rails
       jquery-rails
@@ -551,24 +559,22 @@ GEM
       sass-rails
     slop (3.4.7)
     spork (0.9.2)
-    spreadsheet (1.0.9)
+    spreadsheet (1.1.0)
       ruby-ole (>= 1.0)
-    sprockets (3.4.1)
+    sprockets (3.5.2)
+      concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
     sprockets-rails (2.3.3)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
-    strong_parameters (0.1.4)
-      actionpack (>= 3.2.0)
-      activemodel (>= 3.2.0)
-      railties (>= 3.2.0)
     sugar-rails (1.4.1)
       railties (>= 3.0.0)
+    temple (0.7.6)
     term-ansicolor (1.2.2)
       tins (~> 0.8)
-    terminal-table (1.4.5)
-    therubyracer (0.12.1)
+    terminal-table (1.5.2)
+    therubyracer (0.12.2)
       libv8 (~> 3.16.14.0)
       ref
     thin (1.6.4)
@@ -589,9 +595,6 @@ GEM
     transaction_retry (1.0.2)
       activerecord (>= 3.0.11)
       transaction_isolation (>= 1.0.2)
-    treetop (1.4.15)
-      polyglot
-      polyglot (>= 0.3.1)
     ttfunk (1.4.0)
     turboboost (0.1.0)
       coffee-rails
@@ -609,17 +612,16 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.1)
-    unicorn (4.8.2)
+    unicorn (5.0.1)
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
-    warden (1.2.3)
+    warden (1.2.4)
       rack (>= 1.0)
-    web-console (2.2.1)
-      activemodel (>= 4.0)
-      binding_of_caller (>= 0.7.2)
-      railties (>= 4.0)
-      sprockets-rails (>= 2.0, < 4.0)
+    web-console (3.0.0)
+      activemodel (>= 4.2)
+      debug_inspector
+      railties (>= 4.2)
     websocket-driver (0.3.2)
     websocket-rack (0.4.0)
       em-websocket (~> 0.3.6)
@@ -632,66 +634,64 @@ GEM
     xpath (2.0.0)
       nokogiri (~> 1.3)
     yajl-ruby (1.2.1)
-    yard (0.8.7.3)
+    yard (0.8.7.6)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  activesupport-json_encoder
-  binding_of_caller
-  brakeman (>= 2.3.1)
+  activesupport-json_encoder!
+  binding_of_caller!
+  brakeman (>= 2.3.1)!
   capybara
   charlock_holmes
   codeclimate-test-reporter
-  coffee-rails (>= 4.0.0)
-  colored
+  coffee-rails (>= 4.0.0)!
+  colored!
   coveralls
   database_cleaner
   email_spec
   exception_notification
-  execjs
+  execjs!
   factory_girl_rails (>= 4.0.0)
   flamegraph
   fuubar
   gmaps4rails (~> 2.0.1)!
-  guard (~> 2.2.5)
-  guard-brakeman (>= 0.8.1)
-  guard-focus
-  guard-rspec
+  guard (~> 2.2.5)!
+  guard-brakeman (>= 0.8.1)!
+  guard-focus!
+  guard-rspec!
   guard-spork
-  jquery-rails (= 4.0.4)
-  json
+  json!
   launchy
-  letter_opener
-  mail!
+  letter_opener!
   mailman
-  meta_request
-  mysql2
+  meta_request!
+  mysql2!
   newrelic_rpm
-  nokogiri
+  nokogiri!
   poltergeist (= 1.5.0)
   prawn!
-  protected_attributes
+  protected_attributes!
   pry
   rack-mini-profiler
   rack-timeout
-  rails (~> 4.2.1)
-  redcarpet
-  rspec-rails
+  rails (~> 4.2.1)!
+  redcarpet!
+  rspec-rails!
   rspec-rerun!
-  sass-rails (>= 4.0.3)
+  sass-rails (>= 4.0.3)!
   sidekiq (~> 3.5.1)
   sidekiq-failures
   simplecov
   spork
-  therubyracer
+  therubyracer!
   tilt (~> 1.4.1)
   timecop
-  transaction_retry
+  transaction_retry!
   turbolinks (>= 3.0)!
   turnout
-  uglifier (>= 1.3.0)
-  unicorn
-  yard
+  uglifier (>= 1.3.0)!
+  unicorn!
+  yard!
   your_platform!

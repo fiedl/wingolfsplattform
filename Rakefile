@@ -6,7 +6,10 @@ require File.expand_path('../config/application', __FILE__)
 require 'rspec/core/rake_task'
 require 'rspec-rerun'
 
-Wingolfsplattform::Application.load_tasks
+# Do not load the application tasks for the moment, which would
+# invoke test:prepare, which has been dropped.
+# 
+# # Wingolfsplattform::Application.load_tasks
 
 pattern = "{./spec/**/*_spec.rb,./vendor/engines/**/spec/**/*_spec.rb}"
 
