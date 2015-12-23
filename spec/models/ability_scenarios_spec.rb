@@ -258,4 +258,17 @@ describe Ability do
     
     he { should be_able_to :create_account_for, @other_member }
   end
+  
+  describe "Lokaler Seiten-Admin, z.B. für die Rubrik Wingolfsblätter" do
+    before do
+      @page = create :page
+      @page.admins << user
+      @subpage = @page.child_pages.create title: "Subpage"
+      @attachment = @subpage.attachments.create title: "Some Document"
+    end
+    
+    he { should be_able_to :manage, @page }
+    he { should be_able_to :manage, @subpage }
+    he { should be_able_to :manage, @attachment }
+  end
 end

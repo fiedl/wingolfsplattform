@@ -102,6 +102,9 @@ module AbilityDefinitions
       can :manage, Page do |page|
         page.admins_of_self_and_ancestors.include? user
       end
+      can :manage, Attachment do |attachment|
+        can? :manage, attachment.parent
+      end
 
       can :manage, ProfileField do |profile_field|
         profile_field.profileable.nil? ||  # in order to create profile fields
