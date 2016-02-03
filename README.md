@@ -83,7 +83,7 @@ Der abstrakte Teil des Quellcodes, d.h. derjenige Teil, der auch von anderen Org
 
 ### Urheber, Mitarbeiter und Lizenz
 
-Copyright (c) 2012-2015, Sebastian Fiedlschuster
+Copyright (c) 2012-2016, Sebastian Fiedlschuster
 
 Mitarbeiter: Jörg Reichardt, Manuel Zerpies, Joachim Back
 
