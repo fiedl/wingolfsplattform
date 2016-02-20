@@ -72,7 +72,19 @@
     = link_to group_path(@philister, :format => :xls, :list => :special_birthdays, quater: 4), class: 'btn btn-default' do
       = excel_icon
       Quartal 4
-  
+
+%h1 Unsere Toten exportieren
+%div
+  %p Liste der zuletzt verstorbenen Wingolfiten exportieren.
+  %p
+    Die folgende Liste enthält die Verstorbenen der letzten zwölf Monate, sortiert nach dem Sterbedatum.
+    Bitte händisch mit den
+    = link_to "letzten Wingolfsblättern", @wbl_page
+    abgleichen, sodass die bereits veröffentlichten Todesfälle nicht nocheinmal abgedruckt werden.
+  %p
+    = link_to group_path(@verstorbene, format: :xls, list: :deceased_members), class: 'btn btn-default' do
+      = excel_icon
+      Liste unserer Toten der letzten zwölf Monate
   
 
 %h1 Wingolfsblätter-PDF hochladen

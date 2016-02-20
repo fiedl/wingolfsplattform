@@ -3,6 +3,7 @@ de:
   bvs_parent:                     Bezirksverbände
   bv_name:                        Bezirksverband
   bv_token:                       BV
+  last_bv_name:                   BV
 
   alle_wingolfiten:               Alle Wingolfiten
   alle_aktiven:                   Alle Aktiven
@@ -33,4 +34,3 @@ de:
   alle_wv_administratoren:        Alle Aktiven-Administratoren
   alle_phv_administratoren:       Alle PhV-Administratoren
   alle_bv_administratoren:        Alle BV-Administratoren
-  

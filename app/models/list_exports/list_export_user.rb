@@ -11,5 +11,9 @@ module ListExports
       bv.try(:token)
     end
     
+    def last_bv_name
+      self.memberships.with_past.where(ancestor_type: 'Group', ancestor_id: Bv.pluck(:id)).order(:valid_from).last.try(:group).try(:token)
+    end
+    
   end
 end
