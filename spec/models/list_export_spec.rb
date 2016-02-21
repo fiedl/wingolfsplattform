@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ListExport do
   
   before do
-    @group = create :group
+    @group = create :group, name: "Gruppe"
     @corporation = create :corporation_with_status_groups
     @bv = create :bv_group, name: 'BV 01', token: 'BV 01'
     @user = create :user
@@ -50,16 +50,16 @@ describe ListExport do
       @user.profile_fields.create(type: 'ProfileFieldTypes::AcademicDegree', value: "Dr. rer. nat.", label: :academic_degree)
       @user.profile_fields.create(type: 'ProfileFieldTypes::General', value: "Dr.", label: :personal_title)
       
-      @list_export = ListExport.new(@group.members, :name_list)
+      @list_export = ListExports::NameList.from_group(@group)
     end
     describe "#headers" do
       subject { @list_export.headers }
-      it { should == ['Nachname', 'Vorname', 'Aktivitätszahl', 'Persönlicher Titel', 'Akademischer Grad', 'BV'] }
+      it { should == ['Nachname', 'Vorname', 'Aktivitätszahl', 'Persönlicher Titel', 'Akademischer Grad', "Mitglied in 'Gruppe' seit", 'BV'] }
     end
     describe "#to_csv" do
       subject { @list_export.to_csv }
-      it { should == "Nachname;Vorname;Aktivitätszahl;Persönlicher Titel;Akademischer Grad;BV\n" +
-        "#{@user.last_name};#{@user.first_name};#{@user_title_without_name};Dr.;Dr. rer. nat.;BV 01\n" }
+      it { should == "Nachname;Vorname;Aktivitätszahl;Persönlicher Titel;Akademischer Grad;Mitglied in 'Gruppe' seit;BV\n" +
+        "#{@user.last_name};#{@user.first_name};#{@user_title_without_name};Dr.;Dr. rer. nat.;#{I18n.l Date.today};BV 01\n" }
     end
   end
   
