@@ -1,5 +1,5 @@
 Rails.application.config.middleware.use ExceptionNotification::Rack, {
-  ignore_exceptions: ExceptionNotifier.ignored_exceptions + [],
+  ignore_exceptions: ExceptionNotifier.ignored_exceptions + [ActionController::MissingFile],
   :email => {
     :email_prefix => "[ERROR] ",
     :sender_address => %{"Plattform-Fehler" <noreply@wingolfsplattform.org>},
