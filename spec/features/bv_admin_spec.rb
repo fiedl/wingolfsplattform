@@ -108,19 +108,19 @@ feature "BV-Admins" do
     
     visit group_path(@bv)
     within ".box.first" do
-      page.should have_text I18n.t(:edit), visible: true
+      page.should have_selector '.edit_button', visible: true
     end
     within ".role-preview-switcher" do
       click_on I18n.t(:officer)
     end
     within ".box.first" do
-      page.should have_no_text I18n.t(:edit), visible: true
+      page.should have_no_selector '.edit_button', visible: true
     end
     within ".role-preview-switcher" do
       click_on I18n.t(:admin)
     end
     within ".box.first" do
-      page.should have_text I18n.t(:edit), visible: true
+      page.should have_selector '.edit_button', visible: true
     end
   end
   
