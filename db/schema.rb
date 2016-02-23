@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151120071649) do
+ActiveRecord::Schema.define(version: 20160211120134) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 20151120071649) do
     t.string   "plz",        limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.string   "town",       limit: 255
   end
 
   create_table "comments", force: :cascade do |t|
@@ -246,6 +247,7 @@ ActiveRecord::Schema.define(version: 20151120071649) do
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.datetime "read_at"
+    t.datetime "failed_at"
   end
 
   create_table "pages", force: :cascade do |t|
@@ -256,6 +258,7 @@ ActiveRecord::Schema.define(version: 20151120071649) do
     t.string   "redirect_to",    limit: 255
     t.integer  "author_user_id", limit: 4
     t.string   "type",           limit: 255
+    t.datetime "archived_at"
   end
 
   add_index "pages", ["author_user_id"], name: "pages_author_user_id_fk", using: :btree
@@ -284,6 +287,7 @@ ActiveRecord::Schema.define(version: 20151120071649) do
     t.text     "entire_message",  limit: 65535
     t.string   "message_id",      limit: 255
     t.string   "content_type",    limit: 255
+    t.string   "sent_via",        limit: 255
   end
 
   add_index "posts", ["author_user_id"], name: "posts_author_user_id_fk", using: :btree
