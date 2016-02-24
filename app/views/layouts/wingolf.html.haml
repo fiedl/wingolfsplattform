@@ -35,6 +35,7 @@
                   %ul.dropdown-menu
                     %li.user_name= current_user.title
                     %li.user_email= current_user.email
+                    %li= link_to t(:my_posts), posts_path
                     %li= link_to t(:my_profile), current_user
                     %li= link_to t(:change_avatar), user_path(current_user, trigger_change_avatar: true)
                     %li= link_to t(:change_password), change_password_path
