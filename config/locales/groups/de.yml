@@ -4,6 +4,9 @@ de:
   bv_name:                        Bezirksverband
   bv_token:                       BV
   last_bv_name:                   BV
+  im_bv_seit:                     Im BV seit
+
+  stammdaten:                     Stammdaten
 
   alle_wingolfiten:               Alle Wingolfiten
   alle_aktiven:                   Alle Aktiven

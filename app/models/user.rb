@@ -23,6 +23,9 @@ class User
     aktiver?
     philister?
     
+    status_export_string
+    studium_export_string
+    
     date_of_birth
     date_of_death  
     birthday_this_year
@@ -435,6 +438,26 @@ class User
       status_memberships << self.current_status_membership_in(c)
     end
     return status_memberships
+  end
+  
+  def status_export_string
+    #cached {
+      self.corporations.collect do |corporation|
+        if membership = self.current_status_membership_in(corporation)
+          "#{membership.group.name.singularize} im #{corporation.name} seit #{I18n.localize(membership.valid_from.to_date) if membership.valid_from}"
+        else
+          ""
+        end
+      end.join("\n")
+      #}
+  end
+  
+  def studium_export_string
+    #cached { 
+      self.profile_fields.where(type: "ProfileFieldTypes::Study").collect do |study|
+        "Studium der #{study.subject} an der #{study.university} vom #{study.from} bis #{study.to}"
+      end.join("\n")
+      #}
   end
   
   

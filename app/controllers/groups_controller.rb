@@ -16,6 +16,8 @@ module GroupsControllerOverride
     case list_preset
     when 'wingolfsblaetter'
       ListExports::Wingolfsblaetter.from_group(@group)
+    when 'stammdaten'
+      ListExports::Stammdaten.from_group(@group) if can? :export, :stammdaten
     else
       super(list_preset)  
     end

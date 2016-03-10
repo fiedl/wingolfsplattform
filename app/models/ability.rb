@@ -90,6 +90,9 @@ module AbilityDefinitions
       
       can [:update, :change_first_name, :change_alias, :change_status, :create_account_for], User, id: Role.of(user).administrated_users.map(&:id)
       can :manage, UserAccount, user_id: Role.of(user).administrated_users.map(&:id)
+      can :update_members, Group do |group|
+        can? :update, group
+      end
 
       can :execute, Workflow do |workflow|
         # Local admins can execute workflows of groups they're admins of.
