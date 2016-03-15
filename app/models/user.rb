@@ -441,7 +441,7 @@ class User
   end
   
   def status_export_string
-    #cached {
+    cached {
       self.corporations.collect do |corporation|
         if membership = self.current_status_membership_in(corporation)
           "#{membership.group.name.singularize} im #{corporation.name} seit #{I18n.localize(membership.valid_from.to_date) if membership.valid_from}"
@@ -449,11 +449,11 @@ class User
           ""
         end
       end.join("\n")
-      #}
+    }
   end
   
   def studium_export_string
-    #cached { 
+    #cached {  # TODO RESET THIS CACHE WHEN PROFILE FIELD STUDY HAS CHANGED
       self.profile_fields.where(type: "ProfileFieldTypes::Study").collect do |study|
         "Studium der #{study.subject} an der #{study.university} vom #{study.from} bis #{study.to}"
       end.join("\n")
