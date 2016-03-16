@@ -259,6 +259,12 @@ module AbilityDefinitions
     end
   end
   
+  def rights_for_beta_testers
+    super
+    
+    can :export, :stammdaten
+  end
+  
 end
 
 class Ability
