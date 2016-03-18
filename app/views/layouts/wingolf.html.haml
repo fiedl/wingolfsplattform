@@ -29,8 +29,9 @@
                   %span.user_avatar
                     = render 'layouts/session_bar_avatar'
                   %span.user_name#user_name{data: {email: current_user.email, id: current_user.id, title: current_user.title}}
-                  - if can? :use, :merit
-                    = link_to merit_indicator(current_user), user_path(current_user) + "#merit"
+                    = link_to current_user.title, current_user
+                  -#- if can? :use, :merit
+                  -#  = link_to merit_indicator(current_user), user_path(current_user) + "#merit"
                   %b.caret
                   %ul.dropdown-menu
                     %li.user_name= current_user.title
