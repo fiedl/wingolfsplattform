@@ -1,0 +1,8 @@
+- active ||= 'general'
+
+%ul.nav.nav-tabs.user.user_tabs
+  %li{class: active == 'contact' ? 'active' : ''}
+    = link_to t(:contact), user_contact_information_path(@user)
+  %li{class: active == 'wingolf' ? 'active' : ''}
+    = link_to "Wingolf", user_wingolf_information_path(@user)
+  

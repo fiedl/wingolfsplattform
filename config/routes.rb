@@ -5,6 +5,10 @@ Rails.application.routes.draw do
   resources :groups, path: :aktivitates, as: :aktivitates
   resources :groups, path: :philisterschaften, as: :philisterschaften
   resources :groups, path: :bvs, as: :bvs
+  
+  resources :users do
+    get :wingolf, to: 'user_wingolf_information#index', as: 'wingolf_information'
+  end
 
   get :admins, to: 'admins#index'
   

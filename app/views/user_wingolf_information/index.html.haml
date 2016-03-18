@@ -1,0 +1,10 @@
+= render partial: 'users/tabs', locals: {active: 'wingolf'}
+
+#corporate_vita
+  - if @user.corporations.count > 0
+    %h1.section.corporate_vita= t :corporate_vita
+    %div
+      = render partial: 'users/workflow_triggers'
+      - if can? :manage, @user
+        = link_to t(:show_group_memberships), user_memberships_path(user_id: @user.id), class: 'btn btn-default right'
+      = corporate_vita_for_user @user
