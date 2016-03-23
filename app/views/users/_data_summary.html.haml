@@ -1,0 +1,6 @@
+= render file: YourPlatform::Engine.root.join('app/views/users/_data_summary').to_s, locals: {user: user}
+
+- if user.bv
+  %ul.attributes
+    %li= render partial: 'users/user_bv_attribute', locals: {user: user}
+    

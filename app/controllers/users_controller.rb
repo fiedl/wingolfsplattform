@@ -1,6 +1,6 @@
 require_dependency YourPlatform::Engine.root.join('app/controllers/users_controller').to_s
 
-class UsersController
+module UsersControllerModifications
   
   def new
     @title = "Aktivmeldung eintragen" # t(:create_user)
@@ -55,6 +55,19 @@ class UsersController
     end
   end
   
+  private
+  
+  def user_params
+    additional_permitted_keys = []
+    additional_permitted_keys += [:wingolfsblaetter_abo, :localized_bv_beitrittsdatum] if @user && can?(:update, @user)
+    super.merge params.require(:user).permit(*additional_permitted_keys)
+  end
+  
+end
+
+class UsersController
+  prepend UsersControllerModifications
+
   # This method asynchronously creates a new user when called like this:
   # 
   #    UsersController.delay.create_async(@basic_user_params, @user_params)
@@ -97,5 +110,5 @@ class UsersController
     user.delay.fill_cache
     Group.alle_aktiven.delay.fill_cache
   end
-  
+
 end
