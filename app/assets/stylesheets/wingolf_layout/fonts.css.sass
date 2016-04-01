@@ -11,13 +11,16 @@
 // For a short guide, see http://sass-lang.com/guide.
 //
 
+$sans_serif_fonts: "Helvetica Neue", "Helvetica", "Arial", "sans-serif"
+$serif_fonts: "AdobeGaramondPro", "serif"
+
 // Main Elements
 // ===================================================================================
 
 // Everything
 //
 body
-  font-family: 'AdobeGaramondPro'
+  font-family: $serif_fonts
 
 // Standard Content
 //
@@ -33,7 +36,7 @@ h2, .h2
 // Content Boxes
 //
 #content * .box
-  font-family: 'Helvetica Neue'
+  font-family: $sans_serif_fonts
 
   .head
     h1
@@ -50,7 +53,7 @@ h2, .h2
     h2, .h2
       font-size: 13pt
     div.page_header, .post-group
-      font-family: Helvetica-Neue, Helvetica, Arial
+      font-family: $sans_serif_fonts
       font-size: 7.5pt
 
 // Hyperlinks
@@ -115,7 +118,7 @@ a
 // Toolbar
 //
 #toolbar
-  font-family: 'AdobeGaramondPro', Helvetica
+  font-family: $serif_fonts
   font-weight: bold
   font-size: 13px
   text-decoration: none
@@ -132,17 +135,15 @@ a
     font-weight: bold
     
 #version_footer
-  font-family: 'AdobeGaramondPro', serif
+  font-family: $serif_fonts
   font-size: 8pt
 
 // Forms
 //
 input
-  //font-family: 'AdobeGaramondPro', Helvetica
   font-size: 12px
   font-weight: bold
 .text, .password
-  //font-family: 'AdobeGaramondPro', Helvetica
   font-size: 12px
   font-weight: bold
 .footnotes
@@ -157,7 +158,7 @@ textarea
   font-size: 11pt
   
 body.posts textarea  
-  font-family: Helvetica
+  font-family: $sans_serif_fonts
   
 .post-header
   font-size: 85%
@@ -185,7 +186,7 @@ ul.attributes, ul.profile_fields
 //div.tooltip.fade.in
 div.tooltip      
   font-size: 12pt
-  font-family: Helvetica, Arial, sans-serif
+  font-family: $sans_serif_fonts
 
 
 // Special Adjustments
@@ -198,7 +199,7 @@ div.tooltip
 li.nav-header
   font-weight: bold
   font-size: 11px
-  font-family: Helvetica
+  font-family: $sans_serif_fonts
   line-height: 20px
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5)
   text-transform: uppercase  
@@ -213,11 +214,11 @@ ul.ui-autocomplete
 // Bootstrap Buttons
 //
 .btn
-  font-family: 'Helvetica Neue'
+  font-family: $sans_serif_fonts
   
 // Popovers
 .popover
-  font-family: FontAwesome
+  font-family: $sans_serif_fonts
   font-size: 11pt
   .popover-title
     font-weight: bold
@@ -262,10 +263,9 @@ div.workflow_steps
 
 // Events
 span.event.info
-  font-family: FontAwesome
+  font-family: $sans_serif_fonts
   font-size: 8pt
 span.event.name
-  //font-family: FontAwesome
   font-size: 11pt
   
 // Terms of Use
@@ -281,13 +281,13 @@ form#new_user
   input
     font-size: 11pt
     font-weight: normal
-    font-family: FontAwesome
+    font-family: $sans_serif_fonts
 
 
 // Change Password
 .password_strength_desc
   font-size: 14pt
-  font-family: Helvetica
+  font-family: $sans_serif_fonts
 .confirm_password_change 
   label
     font-size: 12pt
