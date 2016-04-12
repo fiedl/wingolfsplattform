@@ -1,12 +1,14 @@
+@import "_colors"
+
 #backendBar
-  background: #7e0f0d
+  background: $signed-in-bar-bgcolor
   height: 45px
   .content
     width: 846px
     margin: 0 auto
     position: relative
     a
-      color: #fff
+      color: $signed-in-bar-color
     ul.backendBarItems
       margin: 0px
       padding: 0px
@@ -44,9 +46,9 @@
           /*border:1px #d5d2cc solid;
           background: repeat #e8e5de
           background-image: image-url("content_wrapper.gif")
-          color: #7e0f0d
+          color: $link-color
           a
-            color: #7e0f0d
+            color: $link-color
       li.backendBarItem.dropdown
         ul.dropdown-menu
           padding: 8px
@@ -69,7 +71,7 @@
         li.backendBarItem.dropdown.active
           background: repeat #f8f5ee
           a
-            color: #7e0f0d
+            color: $link-color
               
       li.backendBarItem.dropdown:hover
         ul.dropdown-menu
@@ -78,5 +80,5 @@
     border-top-color: white
   a:hover
     b.caret
-      border-top-color: #7e0f0d
+      border-top-color: $link-color
       

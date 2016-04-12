@@ -196,6 +196,9 @@ class Group
   def self.alle_philister
     self.find_or_create_special_group :alle_philister
   end
+  def self.alle_verstorbenen_wingolfiten
+    self.find_or_create_by name: "Alle Verstorbenen Wingolfiten"
+  end
   def self.alle_amtstraeger
     alle_wingolfiten.find_or_create_special_group :alle_amtstraeger
   end

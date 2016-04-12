@@ -90,6 +90,9 @@ module AbilityDefinitions
       
       can [:update, :change_first_name, :change_alias, :change_status, :create_account_for], User, id: Role.of(user).administrated_users.map(&:id)
       can :manage, UserAccount, user_id: Role.of(user).administrated_users.map(&:id)
+      can :update_members, Group do |group|
+        can? :update, group
+      end
 
       can :execute, Workflow do |workflow|
         # Local admins can execute workflows of groups they're admins of.
@@ -101,6 +104,9 @@ module AbilityDefinitions
 
       can :manage, Page do |page|
         page.admins_of_self_and_ancestors.include? user
+      end
+      can :manage, Attachment do |attachment|
+        can? :manage, attachment.parent
       end
 
       can :manage, ProfileField do |profile_field|
@@ -251,6 +257,12 @@ module AbilityDefinitions
     cannot [:create_post_for, :create_post, :create_event_for, :create_event], Group do |group|
       group.name.try(:include?, "Verstorbene")
     end
+  end
+  
+  def rights_for_beta_testers
+    super
+    
+    can :export, :stammdaten
   end
   
 end

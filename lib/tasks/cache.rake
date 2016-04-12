@@ -119,6 +119,11 @@ namespace :cache do
     ListExports::SpecialBirthdays.from_group(@philister).to_csv if @philister
     ListExports::SpecialBirthdays.from_group(@philister).to_xls if @philister
     
+    log.info "* Unsere Toten ..."
+    @verstorbene = Group.alle_verstorbenen_wingolfiten
+    ListExports::DeceasedMembers.from_group(@verstorbene).to_csv if @verstorbene
+    ListExports::DeceasedMembers.from_group(@verstorbene).to_xls if @verstorbene
+    
     log.success "\nFertig."
   end
 end

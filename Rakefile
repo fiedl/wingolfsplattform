@@ -6,7 +6,16 @@ require File.expand_path('../config/application', __FILE__)
 require 'rspec/core/rake_task'
 require 'rspec-rerun'
 
+# This is needed for `rake db:migrate` et cetera:
+#
 Wingolfsplattform::Application.load_tasks
+
+# This is a hack to fix "Don't know how to build task 'test:prepare'":
+# https://github.com/rspec/rspec-rails/issues/936#issuecomment-36129887
+#
+task 'test:prepare' do
+  p "test:prepare: THIS TASK DOESN'T DO ANYTHING ANYMORE."
+end
 
 pattern = "{./spec/**/*_spec.rb,./vendor/engines/**/spec/**/*_spec.rb}"
 

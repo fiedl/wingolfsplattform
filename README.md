@@ -6,6 +6,7 @@
 [![Build Status on master](https://travis-ci.org/fiedl/wingolfsplattform.png?branch=master "master")](https://travis-ci.org/fiedl/wingolfsplattform)
 [![Code Climate](https://codeclimate.com/github/fiedl/wingolfsplattform/badges/gpa.svg)](https://codeclimate.com/github/fiedl/wingolfsplattform)
 [![Dependency Status](https://gemnasium.com/fiedl/wingolfsplattform.png)](https://gemnasium.com/fiedl/wingolfsplattform)
+[![security](https://hakiri.io/github/fiedl/wingolfsplattform/master.svg)](https://hakiri.io/github/fiedl/wingolfsplattform/master)
 
 Dies ist der Quellcode der entstehenden neuen Plattform von Wingolfsbund und VAW, der sog. **Wingolfsplattform**. Die Plattform soll vier Hauptaufgaben erfüllen: Hilfestellung bei der Verwaltung der Mitglieder des Wingolfs, Netzwerk der Mitglieder, Austausch von Informationen und Dokumenten, Präsentation nach außen. 
 Nähere Informationen zum Anforderungsspektrum unter http://wingolf.org/ak-internet.
@@ -82,7 +83,7 @@ Der abstrakte Teil des Quellcodes, d.h. derjenige Teil, der auch von anderen Org
 
 ### Urheber, Mitarbeiter und Lizenz
 
-Copyright (c) 2012-2015, Sebastian Fiedlschuster
+Copyright (c) 2012-2016, Sebastian Fiedlschuster
 
 Mitarbeiter: Jörg Reichardt, Manuel Zerpies, Joachim Back
 

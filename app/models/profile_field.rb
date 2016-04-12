@@ -8,6 +8,16 @@ require_dependency YourPlatform::Engine.root.join( 'app/models/profile_field' ).
 #
 class ProfileField
   
+  after_save { adopt_profileable_bv }
+  
+  def adopt_profileable_bv
+    if self.kind_of?(ProfileFieldTypes::Address) && self.profileable.kind_of?(User) && self.profileable.alive? && self.profileable.wingolfit?
+      self.profileable.adapt_bv_to_postal_address
+    elsif self.parent.kind_of?(ProfileFieldTypes::Address)
+      self.parent.adopt_profileable_bv
+    end
+  end
+  
   # List all possible types. This is needed for code injection security checks.
   #
   self.singleton_class.send :alias_method, :orig_possible_types, :possible_types

@@ -8,7 +8,7 @@ require_dependency YourPlatform::Engine.root.join( 'app/models/user' ).to_s
 # this re-opened class contains all wingolf-specific additions to the user model.
 #
 class User
-  attr_accessible :wingolfsblaetter_abo, :hidden
+  attr_accessible :wingolfsblaetter_abo, :hidden, :localized_bv_beitrittsdatum
   
   # This method is called by a nightly rake task to renew the cache of this object.
   #
@@ -22,6 +22,9 @@ class User
     w_nummer
     aktiver?
     philister?
+    
+    status_export_string
+    studium_export_string
     
     date_of_birth
     date_of_death  
@@ -109,6 +112,18 @@ class User
   
   def bv_beitrittsdatum
     bv_membership.valid_from if bv
+  end
+  
+  def localized_bv_beitrittsdatum
+    I18n.localize bv_beitrittsdatum.to_date if bv_beitrittsdatum
+  end
+  def localized_bv_beitrittsdatum=(str)
+    if str == "-"
+      self.bv_membership.valid_from = nil
+    else
+      self.bv_membership.valid_from = str.to_date.to_datetime
+    end
+    self.bv_membership.save
   end
   
   # Diese Methode gibt den BV zurück, dem der Benutzer aufgrund seiner Postanschrift
@@ -435,6 +450,26 @@ class User
       status_memberships << self.current_status_membership_in(c)
     end
     return status_memberships
+  end
+  
+  def status_export_string
+    cached {
+      self.corporations.collect do |corporation|
+        if membership = self.current_status_membership_in(corporation)
+          "#{membership.group.name.singularize} im #{corporation.name} seit #{I18n.localize(membership.valid_from.to_date) if membership.valid_from}"
+        else
+          ""
+        end
+      end.join("\n")
+    }
+  end
+  
+  def studium_export_string
+    #cached {  # TODO RESET THIS CACHE WHEN PROFILE FIELD STUDY HAS CHANGED
+      self.profile_fields.where(type: "ProfileFieldTypes::Study").collect do |study|
+        "Studium der #{study.subject} an der #{study.university} vom #{study.from} bis #{study.to}"
+      end.join("\n")
+      #}
   end
   
   

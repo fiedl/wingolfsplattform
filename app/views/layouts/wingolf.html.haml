@@ -29,12 +29,14 @@
                   %span.user_avatar
                     = render 'layouts/session_bar_avatar'
                   %span.user_name#user_name{data: {email: current_user.email, id: current_user.id, title: current_user.title}}
-                  - if can? :use, :merit
-                    = link_to merit_indicator(current_user), user_path(current_user) + "#merit"
+                    = link_to current_user.title, current_user
+                  -#- if can? :use, :merit
+                  -#  = link_to merit_indicator(current_user), user_path(current_user) + "#merit"
                   %b.caret
                   %ul.dropdown-menu
                     %li.user_name= current_user.title
                     %li.user_email= current_user.email
+                    %li= link_to t(:my_posts), posts_path
                     %li= link_to t(:my_profile), current_user
                     %li= link_to t(:change_avatar), user_path(current_user, trigger_change_avatar: true)
                     %li= link_to t(:change_password), change_password_path
@@ -97,8 +99,7 @@
                 - if show_vertical_nav?
                   .content_twoCols.content_twoCols-20-80
                     .content_twoCols_left.hidden-print
-                      = vertical_nav
-                      = render partial: 'last_seen_activities/index'
+                      = render partial: 'layouts/vertical_nav'
                     .content_twoCols_right
                       #flash{data: {'turbolinks-temporary' => true}}= flash_area
                       = render partial: 'shared/read_only_mode_notice' if read_only_mode?

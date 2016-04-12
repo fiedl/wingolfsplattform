@@ -35,6 +35,8 @@ feature 'Status Promotion' do
     page.should have_text @user_to_promote.name
     page.should have_selector '.workflow_triggers'
     
+    within("#corporate_vita") { page.should have_text @corporation.status_groups.second.name.singularize }
+    
     @user_to_promote.should be_member_of @corporation.status_groups.second
     @user_to_promote.should_not be_member_of @corporation.status_groups.first
   end

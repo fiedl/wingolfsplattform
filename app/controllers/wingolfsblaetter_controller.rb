@@ -9,6 +9,7 @@ class WingolfsblaetterController < ApplicationController
     @eisenberg = User.where(last_name: "Eisenberg", first_name: "Reinke").first
     @statistics_preset = 'aktivitates_join_and_persist_statistics'
     @philister = Group.alle_philister
+    @verstorbene = Group.alle_verstorbenen_wingolfiten
 
     @wbl_page = Page.where(title: "Wingolfsblätter").first
     @wbl_blog_post = @wbl_page.blog_entries.reorder(:created_at).last
