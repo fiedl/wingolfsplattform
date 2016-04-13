@@ -313,9 +313,6 @@ namespace :import do
       # Fragen, ob folgende Philister im Wunsch-BV (links) sind oder neu zugeordnet (rechts)
       # werden müssen:
       #
-      # * (663) Werner Berkenbrink CaCl58, wohnhaft in 40822 Mettmann: BV 19b -> BV 18
-      # * (1044) Jürgen Donnerstag Kö61 H05, wohnhaft in 45359 Essen: BV 19c -> BV 19a
-      # * (1403) Manfred Gesien G67 Kg97, wohnhaft in 42657 Solingen: BV 19b -> BV 18
       # * (2365) Karsten Kümmel T88 Je Nstft 91, wohnhaft in 49084 Osnabrück: BV 07 -> BV 12
       # * (2778) Reinhard Morgenstern Fr62, wohnhaft in 79361 Sasbach: BV 45 -> BV 33
       # * (2967) Fritz Ulrich Olbricht St79, wohnhaft in 22605 Hamburg: BV 01 -> BV 02
