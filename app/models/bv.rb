@@ -1,19 +1,20 @@
 class Bv < Group
   after_save { Bv.bvs_parent << self }
-  
+
   def self.by_town_and_plz(town, plz)
     town = Bv.modify_town_for_loopup(town) if town  # Klammern entfernen etc., z.B. "Halle (Saale)" -> "Halle"
-    
+
     bv_tokens = BvMapping
       .where(plz: plz)
       .where('town LIKE ?', "#{town}%")  # z.B. für "Freiburg" in "Freiburg im Breisgau". Vor der Stadt darf aber nichts kommen: Sonst bekommt man Probleme mit "Neuendorf b. Elmshorn", das sonst auch für "Elmshorn" gehalten werden kann.
       .pluck(:bv_name).uniq
+    #binding.pry if bv_tokens.count > 1
     raise("Der Wohnort '#{plz} #{town}' kann nicht eindeutig einem BV zugeordnet werden.") if bv_tokens.count > 1
-    
+
     bv_token = bv_tokens.first
     Bv.where(token: bv_token).first
   end
-  
+
   def self.by_address(address_string)
     geo_location = GeoLocation.find_or_create_by address: address_string
     self.by_geo_location(geo_location)
@@ -26,7 +27,7 @@ class Bv < Group
   def self.by_geo_location( geo_location )
     self.by_country_code_and_town_and_plz geo_location.country_code, geo_location.city, geo_location.plz
   end
-  
+
   def self.by_country_code_and_town_and_plz(country_code, town, plz)
     country_code = country_code.upcase
 
@@ -61,7 +62,7 @@ class Bv < Group
     Bv.unassign_user user
     super(user, options)
 
-    # TODO: Hier muss noch der entsprechende Workflow später getriggert werden, 
+    # TODO: Hier muss noch der entsprechende Workflow später getriggert werden,
     # damit die automatischen Benachrichtigungen versandt werden.
   end
 
@@ -70,8 +71,8 @@ class Bv < Group
     old_bv = user.bv
     old_bv.try(:unassign_user, user)
   end
-  
-  
+
+
   def self.modify_town_for_loopup(town)
     town = town.gsub(/\(.*\)/, "").strip if town  # Klammern entfernen, z.B. "Halle (Saale)" -> "Halle"
     town = town.gsub("Munich", "München")
@@ -79,7 +80,7 @@ class Bv < Group
     town = town.gsub("Nuremberg", "Nürnberg")
     town = town.gsub("Brunswick", "Braunschweig")
     town = town.gsub("Giessen", "Gießen")
-    
+
     return town
   end
 

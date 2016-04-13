@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 20160320235944) do
     t.string   "plz",        limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.string   "town",       limit: 255
   end
 
   create_table "comments", force: :cascade do |t|
