@@ -322,18 +322,6 @@ namespace :import do
       # * (3517) Karl Helmut Schlösser Si74, wohnhaft in 40723 Hilden: BV 38 -> BV 19b
       # * (4847) Dennis Lohmann Je04, wohnhaft in  Belfast: BV 12 -> BV 45
       # * (4917) André Dürrbeck Fr05 W08, wohnhaft in 81925 München: BV 46 -> BV 38
-      #
-      # Problemfälle, die händisch zu überprüfen sind, z.B. aufgrund falschen Adressformates:
-      #
-      # * (704) Felix Blank Wi99, wohnhaft in 1030 Wien: BV 43 ->
-      # * (1424) Sebastian Gimbel Wi97, wohnhaft in 1010 Wien: BV 43 ->
-      # * (2100) Gerd Ferdinand Kirchhoff Mch60, wohnhaft in Ibaraki-ken 310-8585 Mito-shi: BV 46 ->
-      # * (2510) Carsten Lippold CaCl87 R90, wohnhaft in  Qingdao: BV 46 -> BV 45
-      # * (2740) Klaus Minges Fr79, wohnhaft in RSA-7806 Hout Bay: BV 46 ->
-      # * (3090) Horst Pichler Wi99, wohnhaft in 1140 Wien: BV 43 ->
-      # * (3336) Udo Rosenboom CaCl54 Be56, wohnhaft in 82113 JL Raya Tanah Lot, Desa Beraban - TABANAN / Bali: BV 46 ->
-      # * (3815) Jörn Heinrich Sommer Dst95, wohnhaft in 8660 Skanderborg: BV 45 ->
-      # * (4712) Markus Handke Gi92, wohnhaft in B-1000 Brüssel: BV 45 ->
 
       # Ältere Anläufe zur Archivierung:
       #
