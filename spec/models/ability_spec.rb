@@ -1,9 +1,9 @@
 require 'spec_helper'
 require 'cancan/matchers'
 
-# In order to call the user "he" rather than "it", 
+# In order to call the user "he" rather than "it",
 # we have to define an alias here.
-# 
+#
 # http://stackoverflow.com/questions/12317558/alias-it-in-rspec
 #
 RSpec.configure do |c|
@@ -11,32 +11,32 @@ RSpec.configure do |c|
 end
 
 describe Ability do
-  
+
   # I'm sorry. I do have problems with cancan's terminology, here.
-  # For me, the User can do something, i.e. I would ask 
+  # For me, the User can do something, i.e. I would ask
   #
   #   @user.can? :manage, @page
   #
-  # But for cancan, it's 
+  # But for cancan, it's
   #
   #   Ability.new(@user).can? :manage, @page
   #
   # That is why I let(:the_user) be the ability.
   # Also note, "he" refers to the regular "it" call.
   # I just like to call the user "he" rather than "it".
-  #  
+  #
   describe "for users with account" do
     let(:user) { create(:user_with_account) }
     let(:ability) { Ability.new(user) }
     subject { ability }
     let(:the_user) { subject }
-        
-    # 
+
+    #
     # Regular Users
-    # 
-    
+    #
+
     he { should be_able_to :index, :admins }
-      
+
     he "should be able to update his own record with a few exceptions" do
       the_user.should be_able_to :update, user
       the_user.should be_able_to :change_first_name, user
@@ -46,7 +46,7 @@ describe Ability do
     end
     he "should be able to edit his own profile fields" do
       @profile_field = user.profile_fields.create(type: "ProfileFieldTypes::Phone", value: "123-456789")
-    
+
       the_user.should be_able_to :create, ProfileField.new
       the_user.should be_able_to :read, @profile_field
       the_user.should be_able_to :update, @profile_field
@@ -71,7 +71,7 @@ describe Ability do
     he "should not be able to destroy his account" do
       the_user.should_not be_able_to :destroy, user.account
     end
-    
+
     he "should be able to read anything (exceptions are below)" do
       @page = create(:page)
       @group = create(:group)
@@ -96,14 +96,14 @@ describe Ability do
     end
     he "should not be able to see the temporary activity log." do
       PublicActivity::Activity.create
-      
+
       the_user.should_not be_able_to :read, PublicActivity::Activity
       the_user.should_not be_able_to :read, PublicActivity::Activity.first
     end
     he "should not be able to export the member list" do
       the_user.should_not be_able_to :export_member_list, @group
-    end 
-    
+    end
+
     context "(reading pages and documents)" do
       before do
         @group = create(:group)
@@ -151,7 +151,7 @@ describe Ability do
         he { should be_able_to :read, @page_without_group }
       end
     end
-    
+
     context "(joining events)" do
       before do
         @group = create :group
@@ -165,7 +165,7 @@ describe Ability do
       he { should_not be_able_to :index_event, create(:user) }
       he { should be_able_to :index_events, @group}
     end
-    
+
     describe "if other users are hidden" do
       before do
         @hidden_user = create(:user)
@@ -184,7 +184,7 @@ describe Ability do
         the_user.should be_able_to :read, user
       end
     end
-    
+
     describe "(auto-completion)" do
       he "should be able to use a name-auto-complete list" do
         the_user.should be_able_to :autocomplete_title, User
@@ -193,7 +193,7 @@ describe Ability do
         Ability.new(nil).should_not be_able_to :autocomplete_title, User
       end
     end
-    
+
     describe "(exporting lists)" do
       before do
         @group = create :group
@@ -215,7 +215,7 @@ describe Ability do
         he { should_not be_able_to :export_member_list, @other_corporation }
         he { should_not be_able_to :export_member_list, @bv }
       end
-      
+
       describe "being Fux of a corporation" do
         before { @corporation.status_group('Brandfuxen') << user }
         he { should_not be_able_to :export_member_list, @corporation }
@@ -226,7 +226,7 @@ describe Ability do
         he { should_not be_able_to :export_member_list, @other_corporation }
         he { should_not be_able_to :export_member_list, @bv }
       end
-    
+
       describe "being Philister of a corporation" do
         before { @corporation.status_group('Philister') << user }
         he { should be_able_to :export_member_list, @corporation }
@@ -237,7 +237,7 @@ describe Ability do
         he { should_not be_able_to :export_member_list, @other_corporation }
         he { should_not be_able_to :export_member_list, @bv }
       end
-      
+
       describe "being member of a BV" do
         before { @bv << user }
         he { should_not be_able_to :export_member_list, @corporation }
@@ -249,11 +249,11 @@ describe Ability do
         he { should be_able_to :export_member_list, @bv }
       end
     end
-    
+
     #
     # Officers
     #
-    
+
     context "when the user is officer of a group" do
       before do
         @group = create :group
@@ -278,7 +278,7 @@ describe Ability do
           the_user.should_not be_able_to :export_member_list, @parent_group
         end
       end
-    
+
       describe "(events)" do
         he "should be able to create an event in his group" do
           the_user.should be_able_to :create_event, @group
@@ -303,7 +303,7 @@ describe Ability do
           the_user.should be_able_to :update, @event.contact_people_group
         end
       end
-      
+
       describe "(pages and uploads)" do
         describe "(update pages)" do
           he "should be able to update pages he has created within his group" do
@@ -331,7 +331,7 @@ describe Ability do
             the_user.should_not be_able_to :update, @page
           end
         end
-        
+
         describe "(create pages)" do
           he "should be able to create pages under his group" do
             the_user.should be_able_to :create_page_for, @group
@@ -350,7 +350,7 @@ describe Ability do
             the_user.should_not be_able_to :create_page_for, @unrelated_group
           end
         end
-        
+
         # describe "(destroy pages)" do
         #   he "should be able to destroy his own pages within his group" do
         #     @page = @group.child_pages.create author: user
@@ -365,7 +365,7 @@ describe Ability do
         #     the_user.should_not be_able_to :destroy, @page
         #   end
         # end
-        
+
         describe "(adding attachments)" do
           describe "(while officer)" do
             he "should be able to add attachments to his own pages" do
@@ -388,7 +388,7 @@ describe Ability do
             end
           end
         end
-        
+
         describe "(updating attachments)" do
           describe "(while officer)" do
             he "should be able to update attachments to his own pages" do
@@ -423,7 +423,7 @@ describe Ability do
           #   end
           # end
         end
-        
+
         describe "(destroying attachments)" do
           describe "(while officer)" do
             he "should be able to destroy attachments to his own pages" do
@@ -455,10 +455,10 @@ describe Ability do
           #   end
           # end
         end
-        
+
       end
     end
-    
+
     context "when the user is officer of an Aktivitas" do
       before do
         @corporation = create :wingolf_corporation
@@ -470,11 +470,11 @@ describe Ability do
       he { should be_able_to :create_post_for, @corporation }
       he { should be_able_to :create_post_for, @corporation.philisterschaft }
     end
-    
+
     #
     # Local page admins
     #
-    
+
     context "when the user is a local admin of a page" do
       before do
         @page = create(:page)
@@ -490,20 +490,20 @@ describe Ability do
       he "should NOT be able to manage descendant users" do
         @subgroup = @page.child_groups.create
         @other_user = create(:user)
-        @subgroup << @other_user 
+        @subgroup << @other_user
         the_user.should_not be_able_to :update, @other_user
       end
     end
-      
+
     #
     # Local group admins
     #
-      
+
     context "when the user is a local admin" do
       before do
         @group = create(:group)
         @group.admins << user
-        
+
         @other_user = create(:user)
         @group.assign_user @other_user
       end
@@ -519,7 +519,7 @@ describe Ability do
       he { should be_able_to :change_status, @other_user }
       he { should_not be_able_to :change_last_name, @other_user }
       he { should_not be_able_to :change_hidden, @other_user }
-      
+
       he "should be able to manage the users' profile fields" do
         @other_user = create(:user)
         @group.assign_user @other_user
@@ -639,7 +639,7 @@ describe Ability do
         Ability.new(User.find user.id)
       end
       specify "admin assignment and un-assignent should update the admin rights for the sub objects properly" do
-        
+
         # 1. The user is no admin.
         #
         the_user.should_not be_able_to :manage, @parent_group
@@ -649,7 +649,7 @@ describe Ability do
         the_user.should_not be_able_to :update, @sub_group
         the_user.should_not be_able_to :manage, @sub_group_page
         the_user.should_not be_able_to :update, @sub_group_user
-        
+
         # 2. The user becomes admin of @group.
         #
         @group.admins_parent.assign_user user; wait_for_cache
@@ -660,7 +660,7 @@ describe Ability do
         the_user.should be_able_to :update, @sub_group
         the_user.should be_able_to :manage, @sub_group_page
         the_user.should be_able_to :update, @sub_group_user
-    
+
         # 3. The user loses his admin status.
         #
         @group.admins_parent.unassign_user user; wait_for_cache
@@ -671,11 +671,11 @@ describe Ability do
         the_user.should_not be_able_to :update, @sub_group
         the_user.should_not be_able_to :manage, @sub_group_page
         the_user.should_not be_able_to :update, @sub_group_user
-        
+
       end
     end
-    
-    # 
+
+    #
     # Global Officers
     #
     context "when the user is a global officer" do
@@ -684,11 +684,11 @@ describe Ability do
         @global_officer_group = @group.officers_parent.child_groups.create name: 'Global Science Officer'
         @global_officer_group.add_flag :global_officer
         @global_officer_group << user
-        
+
         @any_group = create :group
         @any_page = create :page
         @any_user = create :user
-        
+
         @event = @any_group.child_events.create name: 'Special Event'
       end
       he { should be_able_to :export_member_list, @any_group }
@@ -699,7 +699,7 @@ describe Ability do
       he { should_not be_able_to :update, @any_group }
       he { should_not be_able_to :update, @any_page }
       he { should_not be_able_to :update, @any_user }
-    
+
       context "when he is contact person for an event" do
         before { @event.contact_people_group.child_users << user }
         he { should be_able_to :update, @event }
@@ -714,8 +714,8 @@ describe Ability do
         he { should_not be_able_to :destroy, @event }
       end
     end
-    
-    # 
+
+    #
     # Global Admins
     #
     context "when the user is a global admin" do
@@ -731,26 +731,26 @@ describe Ability do
       specify "turning the switch on and off should change the abilities accordingly and not cause caching issues" do
         @page = create(:page)
         the_user.should be_able_to :manage, @page
-        
+
         user.global_admin = false
         wait_for_cache
         Ability.new(User.find user.id).should_not be_able_to :manage, @page
-        
+
         user.global_admin = true
         wait_for_cache
         Ability.new(User.find user.id).should be_able_to :manage, @page
       end
     end
   end
-  
+
   describe "for users without account" do
     let(:user) { create(:user) }
     let(:ability) { Ability.new(user) }
     subject { ability }
     let(:the_user) { subject }
-    
+
     he { should_not be_able_to :index, :admins }
   end
-  
+
 end
-  
+

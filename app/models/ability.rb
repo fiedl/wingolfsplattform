@@ -7,7 +7,7 @@
 require_dependency YourPlatform::Engine.root.join('app/models/ability').to_s
 
 module AbilityDefinitions
-  
+
   # Define yoyur abilities below in the appropriate sections.
   # If you want to circumvent the authorization process from your_platform
   # including role preview etc., you can override the `initialize` method:
@@ -26,14 +26,14 @@ module AbilityDefinitions
   #
   # Also, use the `cannot` method with care.
   # If you define
-  # 
+  #
   #     def rights_for_global_admins
   #       can :manage, :all
   #     end
   #     def rights_for_signed_in_users
   #       cannot :destroy, Group
   #     end
-  # 
+  #
   # then global admins cannot destroy groups, since they
   # are also signed-in users.
   #
@@ -42,20 +42,20 @@ module AbilityDefinitions
   #
 
   # ===============================================================================================
-  # Local admins can manage their groups, this groups' subgroups 
+  # Local admins can manage their groups, this groups' subgroups
   # and all users within their groups. They can also execute workflows.
   #
   def rights_for_local_admins
     can :index, PublicActivity::Activity
     can :index, Issue
-        
+
     if not read_only_mode?
       can :update, Group do |group|
         group.admins_of_self_and_ancestors.include?(user)
       end
       can :rename, Group do |group|
         group.admins_of_self_and_ancestors.include?(user) and
-        
+
         # local admins cannot rename groups with flags or corporations.
         #
         not (group.flags.present? || group.corporation?)
@@ -66,7 +66,7 @@ module AbilityDefinitions
       # cannot :change_token, Group
       can :update_memberships, Group do |group|
         group.admins_of_self_and_ancestors.include?(user) and
-        
+
         # only global admins are allowed to manage local admins.
         #
         not group.has_flag?(:admins_parent)
@@ -77,17 +77,17 @@ module AbilityDefinitions
       can :create_officer_group_for, Group do |group|
         can? :update, group
       end
-      
+
       can :destroy, Group do |group|
         group.admins_of_self_and_ancestors.include?(user) and
-        
+
         # One can't destroy a group with members.
         group.descendant_users.count == 0 and
-        
+
         # The group must have no flags. Otherwise, it's used by the system.
         group.flags.count == 0
       end
-      
+
       can [:update, :change_first_name, :change_alias, :change_status, :create_account_for], User, id: Role.of(user).administrated_users.map(&:id)
       can :manage, UserAccount, user_id: Role.of(user).administrated_users.map(&:id)
       can :update_members, Group do |group|
@@ -116,7 +116,7 @@ module AbilityDefinitions
       can :manage, UserGroupMembership do |membership|
         can? :update, membership.user
       end
-      
+
       # Lokale Administratoren dürfen Aktivmeldungen eintragen, wenn sie mindestens
       # eine Aktivitas administrieren.
       #
@@ -125,7 +125,7 @@ module AbilityDefinitions
       end
     end
   end
-  
+
   # ===============================================================================================
   def rights_for_signed_in_users
     #
@@ -141,19 +141,19 @@ module AbilityDefinitions
     # - read groups that are not former-member groups
     # - read pages of own groups
     # - download attachements of those pages
-    # 
+    #
     super
-    
+
     # For the moment, everybody can view the statistics.
     #
     can :index, :statistics
     can :read, :statistics
     can :export, :statistics
-    
+
     # Any logged-in user can view, who are the admins.
     #
     can :index, :admins
-    
+
     can :read, ProfileField do |profile_field|
       # Some profile fields have parent profile fields.
       # They determine what kind of profile field this is.
@@ -161,19 +161,19 @@ module AbilityDefinitions
       while parent_field.parent != nil do
         parent_field = parent_field.parent
       end
-      
+
       # Regular users can read profile fields of profiles they are allowed to see.
       # Exceptions below.
       #
       can?(:read, profile_field.profileable) and
-      
+
       # Regular users can only see their own bank accounts
       # as well as bank accounts of non-user objects, i.e. groups.
       #
       not ((parent_field.type == 'ProfileFieldTypes::BankAccount') &&
         parent_field.profileable.kind_of?(User) && (parent_field.profileable.id != user.id))
     end
-    
+
     # # TODO: Wieder aktivieren, falls man die übrigen General-Felder bearbeiten können soll.
     # # Im Moment können (per your_platform) die Benutzer nur ihre Nicht-General-Felder bearbeiten.
     #
@@ -186,14 +186,14 @@ module AbilityDefinitions
     #     field.profileable.nil? || ((field.label != 'W-Nummer') && (field.profileable == user))
     #   end
     # end
-    
+
     # List exports
     #   - BV-Mitgliedschaft berechtigt dazu, die Mitglieder dieses BV
     #       zu exportieren.
     #   - Mitgliedschaft in einer Verbindung als Bursch oder Philister
     #       berechtigt dazu, die Mitglieder dieser Verbindung zu
     #       exportieren.
-    #   - Normale Gruppen-Mitgliedschaften (etwa Gruppe 'Jeder' 
+    #   - Normale Gruppen-Mitgliedschaften (etwa Gruppe 'Jeder'
     #       oder 'Wingolfsblätter-Abonnenten') berechtigen nicht zum
     #       Export.
     #
@@ -201,14 +201,14 @@ module AbilityDefinitions
       if group.bv?
         user.in? group.members
       elsif group.corporation
-        user.in?(group.corporation.philisterschaft.members) or 
+        user.in?(group.corporation.philisterschaft.members) or
         user.in?(group.corporation.descendant_groups.where(name: 'Burschen').first.members)
       else
         false
       end
     end
   end
-  
+
   # ===============================================================================================
   # Local officers can export the member lists of their groups.
   #
@@ -219,14 +219,14 @@ module AbilityDefinitions
     # - sending group mails
     # - creating events
     # - edit their pages if they are page officer
-    # - create and destroy pages and attachments 
+    # - create and destroy pages and attachments
     #
     super
-    
+
     if not read_only_mode?
     end
   end
-  
+
   # ===============================================================================================
   # Bundesämter sind im Moment mit dem Flag :global_officer versehen.
   # Bundesamtsträger dürfen insbesondere:
@@ -236,11 +236,11 @@ module AbilityDefinitions
   #
   def rights_for_global_officers
     super
-    
+
     can :export, :wingolfsblaetter_export_format
     can :index, :wingolfsblaetter_dashboard
   end
-  
+
   # ===============================================================================================
   def rights_for_everyone
     #
@@ -250,21 +250,21 @@ module AbilityDefinitions
     # - ics calendar feed
     #
     super
-    
+
     # Nobody, not even global admins, can send posts to deceased-groups.
     # Also creating events for those groups is not good.
-    # 
+    #
     cannot [:create_post_for, :create_post, :create_event_for, :create_event], Group do |group|
       group.name.try(:include?, "Verstorbene")
     end
   end
-  
+
   def rights_for_beta_testers
     super
-    
+
     can :export, :stammdaten
   end
-  
+
 end
 
 class Ability
