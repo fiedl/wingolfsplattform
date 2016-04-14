@@ -5,7 +5,7 @@ Rails.application.configure do
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
-  
+
   config.eager_load = false
 
   # Show full error reports
@@ -13,7 +13,7 @@ Rails.application.configure do
   config.action_controller.perform_caching = true  # default: false
   #config.cache_store = :file_store, Rails.root.join("tmp/app_cache")
   config.cache_store = :redis_store, 'redis://localhost:6379/0/', { expires_in: 1.day, namespace: 'development_cache' }
-  
+
   # Care if the mailer can't send
   config.action_mailer.raise_delivery_errors = true
 
@@ -25,24 +25,24 @@ Rails.application.configure do
 
   # Raise exception on mass assignment protection for Active Record models
   config.active_record.mass_assignment_sanitizer = :strict
-  
+
   # Raises error for missing translations
   config.action_view.raise_on_missing_translations = true
-  
+
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
-  
+
   # Asset digests allow you to set far-future HTTP expiration dates on all assets,
   # yet still be able to expire them through the digest params.
   config.assets.digest = true
-  
+
   # Adds additional error checking when serving assets at runtime.
   # Checks for improperly declared sprockets dependencies.
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
-  
+
   config.asset_host = "http://localhost:3000"
 
 
@@ -64,5 +64,11 @@ Rails.application.configure do
   #   enable_starttls_auto: true
   # }
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000, protocol: 'http' }
+
+  # See: http://stackoverflow.com/a/12609856/2066546
+  config.action_mailer.default_options = {
+    from: 'Wingolfsplattform <wingolfsplattform@wingolf.org>'
+  }
+
 
 end
