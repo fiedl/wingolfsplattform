@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe User do
 
-  before do 
+  before do
     @user = create( :user )
   end
 
@@ -19,7 +19,7 @@ describe User do
       subject.should == @user.name + " " + @user.aktivitaetszahl
     end
   end
-  
+
   describe ".find_by_title" do
     before do
       @user = create :user
@@ -189,7 +189,7 @@ describe User do
       it { should == "E06" }
     end
   end
-  
+
   describe "#wingolfit?" do
     before { @user = create(:user) }
     subject { @user.wingolfit? }
@@ -231,7 +231,7 @@ describe User do
       end
     end
   end
-  
+
   describe "#aktivmeldungsdatum" do
     before { @user = create :user }
     subject { @user.aktivmeldungsdatum }
@@ -251,7 +251,7 @@ describe User do
         @second_corporation = create :wingolf_corporation
         @first_corporation.status_groups.first.assign_user @user, at: @date_of_joining_the_first_corporation
         @second_corporation.status_groups.first.assign_user @user, at: @date_of_joining_the_second_corporation
-        
+
         # Promote the user in order to make sure this does not cause problems.
         @date_of_promotion_in_first_corporation = 20.days.ago
         UserGroupMembership.find_by_user_and_group(@user, @first_corporation.status_groups.first).move_to(@first_corporation.status_groups.second, at: @date_of_promotion_in_first_corporation)
@@ -273,7 +273,7 @@ describe User do
         @second_corporation = create :wingolf_corporation
         @first_corporation.status_groups.first.assign_user @user, at: @date_of_joining_the_first_corporation
         @second_corporation.status_groups.first.assign_user @user, at: @date_of_joining_the_second_corporation
-        
+
         # Promote the user in order to make sure this does not cause problems.
         @date_of_promotion_in_first_corporation = "2010-02-21".to_datetime
         UserGroupMembership.find_by_user_and_group(@user, @first_corporation.status_groups.first).move_to(@first_corporation.status_groups.second, at: @date_of_promotion_in_first_corporation)
@@ -291,7 +291,7 @@ describe User do
       end
     end
   end
-  
+
   describe "#fill_in_template_profile_information" do
 
     before do
@@ -302,7 +302,7 @@ describe User do
     subject { @user.fill_in_template_profile_information }
 
     it "should not change the name of the user" do
-      expect { subject }.to_not change { @user.name } 
+      expect { subject }.to_not change { @user.name }
     end
     it "should fill in certain empty profile fields" do
       subject
@@ -363,7 +363,7 @@ describe User do
     end
 
   end
-  
+
   describe "#correct_bv" do
     before do
       @bv0 = create(:bv_group, name: "BV 00 Unbekannt Verzogene", token: "BV 00")
@@ -376,7 +376,7 @@ describe User do
       BvMapping.create(bv_name: "BV 01", plz: "10117")
     end
     subject { @user.correct_bv }
-    
+
     describe "the user being philister" do
       before do
         @corporation = create(:wingolf_corporation)
@@ -416,7 +416,7 @@ describe User do
       it { should == nil }
     end
   end
-  
+
   describe "#adapt_bv_to_postal_address" do
     before do
       @bv0 = create(:bv_group, name: "BV 00 Unbekannt Verzogene", token: "BV 00")
@@ -429,7 +429,7 @@ describe User do
       BvMapping.create(bv_name: "BV 01", plz: "10117")
     end
     subject { @user.adapt_bv_to_postal_address }
-    
+
     specify "prelims" do
       Bv.by_address(@address1).should == @bv1
       Bv.by_address(@address2).should == @bv2
@@ -469,7 +469,7 @@ describe User do
         it "should keep the memberships as they are" do
           subject
           @user.bv.should == @bv1
-          
+
           # a double dag link would indicate that the membership had been created twice.
           @user.bv_membership.count.should == 1
         end
@@ -588,15 +588,15 @@ describe User do
         time_travel 2.seconds
         @user.reload.bv.should == nil
       end
-      it { should == nil }      
+      it { should == nil }
     end
   end
-  
-  
+
+
   describe "#mark_as_deceased" do
     before { @date = 1.day.ago }
     subject { @user.mark_as_deceased(at: @date) }
-    
+
     describe "the user being member of a bv" do
       before do
         @bv = create(:bv_group)
@@ -653,12 +653,12 @@ describe User do
         @user.reload.account.should == nil
       end
     end
-    
+
   end
-  
+
   # User Creation
   # ==========================================================================================
-  
+
   describe ".create" do
     before { @params = {first_name: "Jochen", last_name: "Kanne"} }
     subject { @user = User.create(@params) }
@@ -683,5 +683,5 @@ describe User do
       end
     end
   end
-    
+
 end
