@@ -135,8 +135,8 @@ class User
   #
   def correct_bv
     if self.philister?
-      if postal_address_field_or_first_address_field.try(:value).try(:present?)
-        postal_address_field_or_first_address_field.bv
+      if primary_address_field.try(:value).try(:present?)
+        primary_address_field.bv
       else
         # Wenn keine Adresse gegeben ist, in den BV 00 (Unbekannt Verzogen) verschieben.
         Bv.find_by_token("BV 00")
@@ -159,7 +159,7 @@ class User
   # Achtung: Nur Philister sind BVs zugeordnet. Wenn der Benutzer Aktiver ist,
   # tut diese Methode nichts.
   #
-  def adapt_bv_to_postal_address
+  def adapt_bv_to_primary_address
     self.groups(true) # reload groups
     new_bv = correct_bv
 
