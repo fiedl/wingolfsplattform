@@ -65,6 +65,16 @@ namespace :import do
     task :additional_mappings => [:environment, :print_info] do
       log.section "Ergänzungen zu BV-Zuordnungen importieren."
 
+      # 2014-08-16
+      # Korrektur fehlerhafter Einträge gemäß Vademecum 2005 und 2012.
+      # UserVoice: https://wingolf.uservoice.com/admin/tickets/94
+      # Trello: https://trello.com/c/VCeC7ne5/586-fehlende-bv-zuordnungen
+      #
+      # 2016-04-13
+      # Diese Korrekturen wurden auf Wunsch von Neusel im Rahmen von
+      # https://trello.com/c/GynIkAfo/945-bvs entfernt und durch die folgenden
+      # ersetzt.
+
       # 2016-04-13, Fiedlschuster
       # Ergänzende Informationen von Neusel.
       #
@@ -238,13 +248,17 @@ namespace :import do
       #
       # Neunkirchen am Brand gehört zum BV 37, nicht 36. Beide Einträge waren vorhanden.
       BvMapping.where(plz: '91077', town: 'Neunkirchen a.Brand').destroy_all
-      #
+
+      # 2016-04-13, 2016-04-15
       # Die folgenden Korrekturdaten wurden dem alten Anlauf entnommen:
       # https://trello.com/c/VCeC7ne5/586-fehlende-bv-zuordnungen
       # https://github.com/fiedl/wingolfsplattform/commit/1f5c9c4781185947ac87916a5994270aa7d3b985
       #
       # Sofern dort nicht gefunden, dann dem Vademecum:
       # https://wingolfsplattform.org/attachments/285/Vademecum_Wingolfiticum_2012.pdf
+      #
+      # Einzelne Korrekturen durch Neusel:
+      # http://support.wingolfsplattform.org/tickets/500
       #
       BvMapping.where(plz: '21629').first.update_attributes bv_name: 'BV 05'
       BvMapping.where(plz: '89343').first.update_attributes bv_name: 'BV 38'
@@ -274,13 +288,11 @@ namespace :import do
       BvMapping.where(plz: '86470').first.update_attributes bv_name: 'BV 38'
       BvMapping.where(plz: '65239').first.update_attributes bv_name: 'BV 26'
       BvMapping.where(plz: '68766').first.update_attributes bv_name: 'BV 32'
-
       BvMapping.where(plz: '56457', town: 'Westerburg').first.update_attributes bv_name: 'BV 21'
       BvMapping.where(plz: '57627', town: 'Hachenburg').first.update_attributes bv_name: 'BV 21'
       BvMapping.where(plz: '99837', town: 'Dippach').first.update_attributes bv_name: 'BV 28'
       BvMapping.where(plz: '91301', town: 'Forchheim').first.update_attributes bv_name: 'BV 37'
       BvMapping.where(plz: '56290', town: 'Beltheim').first.update_attributes bv_name: 'BV 29'
-
       BvMapping.find_or_create plz: '85598', town: 'Baldham', bv_name: 'BV 38'
       BvMapping.find_or_create plz: '86941', town: 'St. Ottilien', bv_name: 'BV 38'
       BvMapping.find_or_create plz: '10623', town: 'Berlin-Charlottenburg', bv_name: 'BV 01'
@@ -293,7 +305,6 @@ namespace :import do
       BvMapping.find_or_create plz: '60325', town: 'Frankfurt / Main', bv_name: 'BV 27'
       BvMapping.find_or_create plz: '60325', town: 'Frankfurt/Main', bv_name: 'BV 27'
       BvMapping.find_or_create plz: '99718', town: 'Feldengel-Großenehrich', bv_name: 'BV 28'
-
       BvMapping.find_or_create plz: '04347', town: 'Leipzig', bv_name: 'BV 42'
       BvMapping.find_or_create plz: '18442', town: 'Neu Lüdershagen', bv_name: 'BV 06'
       BvMapping.find_or_create plz: '26160', town: 'Edewecht', bv_name: 'BV 04'
@@ -311,24 +322,6 @@ namespace :import do
       BvMapping.find_or_create plz: '04838', town: 'Doberschütz', bv_name: 'BV 42'
       BvMapping.find_or_create plz: '06295', town: 'Lutherstadt Eisleben', bv_name: 'BV 23'
       BvMapping.find_or_create plz: '06333', town: 'Arnstein OT Sylda', bv_name: 'BV 35'
-
-      # Offene Punkte:
-      # Fragen, ob folgende Philister im Wunsch-BV (links) sind oder neu zugeordnet (rechts)
-      # werden müssen:
-      #
-      # * (2365) Karsten Kümmel T88 Je Nstft 91, wohnhaft in 49084 Osnabrück: BV 07 -> BV 12
-      # * (2778) Reinhard Morgenstern Fr62, wohnhaft in 79361 Sasbach: BV 45 -> BV 33
-      # * (2967) Fritz Ulrich Olbricht St79, wohnhaft in 22605 Hamburg: BV 01 -> BV 02
-      # * (3517) Karl Helmut Schlösser Si74, wohnhaft in 40723 Hilden: BV 38 -> BV 19b
-      # * (4847) Dennis Lohmann Je04, wohnhaft in  Belfast: BV 12 -> BV 45
-      # * (4917) André Dürrbeck Fr05 W08, wohnhaft in 81925 München: BV 46 -> BV 38
-
-      # Ältere Anläufe zur Archivierung:
-      #
-      # # 2014-08-16
-      # # Korrektur fehlerhafter Einträge gemäß Vademecum 2005 und 2012.
-      # # UserVoice: https://wingolf.uservoice.com/admin/tickets/94
-      # # Trello: https://trello.com/c/VCeC7ne5/586-fehlende-bv-zuordnungen
 
       log.success "Fertig."
     end
