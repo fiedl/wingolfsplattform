@@ -277,9 +277,9 @@ namespace :import do
 
       BvMapping.where(plz: '56457', town: 'Westerburg').first.update_attributes bv_name: 'BV 21'
       BvMapping.where(plz: '57627', town: 'Hachenburg').first.update_attributes bv_name: 'BV 21'
-      BvMapping.where(plz: '99837', town: 'Dippach').first.update_attributes bv_name: 'BV 24'
+      BvMapping.where(plz: '99837', town: 'Dippach').first.update_attributes bv_name: 'BV 28'
       BvMapping.where(plz: '91301', town: 'Forchheim').first.update_attributes bv_name: 'BV 37'
-      BvMapping.where(plz: '56290', town: 'Beltheim').first.update_attributes bv_name: 'BV 20'
+      BvMapping.where(plz: '56290', town: 'Beltheim').first.update_attributes bv_name: 'BV 29'
 
       BvMapping.find_or_create plz: '85598', town: 'Baldham', bv_name: 'BV 38'
       BvMapping.find_or_create plz: '86941', town: 'St. Ottilien', bv_name: 'BV 38'
@@ -305,9 +305,12 @@ namespace :import do
       BvMapping.find_or_create plz: '73087', town: 'Bad Boll', bv_name: 'BV 34'
       BvMapping.find_or_create plz: '83075', town: 'Bad Aibling', bv_name: 'BV 38'
 
-      ##BvMapping.find_or_create plz: '04838', town: 'Doberschütz', bv_name: 'BV 00'
-      ##BvMapping.find_or_create plz: '06295', town: 'Lutherstadt Eisleben', bv_name: 'BV 00'
-      ##BvMapping.find_or_create plz: '06333', town: 'Arnstein OT Sylda', bv_name: 'BV 00'
+      # Informationen von Neusel, 2016-04-15.
+      # Aus E-Mail kopiert nach: http://support.wingolfsplattform.org/tickets/500#reply-1737
+      #
+      BvMapping.find_or_create plz: '04838', town: 'Doberschütz', bv_name: 'BV 42'
+      BvMapping.find_or_create plz: '06295', town: 'Lutherstadt Eisleben', bv_name: 'BV 23'
+      BvMapping.find_or_create plz: '06333', town: 'Arnstein OT Sylda', bv_name: 'BV 35'
 
       # Offene Punkte:
       # Fragen, ob folgende Philister im Wunsch-BV (links) sind oder neu zugeordnet (rechts)
