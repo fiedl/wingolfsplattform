@@ -8,7 +8,7 @@ describe GeoLocation do
     create( :bv_group, name: "BV 00" ) # just to have another one in the database
     @bv = create( :bv_group, name: "BV 01", token: "BV 01" )
     @bv_europe = create( :bv_group, name: "BV 45", token: "BV 45" )
-    BvMapping.create( bv_name: "BV 01", plz: "10117" )
+    BvMapping.create(bv_name: "BV 01", plz: "10117", town: "Berlin")
 
     @geo_location = GeoLocation.create( address: @address_string )
     @geo_location2 = GeoLocation.create( address: @address2_string )

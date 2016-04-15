@@ -373,7 +373,7 @@ describe User do
       @address2 = "44 Rue de Stalingrad, Grenoble, Frankreich"
       @address_field1 = @user.profile_fields.create(type: 'ProfileFieldTypes::Address', value: @address1).becomes ProfileFieldTypes::Address
       @address_field2 = @user.profile_fields.create(type: 'ProfileFieldTypes::Address', value: @address2).becomes ProfileFieldTypes::Address
-      BvMapping.create(bv_name: "BV 01", plz: "10117")
+      BvMapping.create(bv_name: "BV 01", plz: "10117", town: "Berlin")
     end
     subject { @user.correct_bv }
 
@@ -417,7 +417,7 @@ describe User do
     end
   end
 
-  describe "#adapt_bv_to_postal_address" do
+  describe "#adapt_bv_to_primary_address" do
     before do
       @bv0 = create(:bv_group, name: "BV 00 Unbekannt Verzogene", token: "BV 00")
       @bv1 = create(:bv_group, name: "BV 01 Berlin", token: "BV 01")
@@ -426,9 +426,9 @@ describe User do
       @address2 = "44 Rue de Stalingrad, Grenoble, Frankreich"
       @address_field1 = @user.profile_fields.create(type: 'ProfileFieldTypes::Address', value: @address1).becomes ProfileFieldTypes::Address
       @address_field2 = @user.profile_fields.create(type: 'ProfileFieldTypes::Address', value: @address2).becomes ProfileFieldTypes::Address
-      BvMapping.create(bv_name: "BV 01", plz: "10117")
+      BvMapping.create(bv_name: "BV 01", plz: "10117", town: "Berlin")
     end
-    subject { @user.adapt_bv_to_postal_address }
+    subject { @user.adapt_bv_to_primary_address }
 
     specify "prelims" do
       Bv.by_address(@address1).should == @bv1

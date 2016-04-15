@@ -21,7 +21,7 @@ describe ProfileFieldTypes::Address do
     create( :bv_group, name: "BV 00" ) # just to have another one in the database
     @bv = create( :bv_group, name: "BV 01", token: "BV 01" )
 
-    BvMapping.create( bv_name: "BV 01", plz: "10117" )
+    BvMapping.create(bv_name: "BV 01", plz: "10117", town: "Berlin")
   end
 
   describe "#bv" do
@@ -38,7 +38,7 @@ describe ProfileFieldTypes::Address do
       subject.should include @address_field.bv.name
     end
   end
-  
+
   specify "changing an address should trigger a bv change of the user" do
     @user = create :user
     @corporation = create :wingolf_corporation
@@ -49,7 +49,7 @@ describe ProfileFieldTypes::Address do
     @city_field = @address_field.find_child_by_key(:city)
     @postal_code_field = @address_field.find_child_by_key(:postal_code)
     @user.bv.should_not == @bv
-    
+
     @country_code_field.value = 'DE'; @country_code_field.save
     @postal_code_field.value = '10117'; @postal_code_field.save
     @city_field.value = 'Berlin'; @city_field.save
@@ -65,7 +65,7 @@ end
 describe ProfileFieldTypes::Study do
 
   subject { ProfileFieldTypes::Study.create() }
-  
+
   its( 'children.count' ) { should == 5 }
   it { should respond_to :from }
   it { should respond_to :from= }
@@ -77,5 +77,5 @@ describe ProfileFieldTypes::Study do
   it { should respond_to :subject= }
   it { should respond_to :specialization }
   it { should respond_to :specialization= }
-  
+
 end
