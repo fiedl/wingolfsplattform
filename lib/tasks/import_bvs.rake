@@ -323,6 +323,13 @@ namespace :import do
       BvMapping.find_or_create plz: '06295', town: 'Lutherstadt Eisleben', bv_name: 'BV 23'
       BvMapping.find_or_create plz: '06333', town: 'Arnstein OT Sylda', bv_name: 'BV 35'
 
+      # Informationen von Neusel, 2015-12-07, eingepflegt am 2016-04-18.
+      # http://support.wingolfsplattform.org/tickets/494
+      #
+      BvMapping.where(plz: '97980', town: 'Bad Mergentheim').first.update_attributes bv_name: 'BV 35'
+      BvMapping.where(plz: '97877', town: 'Wertheim').first.update_attributes bv_name: 'BV 35'
+
+
       log.success "Fertig."
     end
 
