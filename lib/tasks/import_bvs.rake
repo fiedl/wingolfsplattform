@@ -329,6 +329,11 @@ namespace :import do
       BvMapping.where(plz: '97980', town: 'Bad Mergentheim').first.update_attributes bv_name: 'BV 35'
       BvMapping.where(plz: '97877', town: 'Wertheim').first.update_attributes bv_name: 'BV 35'
 
+      # Informationen von Neusel, 2016-04-12, eingepflegt am 2016-04-18.
+      # http://support.wingolfsplattform.org/tickets/764
+      #
+      BvMapping.where(plz: '65597', town: 'Hünfelden').first.update_attributes bv_name: 'BV 26'
+
 
       log.success "Fertig."
     end
