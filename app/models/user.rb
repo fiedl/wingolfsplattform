@@ -111,7 +111,7 @@ class User
   end
 
   def bv_beitrittsdatum
-    bv_membership.valid_from if bv
+    bv_membership.valid_from if bv && bv_membership
   end
 
   def localized_bv_beitrittsdatum
