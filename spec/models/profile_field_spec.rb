@@ -51,8 +51,8 @@ describe ProfileFieldTypes::Address do
     @user.bv.should_not == @bv
 
     @country_code_field.value = 'DE'; @country_code_field.save
-    @postal_code_field.value = '10117'; @postal_code_field.save
     @city_field.value = 'Berlin'; @city_field.save
+    @postal_code_field.value = '10117'; @postal_code_field.save
     @user.reload.bv.should == @bv
   end
 
