@@ -1,7 +1,7 @@
 require_dependency YourPlatform::Engine.root.join('app/controllers/groups_controller').to_s
 
 module GroupsControllerOverride
-  
+
   # For STI reasons, we have to override this method in order
   # to get the BV params into the group params variable.
   #
@@ -11,18 +11,19 @@ module GroupsControllerOverride
     params[:group] ||= params[:philisterschaft]
     super
   end
-  
+
   def list_export_by_preset(list_preset)
     case list_preset
     when 'wingolfsblaetter'
       ListExports::Wingolfsblaetter.from_group(@group)
     when 'stammdaten'
-      ListExports::Stammdaten.from_group(@group) if can? :export, :stammdaten
+      authorize! :export, :stammdaten
+      ListExports::Stammdaten.from_group(@group)
     else
-      super(list_preset)  
+      super(list_preset)
     end
   end
-  
+
 end
 
 class GroupsController
