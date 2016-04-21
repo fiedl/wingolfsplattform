@@ -202,7 +202,11 @@ class User
         end
       end
 
-      new_membership = self.bv_membership.move_to new_bv
+      new_membership = if self.bv_membership.try(:direct?)
+        self.bv_membership.move_to new_bv
+      else # Amtsträger nicht verschieben!
+        self.bv_membership
+      end
     end
 
     # Korrekturlauf: Durch einen Fehler kann es sein, dass ein Benutzer mehreren
@@ -210,7 +214,7 @@ class User
     # deaktiviert, damit er nur noch dem neuen BV zugeordnet ist.
     #
     for membership in self.bv_memberships
-      membership.invalidate at: 1.minute.ago if membership != new_membership
+      membership.invalidate at: 1.minute.ago if membership != new_membership and membership.direct?
     end
 
     # Cache zurücksetzen
