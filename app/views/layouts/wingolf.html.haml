@@ -11,9 +11,9 @@
 
     = favicon_link_tag 'favicon.ico'
     = favicon_link_tag 'fahne-144x144.png', rel: 'apple-touch-icon', type: 'image/png'
-    
+
     %link{rel: 'search', href: opensearch_path, title: "Wingolfsplattform-Suche", type: 'application/opensearchdescription+xml'}
-    
+
     = javascript_include_tag 'application'
     = gmaps4rails_api_script_tags
     = csrf_meta_tags
@@ -51,12 +51,12 @@
                     %b.caret
                   %ul.dropdown-menu
                     = cached_groups_of_user_table current_user
-                
+
                 - # role indicator and preview menu
                 = render partial: 'layouts/role_preview_switcher'
-                
+
                 = render partial: 'notifications/notifications_dropdown'
-                
+
                 - # %li.backendBarItem.dropdown
                 - #   = link_to t(:bookmarks), my_bookmarks_path
                 - #   %ul.dropdown-menu.my-favorites
@@ -90,7 +90,7 @@
               - # %span#star_tool
               - #   = star_tool( current_user, @navable )
               %span#breadcrumb
-                = breadcrumb_ul
+                = breadcrumbs
               %span#access_indicator
                 = access_indicator if current_user
             %span#content_area
