@@ -478,7 +478,7 @@ describe Ability do
     context "when the user is a local admin of a page" do
       before do
         @page = create(:page)
-        @page.admins << user
+        @page.assign_admin user
       end
       he "should be able to manage this page" do
         the_user.should be_able_to :manage, @page
@@ -502,7 +502,7 @@ describe Ability do
     context "when the user is a local admin" do
       before do
         @group = create(:group)
-        @group.admins << user
+        @group.assign_admin user
 
         @other_user = create(:user)
         @group.assign_user @other_user
@@ -593,7 +593,7 @@ describe Ability do
       describe "the user being corporations admin" do
         before do
           @corporation = create :corporation
-          @corporation.admins << user
+          @corporation.assign_admin user
         end
         he { should_not be_able_to :rename, @corporation }
         he { should_not be_able_to :change_token, @corporation }
