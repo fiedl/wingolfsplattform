@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 2ef98666a26a3a0885522c52330df2905de4b368
+  revision: e5e96de4357f9de35472e481a3a8d79294467652
   branch: master
   specs:
     your_platform (1.0.1)
@@ -89,7 +89,7 @@ GIT
 
 GIT
   remote: git://github.com/prawnpdf/prawn.git
-  revision: ed0fd8658d3353fff14969510e7c26772a994290
+  revision: 90441e9e4c528906772765ffcc5e4e702615fe02
   specs:
     prawn (2.1.1)
       pdf-core (~> 0.6.1)
@@ -154,7 +154,7 @@ GEM
     auto_html (1.6.4)
       redcarpet (~> 3.1)
       rinku (~> 1.5.0)
-    autoprefixer-rails (6.3.6.1)
+    autoprefixer-rails (6.3.6.2)
       execjs
     autosize-rails (1.18.17)
       rails (>= 3.1)
@@ -227,7 +227,7 @@ GEM
       execjs
     coffee-script-source (1.10.0)
     colored (1.2)
-    concurrent-ruby (1.0.1)
+    concurrent-ruby (1.0.2)
     connection_pool (2.2.0)
     coveralls (0.7.0)
       multi_json (~> 1.3)
@@ -258,7 +258,7 @@ GEM
     exception_notification (4.1.1)
       actionmailer (>= 3.0.4)
       activesupport (>= 3.0.4)
-    execjs (2.6.0)
+    execjs (2.7.0)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.5.0)
@@ -284,7 +284,7 @@ GEM
       rspec (>= 2.14.0, < 3.1.0)
       ruby-progressbar (~> 1.4)
     gemoji (2.1.0)
-    geocoder (1.3.5)
+    geocoder (1.3.6)
     geoip (1.6.1)
     git-version-bump (0.15.1)
     globalid (0.3.6)
@@ -310,7 +310,7 @@ GEM
     haml (4.0.7)
       tilt
     highline (1.7.8)
-    hitimes (1.2.3)
+    hitimes (1.2.4)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     i18n (0.7.0)
@@ -361,11 +361,11 @@ GEM
       rack-contrib (~> 1.1)
       railties (>= 3.0.0, < 5.0.0)
     method_source (0.8.2)
-    mime-types (2.99.1)
+    mime-types (2.99.2)
     mimemagic (0.3.1)
     mini_magick (4.5.1)
     mini_portile2 (2.0.0)
-    minitest (5.8.4)
+    minitest (5.9.0)
     multi_json (1.11.2)
     mysql2 (0.4.2)
     netrc (0.11.0)
@@ -375,7 +375,7 @@ GEM
     orm_adapter (0.5.0)
     passgen (1.0.2)
     pdf-core (0.6.1)
-    phony (2.15.21)
+    phony (2.15.25)
     poltergeist (1.5.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -396,7 +396,7 @@ GEM
     rack-contrib (1.4.0)
       git-version-bump (~> 0.15)
       rack (~> 1.4)
-    rack-mini-profiler (0.9.9.2)
+    rack-mini-profiler (0.10.1)
       rack (>= 1.2.0)
     rack-protection (1.5.3)
       rack
@@ -449,7 +449,7 @@ GEM
     rb-inotify (0.9.3)
       ffi (>= 0.5.0)
     redcarpet (3.3.4)
-    redis (3.2.2)
+    redis (3.3.0)
     redis-actionpack (4.0.1)
       actionpack (~> 4)
       redis-rack (~> 1.5.0)
