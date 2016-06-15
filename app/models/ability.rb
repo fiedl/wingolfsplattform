@@ -174,6 +174,10 @@ module AbilityDefinitions
         parent_field.profileable.kind_of?(User) && (parent_field.profileable.id != user.id))
     end
 
+    can :update, ProfileField do |profile_field|
+      (profile_field.profileable == user) and (profile_field.key.in? ['klammerung'])
+    end
+
     # # TODO: Wieder aktivieren, falls man die übrigen General-Felder bearbeiten können soll.
     # # Im Moment können (per your_platform) die Benutzer nur ihre Nicht-General-Felder bearbeiten.
     #
