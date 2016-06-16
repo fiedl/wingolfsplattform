@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160320235944) do
+ActiveRecord::Schema.define(version: 20160601215916) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -41,6 +41,8 @@ ActiveRecord::Schema.define(version: 20160320235944) do
     t.string   "content_type",   limit: 255
     t.integer  "file_size",      limit: 4
     t.integer  "author_user_id", limit: 4
+    t.integer  "width",          limit: 4
+    t.integer  "height",         limit: 4
   end
 
   add_index "attachments", ["author_user_id"], name: "attachments_author_user_id_fk", using: :btree
@@ -220,17 +222,18 @@ ActiveRecord::Schema.define(version: 20160320235944) do
   end
 
   create_table "nav_nodes", force: :cascade do |t|
-    t.string   "url_component",   limit: 255
-    t.string   "breadcrumb_item", limit: 255
-    t.string   "menu_item",       limit: 255
+    t.string   "url_component",     limit: 255
+    t.string   "breadcrumb_item",   limit: 255
+    t.string   "menu_item",         limit: 255
     t.boolean  "slim_breadcrumb"
     t.boolean  "slim_url"
     t.boolean  "slim_menu"
     t.boolean  "hidden_menu"
-    t.integer  "navable_id",      limit: 4
-    t.string   "navable_type",    limit: 255
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.integer  "navable_id",        limit: 4
+    t.string   "navable_type",      limit: 255
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.boolean  "hidden_teaser_box"
   end
 
   add_index "nav_nodes", ["navable_id", "navable_type"], name: "navable_type", using: :btree
@@ -259,14 +262,15 @@ ActiveRecord::Schema.define(version: 20160320235944) do
   end
 
   create_table "pages", force: :cascade do |t|
-    t.string   "title",          limit: 255
-    t.text     "content",        limit: 65535
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-    t.string   "redirect_to",    limit: 255
-    t.integer  "author_user_id", limit: 4
-    t.string   "type",           limit: 255
+    t.string   "title",             limit: 255
+    t.text     "content",           limit: 65535
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.string   "redirect_to",       limit: 255
+    t.integer  "author_user_id",    limit: 4
+    t.string   "type",              limit: 255
     t.datetime "archived_at"
+    t.text     "box_configuration", limit: 65535
   end
 
   add_index "pages", ["author_user_id"], name: "pages_author_user_id_fk", using: :btree
