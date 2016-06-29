@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: f593e9970eb6d3ae9c8b755aff76a570b1b64e33
+  revision: 8561efd14edffd791d8a16e25c8ebe2a49689a78
   branch: master
   specs:
     your_platform (1.0.1)
@@ -187,7 +187,7 @@ GEM
       sass (~> 3.0)
       slim (>= 1.3.6, < 4.0)
       terminal-table (~> 1.4)
-    browser (2.1.0)
+    browser (2.2.0)
     builder (3.2.2)
     callsite (0.0.11)
     cancan (1.6.10)
@@ -218,7 +218,7 @@ GEM
       timers (>= 4.1.1)
     celluloid-pool (0.20.5)
       timers (>= 4.1.1)
-    celluloid-supervision (0.20.5)
+    celluloid-supervision (0.20.6)
       timers (>= 4.1.1)
     charlock_holmes (0.6.9.4)
     cliver (0.3.2)
@@ -600,7 +600,7 @@ GEM
     spork (0.9.2)
     spreadsheet (1.1.2)
       ruby-ole (>= 1.0)
-    sprockets (3.6.1)
+    sprockets (3.6.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
     sprockets-rails (2.3.3)
