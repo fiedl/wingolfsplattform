@@ -21,7 +21,7 @@ Rails.application.configure do
   
   # Caching.
   config.action_controller.perform_caching = true  # default: false
-  config.cache_store = :redis_store, 'redis://localhost:6379/0/', { expires_in: 90.minutes, namespace: 'test_cache' }
+  config.cache_store = :redis_store, 'redis://redis:6379/0/', { expires_in: 90.minutes, namespace: 'test_cache' }
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false

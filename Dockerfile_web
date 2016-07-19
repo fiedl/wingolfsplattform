@@ -1,0 +1,10 @@
+FROM wingolfsplattform_ruby_base
+
+ADD . /usr/src/app/
+WORKDIR /usr/src/app/
+
+#Update to latest Version of bundler
+RUN gem install bundler
+
+#redis is injected into the container - defined as link in /etc/hosts if you use compose
+ENV REDIS_HOST redis
