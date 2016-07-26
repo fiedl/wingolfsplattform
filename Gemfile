@@ -1,5 +1,5 @@
 # YourPlatform
-gem 'your_platform', github: 'fiedl/your_platform', branch: 'master'
+gem 'your_platform', github: 'fiedl/your_platform', branch: 'sf/wingolf-org'
 
 source 'https://rubygems.org' do
   # Ruby License, http://www.ruby-lang.org/en/LICENSE.txt
@@ -27,7 +27,7 @@ source 'https://rubygems.org' do
   gem 'unicorn'
 
   # RAILS-3-MIGRATION TEMPORARY GEMS, TODO: REMOVE THOSE
-  gem 'protected_attributes', require: 'protected_attributes'
+  gem 'protected_attributes', require: 'protected_attributes' # When we remove this, we need CanCanCan. See also: http://stackoverflow.com/a/18766552/2066546
   gem 'activesupport-json_encoder'
 
   # Deploy with Capistrano
@@ -94,17 +94,17 @@ source 'https://rubygems.org' do
     gem 'launchy'
     gem 'factory_girl_rails', '>= 4.0.0' # '1.4.0'
     gem 'database_cleaner'
-    gem 'guard-spork'
-    gem 'spork'
     gem 'simplecov', require: false
     gem 'email_spec'
     gem 'timecop'  # time_travel
     gem 'fuubar' # better progress bar for specs
     gem "codeclimate-test-reporter", require: nil
+    gem 'poltergeist'
+    gem 'selenium-webdriver'
   end
-
-  group :test do
-    gem 'poltergeist', '1.5.0'
+  group :development do
+    gem 'spring'
+    gem 'spring-commands-rspec'
   end
 
   # Pry Console Addon
@@ -128,8 +128,6 @@ source 'https://rubygems.org' do
   # readline (for rails console)
   # see https://github.com/luislavena/rb-readline/issues/84#issuecomment-17335885
   #gem 'rb-readline', '~> 0.5.0', group: :development, require: 'readline'
-
-  gem 'gmaps4rails', '~> 2.0.1', git: 'git://github.com/fiedl/Google-Maps-for-Rails.git'
 
   # To customly set timeout time we need rack-timeout
   gem 'rack-timeout'
@@ -165,6 +163,7 @@ source 'https://rubygems.org' do
   #gem 'bootstrap', git: 'https://github.com/twbs/bootstrap-rubygem'
 
   gem 'sidekiq', '~> 3.5.1'
+
 end
 
 source 'https://rails-assets.org'
@@ -173,3 +172,4 @@ source 'https://rails-assets.org'
 #end
 
 ruby '2.3.1'
+

@@ -102,13 +102,6 @@ module AbilityDefinitions
         (workflow.admins_of_ancestors.include?(user))
       end
 
-      can :manage, Page do |page|
-        page.admins_of_self_and_ancestors.include? user
-      end
-      can :manage, Attachment do |attachment|
-        can? :manage, attachment.parent
-      end
-
       can :manage, ProfileField do |profile_field|
         profile_field.profileable.nil? ||  # in order to create profile fields
           (can?(:update, profile_field.profileable) && profile_field.key != "W-Nummer")
@@ -120,9 +113,11 @@ module AbilityDefinitions
       # Lokale Administratoren dürfen Aktivmeldungen eintragen, wenn sie mindestens
       # eine Aktivitas administrieren.
       #
-      can :create, User do
-        user.administrated_aktivitates.count > 0
-      end
+      can :create, User if user.administrated_aktivitates.count > 0
+
+      # Öffentliche Homepages
+      can :index, :home_pages
+      can :create, Pages::HomePage
     end
   end
 
@@ -254,6 +249,10 @@ module AbilityDefinitions
     # - ics calendar feed
     #
     super
+
+    can [:read, :download], Attachment do |attachment|
+      Attachment.wingolfshaus.include?(attachment) || Attachment.wappen.include?(attachment)
+    end
 
     # Nobody, not even global admins, can send posts to deceased-groups.
     # Also creating events for those groups is not good.

@@ -48,6 +48,7 @@ feature 'User page', js: false do
       #it { should have_selector('title', text: 'Wingolfsplattform') } #can't get it to work on capybara 2.0
 
       scenario "the section #{I18n.t(:contact_information)} should be editable", js: true do
+        click_tab :contact_info_tab
         within('.box.section.contact_information') do
           page.should have_selector('.postal_address', :visible => true)
           page.should have_no_selector('.radio', :visible => true )
@@ -62,6 +63,7 @@ feature 'User page', js: false do
       end
 
       scenario "the section #{I18n.t(:organizations)} should be editable", js: true do
+        click_tab :study_and_work_tab
         within('.box.section.organizations') do
           click_on I18n.t(:edit)
           page.should have_selector('a.add_button', visible: true)
@@ -82,10 +84,11 @@ feature 'User page', js: false do
           page.should have_no_selector('li')
         end
       end
-      
+
       scenario "editing the 'study information' box", js: true do
+        click_tab :study_and_work_tab
         within '.box.section.study_information' do
-          
+
           # Adding a study profile field.
           #
           click_on I18n.t :edit
@@ -106,29 +109,30 @@ feature 'User page', js: false do
           study_field.university.should == "FAU Erlangen"
           study_field.subject.should == "Physics"
           study_field.specialization.should_not be_present
-          
+
           # Changing the study field.
           #
           within '.profile_field.subject' do
             find('.best_in_place').click  # Physics
             fill_in 'value', with: "Theoretical and Experimental Physics\n"
-          
+
             wait_for_ajax
             study_field.reload.subject.should == "Theoretical and Experimental Physics"
           end
-          
+
           # Removing the study field.
           #
           click_on I18n.t :edit
           find('.remove_button').click
           find('.save_button').click
-          
+
           wait_for_ajax
           @user.profile_fields.where(type: 'ProfileFieldTypes::Study').count.should == 0
         end
       end
 
       scenario "the section #{I18n.t(:career_information)} should be editable", js: true do
+        click_tab :study_and_work_tab
         within '.box.section.career_information' do
           click_on I18n.t(:edit)
           subject.should have_selector('a.add_button', visible: true)
@@ -157,6 +161,7 @@ feature 'User page', js: false do
       end
 
       scenario "the section #{I18n.t(:access_information)}", js: true do
+        click_tab :more_info_tab
         within('.box.section.access') do
 
           click_on I18n.t(:edit)
@@ -167,6 +172,7 @@ feature 'User page', js: false do
       end
 
       scenario "the section #{I18n.t(:communication)} should be editable", js: true do
+        click_tab :more_info_tab
         within('.box.section.communication') do
           click_on I18n.t(:edit)
           page.should have_selector('select', :visible => true)
@@ -185,6 +191,7 @@ feature 'User page', js: false do
         end
 
         scenario 'the profile sections should not be editable', js: true do
+          click_tab :contact_info_tab
           within('.box.section.contact_information') do
             page.should have_selector('.postal_address', :visible => true)
             page.should have_no_selector('.radio', :visible => true)
@@ -193,6 +200,7 @@ feature 'User page', js: false do
             subject.should have_no_selector('.remove_button', visible: true)
           end
 
+          click_tab :study_and_work_tab
           within '.box.section.career_information' do
             subject.should have_no_selector('a.edit_button', visible: true)
             subject.should have_no_selector('a.add_button', visible: true)
@@ -201,32 +209,39 @@ feature 'User page', js: false do
         end
 
         scenario "the section #{I18n.t(:communication)} should not be editable", js: true do
+          click_tab :more_info_tab
           subject.should have_no_selector('a.edit_button', visible: true)
         end
 
         scenario 'the empty sections should not be visible' do
+          click_tab :study_and_work_tab
           subject.should have_no_selector('.box.section.organizations')
         end
 
         scenario 'the bank account section should not be visible' do
+          click_tab :more_info_tab
           subject.should have_no_selector('h1', text: I18n.t(:bank_account_information))
-
         end
       end
 
       describe 'and visiting the own profile' do
-        
+
         background do
           login(@user)
           visit user_path(@user)
         end
 
         scenario 'the profile sections should be editable', js: true do
+          click_tab :contact_info_tab
           section_should_be_editable(:contact_information, [ProfileFieldTypes::Address, ProfileFieldTypes::Email, ProfileFieldTypes::Phone, ProfileFieldTypes::Homepage, ProfileFieldTypes::Custom])
+
+          click_tab :study_and_work_tab
           section_should_be_editable(:about_myself)
           section_should_be_editable(:study_information)
           section_should_be_editable(:career_information, [ProfileFieldTypes::Employment, ProfileFieldTypes::ProfessionalCategory])
           section_should_be_editable(:organizations)
+
+          click_tab :more_info_tab
           section_should_be_editable(:bank_account_information)
         end
 
@@ -249,6 +264,7 @@ feature 'User page', js: false do
         end
 
         scenario "the section #{I18n.t(:contact_information)} should be editable", js: true do
+          click_tab :contact_info_tab
           within('.box.section.contact_information') do
             page.should have_selector('.postal_address', :visible => true)
             page.should have_no_selector('.radio', :visible => true)
@@ -263,6 +279,7 @@ feature 'User page', js: false do
           end
         end
         scenario "the section #{I18n.t(:communication)} should be editable", js: true do
+          click_tab :more_info_tab
           within('.box.section.communication') do
             click_on I18n.t(:edit)
             page.should have_selector('select', :visible => true)
@@ -270,6 +287,7 @@ feature 'User page', js: false do
         end
 
         scenario "the section #{I18n.t(:study_information)} should be editable", js: true do
+          click_tab :study_and_work_tab
           within('.box.section.study_information') do
             click_on I18n.t(:edit)
             page.should have_selector('a.add_button', visible: true)
@@ -287,18 +305,22 @@ feature 'User page', js: false do
             click_on I18n.t(:save)
             wait_for_ajax; wait_for_ajax
             page.should have_content("StudiumUniversale")
+          end
 
-            visit user_path(@user)
+          visit user_path(@user)
+          click_tab :study_and_work_tab
+          within('.box.section.study_information') do
             page.should have_content("StudiumUniversale")
           end
         end
-        
+
         scenario "Looking at the section 'access' and requesting a new password", js: true do
+          click_tab :more_info_tab
           within('.box.section.access') do
             page.should have_text @user.alias
             page.should have_text @user.name
             page.should have_text @user.email
-            
+
             click_on I18n.t(:edit)
             page.should have_selector "input[type=text]", count: 1  # alias
             page.should have_text "Zugang zur Plattform"
@@ -323,6 +345,7 @@ feature 'User page', js: false do
       end
 
       scenario 'the section for account information', js: true do
+        click_tab :more_info_tab
         within('.box.section.access') do
           page.should have_content(I18n.t :user_has_no_account)
 

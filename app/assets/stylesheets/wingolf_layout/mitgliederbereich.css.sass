@@ -4,7 +4,7 @@
   background: $signed-in-bar-bgcolor
   height: 45px
   .content
-    width: 846px
+    max-width: 846px
     margin: 0 auto
     position: relative
     a
@@ -52,13 +52,13 @@
       li.backendBarItem.dropdown
         ul.dropdown-menu
           padding: 8px
-          margin: 0px    
+          margin: 0px
           li
             height: auto
             padding: 0px
             margin: 0px
             a
-              height: auto 
+              height: auto
               width: 100%
               padding: 8px
             a:hover
@@ -72,13 +72,12 @@
           background: repeat #f8f5ee
           a
             color: $link-color
-              
+
       li.backendBarItem.dropdown:hover
         ul.dropdown-menu
-          display: block        
+          display: block
   b.caret
     border-top-color: white
   a:hover
     b.caret
       border-top-color: $link-color
-      

@@ -8,7 +8,7 @@ require_dependency YourPlatform::Engine.root.join( 'app/models/user' ).to_s
 # this re-opened class contains all wingolf-specific additions to the user model.
 #
 class User
-  attr_accessible :wingolfsblaetter_abo, :hidden, :localized_bv_beitrittsdatum
+  attr_accessible :wingolfsblaetter_abo, :hidden, :localized_bv_beitrittsdatum if defined? attr_accessible
 
   # This method is called by a nightly rake task to renew the cache of this object.
   #
@@ -34,6 +34,7 @@ class User
     postal_address
     address_label
     postal_address_updated_at
+    address_fields_json
 
     corporations
     current_corporations

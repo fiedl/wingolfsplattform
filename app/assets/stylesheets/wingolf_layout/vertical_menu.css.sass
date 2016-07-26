@@ -3,17 +3,17 @@ $dark: #e6e6e4
 $light: #f8f7f5
 // #f8f7f5, #a15d5a
 $black: #222222
-$border: #cccccc  
+$border: #cccccc
 $border_shade: #d6d3cd
 
 .vertical_nav
   ul.nav
-    width: 197px
+    width: 100%
     margin: 0
     margin-bottom: 15px
     padding: 0
     list-style: none
-    
+
     * a
       color: #000
       padding: 8px 4px 8px 10px
@@ -22,6 +22,7 @@ $border_shade: #d6d3cd
       border-left: 1px solid $border_shade
       border-right: 1px solid $border_shade
       margin-bottom: 1px
+      word-wrap: break-word
 
     * a
       background: $light
@@ -31,7 +32,7 @@ $border_shade: #d6d3cd
       background: $dark
     li.ancestor a:hover
       background: $light
-      
+
     li.recent a
       background: $dark
     li.recent a:hover
@@ -46,3 +47,8 @@ $border_shade: #d6d3cd
     li.child a:hover
       background: #fff
 
+.vertical_nav_col
+  padding-left: 0px
+.content_col
+  padding-left: 0px
+  padding-right: 0px

@@ -1,23 +1,34 @@
-#logged-in-bar
+body.wingolf_layout
 
-  li.first > .user_avatar > .avatar > img
-    margin-top: 6px
-    margin-bottom: 6px
-  
-  // This makes the dropdowns visible on hovering the trigger.
-  //
-  li.dropdown:hover
+  #logged-in-bar
+
+    li.first > .user_avatar > .avatar > img
+      margin-top: 6px
+      margin-bottom: 6px
+
+    // This makes the dropdowns visible on hovering the trigger.
+    //
+    li.dropdown:hover
+      ul.dropdown-menu
+        display: block
+
     ul.dropdown-menu
-      display: block
-  
-  ul.dropdown-menu
-    > li.user_name
-      padding: 7px !important
-      font-weight: bold
-      font-family: Helvetica
-    > li.user_email
-      padding: 7px !important
-      margin-bottom: 10px
-      font-weight: normal
-      font-family: Helvetica
-    
+      > li.user_name
+        padding: 7px !important
+        font-weight: bold
+        font-family: Helvetica
+      > li.user_email
+        padding: 7px !important
+        margin-bottom: 10px
+        font-weight: normal
+        font-family: Helvetica
+
+    // Centering the user name for small devices does not look so good after all.
+    //
+    //@media (max-width: 500px)
+    //  #backendBar
+    //    text-align: center
+    //    ul.backendBarItems
+    //      display: inline-block
+    //      li.backendBarItem.first
+    //        margin-right: 0px
