@@ -33,9 +33,6 @@ source 'https://rubygems.org' do
   # Deploy with Capistrano
   # gem 'capistrano'
 
-  # HTML-Nodes
-  gem 'nokogiri'								# MIT License
-
   # DAG für Nodes Model, see: https://github.com/resgraph/acts-as-dag
   #gem 'acts-as-dag', path: '../acts-as-dag'
   #gem 'acts-as-dag', git: "git://github.com/resgraph/acts-as-dag.git"	# MIT License
