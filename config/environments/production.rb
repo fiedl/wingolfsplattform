@@ -8,15 +8,14 @@ Rails.application.configure do
   # your application in memory, allowing both threaded web servers
   # and those relying on copy on write to perform better.
   # Rake tasks automatically ignore this option for performance.
-  config.eager_load = true  
-  
+  config.eager_load = true
+
   # Full error reports are disabled.
   config.consider_all_requests_local = false
 
   # Caching
+  # See also: your_platform/config/initializers/cache.rb
   config.action_controller.perform_caching = true
-  # config.cache_store = :file_store, Rails.root.join("tmp/app_cache")
-  config.cache_store = :redis_store, "redis://localhost:6379/0/", { expires_in: 1.week, namespace: "#{::STAGE}_cache" }
 
   # Enable Rack::Cache to put a simple HTTP cache in front of your application
   # Add `rack-cache` to your Gemfile before enabling this.
@@ -76,17 +75,17 @@ Rails.application.configure do
 
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
-  
+
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-  
-  
+
+
   # Load Secret Settings
   # -> moved to config/application.rb
-  
+
   if ::STAGE.to_s.include? 'master'
     config.asset_host = 'http://master.wingolfsplattform.org'
   elsif ::STAGE.to_s.include? 'sandbox'
@@ -94,7 +93,7 @@ Rails.application.configure do
   else
     config.asset_host = 'https://wingolfsplattform.org'
   end
-  
+
   # SMTP Settings
   config.action_mailer.delivery_method = :smtp
 
@@ -116,12 +115,12 @@ Rails.application.configure do
     # only if certificate malfunctions:
     # openssl_verify_mode: OpenSSL::SSL::VERIFY_NONE
   }
-  
+
   # See: http://stackoverflow.com/a/12609856/2066546
-  config.action_mailer.default_options = {    
+  config.action_mailer.default_options = {
     from: 'Wingolfsplattform <wingolfsplattform@wingolf.org>'
   }
-  
+
   config.action_mailer.default_url_options = { host: 'wingolfsplattform.org', protocol: 'https' }
 
 end

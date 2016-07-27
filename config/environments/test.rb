@@ -6,7 +6,7 @@ Rails.application.configure do
   # your test database is "scratch space" for the test suite and is wiped
   # and recreated between test runs. Don't rely on the data there!
   config.cache_classes = true
-  
+
   # Do not eager load code on boot. This avoids loading your whole application
   # just for the purpose of running a single test. If you are using a tool that
   # preloads Rails for running tests, you may have to set it to true.
@@ -18,10 +18,10 @@ Rails.application.configure do
 
   # Show full error reports.
   config.consider_all_requests_local       = true
-  
-  # Caching.
+
+  # Caching
+  # See also: your_platform/config/initializers/cache.rb
   config.action_controller.perform_caching = true  # default: false
-  config.cache_store = :redis_store, 'redis://redis:6379/0/', { expires_in: 90.minutes, namespace: 'test_cache' }
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
@@ -34,23 +34,23 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
   config.action_mailer.default_url_options = { :host => 'localhost' }
-  config.action_mailer.default_options = {    
+  config.action_mailer.default_options = {
     from: 'Wingolfsplattform <wingolfsplattform@wingolf.org>'
   }
 
   # Raise exception on mass assignment protection for Active Record models
   # This is deactivated, now, since we use strong_parameters.
   # https://github.com/rails/strong_parameters/
-  # 
+  #
   # config.active_record.mass_assignment_sanitizer = :strict
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
-  
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
-  
+
   # Randomize the order test cases are executed.
   config.active_support.test_order = :random
-  
+
 end
