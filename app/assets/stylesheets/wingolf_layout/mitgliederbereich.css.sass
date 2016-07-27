@@ -7,8 +7,11 @@
     width: 846px
     margin: 0 auto
     position: relative
-    a
+    a, input[type='submit']
       color: $signed-in-bar-color
+      background: none
+      border: none
+      text-align: left
     ul.backendBarItems
       margin: 0px
       padding: 0px
@@ -24,7 +27,7 @@
         padding: 0px
         position: relative
         height: 45px
-        a
+        a, input[type='submit']
           display: inline-block
           height: 45px
           padding: 13px 11px 13px 11px
@@ -47,38 +50,37 @@
           background: repeat #e8e5de
           background-image: image-url("content_wrapper.gif")
           color: $link-color
-          a
+          a, input[type='submit']
             color: $link-color
       li.backendBarItem.dropdown
         ul.dropdown-menu
           padding: 8px
-          margin: 0px    
+          margin: 0px
           li
             height: auto
             padding: 0px
             margin: 0px
-            a
-              height: auto 
+            a, input[type='submit']
+              height: auto
               width: 100%
               padding: 8px
-            a:hover
+            a:hover, input[type='submit']:hover
               background: repeat #e8e5de
           li.active
-            a
+            a, input[type='submit']
               background: #f8f5ee
             a:hover
               background: repeat #e8e5de
         li.backendBarItem.dropdown.active
           background: repeat #f8f5ee
-          a
+          a, input[type='submit']
             color: $link-color
-              
+
       li.backendBarItem.dropdown:hover
         ul.dropdown-menu
-          display: block        
+          display: block
   b.caret
     border-top-color: white
   a:hover
     b.caret
       border-top-color: $link-color
-      

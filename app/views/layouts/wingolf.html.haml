@@ -41,7 +41,7 @@
                     %li= link_to t(:change_avatar), user_path(current_user, trigger_change_avatar: true)
                     %li= link_to t(:change_password), change_password_path
                     %li= link_to t(:settings), user_settings_path(current_user)
-                    %li= link_to t(:sign_out), sign_out_path, method: :delete
+                    %li= button_to t(:sign_out), sign_out_path, method: :delete
                 %li.backendBarItem
                   = link_to t(:my_profile), current_user, :class => 'my_profile'
                 %li.backendBarItem.dropdown
@@ -62,7 +62,7 @@
                 - #   %ul.dropdown-menu.my-favorites
                 - #     = bookmarked_objects_lis( current_user )
                 %li.last.backendBarItem
-                  = link_to t(:sign_out), sign_out_path, method: :delete, id: 'sign_out'
+                  = button_to t(:sign_out), sign_out_path, method: :delete, id: 'sign_out'
             .clear
     - Rack::MiniProfiler.step("#header-bar") do
       #header-bar
