@@ -13,7 +13,8 @@ web:
   build: .
   dockerfile: Dockerfile_web
   environment:
-    - REDIS_HOST=redis
+    REDIS_HOST: redis
+    MYSQL_ROOT_PASSWORD: QW124453x
   links:
     - db
     - redis

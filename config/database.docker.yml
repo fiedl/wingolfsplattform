@@ -1,0 +1,17 @@
+development:
+  adapter: mysql2
+  reconnect: false
+  database: wingolfsplattform_development
+  pool: 25
+  username: root
+  password: <%= ENV['MYSQL_ROOT_PASSWORD'] %>
+  host: db
+
+test:
+  adapter: mysql2
+  reconnect: false
+  database: wingolfsplattform_test
+  pool: 5
+  username: root
+  password: <%= ENV['MYSQL_ROOT_PASSWORD'] %>
+  host: db

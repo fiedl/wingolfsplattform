@@ -3,6 +3,8 @@ FROM wingolfsplattform_ruby_base
 ADD . /usr/src/app/
 WORKDIR /usr/src/app/
 
+ADD config/database.docker.yml config/database.yml
+
 #Update to latest Version of bundler
 RUN gem install bundler
 
