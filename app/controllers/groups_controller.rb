@@ -17,7 +17,7 @@ module GroupsControllerOverride
     when 'wingolfsblaetter'
       ListExports::Wingolfsblaetter.from_group(@group)
     when 'stammdaten'
-      authorize! :export, :stammdaten
+      authorize! :export_stammdaten_for, @group
       ListExports::Stammdaten.from_group(@group)
     else
       super(list_preset)

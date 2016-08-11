@@ -77,6 +77,9 @@ module AbilityDefinitions
       can :create_officer_group_for, Group do |group|
         can? :update, group
       end
+      can :export_stammdaten_for, Group do |group|
+        can? :update, group
+      end
 
       can :destroy, Group do |group|
         group.admins_of_self_and_ancestors.include?(user) and
@@ -265,8 +268,6 @@ module AbilityDefinitions
 
   def rights_for_beta_testers
     super
-
-    can :export, :stammdaten
   end
 
 end
