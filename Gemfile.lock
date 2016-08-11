@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: f89212bcc9597db6d9eaec84a8088308f8f85131
+  revision: 5b154960b5834ffe8c7d72574e71c6e90379c7c5
   branch: master
   specs:
     your_platform (1.0.1)
@@ -642,7 +642,7 @@ GEM
       rack
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uglifier (3.0.0)
+    uglifier (3.0.1)
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
