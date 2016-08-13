@@ -107,9 +107,6 @@ source 'https://rubygems.org' do
   # Pry Console Addon
   gem 'pry', group: :development
 
-  # Turbolinks
-  gem 'turbolinks', '>= 3.0', github: 'rails/turbolinks'
-
   # Receiving Mails
   gem 'mailman', require: false
   # gem 'rb-inotify', '~> 0.9', group: :production
