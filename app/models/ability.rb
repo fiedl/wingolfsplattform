@@ -268,6 +268,7 @@ module AbilityDefinitions
 
   def rights_for_beta_testers
     super
+    cannot :use, :semester_calendars
   end
 
 end
