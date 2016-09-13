@@ -34,18 +34,19 @@ class Event
 
   def save_scope_association_if_needed
     if parent_groups.first
-      corporation = parent_groups.first.corporation
-      aktivitas = corporation.aktivitas
-      philisterschaft = corporation.philisterschaft
+      if corporation = parent_groups.first.corporation
+        aktivitas = corporation.aktivitas
+        philisterschaft = corporation.philisterschaft
 
-      if @scope_has_changed
-        @scope_has_changed = false
-        if aktive and philister
-          self.move_to corporation
-        elsif aktive and not philister
-          self.move_to aktivitas
-        elsif not aktive and philister
-          self.move_to philisterschaft
+        if @scope_has_changed
+          @scope_has_changed = false
+          if aktive and philister
+            self.move_to corporation
+          elsif aktive and not philister
+            self.move_to aktivitas
+          elsif not aktive and philister
+            self.move_to philisterschaft
+          end
         end
       end
     end
