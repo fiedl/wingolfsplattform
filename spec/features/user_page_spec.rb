@@ -82,10 +82,10 @@ feature 'User page', js: false do
           page.should have_no_selector('li')
         end
       end
-      
+
       scenario "editing the 'study information' box", js: true do
         within '.box.section.study_information' do
-          
+
           # Adding a study profile field.
           #
           click_on I18n.t :edit
@@ -106,23 +106,23 @@ feature 'User page', js: false do
           study_field.university.should == "FAU Erlangen"
           study_field.subject.should == "Physics"
           study_field.specialization.should_not be_present
-          
+
           # Changing the study field.
           #
           within '.profile_field.subject' do
             find('.best_in_place').click  # Physics
             fill_in 'value', with: "Theoretical and Experimental Physics\n"
-          
+
             wait_for_ajax
             study_field.reload.subject.should == "Theoretical and Experimental Physics"
           end
-          
+
           # Removing the study field.
           #
           click_on I18n.t :edit
           find('.remove_button').click
           find('.save_button').click
-          
+
           wait_for_ajax
           @user.profile_fields.where(type: 'ProfileFieldTypes::Study').count.should == 0
         end
@@ -215,7 +215,7 @@ feature 'User page', js: false do
       end
 
       describe 'and visiting the own profile' do
-        
+
         background do
           login(@user)
           visit user_path(@user)
@@ -292,13 +292,13 @@ feature 'User page', js: false do
             page.should have_content("StudiumUniversale")
           end
         end
-        
+
         scenario "Looking at the section 'access' and requesting a new password", js: true do
           within('.box.section.access') do
             page.should have_text @user.alias
             page.should have_text @user.name
             page.should have_text @user.email
-            
+
             click_on I18n.t(:edit)
             page.should have_selector "input[type=text]", count: 1  # alias
             page.should have_text "Zugang zur Plattform"
