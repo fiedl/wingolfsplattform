@@ -11,8 +11,8 @@ feature 'User page', js: false do
 
     background do
       User.destroy_all
-      @user = create(:user_with_account, :with_corporate_vita, :with_address)
-      @other_user = create(:user_with_account, :with_profile_fields, :with_corporate_vita, :with_address, :with_bank_account)
+      @user = create(:user_with_account, :with_corporate_vita, :with_postal_address)
+      @other_user = create(:user_with_account, :with_profile_fields, :with_corporate_vita, :with_postal_address, :with_bank_account)
     end
 
 
@@ -49,6 +49,7 @@ feature 'User page', js: false do
 
       scenario "the section #{I18n.t(:contact_information)} should be editable", js: true do
         within('.box.section.contact_information') do
+
           page.should have_selector('.postal_address', :visible => true)
           page.should have_no_selector('.radio', :visible => true )
 
