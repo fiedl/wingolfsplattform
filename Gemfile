@@ -98,10 +98,7 @@ source 'https://rubygems.org' do
     gem 'timecop'  # time_travel
     gem 'fuubar' # better progress bar for specs
     gem "codeclimate-test-reporter", require: nil
-  end
-
-  group :test do
-    gem 'poltergeist', '1.5.0'
+    gem 'poltergeist'
     gem 'selenium-webdriver'
   end
 

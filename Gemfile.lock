@@ -185,7 +185,8 @@ GEM
     builder (3.2.2)
     callsite (0.0.11)
     cancan (1.6.10)
-    capybara (2.2.0)
+    capybara (2.8.1)
+      addressable
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
@@ -215,6 +216,8 @@ GEM
     celluloid-supervision (0.20.6)
       timers (>= 4.1.1)
     charlock_holmes (0.6.9.4)
+    childprocess (0.5.9)
+      ffi (~> 1.0, >= 1.0.11)
     cliver (0.3.2)
     codeclimate-test-reporter (0.4.7)
       simplecov (>= 0.7.1, < 1.0.0)
@@ -415,10 +418,9 @@ GEM
     pdf-core (0.6.1)
     phony (2.15.28)
     pkg-config (1.1.7)
-    poltergeist (1.5.0)
+    poltergeist (1.10.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
-      multi_json (~> 1.0)
       websocket-driver (>= 0.2.0)
     protected_attributes (1.1.3)
       activemodel (>= 4.0.1, < 5.0)
@@ -555,6 +557,7 @@ GEM
       sexp_processor (~> 4.0)
     ruby_parser (3.7.2)
       sexp_processor (~> 4.1)
+    rubyzip (1.2.0)
     safe_yaml (1.0.4)
     sass (3.4.22)
     sass-rails (5.0.6)
@@ -563,6 +566,10 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
+    selenium-webdriver (2.53.4)
+      childprocess (~> 0.5)
+      rubyzip (~> 1.0)
+      websocket (~> 1.0)
     sexp_processor (4.6.0)
     sidekiq (3.5.4)
       celluloid (~> 0.17.2)
@@ -655,7 +662,10 @@ GEM
       activemodel (>= 4.2)
       debug_inspector
       railties (>= 4.2)
-    websocket-driver (0.3.2)
+    websocket (1.2.3)
+    websocket-driver (0.6.4)
+      websocket-extensions (>= 0.1.0)
+    websocket-extensions (0.1.2)
     will_paginate (3.1.0)
     xpath (2.0.0)
       nokogiri (~> 1.3)
@@ -694,7 +704,7 @@ DEPENDENCIES
   meta_request!
   mysql2!
   newrelic_rpm!
-  poltergeist (= 1.5.0)!
+  poltergeist!
   prawn!
   protected_attributes!
   pry!
@@ -705,6 +715,7 @@ DEPENDENCIES
   rspec-rails!
   rspec-rerun!
   sass-rails (>= 4.0.3)!
+  selenium-webdriver!
   sidekiq (~> 3.5.1)!
   sidekiq-failures!
   simplecov!
