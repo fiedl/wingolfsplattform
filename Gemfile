@@ -102,6 +102,7 @@ source 'https://rubygems.org' do
 
   group :test do
     gem 'poltergeist', '1.5.0'
+    gem 'selenium-webdriver'
   end
 
   # Pry Console Addon
