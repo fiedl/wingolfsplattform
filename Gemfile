@@ -127,7 +127,7 @@ source 'https://rubygems.org' do
   gem 'rack-timeout'
 
   # Metrics
-  #gem 'fnordmetric'
+  gem 'browser', '1.1.0'
 
   # Profiling
   gem 'rack-mini-profiler'
