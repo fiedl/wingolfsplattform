@@ -12,7 +12,11 @@ module ProfileFieldTypes
     # This method returns the Bv associated with the given address.
     #
     def bv
-      Bv.by_address_field(self)
+      Bv.find bv_id if bv_id
+    end
+
+    def bv_id
+      cached { Bv.by_address_field(self).try(:id) }
     end
 
     # The html output method is overridden here, in order to display the bv as well.

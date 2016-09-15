@@ -34,6 +34,7 @@ class User
     postal_address
     address_label
     postal_address_updated_at
+    address_profile_fields.map(&:bv)
 
     corporations
     current_corporations
