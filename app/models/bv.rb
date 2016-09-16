@@ -29,7 +29,7 @@ class Bv < Group
   end
 
   def self.by_country_code_and_town_and_plz(country_code, town, plz)
-    country_code = country_code.upcase
+    country_code = country_code.try(:upcase)
 
     # Deutschland: BV per Wohnort (`town`) identifizieren.
     #
