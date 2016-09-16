@@ -12,6 +12,7 @@ class ProfileField
 
   def adopt_profileable_bv
     if self.kind_of?(ProfileFieldTypes::Address) && self.profileable.kind_of?(User) && self.profileable.alive? && self.profileable.wingolfit?
+      self.delete_cache
       self.profileable.adapt_bv_to_primary_address
     elsif self.parent.kind_of?(ProfileFieldTypes::Address) and self.key == 'postal_code'
       self.parent.delay_for(10.seconds).adopt_profileable_bv

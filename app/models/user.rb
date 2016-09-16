@@ -137,6 +137,7 @@ class User
   def correct_bv
     if self.philister?
       if primary_address_field.try(:value).try(:present?)
+        primary_address_field.delete_cache
         primary_address_field.bv
       else
         # Wenn keine Adresse gegeben ist, in den BV 00 (Unbekannt Verzogen) verschieben.
