@@ -13,11 +13,12 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 883c6a5954521f8862879f7d16f153c5edaa1521
+  revision: 415407b4f2c3a90e12f403a65176a32aa1fb42f2
   branch: master
   specs:
     your_platform (1.0.1)
       actionpack (>= 4.2.5.2)
+      activerecord (>= 4.2.7.1)
       acts-as-dag (>= 2.5.7)
       acts_as_tree
       auto_html (~> 1.6.4)
@@ -70,6 +71,7 @@ GIT
       rails-assets-datatables (>= 1.10.10)
       rails-assets-jquery-ui
       rails-assets-jquery-ujs
+      rails-assets-trentrichardson--jQuery-Timepicker-Addon (>= 1.6.3)
       rails-i18n
       rails-settings-cached
       redcarpet (>= 3.3.2)
@@ -96,7 +98,7 @@ GIT
 
 GIT
   remote: git://github.com/prawnpdf/prawn.git
-  revision: af6baeff1a97b68b83a76b2a9bdfa249e6bda47d
+  revision: ec9531b6eb0a61cfed0748a395679f053a2d62cd
   specs:
     prawn (2.1.1)
       pdf-core (~> 0.6.1)
@@ -146,7 +148,7 @@ GEM
     acts-as-dag (4.0.0)
       activemodel
       activerecord (~> 4.0, >= 4.0.0)
-    acts_as_tree (2.5.0)
+    acts_as_tree (2.5.1)
       activerecord (>= 3.0.0)
     addressable (2.4.0)
     ambry (1.0.0)
@@ -154,7 +156,7 @@ GEM
     auto_html (1.6.4)
       redcarpet (~> 3.1)
       rinku (~> 1.5.0)
-    autoprefixer-rails (6.4.0.2)
+    autoprefixer-rails (6.4.1.1)
       execjs
     autosize-rails (1.18.17)
       rails (>= 3.1)
@@ -247,7 +249,7 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
-    domain_name (0.5.20160615)
+    domain_name (0.5.20160826)
       unf (>= 0.0.5, < 1.0.0)
     edit_mode (1.0.2)
       jquery-rails
@@ -289,7 +291,7 @@ GEM
       rspec (>= 2.14.0, < 3.1.0)
       ruby-progressbar (~> 1.4)
     gemoji (2.1.0)
-    geocoder (1.3.7)
+    geocoder (1.4.0)
     geoip (1.6.2)
     git-version-bump (0.15.1)
     globalid (0.3.7)
@@ -316,21 +318,21 @@ GEM
       tilt
     has_secure_token (1.0.0)
       activerecord (>= 3.0)
-    hashie (3.4.4)
+    hashie (3.4.6)
     highline (1.7.8)
     hitimes (1.2.4)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     i18n (0.7.0)
-    i18n-js (3.0.0.rc13)
+    i18n-js (3.0.0.rc14)
       i18n (~> 0.6, >= 0.6.6)
-    icalendar (2.4.0)
+    icalendar (2.4.1)
     jquery-atwho-rails (1.3.2)
     jquery-fileupload-rails (0.4.7)
       actionpack (>= 3.1)
       railties (>= 3.1)
       sass (>= 3.2)
-    jquery-rails (4.1.1)
+    jquery-rails (4.2.1)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
@@ -340,7 +342,7 @@ GEM
     json (1.8.3)
     judge (2.1.1)
       rails (>= 3.1)
-    jwt (1.5.4)
+    jwt (1.5.6)
     kgio (2.10.0)
     launchy (2.2.0)
       addressable (~> 2.3)
@@ -416,7 +418,7 @@ GEM
     orm_adapter (0.5.0)
     passgen (1.0.2)
     pdf-core (0.6.1)
-    phony (2.15.28)
+    phony (2.15.31)
     pkg-config (1.1.7)
     poltergeist (1.10.0)
       capybara (~> 2.1)
@@ -466,10 +468,11 @@ GEM
       rails-assets-jquery (>= 1.7.0)
     rails-assets-font-awesome (4.6.3)
     rails-assets-jquery (3.1.0)
-    rails-assets-jquery-ui (1.12.0)
+    rails-assets-jquery-ui (1.12.1)
       rails-assets-jquery (>= 1.6)
-    rails-assets-jquery-ujs (1.2.1)
+    rails-assets-jquery-ujs (1.2.2)
       rails-assets-jquery (> 1.8)
+    rails-assets-trentrichardson--jQuery-Timepicker-Addon (1.6.3)
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
     rails-dom-testing (1.0.7)
@@ -489,7 +492,7 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     raindrops (0.15.0)
-    rake (11.2.2)
+    rake (11.3.0)
     rake-compiler (0.9.2)
       rake
     rb-fsevent (0.9.3)
@@ -646,7 +649,7 @@ GEM
       rack
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uglifier (3.0.1)
+    uglifier (3.0.2)
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
@@ -666,7 +669,7 @@ GEM
     websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
-    will_paginate (3.1.0)
+    will_paginate (3.1.3)
     xpath (2.0.0)
       nokogiri (~> 1.3)
     yard (0.8.7.6)
