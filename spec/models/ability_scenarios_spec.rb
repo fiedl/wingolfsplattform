@@ -271,4 +271,48 @@ describe Ability do
     he { should be_able_to :manage, @subpage }
     he { should be_able_to :manage, @attachment }
   end
+
+  describe "(Semesterprogramme)" do
+    before do
+      @corporation = create :wingolf_corporation
+      @semester_calendar = @corporation.semester_calendars.create year: Time.zone.now.year, term: :summer_term
+      @pdf = @semester_calendar.attachments.create
+    end
+
+    describe "Der Senior" do
+      before do
+        @corporation.aktivitas.create_officer_group(name: "Senior").assign_user user
+      end
+
+      he { should be_able_to :create_semester_calendar_for, @corporation }
+      he { should be_able_to :update, @semester_calendar }
+      he { should_not be_able_to :destroy, @semester_calendar }
+      he "should be able to destroy the semester calendar if it has no attachment" do
+        @semester_calendar.attachments.first.destroy
+        the_user.should be_able_to :destroy, @semester_calendar
+      end
+      he { should be_able_to :create_attachment_for, @semester_calendar }
+      he { should_not be_able_to :destroy, @pdf }
+    end
+
+    describe "Ein anderer Wingolfit" do
+      before do
+        @other_corporation = create :wingolf_corporation
+        @other_corporation.status_groups.first.assign_user user
+      end
+
+      he { should be_able_to :read, @corporation }
+      he { should be_able_to :read, @semester_calendar }
+      he { should be_able_to :read, @semester_calendar.attachments.first }
+      he { should be_able_to :download, @semester_calendar.attachments.first }
+    end
+
+    describe "Irgendein Internetbenutzer" do
+      before { user.account.destroy; user.reload }
+      he { should_not be_able_to :read, @semester_calendar }
+      he { should be_able_to :read, @semester_calendar.attachments.first }
+      he { should be_able_to :download, @semester_calendar.attachments.first }
+    end
+  end
+
 end

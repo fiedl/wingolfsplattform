@@ -126,6 +126,17 @@ module AbilityDefinitions
       can :create, User do
         user.administrated_aktivitates.count > 0
       end
+
+      # Lokale Administratoren dürfen Semesterprogramme löschen.
+      #
+      # Da dies nur dazu dient, versehentlich erstellte Programme zu löschen,
+      # nur, solange noch kein PDF hochgeladen wurde. Die Termine selbst gehen
+      # nicht verloren, da diese nicht mit gelöscht werden, sondern separat
+      # in der Datenbank bleibne. -> Siehe `rights_for_everyone`
+      #
+      can :destroy, SemesterCalendar do |semester_calendar|
+        can?(:update, semester_calendar.group)
+      end
     end
   end
 
@@ -231,6 +242,18 @@ module AbilityDefinitions
     super
 
     if not read_only_mode?
+
+      # Amtsträger der Aktivitas dürfen Semesterprogramme für die Verbindung erstellen.
+      can :create, SemesterCalendar
+      can :create_semester_calendar_for, Corporation do |corporation|
+        user.corporations_the_user_is_officer_in.include? corporation
+      end
+      can :update, SemesterCalendar do |semester_calendar|
+        can? :create_semester_calendar_for, semester_calendar.group
+      end
+      can :destroy, SemesterCalendar do |semester_calendar|
+        can? :update, semester_calendar
+      end
     end
   end
 
@@ -257,6 +280,13 @@ module AbilityDefinitions
     # - ics calendar feed
     #
     super
+
+    # Jeder Internetbenutzer kann Semesterprogramm-PDFs herunterladen, damit
+    # die Verbindungen die Möglichkeit haben, die PDFs zu verlinken.
+    #
+    can [:read, :download], Attachment do |attachment|
+      attachment.parent_type == "SemesterCalendar"
+    end
 
     # Nobody, not even global admins, can send posts to deceased-groups.
     # Also creating events for those groups is not good.
