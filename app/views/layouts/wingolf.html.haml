@@ -94,7 +94,7 @@
               %span#access_indicator
                 = access_indicator if current_user
             %span#content_area
-            - Rack::MiniProfiler.step("#content") do
+            - Rack::MiniProfiler.step("#content_area") do
               #content
                 - if show_vertical_nav?
                   .content_twoCols.content_twoCols-20-80
@@ -103,16 +103,13 @@
                     .content_twoCols_right
                       #flash{data: {'turbolinks-temporary' => true}}= flash_area
                       = render partial: 'shared/read_only_mode_notice' if read_only_mode?
-                      = replace_unicode_special_chars_by_html_escape_strings( |
-                          convert_to_content_box { yield }                    |
-                        )                                                     |
-                    \ 
+                      - Rack::MiniProfiler.step("content") do
+                        = convert_to_content_box { yield }
                 - else
                   = flash_area
                   = render partial: 'shared/read_only_mode_notice' if read_only_mode?
-                  = replace_unicode_special_chars_by_html_escape_strings( |
-                      convert_to_content_box { yield }                    |
-                    )                                                     |
+                  - Rack::MiniProfiler.step("content") do
+                    = convert_to_content_box { yield }
                 .clear
 
     .bottom_page_footer.hidden-print= render partial: 'layouts/footer' unless @hide_footer
