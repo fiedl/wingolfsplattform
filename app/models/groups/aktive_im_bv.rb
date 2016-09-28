@@ -18,7 +18,7 @@ class Groups::AktiveImBv < Groups::GeoSearchGroup
 
   def apply_status_selector(users)
     super.select do |user|
-      user.aktiver? &&
+      (not user.philister?) &&
       (not user.corporations.include? corporation)
     end
   end
