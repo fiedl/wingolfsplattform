@@ -23,29 +23,26 @@ class Event
   end
 
   def aktive=(new_setting)
-    @aktive = new_setting
+    @aktive = new_setting.to_b
     @scope_has_changed = true
   end
 
   def philister=(new_setting)
-    @philister = new_setting
+    @philister = new_setting.to_b
     @scope_has_changed = true
   end
 
   def save_scope_association_if_needed
     if parent_groups.first
       if corporation = parent_groups.first.corporation
-        aktivitas = corporation.aktivitas
-        philisterschaft = corporation.philisterschaft
-
         if @scope_has_changed
           @scope_has_changed = false
           if aktive and philister
             self.move_to corporation
           elsif aktive and not philister
-            self.move_to aktivitas
+            self.move_to corporation.aktivitas
           elsif not aktive and philister
-            self.move_to philisterschaft
+            self.move_to corporation.philisterschaft
           end
         end
       end
