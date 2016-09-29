@@ -19,6 +19,14 @@ module IssueOverride
         super
       end
     end
+
+    def with_wbl_abo
+      ids = self.all.select do |issue|
+        profileable = issue.reference.try(:profileable)
+        profileable.kind_of?(User) and profileable.wingolfsblaetter_abo
+      end
+      self.where(id: ids)
+    end
   end
 
   def self.prepended(base)
@@ -31,5 +39,5 @@ end
 class Issue
   prepend IssueOverride
 
-  scope :wingolfsblaetter, -> { concerning_postal_addresses.unresolved }
+  scope :wingolfsblaetter, -> { concerning_postal_addresses.unresolved.with_wbl_abo }
 end
