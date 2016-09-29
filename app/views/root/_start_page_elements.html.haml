@@ -1,7 +1,28 @@
 .row
   .col-sm-12.col-xs-4
     = render partial: 'root/latest_members_box', locals: {box_heading: 'Aktivmeldungen', group: Group.alle_aktiven}
-  .col-sm-12.col-xs-4  
+  .col-sm-12.col-xs-4
     = render partial: 'root/latest_members_box', locals: {box_heading: 'Philistrationen', group: Group.alle_philister}
-  .col-sm-12.col-xs-4  
+  .col-sm-12.col-xs-4
     = render partial: 'root/latest_members_box', locals: {box_heading: 'Todesfälle', group: Group.where(name: 'Alle verstorbenen Wingolfiten').first}
+  .col-sm-12
+    = Rails.cache.fetch("Austritte", expires_in: 1.day) do
+      - capture_haml do
+        %h1.austritte Austritte
+        %div
+          %p Dieses Jahr:
+          %ul.austritte_und_streichungen
+            %li
+              .austritte_gesamt= "#{anzahl_der_austritte_dieses_jahr} Austritte"
+              %ul
+                %li
+                  %a.has_popover{href: '#', data: {toggle: 'popover', content: austritte_je_aktivitas_dieses_jahr, placement: 'left'}}= "#{anzahl_der_aktivenaustritte_dieses_jahr} Aktive"
+                %li
+                  %a.has_popover{href: '#', data: {toggle: 'popover', content: austritte_je_phv_dieses_jahr, placement: 'top'}}= "#{anzahl_der_philisteraustritte_dieses_jahr} Philister"
+            %li
+              .streichungen_gesamt= "#{anzahl_der_streichungen_dieses_jahr} Streichungen"
+              %ul
+                %li
+                  %a.has_popover{href: '#', data: {toggle: 'popover', content: streichungen_je_aktivitas_dieses_jahr, placement: 'left'}}= "#{anzahl_der_aktivenstreichungen_dieses_jahr} Aktive"
+                %li
+                  %a.has_popover{href: '#', data: {toggle: 'popover', content: streichungen_je_phv_dieses_jahr, placement: 'bottom'}}= "#{anzahl_der_philisterstreichungen_dieses_jahr} Philister"
