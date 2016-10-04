@@ -6,33 +6,18 @@ class ApplicationController
   before_action :new_relic_params
   before_action :collect_data_for_exception_notifier
 
-  layout             :find_layout
-
-
   protected
 
-  def find_layout
-    if cookies[:layout] == 'mobile' and params[:layout].blank?
-      # If it has been mobile, stay mobile, because we are
-      # on a mobile app here (turbolinks-ios).
-      layout = 'mobile'
-    else
-
-      # TODO: The layout should be saved in the user's preferences, i.e. interface settings.
-      layout = "wingolf"
-      layout = "bootstrap" if Rails.env.test?
-
-      layout = "minimal" if layout_setting == "minimal"
-      layout = "wingolf" if layout_setting == "wingolf"
-      layout = "bootstrap" if layout_setting == "bootstrap"
-      layout = "compact" if layout_setting == "compact"
-
-      cookies[:layout] = layout
-    end
-    return layout
+  def permitted_layouts
+    super + ['wingolf']
   end
-  def layout_setting
-    params[:layout] || cookies[:layout]
+
+  def default_layout
+    if Rails.env.test?
+      'bootstrap'
+    else
+      'wingolf'
+    end
   end
 
   def new_relic_params
