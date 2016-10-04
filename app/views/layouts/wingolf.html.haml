@@ -28,14 +28,14 @@
                 %li.first.backendBarItem.dropdown
                   %span.user_avatar
                     = render 'layouts/session_bar_avatar'
-                  %span.user_name#user_name{data: {email: current_user.email, id: current_user.id, title: current_user.title}}
+                  %span.user_name#user_name.obscure-in-demo{data: {email: current_user.email, id: current_user.id, title: current_user.title}}
                     = link_to current_user.title, current_user
                   -#- if can? :use, :merit
                   -#  = link_to merit_indicator(current_user), user_path(current_user) + "#merit"
                   %b.caret
                   %ul.dropdown-menu
-                    %li.user_name= current_user.title
-                    %li.user_email= current_user.email
+                    %li.user_name.obscure-in-demo= current_user.title
+                    %li.user_email.obscure-in-demo= current_user.email
                     %li= link_to t(:my_posts), posts_path
                     %li= link_to t(:my_profile), current_user
                     %li= link_to t(:change_avatar), user_path(current_user, trigger_change_avatar: true)
