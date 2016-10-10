@@ -254,6 +254,13 @@ module AbilityDefinitions
       can :destroy, SemesterCalendar do |semester_calendar|
         can? :update, semester_calendar
       end
+      can [:create_event, :create_event_for], Corporation do |corporation|
+        can? :create_semester_calendar_for, corporation
+      end
+      can [:update, :destroy, :invite_to], Event do |event|
+        event.group.try(:corporation) && user.corporations_the_user_is_officer_in.include?(event.group.corporation)
+      end
+
     end
   end
 
