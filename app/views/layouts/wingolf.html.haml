@@ -93,24 +93,9 @@
                 = breadcrumbs
               %span#access_indicator
                 = access_indicator if current_user
-            %span#content_area
-            - Rack::MiniProfiler.step("#content_area") do
-              #content
-                - if show_vertical_nav?
-                  .content_twoCols.content_twoCols-20-80
-                    .content_twoCols_left.hidden-print
-                      = render partial: 'layouts/vertical_nav'
-                    .content_twoCols_right
-                      #flash{data: {'turbolinks-temporary' => true}}= flash_area
-                      = render partial: 'shared/read_only_mode_notice' if read_only_mode?
-                      - Rack::MiniProfiler.step("content") do
-                        = convert_to_content_box { yield }
-                - else
-                  = flash_area
-                  = render partial: 'shared/read_only_mode_notice' if read_only_mode?
-                  - Rack::MiniProfiler.step("content") do
-                    = convert_to_content_box { yield }
-                .clear
+            #content
+              = render partial: 'layouts/multi_column_content_area'
+              .clear
 
     .bottom_page_footer.hidden-print= render partial: 'layouts/footer' unless @hide_footer
     .hidden-print= debug(params) if Rails.env.development?

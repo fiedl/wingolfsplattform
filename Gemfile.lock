@@ -13,13 +13,14 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: af8e30370bf41502bcf2fa14c68f44dc4721f2c2
+  revision: e00283e3089494fb621cbfb6d4a4ced36536f396
   branch: master
   specs:
     your_platform (1.0.1)
       actionpack (>= 4.2.5.2)
       activerecord (>= 4.2.7.1)
       acts-as-dag (>= 2.5.7)
+      acts-as-taggable-on (~> 4.0)
       acts_as_tree
       auto_html (~> 1.6.4)
       autosize-rails
@@ -151,6 +152,8 @@ GEM
     acts-as-dag (4.0.0)
       activemodel
       activerecord (~> 4.0, >= 4.0.0)
+    acts-as-taggable-on (4.0.0)
+      activerecord (>= 4.0)
     acts_as_tree (2.6.0)
       activerecord (>= 3.0.0)
     addressable (2.4.0)
