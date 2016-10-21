@@ -79,9 +79,9 @@ source 'https://rubygems.org' do
   group :test, :development do
     gem 'guard', '~> 2.2.5'
     gem 'guard-focus'
-    gem 'rspec-rails'
+    gem 'rspec-rails', '< 3.0'
     gem 'guard-rspec'
-    gem 'rspec-rerun', github: 'dblock/rspec-rerun'
+    gem 'rspec-rerun', '~> 0.3.1'
   #  gem 'rspec-mocks'
   #  gem 'listen'
   #  gem 'rb-inotify', '0.8.8' if RUBY_PLATFORM.downcase.include?("linux")
@@ -131,7 +131,6 @@ source 'https://rubygems.org' do
 
   # Profiling
   gem 'rack-mini-profiler'
-  gem 'flamegraph'
 
   # Code Coverage Badge, coveralls.io
   gem 'coveralls', require: false
