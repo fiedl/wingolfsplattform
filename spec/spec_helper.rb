@@ -58,7 +58,7 @@ require 'coveralls'
 formatters = [SimpleCov::Formatter::HTMLFormatter]
 formatters << Coveralls::SimpleCov::Formatter if ENV['COVERALLS_REPO_TOKEN']
 formatters << CodeClimate::TestReporter::Formatter if ENV['CODECLIMATE_REPO_TOKEN']
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[*formatters]
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter::new(*formatters)
 SimpleCov.start 'rails'
 CodeClimate::TestReporter.start
 # Coveralls.wear! 'rails'
@@ -163,7 +163,7 @@ Spork.prefork do
   #
   # See: https://github.com/jnicklas/capybara#asynchronous-javascript-ajax-and-friends
   #
-  Capybara.default_wait_time = 15
+  Capybara.default_max_wait_time = 15
 
 
   # Background Jobs:
@@ -176,6 +176,12 @@ Spork.prefork do
   # ----------------------------------------------------------------------------------------
 
   RSpec.configure do |config|
+
+    # rspec-rails 3 will no longer automatically infer an example group's
+    # spec type from the file location. You can explicitly opt-in to this
+    # feature using this snippet:
+    #
+    config.infer_spec_type_from_file_location!
 
     # Inclusion of helper methods.
     # ......................................................................................
