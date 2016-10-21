@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161011184416) do
+ActiveRecord::Schema.define(version: 20161021103433) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20161011184416) do
     t.integer  "author_user_id", limit: 4
     t.integer  "width",          limit: 4
     t.integer  "height",         limit: 4
+    t.string   "type",           limit: 255
   end
 
   add_index "attachments", ["author_user_id"], name: "attachments_author_user_id_fk", using: :btree
@@ -283,6 +284,7 @@ ActiveRecord::Schema.define(version: 20161011184416) do
     t.string   "type",              limit: 255
     t.datetime "archived_at"
     t.text     "box_configuration", limit: 65535
+    t.text     "teaser_text",       limit: 65535
   end
 
   add_index "pages", ["author_user_id"], name: "pages_author_user_id_fk", using: :btree
@@ -416,6 +418,7 @@ ActiveRecord::Schema.define(version: 20161011184416) do
     t.integer "taggings_count", limit: 4,     default: 0
     t.string  "title",          limit: 255
     t.text    "body",           limit: 65535
+    t.string  "subtitle",       limit: 255
   end
 
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
