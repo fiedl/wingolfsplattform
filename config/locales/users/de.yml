@@ -7,6 +7,7 @@ de:
   name_affix_without_deceased_symbol: Aktivitätszahl
 
   aktivitaetszahl:                Aktivitätszahl
+  fruehere_aktivitaetszahl:       Frühere Aktivitätszahl
 
   studium_export_string:          Studium
   status_export_string:           Wingolfsstatus

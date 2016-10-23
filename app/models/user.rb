@@ -240,6 +240,15 @@ class User
     end
   end
 
+  def fruehere_aktivitaetszahl
+    cached do
+      self.corporations
+        .collect { |corporation| {string: aktivitaetszahl_for(corporation), year: aktivitaetszahl_year_for(corporation)} }
+        .sort_by { |hash| hash[:year] }  # Sort by the year of joining the corporation.
+        .collect { |hash| hash[:string] }.join(" ")
+    end
+  end
+
   def aktivitätszahl
     aktivitaetszahl
   end
