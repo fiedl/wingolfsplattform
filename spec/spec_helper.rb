@@ -58,7 +58,7 @@ require 'coveralls'
 formatters = [SimpleCov::Formatter::HTMLFormatter]
 formatters << Coveralls::SimpleCov::Formatter if ENV['COVERALLS_REPO_TOKEN']
 formatters << CodeClimate::TestReporter::Formatter if ENV['CODECLIMATE_REPO_TOKEN']
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter::new(*formatters)
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter::new(formatters)
 SimpleCov.start 'rails'
 CodeClimate::TestReporter.start
 # Coveralls.wear! 'rails'
