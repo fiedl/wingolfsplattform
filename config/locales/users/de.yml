@@ -1,13 +1,13 @@
 
 de:
   add_to_corporation:            Zu dieser Verbindung hinzufügen
-  
+
   corporate_info:                Wingolf
   name_affix:                    Aktivitätszahl
   name_affix_without_deceased_symbol: Aktivitätszahl
 
   aktivitaetszahl:                Aktivitätszahl
-  
+
   studium_export_string:          Studium
   status_export_string:           Wingolfsstatus
 
