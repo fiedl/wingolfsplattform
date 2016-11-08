@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 951c7f09905e1719856eaeba011d2051c2a4cb91
+  revision: 3afe9f61a98bc3d844e4384ddc33693175e0eb38
   branch: master
   specs:
     your_platform (1.0.1)
@@ -94,14 +94,6 @@ GIT
       wannabe_bool
       web-console (>= 2.1.3)
       will_paginate (> 3.0)
-
-GIT
-  remote: git://github.com/prawnpdf/prawn.git
-  revision: 921f3986cddf92f94c516403bac2dfcfaeba0d33
-  specs:
-    prawn (2.1.1)
-      pdf-core (~> 0.6.1)
-      ttfunk (~> 1.4.0)
 
 GEM
   remote: https://rails-assets.org/
@@ -416,6 +408,9 @@ GEM
       capybara (~> 2.1)
       cliver (~> 0.3.1)
       websocket-driver (>= 0.2.0)
+    prawn (2.0.2)
+      pdf-core (~> 0.6.0)
+      ttfunk (~> 1.4.0)
     protected_attributes (1.1.3)
       activemodel (>= 4.0.1, < 5.0)
     pry (0.10.4)
@@ -697,7 +692,6 @@ DEPENDENCIES
   mysql2!
   newrelic_rpm!
   poltergeist!
-  prawn!
   protected_attributes!
   pry!
   rack-mini-profiler!

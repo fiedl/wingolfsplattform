@@ -147,7 +147,6 @@ source 'https://rubygems.org' do
 
   gem 'newrelic_rpm'
   #gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
-  gem 'prawn', github: 'prawnpdf/prawn'
 
   # get emails for exceptions.
   # http://railscasts.com/episodes/104
