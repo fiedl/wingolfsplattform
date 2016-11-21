@@ -21,7 +21,8 @@ feature "best_in_place and hyperlinks" do
       visit page_path @page
 
       within '.box.first' do
-        click_on I18n.t :edit
+        find('.edit_button').trigger 'click'
+        page.should have_selector 'textarea'
         all('textarea').last.set 'This is a page body with [[hyperlink]].'
         click_on I18n.t :save
       end
