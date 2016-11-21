@@ -29,6 +29,7 @@ GIT
       coffee-rails (>= 4.1.0)
       devise (>= 3.5.4)
       edit_mode (>= 1.0.2)
+      elasticsearch-model
       eventmachine (>= 1.0.7)
       execjs (>= 2.5.2)
       faker
@@ -242,6 +243,18 @@ GEM
       jquery-rails
       jquery-turbolinks
       rails (>= 3.2)
+    elasticsearch (5.0.0)
+      elasticsearch-api (= 5.0.0)
+      elasticsearch-transport (= 5.0.0)
+    elasticsearch-api (5.0.0)
+      multi_json
+    elasticsearch-model (0.1.9)
+      activesupport (> 3)
+      elasticsearch (> 0.4)
+      hashie
+    elasticsearch-transport (5.0.0)
+      faraday
+      multi_json
     email_spec (2.1.0)
       htmlentities (~> 4.3.3)
       launchy (~> 2.1)
