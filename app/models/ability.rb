@@ -288,6 +288,9 @@ module AbilityDefinitions
     #
     super
 
+    # Feature Switches
+    cannot :create_comment_for, BlogPost
+
     # Jeder Internetbenutzer kann Semesterprogramm-PDFs herunterladen, damit
     # die Verbindungen die Möglichkeit haben, die PDFs zu verlinken.
     #
