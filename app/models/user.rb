@@ -10,47 +10,47 @@ require_dependency YourPlatform::Engine.root.join( 'app/models/user' ).to_s
 class User
   attr_accessible :wingolfsblaetter_abo, :hidden, :localized_bv_beitrittsdatum
 
-  # This method is called by a nightly rake task to renew the cache of this object.
+  ## This method is called by a nightly rake task to renew the cache of this object.
+  ##
+  #def fill_cache
+  #  aktivitaetszahl
+  #  name_affix
+  #  title
   #
-  def fill_cache
-    aktivitaetszahl
-    name_affix
-    title
-
-    bv
-    bv_membership
-    w_nummer
-    aktiver?
-    philister?
-
-    status_export_string
-    studium_export_string
-
-    date_of_birth
-    date_of_death
-    birthday_this_year
-    age
-
-    postal_address
-    address_label
-    postal_address_updated_at
-    address_profile_fields.map(&:bv)
-
-    corporations
-    current_corporations
-    sorted_current_corporations
-    my_groups_in_first_corporation
-
-    for corporation in corporations
-      corporate_vita_memberships_in corporation
-    end
-
-    hidden
-    personal_title
-    academic_degree
-
-    administrated_aktivitates
-  end
+  #  bv
+  #  bv_membership
+  #  w_nummer
+  #  aktiver?
+  #  philister?
+  #
+  #  status_export_string
+  #  studium_export_string
+  #
+  #  date_of_birth
+  #  date_of_death
+  #  birthday_this_year
+  #  age
+  #
+  #  postal_address
+  #  address_label
+  #  postal_address_updated_at
+  #  address_profile_fields.map(&:bv)
+  #
+  #  corporations
+  #  current_corporations
+  #  sorted_current_corporations
+  #  my_groups_in_first_corporation
+  #
+  #  for corporation in corporations
+  #    corporate_vita_memberships_in corporation
+  #  end
+  #
+  #  hidden
+  #  personal_title
+  #  academic_degree
+  #
+  #  administrated_aktivitates
+  #end
 
   # This method returns a kind of label for the user, e.g. for menu items representing the user.
   # Use this rather than the name attribute itself, since the title method is likely to be overridden
@@ -60,12 +60,14 @@ class User
   # Here, title returns the name and the aktivitaetszahl, e.g. "Max Mustermann E10 H12".
   #
   def title
-    cached { "#{name} #{name_affix}".gsub("  ", " ").strip }
+    "#{name} #{name_affix}".gsub("  ", " ").strip
   end
+  cache :title
 
   def name_affix
-    cached { "#{aktivitaetszahl} #{string_for_death_symbol}".gsub("  ", " ").strip }
+    "#{aktivitaetszahl} #{string_for_death_symbol}".gsub("  ", " ").strip
   end
+  cache :name_affix
 
   # For dead users, there is a cross symbol in the title.
   # (✝,✞,✟)
@@ -80,7 +82,7 @@ class User
   # This method returns the bv (Bezirksverband) the user is associated with.
   #
   def bv
-    cached { Bv.find(bv_id) if bv_id }
+    Bv.find(bv_id) if bv_id
   end
   def bv_ids
     # TODO: Sobald ActsAsDag obsolet ist, müssen nur noch direkte Mitgliedschaften
@@ -96,6 +98,7 @@ class User
   def bv_id
     bv_ids.first
   end
+  cache :bv_id
 
   def bv_membership
     @bv_membership ||= UserGroupMembership.find_by_user_and_group(self, bv) if bv
@@ -220,9 +223,7 @@ class User
     end
 
     # Cache zurücksetzen
-    self.delay.delete_cache
-    #self.delay.delete_cached :bv
-    #self.delay.delete_cached :bv_membership
+    self.delay.renew_cache
 
     self.groups(true) # reload groups
     return new_membership
@@ -231,23 +232,21 @@ class User
   # This method returns the aktivitaetszahl of the user, e.g. "E10 H12".
   #
   def aktivitaetszahl
-    cached do
-      self.corporations
-        .select { |corporation| role = Role.of(self).in(corporation); role.full_member? or role.deceased_member? }
-        .collect { |corporation| {string: aktivitaetszahl_for(corporation), year: aktivitaetszahl_year_for(corporation)} }
-        .sort_by { |hash| hash[:year] }  # Sort by the year of joining the corporation.
-        .collect { |hash| hash[:string] }.join(" ")
-    end
+    self.corporations
+      .select { |corporation| role = Role.of(self).in(corporation); role.full_member? or role.deceased_member? }
+      .collect { |corporation| {string: aktivitaetszahl_for(corporation), year: aktivitaetszahl_year_for(corporation)} }
+      .sort_by { |hash| hash[:year] }  # Sort by the year of joining the corporation.
+      .collect { |hash| hash[:string] }.join(" ")
   end
+  cache :aktivitaetszahl
 
   def fruehere_aktivitaetszahl
-    cached do
-      self.corporations
-        .collect { |corporation| {string: aktivitaetszahl_for(corporation), year: aktivitaetszahl_year_for(corporation)} }
-        .sort_by { |hash| hash[:year] }  # Sort by the year of joining the corporation.
-        .collect { |hash| hash[:string] }.join(" ")
-    end
+    self.corporations
+      .collect { |corporation| {string: aktivitaetszahl_for(corporation), year: aktivitaetszahl_year_for(corporation)} }
+      .sort_by { |hash| hash[:year] }  # Sort by the year of joining the corporation.
+      .collect { |hash| hash[:string] }.join(" ")
   end
+  cache :fruehere_aktivitaetszahl
 
   def aktivitätszahl
     aktivitaetszahl
@@ -326,14 +325,16 @@ class User
   # ==========================================================================================
 
   def w_nummer
-    cached { self.profile_fields.where(label: "W-Nummer").first.try(:value) }
+    self.profile_fields.where(label: "W-Nummer").first.try(:value)
   end
+  cache :w_nummer
   def w_nummer=(str)
     field = profile_fields.where(label: "W-Nummer").first || profile_fields.create(type: 'ProfileFieldTypes::General', label: 'W-Nummer')
     field.update_attribute(:value, str)
     field.delete_cache
     self.delete_cache
   end
+
 
   def self.find_by_w_nummer(wnr)
     ProfileField.where(label: "W-Nummer", value: wnr).last.try(:profileable)
@@ -358,12 +359,14 @@ class User
   end
 
   def aktiver?
-    cached { Group.alle_aktiven.members.include? self }
+    Group.alle_aktiven.members.include? self
   end
+  cache :aktiver?
 
   def philister?
-    cached { Group.alle_philister.members.include? self }
+    Group.alle_philister.members.include? self
   end
+  cache :philister?
 
   def group_names
     self.groups.pluck(:name)
@@ -406,8 +409,9 @@ class User
   # Besondere Admin-Hilfs-Methoden
 
   def administrated_aktivitates
-    cached { Role.of(self).administrated_aktivitates }
+    Role.of(self).administrated_aktivitates
   end
+  cache :administrated_aktivitates
 
   # Damit können wir einen Benutzer in der Konsole schnell finden:
   #
@@ -468,16 +472,15 @@ class User
   end
 
   def status_export_string
-    cached {
-      self.corporations.collect do |corporation|
-        if membership = self.current_status_membership_in(corporation)
-          "#{membership.group.name.singularize} im #{corporation.name} seit #{I18n.localize(membership.valid_from.to_date) if membership.valid_from}"
-        else
-          ""
-        end
-      end.join("\n")
-    }
+    self.corporations.collect do |corporation|
+      if membership = self.current_status_membership_in(corporation)
+        "#{membership.group.name.singularize} im #{corporation.name} seit #{I18n.localize(membership.valid_from.to_date) if membership.valid_from}"
+      else
+        ""
+      end
+    end.join("\n")
   end
+  cache :status_export_string
 
   def studium_export_string
     #cached {  # TODO RESET THIS CACHE WHEN PROFILE FIELD STUDY HAS CHANGED
