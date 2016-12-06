@@ -12,6 +12,15 @@ require "action_view/railtie"
 require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
+# Determine a possible staging environment.
+#
+::STAGE = if __FILE__.start_with?('/var/')
+  # wingolfsplattform, wingolfsplattform-master, wingolfsplattform-sandbox
+  __FILE__.split('/')[2]
+else
+  Rails.env.to_s
+end
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -35,15 +44,6 @@ if not File.exist?(File.expand_path('../secrets.yml', __FILE__))
   raise 'The file config/secrets.yml does not exist.'
 end
 
-# Determine a possible staging environment.
-#
-if __FILE__.start_with?('/var/')
-  ::STAGE = __FILE__.split('/')[2] # ['wingolfsplattform', 'wingolfsplattform-master', 'wingolfsplattform-sandbox']
-else
-  ::STAGE = Rails.env.to_s
-end
-
-
 module Wingolfsplattform
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -63,7 +63,7 @@ module Wingolfsplattform
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
-    
+
     # fix for field_with_errors in form helper, see: http://www.rabbitcreative.com/2010/09/20/rails-3-still-fucking-up-field_with_errors/
     config.action_view.field_error_proc = Proc.new { |html_tag, instance| "<span class=\"field_with_errors\">#{html_tag}</span>".html_safe }
 
@@ -76,11 +76,11 @@ end
 
 # $enable_tracing = false
 # $trace_out = open('trace.txt', 'w')
-# 
+#
 # set_trace_func proc { |event, file, line, id, binding, classname|
 #   if $enable_tracing && event == 'call'
 #     $trace_out.puts "#{file}:#{line} #{classname}##{id}"
 #   end
 # }
-# 
+#
 # $enable_tracing = true

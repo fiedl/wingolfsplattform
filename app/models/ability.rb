@@ -77,6 +77,9 @@ module AbilityDefinitions
       can :create_officer_group_for, Group do |group|
         can? :update, group
       end
+      can :export_stammdaten_for, Group do |group|
+        can? :update, group
+      end
 
       can :destroy, Group do |group|
         group.admins_of_self_and_ancestors.include?(user) and
@@ -113,11 +116,24 @@ module AbilityDefinitions
       # Lokale Administratoren dürfen Aktivmeldungen eintragen, wenn sie mindestens
       # eine Aktivitas administrieren.
       #
-      can :create, User if user.administrated_aktivitates.count > 0
+      can :create, User do
+        user.administrated_aktivitates.count > 0
+      end
 
       # Öffentliche Homepages
       can :index, :home_pages
       can :create, Pages::HomePage
+
+      # Lokale Administratoren dürfen Semesterprogramme löschen.
+      #
+      # Da dies nur dazu dient, versehentlich erstellte Programme zu löschen,
+      # nur, solange noch kein PDF hochgeladen wurde. Die Termine selbst gehen
+      # nicht verloren, da diese nicht mit gelöscht werden, sondern separat
+      # in der Datenbank bleibne. -> Siehe `rights_for_everyone`
+      #
+      can :destroy, SemesterCalendar do |semester_calendar|
+        can?(:update, semester_calendar.group)
+      end
     end
   end
 
@@ -223,6 +239,25 @@ module AbilityDefinitions
     super
 
     if not read_only_mode?
+
+      # Amtsträger der Aktivitas dürfen Semesterprogramme für die Verbindung erstellen.
+      can :create, SemesterCalendar
+      can :create_semester_calendar_for, Corporation do |corporation|
+        user.corporations_the_user_is_officer_in.include? corporation
+      end
+      can :update, SemesterCalendar do |semester_calendar|
+        can? :create_semester_calendar_for, semester_calendar.group
+      end
+      can :destroy, SemesterCalendar do |semester_calendar|
+        can? :update, semester_calendar
+      end
+      can [:create_event, :create_event_for], Corporation do |corporation|
+        can? :create_semester_calendar_for, corporation
+      end
+      can [:update, :destroy, :invite_to], Event do |event|
+        event.group.try(:corporation) && user.corporations_the_user_is_officer_in.include?(event.group.corporation)
+      end
+
     end
   end
 
@@ -250,6 +285,19 @@ module AbilityDefinitions
     #
     super
 
+    # Feature Switches
+    cannot :create_comment_for, BlogPost
+
+    # Jeder Internetbenutzer kann Semesterprogramm-PDFs herunterladen, damit
+    # die Verbindungen die Möglichkeit haben, die PDFs zu verlinken.
+    #
+    can [:read, :download], Attachment do |attachment|
+      attachment.parent_type == "SemesterCalendar"
+    end
+
+    # Jeder Internetbenutzer darf Wingolfshaus-Bilder bzw. Wappen herunterladen,
+    # da diese auf den öffentlichen Homepages eingebunden werden.
+    #
     can [:read, :download], Attachment do |attachment|
       Attachment.wingolfshaus.include?(attachment) || Attachment.wappen.include?(attachment)
     end
@@ -264,8 +312,6 @@ module AbilityDefinitions
 
   def rights_for_beta_testers
     super
-
-    can :export, :stammdaten
   end
 
 end

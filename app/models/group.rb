@@ -8,7 +8,7 @@ require_dependency YourPlatform::Engine.root.join( 'app/models/group' ).to_s
 # this re-opened class contains all wingolf-specific additions to the group model.
 
 class Group
-  
+
   # This method is called by a nightly rake task to renew the cache of this object.
   #
   def fill_cache
@@ -17,25 +17,25 @@ class Group
     memberships_for_member_list
     memberships_this_year
     latest_memberships
-        
+
     # Other Groups
     leaf_groups
     corporation
-    
+
     # Address Labels
     members_postal_addresses
     cached_members_postal_addresses_created_at
 
   end
-  
-  
+
+
   # Mailing lists
   #
   alias_method :original_mailing_list_sender_filter_settings, :mailing_list_sender_filter_settings
   def mailing_list_sender_filter_settings
     [:wingolfiten] + original_mailing_list_sender_filter_settings
   end
-  
+
   alias_method :original_user_matches_mailing_list_sender_filter?, :user_matches_mailing_list_sender_filter?
   def user_matches_mailing_list_sender_filter?(user)
     case self.mailing_list_sender_filter.to_s
@@ -45,10 +45,14 @@ class Group
       original_user_matches_mailing_list_sender_filter?(user)
     end
   end
-  
+
 
   # Special Groups
   # ==========================================================================================
+
+  def self.main_org
+    self.alle_wingolfiten
+  end
 
   # Erstbandphilister
   # ------------------------------------------------------------------------------------------
@@ -62,7 +66,7 @@ class Group
   def self.find_bvs_parent_group
     find_special_group(:bvs_parent)
   end
-  
+
   def self.create_bvs_parent_group
     bvs_parent_group = create_special_group(:bvs_parent)
     bvs_parent_group.parent_pages << Page.intranet_root
@@ -72,11 +76,11 @@ class Group
   def self.find_or_create_bvs_parent_group
     find_or_create_special_group(:bvs_parent)
   end
-  
+
   def self.bvs_parent
     find_or_create_bvs_parent_group
   end
-  
+
   def self.bvs_parent!
     find_bvs_parent_group || raise('special group :bvs_parent does not exist.')
   end
@@ -88,7 +92,7 @@ class Group
   def self.find_bv_groups
     (self.find_bvs_parent_group.try(:child_groups) || [])
   end
-  
+
   def bv?
     Bv.find_bv_groups.include?(self)
   end
@@ -102,7 +106,7 @@ class Group
 
   def self.find_or_create_wbl_abo_group
     if self.wbl_abo_group
-      return self.wbl_abo_group 
+      return self.wbl_abo_group
     else
       wbl_page = Page.find_by_title("Wingolfsblätter")
       wbl_page ||= Page.find_or_create_intranet_root.child_pages.create(title: "Wingolfsblätter")
@@ -112,7 +116,7 @@ class Group
       return group
     end
   end
- 
+
   def self.wbl_abo
     self.find_or_create_wbl_abo_group
   end
@@ -136,15 +140,15 @@ class Group
       ancestor.has_flag?(:bvs_parent)
     end.any?
   end
-  
-  
+
+
   def memberships_for_member_list
     cached { memberships_including_members }
   end
-  
-  
+
+
   # Jeder
-  #   | 
+  #   |
   # Alle Wingolfiten
   #   |
   #   |---- Alle Aktiven
@@ -180,7 +184,7 @@ class Group
   #               |----------- Alle Schriftwarte (Schriftwarte + Bundes-xx + GfdW)
   #               |----------- Alle Kassenwarte  (Kassenwarte + Bundes-xxx + GfdW)
   #               |
-  #               |----------- Alle Administratoren 
+  #               |----------- Alle Administratoren
   #                                      |------------- Alle Korporationen-Administretoren
   #                                      |------------- Alle Aktiven-Administratoren
   #                                      |------------- Alle Phil-Administratoren
@@ -274,6 +278,6 @@ class Group
   def self.alle_bv_administratoren
     alle_administratoren.find_or_create_special_group :alle_bv_administratoren
   end
-  
+
 end
 

@@ -54,8 +54,9 @@ require 'coveralls'
 formatters = [SimpleCov::Formatter::HTMLFormatter]
 formatters << Coveralls::SimpleCov::Formatter if ENV['COVERALLS_REPO_TOKEN']
 formatters << CodeClimate::TestReporter::Formatter if ENV['CODECLIMATE_REPO_TOKEN']
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[*formatters]
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter::new(formatters)
 SimpleCov.start 'rails'
+CodeClimate::TestReporter.start
 # Coveralls.wear! 'rails'
 
 if ENV['CI'] == 'travis'
@@ -75,7 +76,6 @@ ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 
 # Stop if the database is not migrated.
-#
 ActiveRecord::Migration.check_pending!
 
 
@@ -139,7 +139,6 @@ end
 # See: https://github.com/jnicklas/capybara#asynchronous-javascript-ajax-and-friends
 #
 Capybara.default_max_wait_time = 15
-
 
 # Background Jobs:
 # Perform all background jobs immediately.
@@ -273,7 +272,6 @@ RSpec.configure do |config|
   config.after(:suite) do
     DatabaseCleaner.clean
   end
-
 
   # Spec Filtering: Focus on Current Specs
   # ......................................................................................

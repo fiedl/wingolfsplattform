@@ -1,10 +1,11 @@
 class WingolfsblaetterController < ApplicationController
-  
+
   def index
     authorize! :index, :wingolfsblaetter_dashboard
-    
+
     @global_officers = Group.find_by_flag(:global_officers)
-    @issues_count = Issue.unresolved.count
+    @issues_count = Issue.wingolfsblaetter.count
+    @issues_path = wingolfsblaetter_issues_path
     @abonnenten = Group.find_by_flag :wbl_abo
     @eisenberg = User.where(last_name: "Eisenberg", first_name: "Reinke").first
     @statistics_preset = 'aktivitates_join_and_persist_statistics'
@@ -21,8 +22,8 @@ class WingolfsblaetterController < ApplicationController
       @wbl_blog_post.content = "Wingolfsblätter des Jahres #{@new_year}."
       @wbl_blog_post.save
     end
-    
+
     set_current_title I18n.t(:wingolfsblaetter)
   end
-  
+
 end

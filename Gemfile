@@ -33,9 +33,6 @@ source 'https://rubygems.org' do
   # Deploy with Capistrano
   # gem 'capistrano'
 
-  # HTML-Nodes
-  gem 'nokogiri'								# MIT License
-
   # DAG für Nodes Model, see: https://github.com/resgraph/acts-as-dag
   #gem 'acts-as-dag', path: '../acts-as-dag'
   #gem 'acts-as-dag', git: "git://github.com/resgraph/acts-as-dag.git"	# MIT License
@@ -82,9 +79,9 @@ source 'https://rubygems.org' do
   group :test, :development do
     gem 'guard', '~> 2.2.5'
     gem 'guard-focus'
-    gem 'rspec-rails'
+    gem 'rspec-rails', '< 3.0'
     gem 'guard-rspec'
-    gem 'rspec-rerun', github: 'dblock/rspec-rerun'
+    gem 'rspec-rerun', '~> 0.3.1'
   #  gem 'rspec-mocks'
   #  gem 'listen'
   #  gem 'rb-inotify', '0.8.8' if RUBY_PLATFORM.downcase.include?("linux")
@@ -110,9 +107,6 @@ source 'https://rubygems.org' do
   # Pry Console Addon
   gem 'pry', group: :development
 
-  # Turbolinks
-  gem 'turbolinks', '>= 3.0', github: 'rails/turbolinks'
-
   # Receiving Mails
   gem 'mailman', require: false
   # gem 'rb-inotify', '~> 0.9', group: :production
@@ -133,11 +127,10 @@ source 'https://rubygems.org' do
   gem 'rack-timeout'
 
   # Metrics
-  #gem 'fnordmetric'
+  gem 'browser', '1.1.0'
 
   # Profiling
   gem 'rack-mini-profiler'
-  gem 'flamegraph'
 
   # Code Coverage Badge, coveralls.io
   gem 'coveralls', require: false
@@ -154,7 +147,6 @@ source 'https://rubygems.org' do
 
   gem 'newrelic_rpm'
   #gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
-  gem 'prawn', github: 'prawnpdf/prawn'
 
   # get emails for exceptions.
   # http://railscasts.com/episodes/104

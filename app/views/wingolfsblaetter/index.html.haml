@@ -1,6 +1,6 @@
 %h1 Wingolfsblätter
 %div
-  %p 
+  %p
     Diese Zusammenstellung dient der Hilfestellung bei Verwaltungsaufgaben rund um die Erstellung und den Versand der Wingolfsblätter. Sie kann von allen
     = link_to "globalen Amtsträgern", group_members_path(@global_officers)
     eingesehen werden.
@@ -8,18 +8,18 @@
 %h1 Empfänger-Adressen exportieren
 %div
   %ol
-    - if Issue.unresolved.count > 0
+    - if @issues_count > 0
       %li
         %strong Verwaltungsprobleme lösen.
         %br
         Derzeit bestehen
         %strong
-          = link_to "#{@issues_count} Verwaltungsprobleme.", issues_path
+          = link_to "#{@issues_count} relevante Verwaltungsprobleme.", @issues_path
         Diese
         %strong
           müssen vor dem Export gelöst werden!
         %p
-          = link_to issues_path, class: 'btn btn-default' do
+          = link_to @issues_path, class: 'btn btn-default' do
             = icon :flag
             Verwaltungsprobleme lösen
     %li
@@ -30,11 +30,11 @@
         = link_to group_path(@abonnenten, format: 'xls', list: 'wingolfsblaetter'), class: 'btn btn-default' do
           = excel_icon
           Export der Empfänger-Liste
-    %li 
+    %li
       %strong Plausibilitätsprüfung.
       %br
       Empfänger-Liste händisch auf Plausiblität prüfen. Dazu bitte die exportierte Datei in Excel oder Numbers öffnen und händisch prüfen.
-    %li 
+    %li
       %strong Versand.
       %br
       Empfänger-Liste an
@@ -85,7 +85,7 @@
     = link_to group_path(@verstorbene, format: :xls, list: :deceased_members), class: 'btn btn-default' do
       = excel_icon
       Liste unserer Toten der letzten zwölf Monate
-  
+
 
 %h1 Wingolfsblätter-PDF hochladen
 %div
@@ -101,7 +101,7 @@
     %li
       Dort das PDF in den blauen Kasten "Dokumente oder Bilder hierher schieben!" schieben und warten, bis es hochgeladen ist.
     %li
-      In der Rubrik "Dokumente" auf "Bearbeiten" klicken und "Wingolfsblätter x/20xx" als 
+      In der Rubrik "Dokumente" auf "Bearbeiten" klicken und "Wingolfsblätter x/20xx" als
       %strong Titel eintragen
-      sowie "Titelthema: xxx" als 
+      sowie "Titelthema: xxx" als
       %strong Beschreibung eintragen.

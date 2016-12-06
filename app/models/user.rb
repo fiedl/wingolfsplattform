@@ -35,6 +35,7 @@ class User
     address_label
     postal_address_updated_at
     address_fields_json
+    address_profile_fields.map(&:bv)
 
     corporations
     current_corporations
@@ -137,6 +138,7 @@ class User
   def correct_bv
     if self.philister?
       if primary_address_field.try(:value).try(:present?)
+        primary_address_field.delete_cache
         primary_address_field.bv
       else
         # Wenn keine Adresse gegeben ist, in den BV 00 (Unbekannt Verzogen) verschieben.
@@ -233,6 +235,15 @@ class User
     cached do
       self.corporations
         .select { |corporation| role = Role.of(self).in(corporation); role.full_member? or role.deceased_member? }
+        .collect { |corporation| {string: aktivitaetszahl_for(corporation), year: aktivitaetszahl_year_for(corporation)} }
+        .sort_by { |hash| hash[:year] }  # Sort by the year of joining the corporation.
+        .collect { |hash| hash[:string] }.join(" ")
+    end
+  end
+
+  def fruehere_aktivitaetszahl
+    cached do
+      self.corporations
         .collect { |corporation| {string: aktivitaetszahl_for(corporation), year: aktivitaetszahl_year_for(corporation)} }
         .sort_by { |hash| hash[:year] }  # Sort by the year of joining the corporation.
         .collect { |hash| hash[:string] }.join(" ")

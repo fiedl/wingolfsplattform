@@ -25,7 +25,7 @@ ENV['RSPEC_RERUN_PATTERN'] ||= pattern
 task default: 'rspec-rerun:spec'
 
 # task :default => :spec
-# 
+#
 # Rake::Task[ :spec ].clear
 # RSpec::Core::RakeTask.new( :spec ) do |t|
 #   t.pattern = pattern
