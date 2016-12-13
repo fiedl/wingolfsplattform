@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: 9144b90c3ff50bc03b2645106567c6d00910e332
+  revision: 203d81e9702e9691ebc754b0419c8b1616e00444
   branch: master
   specs:
     your_platform (1.0.1)
@@ -51,6 +51,7 @@ GIT
       jquery-turbolinks
       judge
       mail (>= 2.6.0)
+      mail_form
       merit
       mini_magick
       nokogiri (>= 1.6.8)
@@ -84,6 +85,7 @@ GIT
       sass-rails (>= 3.2)
       sidekiq (>= 3.4.2)
       sidekiq-limit_fetch
+      simple_form
       slim_breadcrumb (>= 0.0.3)
       sprockets-rails (~> 2.3)
       sugar-rails
@@ -362,6 +364,9 @@ GEM
     lumberjack (1.0.10)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
+    mail_form (1.6.0)
+      actionmailer (>= 3.2, < 5.1)
+      activemodel (>= 3.2, < 5.1)
     maildir (2.2.1)
     mailman (0.7.3)
       activesupport (>= 2.3.4)
@@ -421,7 +426,7 @@ GEM
     orm_adapter (0.5.0)
     passgen (1.0.2)
     pdf-core (0.6.1)
-    phony (2.15.36)
+    phony (2.15.38)
     poltergeist (1.11.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -589,6 +594,9 @@ GEM
       sidekiq (>= 2.16.0)
     sidekiq-limit_fetch (2.4.2)
       sidekiq (>= 2.6.5, < 4.0)
+    simple_form (3.3.1)
+      actionpack (> 4, < 5.1)
+      activemodel (> 4, < 5.1)
     simplecov (0.12.0)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)

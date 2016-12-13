@@ -6,7 +6,7 @@ module ListExports
         :last_name,
         :first_name,
         :male_or_female_salutation,
-        :personal_title,
+        :personal_title_max_10_chars,
         :postal_address_street_with_number,
         :postal_address_second_address_line,
         :postal_address_postal_code,
