@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: git://github.com/fiedl/your_platform.git
-  revision: b37d572c603e376d8fec93fa99c72116d93ef5c3
+  revision: 0464bec76815a0bdc6d0a4e8c02536abd3d85498
   branch: master
   specs:
     your_platform (1.0.1)
@@ -747,4 +747,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.13.6
+   1.13.7
