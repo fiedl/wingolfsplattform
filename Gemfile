@@ -155,6 +155,9 @@ source 'https://rubygems.org' do
   #gem 'bootstrap', git: 'https://github.com/twbs/bootstrap-rubygem'
 
   gem 'sidekiq', '~> 3.5.1'
+
+  # Temporary fixes
+  gem 'gemoji', '~> 2.1.0'
 end
 
 source 'https://rails-assets.org'
