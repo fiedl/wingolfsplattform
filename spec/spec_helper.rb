@@ -230,7 +230,7 @@ Spork.prefork do
     config.include Debug
 
     # Devise test helper for controller tests
-    config.include Devise::TestHelpers, :type => :controller
+    config.include Devise::Test::ControllerHelpers, :type => :controller
     config.extend ControllerMacros, :type => :controller
 
 
