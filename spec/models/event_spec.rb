@@ -9,8 +9,8 @@ describe Event do
 
   describe "when the parent is a corporation" do
     before { @corporation << @event }
-    its(:aktive) { should be_true }
-    its(:philister) { should be_true }
+    its(:aktive) { should be true }
+    its(:philister) { should be true }
 
     describe "#aktive=false" do
       it "should move the event to the philisterschaft" do
@@ -54,8 +54,8 @@ describe Event do
 
   describe "when the parent is an aktivitas" do
     before { @corporation.aktivitas << @event }
-    its(:aktive) { should be_true }
-    its(:philister) { should be_false }
+    its(:aktive) { should be true }
+    its(:philister) { should be false }
 
     describe "#philister=true" do
       it "should move the event to the corporation" do
@@ -78,8 +78,8 @@ describe Event do
 
   describe "when the parent is a philisterschaft" do
     before { @corporation.philisterschaft << @event }
-    its(:aktive) { should be_false }
-    its(:philister) { should be_true }
+    its(:aktive) { should be false }
+    its(:philister) { should be true }
 
     describe "#aktive=true" do
       it "should move the event to the corporation" do

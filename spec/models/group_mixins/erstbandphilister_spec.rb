@@ -14,7 +14,7 @@ describe GroupMixins::Erstbandphilister do
 
       @corporation_a = create :wingolf_corporation
       @philisterschaft_a = @corporation_a.philisterschaft
-      
+
       @philister_a = @corporation_a.status_group("Philister")
       @erstbandphilister_a = @philisterschaft_a.create_erstbandphilister_parent_group
 
@@ -29,10 +29,10 @@ describe GroupMixins::Erstbandphilister do
       @user = create( :user )
       @membership_a = @philister_a.assign_user @user, at: "1960-01-01".to_datetime
       @membership_b = @philister_b.assign_user @user, at: "1962-01-01".to_datetime
-      
+
       @user.reload
     end
-    
+
     specify "prelims" do
       @membership_a.reload.valid_from.year.should == 1960
       @membership_b.reload.valid_from.year.should == 1962
@@ -80,7 +80,7 @@ describe GroupMixins::Erstbandphilister do
         context "if absent" do
           subject { @philisterschaft_c.create_erstbandphilister_parent_group }
           it "should return the new erstbandphilister_parent_group" do
-            subject.is_erstbandphilister_parent_group?.should be_true
+            subject.is_erstbandphilister_parent_group?.should be true
             subject.parent_groups.first.should == @philisterschaft_c
           end
         end
@@ -94,7 +94,7 @@ describe GroupMixins::Erstbandphilister do
 
     describe "#erstbandphilister" do
       it "should be the same as #find_erstbandphilister_parent_group" do
-        @philisterschaft_a.erstbandphilister.should == 
+        @philisterschaft_a.erstbandphilister.should ==
           @philisterschaft_a.find_erstbandphilister_parent_group
       end
     end
@@ -102,7 +102,7 @@ describe GroupMixins::Erstbandphilister do
     describe "#erstbandphilister!" do
       context "if present" do
         it "should return the present group" do
-          @philisterschaft_a.erstbandphilister!.should == 
+          @philisterschaft_a.erstbandphilister!.should ==
             @philisterschaft_a.find_erstbandphilister_parent_group
         end
       end
@@ -110,7 +110,7 @@ describe GroupMixins::Erstbandphilister do
         it "should create the group" do
           @philisterschaft_c.erstbandphilister.should == nil
           erstbandphilister_c = @philisterschaft_c.erstbandphilister!
-          erstbandphilister_c.is_erstbandphilister_parent_group?.should be_true
+          erstbandphilister_c.is_erstbandphilister_parent_group?.should be true
           erstbandphilister_c.should == @philisterschaft_c.find_erstbandphilister_parent_group
         end
       end
@@ -128,7 +128,7 @@ describe GroupMixins::Erstbandphilister do
       it "should create the absent groups" do
         subject
         @philisterschaft_c.find_erstbandphilister_parent_group.should_not == nil
-        @philisterschaft_c.find_erstbandphilister_parent_group.is_erstbandphilister_parent_group?.should be_true
+        @philisterschaft_c.find_erstbandphilister_parent_group.is_erstbandphilister_parent_group?.should be true
       end
     end
 
