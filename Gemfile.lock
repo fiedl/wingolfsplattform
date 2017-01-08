@@ -1,11 +1,11 @@
 GIT
-  remote: git://github.com/fiedl/Google-Maps-for-Rails.git
+  remote: https://github.com/fiedl/Google-Maps-for-Rails.git
   revision: 7a647944046cf8fb03e98b4df34ecee80112ffd1
   specs:
     gmaps4rails (2.0.2)
 
 GIT
-  remote: git://github.com/fiedl/your_platform.git
+  remote: https://github.com/fiedl/your_platform
   revision: 321403f35cecf77eb686df7e8c496dcf4e66c01e
   branch: master
   specs:

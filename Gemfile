@@ -1,5 +1,5 @@
 # YourPlatform
-gem 'your_platform', github: 'fiedl/your_platform', branch: 'master'
+gem 'your_platform', git: 'https://github.com/fiedl/your_platform', branch: 'master'
 
 source 'https://rubygems.org' do
   # Ruby License, http://www.ruby-lang.org/en/LICENSE.txt
@@ -123,7 +123,7 @@ source 'https://rubygems.org' do
   # see https://github.com/luislavena/rb-readline/issues/84#issuecomment-17335885
   #gem 'rb-readline', '~> 0.5.0', group: :development, require: 'readline'
 
-  gem 'gmaps4rails', '~> 2.0.1', git: 'git://github.com/fiedl/Google-Maps-for-Rails.git'
+  gem 'gmaps4rails', '~> 2.0.1', git: 'https://github.com/fiedl/Google-Maps-for-Rails.git'
 
   # To customly set timeout time we need rack-timeout
   gem 'rack-timeout'
