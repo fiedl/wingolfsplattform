@@ -183,6 +183,13 @@ Spork.prefork do
     #
     config.infer_spec_type_from_file_location!
 
+    # Enables both, the new `expect` and the old `should` syntax.
+    # https://www.relishapp.com/rspec/rspec-expectations/docs/syntax-configuration
+    #
+    config.expect_with :rspec do |c|
+      c.syntax = [:should, :expect]
+    end
+
     # Inclusion of helper methods.
     # ......................................................................................
     #
