@@ -38,9 +38,9 @@
                     %li.user_email.obscure-in-demo= current_user.email
                     %li= link_to t(:my_posts), posts_path
                     %li= link_to t(:my_profile), current_user
-                    %li= link_to t(:change_avatar), user_path(current_user, trigger_change_avatar: true)
+                    %li= link_to t(:change_avatar), user_path(current_user, trigger_change_avatar: true), class: 'change_avatar'
                     %li= link_to t(:change_password), change_password_path
-                    %li= link_to t(:settings), user_settings_path(current_user)
+                    %li= link_to t(:settings), user_settings_path(current_user), class: 'user_settings'
                     %li= button_to t(:sign_out), sign_out_path, method: :delete
                 %li.backendBarItem
                   = link_to t(:my_profile), current_user, :class => 'my_profile'
