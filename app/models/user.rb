@@ -300,8 +300,10 @@ class User
     self.profile_fields.create(label: :fax, type: "ProfileFieldTypes::Phone")
     self.profile_fields.create(label: :homepage, type: "ProfileFieldTypes::Homepage")
 
-    pf = self.profile_fields.build(label: :study, type: "ProfileFieldTypes::Study")
-    pf.becomes(ProfileFieldTypes::Study).save
+    if self.study_fields.count == 0
+      pf = self.profile_fields.build(label: :study, type: "ProfileFieldTypes::Study")
+      pf.becomes(ProfileFieldTypes::Study).save
+    end
 
     self.profile_fields.create(label: :professional_category, type: "ProfileFieldTypes::ProfessionalCategory")
     self.profile_fields.create(label: :occupational_area, type: "ProfileFieldTypes::ProfessionalCategory")
