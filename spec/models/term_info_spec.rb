@@ -81,7 +81,7 @@ describe TermInfo do
       @term_info.anzahl_konkneipwanten.should == [@konkneipant].count
       @term_info.anzahl_philistrationen.should == [@philister].count
       @term_info.anzahl_philister.should == [@philister].count
-      @term_info.anzahl_austritte.should == [@ausgetretener_aktiver].count
+      @term_info.anzahl_austritte.should == [@ausgetretener_aktiver, @ausgetretener_philister].count
       @term_info.anzahl_austritte_aktive.should == [@ausgetretener_aktiver].count
       @term_info.anzahl_austritte_philister.should == [@gestrichener_philister].count
       @term_info.anzahl_todesfaelle.should == [@verstorbener].count

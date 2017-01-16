@@ -14,7 +14,7 @@ module TermInfoAdditions
     self.anzahl_inaktiver_burschen_non_loci = anzahl "Inaktive Burschen non loci"
     self.anzahl_konkneipwanten = anzahl "Konkneipanten"
     self.anzahl_philistrationen = corporation.philisterschaft.memberships.where(valid_from: term_time_range).count
-    self.anzahl_philister = corporation.philisterschaft.memberships.at(end_of_term).count
+    self.anzahl_philister = corporation.philisterschaft.memberships.at_time(end_of_term).count
     self.anzahl_austritte = number_of_membership_ends
     self.anzahl_austritte_aktive = corporation.former_members_parent.memberships.where(valid_from: term_time_range).select { |membership| not membership.user.ancestor_group_ids.include? Group.alle_philister.id }.count
     self.anzahl_austritte_philister = corporation.former_members_parent.memberships.where(valid_from: term_time_range).select { |membership| membership.user.ancestor_group_ids.include? Group.alle_philister.id }.count
