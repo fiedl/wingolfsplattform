@@ -65,83 +65,26 @@ describe TermInfo do
     @term_info = @term.term_infos.create corporation_id: @corporation.id
   end
 
-  describe "after #fill_info" do
-    before { @term_info.fill_info }
+  describe "#fill_info" do
+    subject { @term_info.fill_info }
 
-    describe "#anzahl_aktivmeldungen" do
-      subject { @term_info.anzahl_aktivmeldungen }
-      it { should == [@hospitant].count }
+    it "should fill in the statistical info correctly" do
+      subject
+      @term_info.anzahl_aktivmeldungen.should == [@hospitant].count
+      @term_info.anzahl_aller_aktiven.should == [@hospitant, @krassfux, @brandfux, @aktiver_bursch, @inaktiver_bursch_loci, @inaktiver_bursch_nun_loci, @konkneipant].count
+      @term_info.anzahl_burschungen.should == [@aktiver_bursch].count
+      @term_info.anzahl_burschen.should == [@aktiver_bursch, @inaktiver_bursch_loci, @inaktiver_bursch_non_loci].count
+      @term_info.anzahl_fuxen.should == [@krassfux, @brandfux].count
+      @term_info.anzahl_aktiver_burschen.should == [@aktiver_bursch].count
+      @term_info.anzahl_inaktiver_burschen_loci.should == [@inaktiver_bursch_loci].count
+      @term_info.anzahl_inaktiver_burschen_non_loci.should == [@inaktiver_bursch_non_loci].count
+      @term_info.anzahl_konkneipwanten.should == [@konkneipant].count
+      @term_info.anzahl_philistrationen.should == [@philister].count
+      @term_info.anzahl_philister.should == [@philister].count
+      @term_info.anzahl_austritte.should == [@ausgetretener_aktiver].count
+      @term_info.anzahl_austritte_aktive.should == [@ausgetretener_aktiver].count
+      @term_info.anzahl_austritte_philister.should == [@gestrichener_philister].count
+      @term_info.anzahl_todesfaelle.should == [@verstorbener].count
     end
-
-    describe "#anzahl_aller_aktiven" do
-      subject { @term_info.anzahl_aller_aktiven }
-      it { should == [@hospitant, @krassfux, @brandfux, @aktiver_bursch, @inaktiver_bursch_loci, @inaktiver_bursch_nun_loci, @konkneipant].count }
-    end
-
-    describe "#anzahl_burschungen" do
-      subject { @term_info.anzahl_burschungen }
-      it { should == [@aktiver_bursch].count }
-    end
-
-    describe "#anzahl_burschen" do
-      subject { @term_info.anzahl_burschen }
-      it { should == [@aktiver_bursch, @inaktiver_bursch_loci, @inaktiver_bursch_non_loci].count }
-    end
-
-    describe "#anzahl_fuxen" do
-      subject { @term_info.anzahl_fuxen }
-      it { should == [@krassfux, @brandfux].count }
-    end
-
-    describe "#anzahl_aktiver_burschen" do
-      subject { @term_info.anzahl_aktiver_burschen }
-      it { should == [@aktiver_bursch].count }
-    end
-
-    describe "#anzahl_inaktiver_burschen_loci" do
-      subject { @term_info.anzahl_inaktiver_burschen_loci }
-      it { should == [@inaktiver_bursch_loci].count }
-    end
-
-    describe "#anzahl_inaktiver_burschen_non_loci" do
-      subject { @term_info.anzahl_inaktiver_burschen_non_loci }
-      it { should == [@inaktiver_bursch_non_loci].count }
-    end
-
-    describe "#anzahl_konkneipwanten" do
-      subject { @term_info.anzahl_konkneipwanten }
-      it { should == [@konkneipant].count }
-    end
-
-    describe "#anzahl_philistrationen" do
-      subject { @term_info.anzahl_philistrationen }
-      it { should == [@philister].count }
-    end
-
-    describe "#anzahl_philister" do
-      subject { @term_info.anzahl_philister }
-      it { should == [@philister].count }
-    end
-
-    describe "#anzahl_austritte" do
-      subject { @term_info.anzahl_austritte }
-      it { should == [@ausgetretener_aktiver].count }
-    end
-
-    describe "#anzahl_austritte_aktive" do
-      subject { @term_info.anzahl_austritte_aktive }
-      it { should == [@ausgetretener_aktiver].count }
-    end
-
-    describe "#anzahl_austritte_philister" do
-      subject { @term_info.anzahl_austritte_philister }
-      it { should == [@gestrichener_philister].count }
-    end
-
-    describe "#anzahl_todesfaelle" do
-      subject { @term_info.anzahl_todesfaelle }
-      it { should == [@verstorbener].count }
-    end
-
   end
 end
