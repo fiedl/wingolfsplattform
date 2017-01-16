@@ -143,7 +143,7 @@ class Group
 
 
   def memberships_for_member_list
-    cached { memberships_including_members }
+    memberships_including_members
   end
 
 
