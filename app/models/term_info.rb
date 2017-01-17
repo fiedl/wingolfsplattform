@@ -33,14 +33,6 @@ module TermInfoAdditions
     corporation.sub_group(group_name).memberships.where(valid_from: term_time_range).count
   end
 
-  def end_of_term
-    term.end_at
-  end
-
-  def term_time_range
-    term.time_range
-  end
-
 end
 
 class TermInfo
