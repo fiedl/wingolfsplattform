@@ -1,4 +1,4 @@
-require_dependency YourPlatform::Engine.root.join('app/models/term_info').to_s
+require_dependency YourPlatform::Engine.root.join('app/models/term_infos/for_corporation').to_s
 
 module TermInfoAdditions
 
@@ -35,6 +35,6 @@ module TermInfoAdditions
 
 end
 
-class TermInfo
+class TermInfos::ForCorporation
   prepend TermInfoAdditions
 end

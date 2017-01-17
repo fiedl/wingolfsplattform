@@ -9,10 +9,12 @@ class TermInfos::AlleWingolfiten < TermInfo
     self.anzahl_aktivmeldungen = self.number_of_new_members
     self.anzahl_todesfaelle = self.number_of_deaths
     self.anzahl_austritte = self.number_of_membership_ends
+
+    self.save
     return self
   end
 
   def self.for_term(term)
-    term.term_infos.build.becomes(TermInfos::AlleWingolfiten).fill_info
+    term_info = self.find_or_create_by term_id: term.id
   end
 end
