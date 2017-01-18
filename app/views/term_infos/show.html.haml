@@ -1,0 +1,15 @@
+- if group
+  = render partial: 'groups/tabs', locals: {group: group, active: 'members'}
+
+.col-sm-6
+  = render partial: 'some_numbers'
+  = render partial: 'member_box', locals: {group_name: "Hospitanten"} if term_info.hospitanten.any?
+  = render partial: 'member_box', locals: {group_name: "Fuxen"}
+  = render partial: 'member_box', locals: {group_name: "Inaktive Burschen non loci"}
+  = render partial: 'member_box', locals: {group_name: "Konkneipanten"}
+
+.col-sm-6
+  = render partial: 'officers'
+  = render partial: 'semester_calendar'
+  = render partial: 'member_box', locals: {group_name: "Aktive Burschen"}
+  = render partial: 'member_box', locals: {group_name: "Inaktive Burschen loci"}

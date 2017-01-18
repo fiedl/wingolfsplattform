@@ -33,6 +33,56 @@ module TermInfoAdditions
     corporation.sub_group(group_name).memberships.where(valid_from: term_time_range).count
   end
 
+  def senior
+    officer(:senior)
+  end
+
+  def fuxmajor
+    officer(:fuxmajor)
+  end
+
+  def kneipwart
+    officer(:kneipwart)
+  end
+
+  def philister_x
+    officer(:phil_x)
+  end
+
+  def member_ids(group_name)
+    Rails.cache.fetch [self.cache_key, "member_ids", group_name] do
+      corporation.sub_group(group_name).memberships.at_time(end_of_term).order(:valid_from).map(&:user_id)
+    end
+  end
+
+  def members(group_name)
+    User.where id: member_ids(group_name)
+  end
+
+  def hospitanten
+    members "Hospitanten"
+  end
+
+  def fuxen
+    members "Fuxen"
+  end
+
+  def aktive_burschen
+    members "Aktive Burschen"
+  end
+
+  def inaktive_burschen_loci
+    members "Inaktive Burschen loci"
+  end
+
+  def inaktive_burschen_non_loci
+    members "Inaktive Burschen non loci"
+  end
+
+  def konkneipanten
+    members "Konkneipanten"
+  end
+
 end
 
 class TermInfos::ForCorporation
