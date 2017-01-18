@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170117103209) do
+ActiveRecord::Schema.define(version: 20170117231743) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -189,6 +189,15 @@ ActiveRecord::Schema.define(version: 20170117103209) do
   end
 
   add_index "last_seen_activities", ["user_id"], name: "last_seen_activities_user_id_fk", using: :btree
+
+  create_table "locations", force: :cascade do |t|
+    t.integer  "object_id",   limit: 4
+    t.string   "object_type", limit: 255
+    t.float    "longitude",   limit: 24
+    t.float    "latitude",    limit: 24
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
 
   create_table "mentions", force: :cascade do |t|
     t.integer  "who_user_id",    limit: 4
