@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       get :alle_wingolfiten, to: 'alle_wingolfiten#index'
       get 'alle_wingolfiten/anzahl_per_semester', to: 'alle_wingolfiten#anzahl_per_semester'
       get 'alle_wingolfiten/zuwaechse_und_abgaenge_per_semester', to: 'alle_wingolfiten#zuwaechse_und_abgaenge_per_semester'
+      get 'aktive_und_philister/anzahl_per_jahr', to: 'aktive_und_philister#anzahl_per_jahr'
     end
   end
 
