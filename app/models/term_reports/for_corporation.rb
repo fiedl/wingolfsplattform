@@ -22,6 +22,18 @@ module TermReportAdditions
     self.anzahl_erstbandtraeger_aktivitas = erstbandtraeger_der_aktivitas.count
     self.anzahl_erstbandtraeger_philisterschaft = erstbandtraeger_der_philisterschaft.count
     self.save
+
+    self.member_entries.destroy_all
+    if term.kind_of?(Terms::Summer) or term.kind_of?(Terms::Winter)
+      create_member_entries_for "Hospitanten"
+      create_member_entries_for "Fuxen"
+      create_member_entries_for "Aktive Burschen"
+      create_member_entries_for "Inaktive Burschen loci"
+      create_member_entries_for "Inaktive Burschen non loci"
+      create_member_entries_for "Konkneipanten"
+    end
+
+    return self
   end
 
   #Anzahl Amtsträger
@@ -57,13 +69,24 @@ module TermReportAdditions
 
   def member_ids(group_name)
     Rails.cache.fetch [self.cache_key, "member_ids", group_name] do
-      corporation.sub_group(group_name).memberships.at_time(end_of_term).order(:valid_from).map(&:user_id)
+      if corporation.sub_group(group_name)
+        corporation.sub_group(group_name).memberships.at_time(end_of_term).order(:valid_from).map(&:user_id)
+      else
+        []
+      end
     end
   end
 
   def members(group_name)
     User.where id: member_ids(group_name)
   end
+
+  def create_member_entries_for(group_name)
+    members(group_name).each do |user|
+      self.member_entries.create_from_user(user, category: group_name)
+    end
+  end
+
 
   def hospitanten
     members "Hospitanten"
@@ -94,7 +117,7 @@ module TermReportAdditions
   end
 
   def erstbandtraeger_der_philisterschaft
-    (members("Philisterschaft") || members("Altherrenschaft")).select { |user| user.primary_corporation(at: end_of_term).id == corporation.id }
+    (members("Philisterschaft") + members("Altherrenschaft")).select { |user| user.primary_corporation(at: end_of_term).id == corporation.id }
   end
 
 end
