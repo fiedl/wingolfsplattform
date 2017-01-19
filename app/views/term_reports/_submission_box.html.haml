@@ -1,0 +1,21 @@
+#term_report_submission
+  - if term_report.submitted?
+    .alert.alert-success
+      %strong Statistik abgeschickt.
+      Diese Semesterstatistik wurde am
+      = localize term_report.submitted_at
+      abgeschickt.
+  - if not term_report.too_old_to_submit?
+    - if not term_report.due?
+      .alert.alert-info
+        %strong Semesterstatistik noch nicht abgeschickt.
+        Das Semester läuft noch.
+        Ab dem
+        = localize term_report.due_at
+        wird an dieser Stelle ein Knopf zum Abschicken der Statistik angezeigt.
+    - if term_report.due?
+      .alert.alert-warning
+        %strong Semesterstatistik noch nicht abgeschickt!
+        Diese Statistik muss bis zum
+        = localize term_report.over_due_at
+        an den Vorort geschickt werden.

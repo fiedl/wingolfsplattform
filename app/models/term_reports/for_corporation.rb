@@ -120,6 +120,15 @@ module TermReportAdditions
     (members("Philisterschaft") + members("Altherrenschaft")).select { |user| user.primary_corporation(at: end_of_term).id == corporation.id }
   end
 
+
+  def over_due_at
+    if term.kind_of? Terms::Summer
+      Time.zone.now.change(year: year, month: 11, day: 15).to_date
+    elsif term.kind_of? Terms::Winter
+      Time.zone.now.change(year: year + 1, month: 5, day: 5).to_date
+    end
+  end
+
 end
 
 class TermReports::ForCorporation
