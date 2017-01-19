@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TermInfos::ForCorporation do
+describe TermReports::ForCorporation do
   before do
     @term = Terms::Winter.create year: 2016
 
@@ -62,30 +62,30 @@ describe TermInfos::ForCorporation do
     @corporation.status_group("Philister").assign_user @verstorbener, at: "1947-01-01".to_date
     @verstorbener.mark_as_deceased at: "2016-11-19".to_date
 
-    @term_info = @corporation.term_infos.create term_id: @term.id
-    @term_info = TermInfo.find @term_info.id  # In order for it to have the proper sub class.
+    @term_report = @corporation.term_reports.create term_id: @term.id
+    @term_report = TermReport.find @term_report.id  # In order for it to have the proper sub class.
   end
 
   describe "#fill_info" do
-    subject { @term_info.fill_info }
+    subject { @term_report.fill_info }
 
     it "should fill in the statistical info correctly" do
       subject
-      @term_info.anzahl_aktivmeldungen.should == [@hospitant].count
-      @term_info.anzahl_aller_aktiven.should == [@hospitant, @krassfux, @brandfux, @aktiver_bursch, @inaktiver_bursch_loci, @inaktiver_bursch_nun_loci, @konkneipant].count
-      @term_info.anzahl_burschungen.should == [@aktiver_bursch].count
-      @term_info.anzahl_burschen.should == [@aktiver_bursch, @inaktiver_bursch_loci, @inaktiver_bursch_non_loci].count
-      @term_info.anzahl_fuxen.should == [@krassfux, @brandfux].count
-      @term_info.anzahl_aktiver_burschen.should == [@aktiver_bursch].count
-      @term_info.anzahl_inaktiver_burschen_loci.should == [@inaktiver_bursch_loci].count
-      @term_info.anzahl_inaktiver_burschen_non_loci.should == [@inaktiver_bursch_non_loci].count
-      @term_info.anzahl_konkneipwanten.should == [@konkneipant].count
-      @term_info.anzahl_philistrationen.should == [@philister].count
-      @term_info.anzahl_philister.should == [@philister].count
-      @term_info.anzahl_austritte.should == [@ausgetretener_aktiver, @ausgetretener_philister].count
-      @term_info.anzahl_austritte_aktive.should == [@ausgetretener_aktiver].count
-      @term_info.anzahl_austritte_philister.should == [@gestrichener_philister].count
-      @term_info.anzahl_todesfaelle.should == [@verstorbener].count
+      @term_report.anzahl_aktivmeldungen.should == [@hospitant].count
+      @term_report.anzahl_aller_aktiven.should == [@hospitant, @krassfux, @brandfux, @aktiver_bursch, @inaktiver_bursch_loci, @inaktiver_bursch_nun_loci, @konkneipant].count
+      @term_report.anzahl_burschungen.should == [@aktiver_bursch].count
+      @term_report.anzahl_burschen.should == [@aktiver_bursch, @inaktiver_bursch_loci, @inaktiver_bursch_non_loci].count
+      @term_report.anzahl_fuxen.should == [@krassfux, @brandfux].count
+      @term_report.anzahl_aktiver_burschen.should == [@aktiver_bursch].count
+      @term_report.anzahl_inaktiver_burschen_loci.should == [@inaktiver_bursch_loci].count
+      @term_report.anzahl_inaktiver_burschen_non_loci.should == [@inaktiver_bursch_non_loci].count
+      @term_report.anzahl_konkneipwanten.should == [@konkneipant].count
+      @term_report.anzahl_philistrationen.should == [@philister].count
+      @term_report.anzahl_philister.should == [@philister].count
+      @term_report.anzahl_austritte.should == [@ausgetretener_aktiver, @ausgetretener_philister].count
+      @term_report.anzahl_austritte_aktive.should == [@ausgetretener_aktiver].count
+      @term_report.anzahl_austritte_philister.should == [@gestrichener_philister].count
+      @term_report.anzahl_todesfaelle.should == [@verstorbener].count
     end
   end
 end

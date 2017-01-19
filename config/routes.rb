@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   get 'issues/wingolfsblaetter', to: 'issues#index', scope: 'wingolfsblaetter', as: 'wingolfsblaetter_issues'
 
   namespace :charts do
-    namespace :term_infos do
+    namespace :term_reports do
       get :alle_wingolfiten, to: 'alle_wingolfiten#index'
       get 'alle_wingolfiten/anzahl_per_semester', to: 'alle_wingolfiten#anzahl_per_semester'
       get 'alle_wingolfiten/zuwaechse_und_abgaenge_per_semester', to: 'alle_wingolfiten#zuwaechse_und_abgaenge_per_semester'

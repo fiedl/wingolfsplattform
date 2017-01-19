@@ -1,0 +1,4 @@
+%h1 Semesterprogramm
+%div
+  - if term_report.semester_calendar
+    = render partial: 'semester_calendars/pdf', locals: {semester_calendar: term_report.semester_calendar}

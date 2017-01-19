@@ -1,6 +1,6 @@
-require_dependency YourPlatform::Engine.root.join('app/models/term_infos/for_corporation').to_s
+require_dependency YourPlatform::Engine.root.join('app/models/term_reports/for_corporation').to_s
 
-module TermInfoAdditions
+module TermReportAdditions
 
   def fill_info
     super
@@ -99,6 +99,6 @@ module TermInfoAdditions
 
 end
 
-class TermInfos::ForCorporation
-  prepend TermInfoAdditions
+class TermReports::ForCorporation
+  prepend TermReportAdditions
 end

@@ -1,4 +1,4 @@
-class TermInfos::AlleWingolfiten < TermInfo
+class TermReports::AlleWingolfiten < TermReport
   def fill_info
     self.number_of_members = Group.alle_wingolfiten.memberships.at_time(end_of_term).count
     self.number_of_new_members = Group.alle_wingolfiten.memberships.with_past.where(valid_from: term_time_range).count
@@ -15,6 +15,6 @@ class TermInfos::AlleWingolfiten < TermInfo
   end
 
   def self.for_term(term)
-    term_info = self.find_or_create_by term_id: term.id
+    term_report = self.find_or_create_by term_id: term.id
   end
 end

@@ -17,7 +17,7 @@
   = render partial: 'semester_calendar'
 
 .col-sm-12
-  = render partial: 'member_box', locals: {group_name: "Hospitanten"} if term_info.hospitanten.any?
+  = render partial: 'member_box', locals: {group_name: "Hospitanten"} if term_report.hospitanten.any?
   = render partial: 'member_box', locals: {group_name: "Fuxen"}
   = render partial: 'member_box', locals: {group_name: "Inaktive Burschen non loci"}
   = render partial: 'member_box', locals: {group_name: "Konkneipanten"}
