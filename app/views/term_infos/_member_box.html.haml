@@ -1,0 +1,32 @@
+- # locals:
+- group_name || raise('no group_name given')
+- members ||= term_info.members(group_name)
+
+%h1
+  = group_name
+  = "(#{members.count})"
+%div
+  %table.members
+    - members.each do |user|
+      %tr.first_for_user
+        %td.name
+          - if can? :read, user
+            = link_to "#{user.last_name}, #{user.first_name}", user
+          - else
+            = "#{user.last_name}, #{user.first_name}"
+        - if can? :read, user
+          %td.aktivitaetszahl= user.aktivitaetszahl
+          %td.study_address.address{rowspan: 2}= user.study_address.to_s.gsub("\n", "<br />").html_safe
+          %td.phone= user.phone
+          %td.home_address.address{rowspan: 2}= user.home_address.to_s.gsub("\n", "<br />").html_safe
+          %td.klammerung= user.klammerung
+      %tr.second_for_user
+        - if can? :read, user
+          %td.date_of_birth
+            geb.
+            = user.localized_date_of_birth
+        %td.w_nummer
+          = user.w_nummer
+        - if can? :read, user
+          %td.email= user.email
+          %td.study= user.primary_study_field.try(:subject)
