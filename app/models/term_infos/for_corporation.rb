@@ -19,6 +19,8 @@ module TermInfoAdditions
     self.anzahl_austritte_aktive = corporation.former_members_parent.memberships.where(valid_from: term_time_range).select { |membership| not membership.user.ancestor_group_ids.include? Group.alle_philister.id }.count
     self.anzahl_austritte_philister = corporation.former_members_parent.memberships.where(valid_from: term_time_range).select { |membership| membership.user.ancestor_group_ids.include? Group.alle_philister.id }.count
     self.anzahl_todesfaelle = number_of_deaths
+    self.anzahl_erstbandtraeger_aktivitas = erstbandtraeger_der_aktivitas.count
+    self.anzahl_erstbandtraeger_philisterschaft = erstbandtraeger_der_philisterschaft.count
     self.save
   end
 
@@ -81,6 +83,14 @@ module TermInfoAdditions
 
   def konkneipanten
     members "Konkneipanten"
+  end
+
+  def erstbandtraeger_der_aktivitas
+    members("Aktivitas").select { |user| user.primary_corporation(at: end_of_term).id == corporation.id }
+  end
+
+  def erstbandtraeger_der_philisterschaft
+    (members("Philisterschaft") || members("Altherrenschaft")).select { |user| user.primary_corporation(at: end_of_term).id == corporation.id }
   end
 
 end
