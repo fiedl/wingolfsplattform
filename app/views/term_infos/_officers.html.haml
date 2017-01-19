@@ -1,15 +1,15 @@
 %h1 Amtsträger
 %div
-  %table
+  %table.officers
     %tr
-      %td Senior:
-      %td= link_to term_info.senior.title, term_info.senior if term_info.senior
+      %th Senior:
+      %td= link_to_user_with_phone_number(term_info.senior) if term_info.senior
     %tr
-      %td Fuxmajor:
-      %td= link_to term_info.fuxmajor.title, term_info.fuxmajor if term_info.fuxmajor
+      %th Fuxmajor:
+      %td= link_to_user_with_phone_number(term_info.fuxmajor) if term_info.fuxmajor
     %tr
-      %td Kneipwart:
-      %td= link_to term_info.kneipwart.title, term_info.kneipwart if term_info.kneipwart
+      %th Kneipwart:
+      %td= link_to_user_with_phone_number(term_info.kneipwart) if term_info.kneipwart
     %tr
-      %td Philister-x:
-      %td= link_to term_info.philister_x.title, term_info.philister_x if term_info.philister_x
+      %th Philister-x:
+      %td= link_to_user_with_phone_number(term_info.philister_x) if term_info.philister_x
