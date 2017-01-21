@@ -1,6 +1,6 @@
-<% if current_user.philister? %>
+<% if current_user && current_user.philister? %>
 Lieber Conphilister Back,
-<% elsif current_user.aktiver? %>
+<% elsif current_user && current_user.aktiver? %>
 Lieber Philister Back,
 <% else %>
 Lieber Herr Back,
