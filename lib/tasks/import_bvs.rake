@@ -334,6 +334,11 @@ namespace :import do
       #
       BvMapping.where(plz: '65597', town: 'Hünfelden').first.update_attributes bv_name: 'BV 26'
 
+      # Informationen von Neusel, 2016-11-04, eingepflegt am 2017-01-24.
+      # http://support.wingolfsplattform.org/tickets/1785
+      #
+      BvMapping.where(plz: '56477').update_all bv_name: 'BV 21'
+      BvMapping.where(town: 'Beltheim').update_all bv_name: 'BV 20'
 
       log.success "Fertig."
     end
