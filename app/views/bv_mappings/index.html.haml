@@ -1,0 +1,14 @@
+%h1= current_title
+%div
+  %table.bv_mappings.datatable
+    %thead
+      %tr
+        %td PLZ
+        %td Stadt
+        %td BV
+    %tbody
+      - bv_mappings.each do |bv_mapping|
+        %tr
+          %td= bv_mapping.plz
+          %td= bv_mapping.town
+          %td= bv_mapping.bv_name

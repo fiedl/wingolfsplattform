@@ -17,6 +17,8 @@ Rails.application.routes.draw do
 
   get 'issues/wingolfsblaetter', to: 'issues#index', scope: 'wingolfsblaetter', as: 'wingolfsblaetter_issues'
 
+  resources :bv_mappings
+
   namespace :charts do
     namespace :term_reports do
       get :alle_wingolfiten, to: 'alle_wingolfiten#index'
