@@ -74,13 +74,14 @@ class Bv < Group
 
 
   def self.modify_town_for_loopup(town)
-    town = town.gsub(/\(.*\)/, "").strip if town  # Klammern entfernen, z.B. "Halle (Saale)" -> "Halle"
-    town = town.gsub("Munich", "München")
-    town = town.gsub("Cologne", "Köln")
-    town = town.gsub("Nuremberg", "Nürnberg")
-    town = town.gsub("Brunswick", "Braunschweig")
-    town = town.gsub("Giessen", "Gießen")
-
+    if town
+      town = town.gsub(/\(.*\)/, "").strip if town  # Klammern entfernen, z.B. "Halle (Saale)" -> "Halle"
+      town = town.gsub("Munich", "München")
+      town = town.gsub("Cologne", "Köln")
+      town = town.gsub("Nuremberg", "Nürnberg")
+      town = town.gsub("Brunswick", "Braunschweig")
+      town = town.gsub("Giessen", "Gießen")
+    end
     return town
   end
 
