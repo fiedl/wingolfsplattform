@@ -1,16 +1,17 @@
 namespace :nightly do
   require 'importers/models/log'
-  
+
   # This task is run by a cron job every night.
   #
   task :all => [
     :print_info,
     'fix:bvs',
     'issues:all',
+    'fix:memberships',
     :cache,
     :print_info_finish
   ]
-  
+
   task :print_info => [:environment] do
     log.head "Nächtliche Aufgaben: #{I18n.localize(Time.zone.now)}"
   end
