@@ -7,7 +7,7 @@ namespace :nightly do
     :print_info,
     'fix:bvs',
     'issues:all',
-    'fix:memberships',
+    :memberships,
     :cache,
     :print_info_finish
   ]
@@ -20,5 +20,13 @@ namespace :nightly do
     log.success "Abgeschlossen: #{I18n.localize(Time.zone.now)}"
   end
   task :cache => ['cache:all']
+
+  task :memberships => [:environment] do
+    log.section "Mitgliedschaften"
+    log.info "Jeden Donnerstag werden die indirekten Benutzergruppenmitgliedschaften gewartet, d.h. die validity ranges neu berechnet."
+    if Time.zone.now.thursday?
+      Rake::Task["fix:memberships"].invoke
+    end
+  end
 
 end
