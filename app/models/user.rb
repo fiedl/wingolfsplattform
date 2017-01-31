@@ -489,6 +489,27 @@ class User
       #}
   end
 
+  def philistrationsdatum
+    self.membership_in(Group.alle_philister).valid_from
+  end
+
+  # Wenn jemand schon Philister ist, aber vergessen wurde, ihn in allen Verbindungen
+  # zu philistrieren, kann diese Wartungs-Methode verwendet werden.
+  #
+  def in_allen_verbindungen_philistrieren!
+    raise "Noch kein Philister. Das geht nur, wenn er schon in einer Verbindung Philister ist." unless philistrationsdatum
+    self.current_corporations.each do |corporation|
+      unless self.member_of? corporation.philisterschaft
+        status_group_ids_in_this_corporation = StatusGroup.find_all_by_group(corporation.aktivitas).map(&:id)
+        current_status_group = self.groups.where(id: status_group_ids_in_this_corporation).first
+        membership = UserGroupMembership.find_by_user_and_group(self, current_status_group)
+        aenderungsdatum = philistrationsdatum
+        aenderungsdatum = membership.valid_from + 1.day if membership.valid_from > aenderungsdatum
+        membership.move_to corporation.philisterschaft.leaf_groups.first, at: aenderungsdatum
+      end
+    end
+  end
+
 
   # ## Firmenname
   #
