@@ -1,4 +1,6 @@
 de:
   sender_filter:
     wingolfiten:     Wingolfiten
-    
+
+  sender_filter_short:
+    wingolfiten:     Wingolfiten
