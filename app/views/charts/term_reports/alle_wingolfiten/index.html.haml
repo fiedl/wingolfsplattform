@@ -1,3 +1,5 @@
+= render partial: 'statistics/tabs', locals: {active: 'alle_wingolfiten'}
+
 %h1 Anzahl aller Wingolfiten
 %div
   = line_chart charts_term_reports_alle_wingolfiten_anzahl_per_semester_path(params), discrete: true, height: "400px"

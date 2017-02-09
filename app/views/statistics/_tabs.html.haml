@@ -1,0 +1,8 @@
+- if can? :use, :term_infos
+  .panel
+    .panel-body
+      %ul.nav.nav-pills
+        %li{class: ('active' if active == 'term_reports')}= link_to "Semesterstatistiken", term_reports_path
+        %li{class: ''}= link_to "Datenpflege-Punkte", "#"
+        %li{class: ('active' if active == 'alle_wingolfiten')}= link_to "Alle Wingolfiten", charts_term_reports_alle_wingolfiten_path
+        %li{class: ('active' if active == 'statistics')}= link_to "Statistik-Tabellen der Wingolfsblätter", statistics_index_path
