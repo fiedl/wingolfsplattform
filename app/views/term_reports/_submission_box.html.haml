@@ -5,7 +5,7 @@
       Diese Semesterstatistik wurde am
       = localize term_report.submitted_at
       abgeschickt.
-  - if not term_report.too_old_to_submit?
+  - elsif not term_report.too_old_to_submit?
     - if not term_report.due?
       .alert.alert-info
         %strong Semesterstatistik noch nicht abgeschickt.
@@ -19,3 +19,8 @@
         Diese Statistik muss bis zum
         = localize term_report.over_due_at
         an den Vorort geschickt werden.
+
+        - if can? :submit, term_report
+          = button_to term_report_submit_path(term_report_id: term_report.id), class: 'btn btn-default submit_term_report', method: :post do
+            = icon :check
+            Verbindlich abschicken

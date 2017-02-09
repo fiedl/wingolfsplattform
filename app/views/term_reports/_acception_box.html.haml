@@ -1,0 +1,24 @@
+#term_report_acception
+  - if term_report.accepted?
+    .alert.alert-success
+      %strong Seemesterstatistik akzeptiert.
+      Diese Semesterstatistik wurde vom Vorort am
+      = localize term_report.accepted_at.to_date
+      akzeptiert.
+      Alles erledigt.
+  - elsif term_report.rejected?
+    .alert.alert-error
+      %strong Semesterstatistik abgelehnt.
+      Diese Semesterstatistik wurde vom Vorort am
+      = localize term_report.rejected_at.to_date
+      abgelehnt.
+  - elsif term_report.submitted?
+    - if can?(:accept, term_report) and can?(:reject, term_report)
+      .alert.alert-warning
+        %strong Handlungsbedarf.
+        = button_to term_report_accept_path(term_report_id: term_report.id), class: 'btn btn-default  accept_term_report', method: :post do
+          = icon 'ok-circle'
+          Verbindlich akzeptieren
+        = button_to term_report_reject_path(term_report_id: term_report.id), class: 'btn btn-default btn-danger reject_term_report', method: :post do
+          = icon 'remove-circle'
+          Ablehnen

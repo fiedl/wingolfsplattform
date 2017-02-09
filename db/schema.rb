@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170119141944) do
+ActiveRecord::Schema.define(version: 20170203122509) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -395,6 +395,15 @@ ActiveRecord::Schema.define(version: 20170119141944) do
 
   add_index "settings", ["thing_type", "thing_id", "var"], name: "index_settings_on_thing_type_and_thing_id_and_var", unique: true, using: :btree
 
+  create_table "states", force: :cascade do |t|
+    t.string   "name",           limit: 255
+    t.integer  "author_user_id", limit: 4
+    t.integer  "reference_id",   limit: 4
+    t.string   "reference_type", limit: 255
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
   create_table "status_group_membership_infos", force: :cascade do |t|
     t.integer  "membership_id",           limit: 4
     t.integer  "promoted_by_workflow_id", limit: 4
@@ -482,9 +491,6 @@ ActiveRecord::Schema.define(version: 20170119141944) do
     t.string   "type",                                   limit: 255
     t.integer  "anzahl_erstbandtraeger_aktivitas",       limit: 4
     t.integer  "anzahl_erstbandtraeger_philisterschaft", limit: 4
-    t.datetime "submitted_at"
-    t.datetime "accepted_at"
-    t.datetime "rejected_at"
   end
 
   create_table "terms", force: :cascade do |t|
