@@ -1,5 +1,5 @@
 # YourPlatform
-gem 'your_platform', github: 'fiedl/your_platform', branch: 'sf/wingolf-org'
+gem 'your_platform', git: 'https://github.com/fiedl/your_platform', branch: 'sf/wingolf-org'
 
 source 'https://rubygems.org' do
   # Ruby License, http://www.ruby-lang.org/en/LICENSE.txt
@@ -79,9 +79,11 @@ source 'https://rubygems.org' do
   group :test, :development do
     gem 'guard', '~> 2.2.5'
     gem 'guard-focus'
-    gem 'rspec-rails', '< 3.0'
+    gem 'rspec-rails'
+    gem 'rspec-legacy_formatters'
+    gem 'rspec-its'
     gem 'guard-rspec'
-    gem 'rspec-rerun', '~> 0.3.1'
+    gem 'rspec-rerun'
   #  gem 'rspec-mocks'
   #  gem 'listen'
   #  gem 'rb-inotify', '0.8.8' if RUBY_PLATFORM.downcase.include?("linux")
@@ -156,6 +158,8 @@ source 'https://rubygems.org' do
 
   gem 'sidekiq', '~> 3.5.1'
 
+  # Temporary fixes
+  gem 'gemoji', '~> 2.1.0'
 end
 
 source 'https://rails-assets.org'
@@ -163,5 +167,4 @@ source 'https://rails-assets.org'
 #  gem 'rails-assets-tether', '>= 1.1.0'
 #end
 
-ruby '2.3.1'
-
+ruby '2.3.3'

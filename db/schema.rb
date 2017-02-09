@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161021103433) do
+ActiveRecord::Schema.define(version: 20170203122509) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -190,6 +190,15 @@ ActiveRecord::Schema.define(version: 20161021103433) do
 
   add_index "last_seen_activities", ["user_id"], name: "last_seen_activities_user_id_fk", using: :btree
 
+  create_table "locations", force: :cascade do |t|
+    t.integer  "object_id",   limit: 4
+    t.string   "object_type", limit: 255
+    t.float    "longitude",   limit: 24
+    t.float    "latitude",    limit: 24
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
   create_table "mentions", force: :cascade do |t|
     t.integer  "who_user_id",    limit: 4
     t.integer  "whom_user_id",   limit: 4
@@ -295,6 +304,7 @@ ActiveRecord::Schema.define(version: 20161021103433) do
     t.integer  "reference_id",   limit: 4
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.string   "host",           limit: 255
   end
 
   create_table "post_deliveries", force: :cascade do |t|
@@ -385,6 +395,15 @@ ActiveRecord::Schema.define(version: 20161021103433) do
 
   add_index "settings", ["thing_type", "thing_id", "var"], name: "index_settings_on_thing_type_and_thing_id_and_var", unique: true, using: :btree
 
+  create_table "states", force: :cascade do |t|
+    t.string   "name",           limit: 255
+    t.integer  "author_user_id", limit: 4
+    t.integer  "reference_id",   limit: 4
+    t.string   "reference_type", limit: 255
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
   create_table "status_group_membership_infos", force: :cascade do |t|
     t.integer  "membership_id",           limit: 4
     t.integer  "promoted_by_workflow_id", limit: 4
@@ -422,6 +441,64 @@ ActiveRecord::Schema.define(version: 20161021103433) do
   end
 
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
+
+  create_table "term_report_member_entries", force: :cascade do |t|
+    t.integer  "user_id",               limit: 4
+    t.integer  "term_report_id",        limit: 4
+    t.string   "last_name",             limit: 255
+    t.string   "first_name",            limit: 255
+    t.string   "name_affix",            limit: 255
+    t.string   "date_of_birth",         limit: 255
+    t.string   "primary_address",       limit: 255
+    t.string   "secondary_address",     limit: 255
+    t.string   "phone",                 limit: 255
+    t.string   "email",                 limit: 255
+    t.string   "profession",            limit: 255
+    t.string   "category",              limit: 255
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.string   "klammerung",            limit: 255
+    t.string   "w_nummer",              limit: 255
+    t.float    "membership_fee_factor", limit: 24
+  end
+
+  create_table "term_reports", force: :cascade do |t|
+    t.integer  "term_id",                                limit: 4
+    t.integer  "group_id",                               limit: 4
+    t.integer  "number_of_members",                      limit: 4
+    t.integer  "number_of_new_members",                  limit: 4
+    t.integer  "number_of_membership_ends",              limit: 4
+    t.integer  "number_of_deaths",                       limit: 4
+    t.integer  "number_of_events",                       limit: 4
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
+    t.integer  "anzahl_aktivmeldungen",                  limit: 4
+    t.integer  "anzahl_aller_aktiven",                   limit: 4
+    t.integer  "anzahl_burschungen",                     limit: 4
+    t.integer  "anzahl_burschen",                        limit: 4
+    t.integer  "anzahl_fuxen",                           limit: 4
+    t.integer  "anzahl_aktiver_burschen",                limit: 4
+    t.integer  "anzahl_inaktiver_burschen_loci",         limit: 4
+    t.integer  "anzahl_inaktiver_burschen_non_loci",     limit: 4
+    t.integer  "anzahl_konkneipwanten",                  limit: 4
+    t.integer  "anzahl_philistrationen",                 limit: 4
+    t.integer  "anzahl_philister",                       limit: 4
+    t.integer  "anzahl_austritte",                       limit: 4
+    t.integer  "anzahl_austritte_aktive",                limit: 4
+    t.integer  "anzahl_austritte_philister",             limit: 4
+    t.integer  "anzahl_todesfaelle",                     limit: 4
+    t.integer  "balance",                                limit: 4
+    t.string   "type",                                   limit: 255
+    t.integer  "anzahl_erstbandtraeger_aktivitas",       limit: 4
+    t.integer  "anzahl_erstbandtraeger_philisterschaft", limit: 4
+  end
+
+  create_table "terms", force: :cascade do |t|
+    t.integer  "year",       limit: 4
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.string   "type",       limit: 255
+  end
 
   create_table "user_accounts", force: :cascade do |t|
     t.datetime "created_at",                                      null: false

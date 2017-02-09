@@ -12,6 +12,8 @@ de:
   studium_export_string:          Studium
   status_export_string:           Wingolfsstatus
 
+  personal_title_max_10_chars:    Persönlicher Titel
+
   activerecord:
     attributes:
       user:

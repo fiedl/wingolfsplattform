@@ -1,0 +1,23 @@
+%h1= current_title
+%div
+  %table.bv_mappings.datatable
+    %thead
+      %tr
+        %td PLZ
+        %td Stadt
+        %td BV
+    %tbody
+      - bv_mappings.each do |bv_mapping|
+        %tr
+          %td= bv_mapping.plz
+          %td= bv_mapping.town
+          %td= bv_mapping.bv_name
+
+%h1 Neue Zuordnung eintragen
+%div
+  = semantic_form_for new_bv_mapping do |f|
+    = f.inputs do
+      = f.input :plz
+      = f.input :town
+      = f.input :bv_name, as: :select, collection: all_bv_names, include_blank: false
+    = f.actions

@@ -1,0 +1,28 @@
+- if group
+  = render partial: 'groups/tabs', locals: {group: group, active: 'members'}
+
+.panel
+  .panel-body
+    = render partial: 'chart'
+
+.panel
+  .panel-body
+    = render partial: 'select_form'
+
+= render partial: 'submission_box'
+= render partial: 'acception_box'
+
+.col-sm-6
+  = render partial: 'some_numbers'
+
+.col-sm-6
+  = render partial: 'officers'
+  = render partial: 'semester_calendar'
+
+.col-sm-12
+  = render partial: 'member_box', locals: {group_name: "Hospitanten"} if term_report.hospitanten.any?
+  = render partial: 'member_box', locals: {group_name: "Fuxen"}
+  = render partial: 'member_box', locals: {group_name: "Aktive Burschen"}
+  = render partial: 'member_box', locals: {group_name: "Inaktive Burschen loci"}
+  = render partial: 'member_box', locals: {group_name: "Inaktive Burschen non loci"}
+  = render partial: 'member_box', locals: {group_name: "Konkneipanten"}

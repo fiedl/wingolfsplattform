@@ -1,0 +1,32 @@
+- # locals:
+- group_name || raise('no group_name given')
+- members ||= term_report.member_entries.where(category: group_name)
+
+%h1
+  = group_name
+  = "(#{members.count})"
+%div
+  %table.members
+    - members.each do |member|
+      %tr.first_for_member
+        %td.name
+          - if can? :read, member
+            = link_to "#{member.last_name}, #{member.first_name}", member.user
+          - else
+            = "#{member.last_name}, #{member.first_name}"
+        - if can? :read, member
+          %td.aktivitaetszahl= member.name_affix
+          %td.study_address.address{rowspan: 2}= member.primary_address.to_s.gsub("\n", "<br />").html_safe
+          %td.phone= member.phone
+          %td.home_address.address{rowspan: 2}= member.secondary_address.to_s.gsub("\n", "<br />").html_safe
+          %td.klammerung= member.klammerung
+      %tr.second_for_member
+        - if can? :read, member
+          %td.date_of_birth
+            geb.
+            = localize member.date_of_birth.to_date
+        %td.w_nummer
+          = member.w_nummer
+        - if can? :read, member
+          %td.email= member.email
+          %td.study= member.profession

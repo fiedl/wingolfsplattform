@@ -1,0 +1,9 @@
+de:
+  formtastic:
+    labels:
+      plz: PLZ
+      town: Stadt
+      bv_name: BV
+    actions:
+      create: "Diese BV-Zuordnung anlegen"
+

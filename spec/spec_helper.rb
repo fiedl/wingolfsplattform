@@ -171,6 +171,19 @@ RSpec.configure do |config|
   #
   config.include TimeTravel
 
+  # rspec-rails 3 will no longer automatically infer an example group's
+  # spec type from the file location. You can explicitly opt-in to this
+  # feature using this snippet:
+  #
+  config.infer_spec_type_from_file_location!
+
+  # Enables both, the new `expect` and the old `should` syntax.
+  # https://www.relishapp.com/rspec/rspec-expectations/docs/syntax-configuration
+  #
+  config.expect_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
+
   # This introduces the method `wait_for_ajax`, which can be used when the Capybara
   # matchers do not wait properly for ajax code to be finished.
   # This is just a sleep command with a time determined by a simple benchmark.
@@ -206,6 +219,11 @@ RSpec.configure do |config|
   config.include CapybaraHelper, type: :feature
   config.include WysiwygSpecHelper, type: :feature
   config.include TabSpecHelper, type: :feature
+
+  # Devise test helper for controller tests
+  config.include Devise::Test::ControllerHelpers, :type => :controller
+  config.extend ControllerMacros, :type => :controller
+
 
   # Database Wiping Policy
   # ......................................................................................

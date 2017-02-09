@@ -4,7 +4,7 @@
 
 require File.expand_path('../config/application', __FILE__)
 require 'rspec/core/rake_task'
-require 'rspec-rerun'
+require 'rspec-rerun/tasks'
 
 # This is needed for `rake db:migrate` et cetera:
 #

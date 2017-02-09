@@ -1,0 +1,8 @@
+de:
+  term_report: Semesterstatistik
+  term_reports: Semesterstatistiken
+
+  term_report_columns_short:
+    anzahl_aller_aktiven: Aktive
+    anzahl_erstbandtraeger_aktivitas: Steuerpflichtig
+    anzahl_aktivmeldungen: Aktivmeldungen

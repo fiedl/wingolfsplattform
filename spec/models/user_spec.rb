@@ -14,8 +14,8 @@ describe User do
     subject { @user.title }
     it "should return the user's name and his aktivitaetszahl" do
       @user.reload
-      @user.name.blank?.should be_false
-      @user.aktivitaetszahl.blank?.should be_false
+      @user.name.should be_present
+      @user.aktivitaetszahl.should be_present
       subject.should == @user.name + " " + @user.aktivitaetszahl
     end
   end
@@ -338,10 +338,10 @@ describe User do
 
     describe "for the user being member of the @abonnenten_group" do
       before { @abonnenten_group.assign_user @user }
-      it { should be_true }
+      it { should be true }
     end
     describe "for the user not being member of the @abonnenten_group" do
-      it { should be_false }
+      it { should be false }
     end
 
     describe "#wingolfsblaetter_abo = true" do
