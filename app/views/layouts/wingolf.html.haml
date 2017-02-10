@@ -82,7 +82,8 @@
               %span#access_indicator
                 = access_indicator if current_user
             #content
-              = render partial: 'layouts/multi_column_content_area'
+              .row
+                = render partial: 'layouts/multi_column_content_area'
               .clear
 
     .bottom_page_footer.hidden-print= render partial: 'layouts/footer' unless @hide_footer
