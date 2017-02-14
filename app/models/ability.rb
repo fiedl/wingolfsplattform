@@ -310,6 +310,12 @@ module AbilityDefinitions
     super
   end
 
+  def rights_for_developers
+    super
+
+    can :use, :site_links
+  end
+
 end
 
 class Ability

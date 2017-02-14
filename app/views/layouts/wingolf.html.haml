@@ -20,6 +20,8 @@
     = yield :head
   = body_tag do
     - if user_account_signed_in?
+      - if can? :use, :site_links
+        #site-links
       - Rack::MiniProfiler.step("#logged-in-bar") do
         #logged-in-bar.hidden-print
           #backendBar
