@@ -249,7 +249,7 @@ describe Ability do
     end
   end
 
-  describe "Lokaler Admin" do
+  describe "Lokaler Admin (Aktivitas + Philisterschaft)" do
     before do
       @corporation = create :wingolf_corporation
       @corporation.assign_admin user
@@ -257,6 +257,64 @@ describe Ability do
     end
 
     he { should be_able_to :create_account_for, @other_member }
+
+    he "should not be able to change the admin" do
+      the_user.should_not be_able_to :update_memberships, @corporation.admins_parent
+    end
+  end
+
+  describe "Lokaler Admin (Philisterschaft)" do
+    before do
+      @corporation = create :wingolf_corporation
+      @corporation.philisterschaft.assign_admin user
+    end
+
+    he "should not be able to change the admin" do
+      the_user.should_not be_able_to :update_memberships, @corporation.philisterschaft.admins_parent
+    end
+  end
+
+  describe "Lokaler Admin (Aktivitas)" do
+    before do
+      @corporation = create :wingolf_corporation
+      @corporation.aktivitas.assign_admin user
+    end
+
+    he "should be able to change the admin" do
+      the_user.should be_able_to :update_memberships, @corporation.aktivitas.admins_parent
+    end
+    he "should not be able to change the corporations admin" do
+      the_user.should_not be_able_to :update_memberships, @corporation.admins_parent
+    end
+    he "should not be able to change the philister admin" do
+      the_user.should_not be_able_to :update_memberships, @corporation.philisterschaft.admins_parent
+    end
+    he "should not be able to change the admin of another aktivitas or corporation" do
+      @other_corporation = create :wingolf_corporation
+      the_user.should_not be_able_to :update_memberships, @other_corporation.admins_parent
+      the_user.should_not be_able_to :update_memberships, @other_corporation.aktivitas.admins_parent
+      the_user.should_not be_able_to :update_memberships, @other_corporation.philisterschaft.admins_parent
+    end
+
+    describe "if the admins has lost his rights less than five minutes ago" do
+      before do
+        @membership = UserGroupMembership.with_past.find_by_user_and_group user, @corporation.aktivitas.admins_parent
+        @membership.valid_from = 1.year.ago
+        @membership.valid_to = 4.minutes.ago
+        @membership.save
+      end
+      he { User.find(user.id).should be_able_to :update_memberships, @corporation.aktivitas.admins_parent }
+    end
+
+    describe "if the admins has lost his rights more than five minutes ago" do
+      before do
+        @membership = UserGroupMembership.with_past.find_by_user_and_group user, @corporation.aktivitas.admins_parent
+        @membership.valid_from = 1.year.ago
+        @membership.valid_to = 6.minutes.ago
+        @membership.save
+      end
+      he { should_not be_able_to :update_memberships, @corporation.aktivitas.admins_parent }
+    end
   end
 
   describe "Lokaler Seiten-Admin, z.B. für die Rubrik Wingolfsblätter" do

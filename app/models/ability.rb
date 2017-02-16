@@ -71,6 +71,18 @@ module AbilityDefinitions
         #
         not group.has_flag?(:admins_parent)
       end
+
+      # Administratoren einer Aktivitas dürfen ihr Amt weitergeben.
+      # Siehe: https://trello.com/c/SSciMMfB/1101-aktiven-admins-durfen-ihr-amt-weitergeben
+      # Und: http://support.wingolfsplattform.org/tickets/1530#reply-3682
+      #
+      # Damit Fehleingaben korrigiert werden können sei es einem scheidenden Admin
+      # bis zu fünf Minuten, nachdem er das Amt abgegeben hat, noch möglich,
+      # den Admin zu ändern.
+      #
+      # Da für einen gewesenen Admin die Methode `rights_for_local_admins` nicht mehr
+      # aufgerufen wird, ist dies unter `rights_for_signed_in_users` definiert.
+
       can :create_memberships, Group do |group|
         can? :update, group
       end
@@ -224,6 +236,22 @@ module AbilityDefinitions
       else
         false
       end
+    end
+
+    # Administratoren einer Aktivitas dürfen ihr Amt weitergeben.
+    # Siehe: https://trello.com/c/SSciMMfB/1101-aktiven-admins-durfen-ihr-amt-weitergeben
+    # Und: http://support.wingolfsplattform.org/tickets/1530#reply-3682
+    #
+    # Damit Fehleingaben korrigiert werden können sei es einem scheidenden Admin
+    # bis zu fünf Minuten, nachdem er das Amt abgegeben hat, noch möglich,
+    # den Admin zu ändern.
+    #
+    # Da für einen gewesenen Admin die Methode `rights_for_local_admins` nicht mehr
+    # aufgerufen wird, ist dies unter `rights_for_signed_in_users` definiert.
+    #
+    can :update_memberships, OfficerGroup do |group|
+      (group.members.include?(user) || group.memberships.at_time(5.minutes.ago).map(&:user_id).include?(user.id)) &&
+        group.has_flag?(:admins_parent) && group.scope.kind_of?(Aktivitas)
     end
   end
 
