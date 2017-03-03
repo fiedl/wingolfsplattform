@@ -18,7 +18,7 @@ require "sprockets/railtie"
   # wingolfsplattform, wingolfsplattform-master, wingolfsplattform-sandbox
   __FILE__.split('/')[2]
 else
-  Rails.env.to_s
+  Rails.env.to_s + ENV['TEST_ENV_NUMBER'].to_s
 end
 
 # Require the gems listed in Gemfile, including any gems

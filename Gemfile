@@ -1,5 +1,5 @@
 # YourPlatform
-gem 'your_platform', git: 'https://github.com/fiedl/your_platform', branch: 'master'
+gem 'your_platform', git: 'https://github.com/fiedl/your_platform', branch: 'sf/renew-cache-2017'
 
 source 'https://rubygems.org' do
   # Ruby License, http://www.ruby-lang.org/en/LICENSE.txt
@@ -84,6 +84,7 @@ source 'https://rubygems.org' do
     gem 'rspec-its'
     gem 'guard-rspec'
     gem 'rspec-rerun'
+    gem 'parallel_tests'
   #  gem 'rspec-mocks'
   #  gem 'listen'
   #  gem 'rb-inotify', '0.8.8' if RUBY_PLATFORM.downcase.include?("linux")
@@ -132,7 +133,8 @@ source 'https://rubygems.org' do
   gem 'browser', '1.1.0'
 
   # Profiling
-  gem 'rack-mini-profiler'
+  gem 'flamegraph'
+  gem 'stackprof'
 
   # Code Coverage Badge, coveralls.io
   gem 'coveralls', require: false
