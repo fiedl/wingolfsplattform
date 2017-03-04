@@ -13,7 +13,7 @@ class Groups::AktiveImBv < Groups::GeoSearchGroup
   end
 
   def member_ids
-    cached { apply_status_selector(users_within_bv).map(&:id) }
+    apply_status_selector(users_within_bv).map(&:id)
   end
 
   def apply_status_selector(users)
@@ -23,4 +23,5 @@ class Groups::AktiveImBv < Groups::GeoSearchGroup
     end
   end
 
+  cache :member_ids
 end

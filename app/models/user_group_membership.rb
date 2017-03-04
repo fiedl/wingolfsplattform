@@ -7,11 +7,5 @@ require_dependency YourPlatform::Engine.root.join( 'app/models/user_group_member
 #
 class UserGroupMembership
 
-  # This method is called by a nightly rake task to renew the cache of this object.
-  #
-  def fill_cache
-    valid_from
-  end
-
 end
 

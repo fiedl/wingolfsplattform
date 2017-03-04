@@ -16,7 +16,7 @@ module ProfileFieldTypes
     end
 
     def bv_id
-      cached { Bv.by_address_field(self).try(:id) }
+      Bv.by_address_field(self).try(:id)
     end
 
     # The html output method is overridden here, in order to display the bv as well.
@@ -53,6 +53,7 @@ module ProfileFieldTypes
       self.wingolfspost
     end
 
+    cache :bv_id
   end
 
 end
