@@ -78,7 +78,7 @@ feature "Aktivmeldung" do
     # Dort gibt es den Benutzer in der Box der Aktivmeldungen.
 
     page.should have_text 'Aktivmeldungen'
-    click_on User.last.uncached(:title)
+    click_on User.last.title
 
     page.should have_content "Bundesbruder Kanne"
     page.should have_content User.last.title
@@ -178,7 +178,7 @@ feature "Aktivmeldung" do
     # Dort gibt es den Benutzer in der Box der Aktivmeldungen.
 
     page.should have_text 'Aktivmeldungen'
-    click_on User.last.uncached(:title)
+    click_on User.last.title
 
     page.should have_content "Bundesbruder Kanne"
     page.should have_content User.last.title
@@ -275,7 +275,7 @@ feature "Aktivmeldung" do
     # Jetzt ist man wieder auf der Startseite.
     # Dort gibt es den Benutzer nicht in der Box der Aktivmeldungen, da er nicht als Wingolfit eingetragen wurde.
     page.should have_text 'Aktivmeldungen'
-    page.should have_no_text User.last.uncached(:title)
+    page.should have_no_text User.last.title
 
     visit user_path(User.where(last_name: 'Kanne').last)
 
@@ -429,7 +429,7 @@ feature "Aktivmeldung" do
 
     # Jetzt ist man wieder auf der Startseite.
     page.should have_text 'Aktivmeldungen'
-    click_on User.last.uncached(:title)
+    click_on User.last.title
 
     page.should have_content "Bundesbruder Kanne"
     page.should have_content User.last.title

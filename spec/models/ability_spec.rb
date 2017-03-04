@@ -29,7 +29,11 @@ describe Ability do
     let(:user) { create(:user_with_account) }
     let(:ability) { Ability.new(user) }
     subject { ability }
-    let(:the_user) { subject }
+
+    def the_user(reload = false)
+      @the_user_ability = nil if reload
+      @the_user_ability ||= Ability.new(user.reload)
+    end
 
     #
     # Regular Users
@@ -635,9 +639,6 @@ describe Ability do
         @sub_group_user = create :user
         @sub_group.assign_user @sub_group_user, at: 1.hour.ago
       end
-      def the_user
-        Ability.new(User.find user.id)
-      end
       specify "admin assignment and un-assignent should update the admin rights for the sub objects properly" do
 
         # 1. The user is no admin.
@@ -653,7 +654,7 @@ describe Ability do
         # 2. The user becomes admin of @group.
         #
         @group.admins_parent.assign_user user; wait_for_cache
-        the_user.should_not be_able_to :manage, @parent_group
+        the_user(true).should_not be_able_to :manage, @parent_group
         the_user.should be_able_to :update, @group
         the_user.should be_able_to :manage, @page
         the_user.should be_able_to :manage, @sub_page
@@ -664,7 +665,7 @@ describe Ability do
         # 3. The user loses his admin status.
         #
         @group.admins_parent.unassign_user user; wait_for_cache
-        the_user.should_not be_able_to :manage, @parent_group
+        the_user(true).should_not be_able_to :manage, @parent_group
         the_user.should_not be_able_to :update, @group
         the_user.should_not be_able_to :manage, @page
         the_user.should_not be_able_to :manage, @sub_page
