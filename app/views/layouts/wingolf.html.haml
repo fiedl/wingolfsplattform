@@ -1,23 +1,24 @@
 !!!
 %html
   %head
-    %meta{:content => 'text/html; charset=utf-8', 'http-equiv' => 'Content-type'}/
-    %title= website_title_with_app_name
+    - Rack::MiniProfiler.step('wingolf layout head') do
+      %meta{:content => 'text/html; charset=utf-8', 'http-equiv' => 'Content-type'}/
+      %title= website_title_with_app_name
 
-    = stylesheet_link_tag    'bootstrap_setup', :media => 'all'
-    = stylesheet_link_tag    'wingolf_layout', :media => 'all'
-    = stylesheet_link_tag    'application', :media => 'all'
-    = stylesheet_link_tag    'print', :media => 'print'
+      = stylesheet_link_tag    'bootstrap_setup', :media => 'all'
+      = stylesheet_link_tag    'wingolf_layout', :media => 'all'
+      = stylesheet_link_tag    'application', :media => 'all'
+      = stylesheet_link_tag    'print', :media => 'print'
 
-    = favicon_link_tag 'favicon.ico'
-    = favicon_link_tag 'fahne-144x144.png', rel: 'apple-touch-icon', type: 'image/png'
+      = favicon_link_tag 'favicon.ico'
+      = favicon_link_tag 'fahne-144x144.png', rel: 'apple-touch-icon', type: 'image/png'
 
-    %link{rel: 'search', href: opensearch_path, title: "Wingolfsplattform-Suche", type: 'application/opensearchdescription+xml'}
+      %link{rel: 'search', href: opensearch_path, title: "Wingolfsplattform-Suche", type: 'application/opensearchdescription+xml'}
 
-    = javascript_include_tag 'application'
-    = gmaps4rails_api_script_tags
-    = csrf_meta_tags
-    = yield :head
+      = javascript_include_tag 'application'
+      = gmaps4rails_api_script_tags
+      = csrf_meta_tags
+      = yield :head
   = body_tag do
     - if user_account_signed_in?
       - if can? :use, :site_links
@@ -47,12 +48,12 @@
                 %li.backendBarItem
                   = link_to t(:my_profile), current_user, :class => 'my_profile'
                 %li.backendBarItem.dropdown
-                  -# link_to t( :my_groups ), main_app.my_groups_path, class: 'dropdown-toggle', data: { toggle: 'dropdown' }
-                  = link_to my_groups_path, class: 'dropdown-toggle' do
-                    = t :my_groups
-                    %b.caret
-                  %ul.dropdown-menu
-                    = cached_groups_of_user_table current_user
+                  - Rack::MiniProfiler.step("my groups") do
+                    = link_to my_groups_path, class: 'dropdown-toggle' do
+                      = t :my_groups
+                      %b.caret
+                    %ul.dropdown-menu
+                      = render partial: 'users/groups', object: current_user, as: :user
 
                 - # role indicator and preview menu
                 = render partial: 'layouts/role_preview_switcher'
@@ -80,8 +81,7 @@
             #header_search
               = render partial: 'shared/search_box'
             %span#category_indicator
-              - Rack::MiniProfiler.step("#horizontal_nav") do
-                #horizontal_nav= horizontal_nav
+              = render partial: 'layouts/horizontal_nav'
         #print-logo.visible-print
           .right= image_tag('logo.png')
     #contentBgLayer1
@@ -89,12 +89,12 @@
         #contentBgLayer3
           #content_wrapper
             #toolbar
-              - # %span#star_tool
-              - #   = star_tool( current_user, @navable )
-              %span#breadcrumb
-                = breadcrumbs
-              %span#access_indicator
-                = access_indicator if current_user
+              - Rack::MiniProfiler.step('toolbar') do
+                - # %span#star_tool
+                - #   = star_tool( current_user, @navable )
+                = render partial: 'layouts/breadcrumbs'
+                %span#access_indicator
+                  = access_indicator if current_user
             #content
               = render partial: 'layouts/multi_column_content_area'
               .clear
