@@ -160,6 +160,9 @@ source 'https://rubygems.org' do
 
   # Temporary fixes
   gem 'gemoji', '~> 2.1.0'
+
+  # Security Fixes
+  gem 'rubyzip', '>= 1.2.1'  # CVE-2017-5946
 end
 
 source 'https://rails-assets.org'
