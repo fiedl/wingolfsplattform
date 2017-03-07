@@ -35,6 +35,12 @@ feature 'Status Promotion' do
     page.should have_text @user_to_promote.name
     page.should have_selector '.workflow_triggers'
 
+    # Because all caches are renewed synchronously in the specs, this takes forever.
+    # In production, the status workflows controller makes sure that the cache
+    # is properly renewed.
+    #
+    wait_until(timeout: 120.seconds) { @user_to_promote.reload.ancestor_groups(true).include? @corporation.status_groups.second }
+
     within("#corporate_vita") { page.should have_text @corporation.status_groups.second.name.singularize }
 
     @user_to_promote.should be_member_of @corporation.status_groups.second
