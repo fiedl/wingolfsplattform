@@ -2,10 +2,14 @@ rvm:
   - "2.3.3"
 env:
   - "RSPEC_RERUN_PATTERN=./spec/features/[a-h]*_spec.rb RAILS_ENV=test CI_CATEGORY=features DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=4"
-  - "RSPEC_RERUN_PATTERN=./spec/features/[i-z]*_spec.rb RAILS_ENV=test CI_CATEGORY=features DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=4"
+  - "RSPEC_RERUN_PATTERN=./spec/features/[i-s]*_spec.rb RAILS_ENV=test CI_CATEGORY=features DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=4"
+  - "RSPEC_RERUN_PATTERN=./spec/features/[t-z]*_spec.rb RAILS_ENV=test CI_CATEGORY=features DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=4"
   - "NO_CACHING=true RSPEC_RERUN_PATTERN=./spec/models/*_spec.rb RAILS_ENV=test CI_CATEGORY=models DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=4"
-  - "RSPEC_RERUN_PATTERN=./spec/models/[a-g]*_spec.rb RAILS_ENV=test CI_CATEGORY=models DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=4"
-  - "RSPEC_RERUN_PATTERN=./spec/models/[h-z]*_spec.rb RAILS_ENV=test CI_CATEGORY=models DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=4"
+  - "RSPEC_RERUN_PATTERN=./spec/models/[a-c]*_spec.rb NO_RENEW_CACHE=true RAILS_ENV=test CI_CATEGORY=models DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=4"
+  - "RSPEC_RERUN_PATTERN=./spec/models/[d-f]*_spec.rb NO_RENEW_CACHE=true RAILS_ENV=test CI_CATEGORY=models DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=4"
+  - "RSPEC_RERUN_PATTERN=./spec/models/[g]*_spec.rb NO_RENEW_CACHE=true RAILS_ENV=test CI_CATEGORY=models DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=4"
+  - "RSPEC_RERUN_PATTERN=./spec/models/[h-l]*_spec.rb NO_RENEW_CACHE=true RAILS_ENV=test CI_CATEGORY=models DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=4"
+  - "RSPEC_RERUN_PATTERN=./spec/models/[o-z]*_spec.rb NO_RENEW_CACHE=true RAILS_ENV=test CI_CATEGORY=models DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=4"
   - "RSPEC_RERUN_PATTERN=./spec/controllers/*_spec.rb RAILS_ENV=test CI_CATEGORY=controllers DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=4"
 cache: bundler
 sudo: false
