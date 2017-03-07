@@ -735,11 +735,11 @@ describe Ability do
 
         user.global_admin = false
         wait_for_cache
-        Ability.new(User.find user.id).should_not be_able_to :manage, @page
+        the_user(true).should_not be_able_to :manage, @page
 
         user.global_admin = true
         wait_for_cache
-        Ability.new(User.find user.id).should be_able_to :manage, @page
+        the_user(true).should be_able_to :manage, @page
       end
     end
   end
