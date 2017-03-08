@@ -415,7 +415,7 @@ class User
     status_memberships = []
     self.corporations.each do |c|
       print "#{c.name}\n".blue
-      print " -> #{self.current_status_group_in(c).name}\n".green
+      print " -> #{self.current_status_group_in(c).try(:name)}\n".green
       status_memberships << self.current_status_membership_in(c)
     end
     return status_memberships

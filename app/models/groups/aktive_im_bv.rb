@@ -16,6 +16,17 @@ class Groups::AktiveImBv < Groups::GeoSearchGroup
     apply_status_selector(users_within_bv).map(&:id)
   end
 
+  def member_table_rows
+    members.collect do |user|
+      {
+        user_id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        name_affix: user.name_affix
+      }
+    end
+  end
+
   def apply_status_selector(users)
     super.select do |user|
       (not user.philister?) &&
