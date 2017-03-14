@@ -27,14 +27,15 @@
 
       %h2 Verbindung
 
-      - corporations_collection = current_user.administrated_aktivitates.collect(&:corporation)
-      - # Pre-select corporation if only one:
-      - @user.add_to_corporation = corporations_collection.first.id if corporations_collection.count == 1
-
       - if current_user.global_admin?
+        - corporations_collection = Corporation.all
         = f.input :add_to_corporation, as: :select, label: t(:register_in), collection: corporations_collection
         = f.input :aktivmeldungsdatum, as: 'date_select', start_year: 10.years.ago.year, end_year: Time.zone.now.year
+
       - else
+        - corporations_collection = current_user.administrated_aktivitates.collect(&:corporation)
+        - # Pre-select corporation if only one:
+        - @user.add_to_corporation = corporations_collection.first.id if corporations_collection.count == 1
         = f.input :add_to_corporation, as: :select, label: t(:register_in), collection: corporations_collection, required: true, validate: true, input_html: { class: 'required' }
         = f.input :aktivmeldungsdatum, as: 'date_select', start_year: 10.years.ago.year, end_year: Time.zone.now.year, required: true, validate: true, input_html: { class: 'required' }
 
