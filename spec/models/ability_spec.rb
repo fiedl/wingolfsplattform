@@ -159,7 +159,7 @@ describe Ability do
     context "(joining events)" do
       before do
         @group = create :group
-        @event = @group.child_events.create
+        @event = @group.events.create
       end
       he { should be_able_to :read, @event }
       he { should be_able_to :join, @event }
@@ -288,22 +288,22 @@ describe Ability do
           the_user.should be_able_to :create_event, @group
         end
         he "should be able to update events in his group" do
-          @event = @group.child_events.create
+          @event = @group.events.create
           the_user.should be_able_to :update, @event
         end
         he "should be able to create events in subgroups of his group" do
           the_user.should be_able_to :create_event, @sub_group
         end
         he "should be able to update events in subgroups of his group" do
-          @event = @sub_group.child_events.create
+          @event = @sub_group.events.create
           the_user.should be_able_to :update, @event
         end
         he "should be able to update events in sub sub groups of his group" do
-          @event = @sub_sub_group.child_events.create
+          @event = @sub_sub_group.events.create
           the_user.should be_able_to :update, @event
         end
         he "should be able to update the contact people of an event" do
-          @event = @group.child_events.create
+          @event = @group.events.create
           the_user.should be_able_to :update, @event.contact_people_group
         end
       end
@@ -690,7 +690,7 @@ describe Ability do
         @any_page = create :page
         @any_user = create :user
 
-        @event = @any_group.child_events.create name: 'Special Event'
+        @event = @any_group.events.create name: 'Special Event'
       end
       he { should be_able_to :export_member_list, @any_group }
       he { should be_able_to :create_post_for, @any_group }

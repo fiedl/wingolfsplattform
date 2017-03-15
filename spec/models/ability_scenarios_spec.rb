@@ -54,7 +54,7 @@ describe Ability do
 
       describe "Wenn er ein Seminar als Veranstaltung eingetragen hat" do
         before do
-          @seminar_event = Group.alle_wingolfiten.child_events.create name: "75. Wingolfsseminar"
+          @seminar_event = Group.alle_wingolfiten.events.create name: "75. Wingolfsseminar"
           @seminar_event.contact_people_group.child_users << user
         end
 

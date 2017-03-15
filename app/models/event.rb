@@ -4,11 +4,12 @@ class Event
 
   attr_accessible :aktive, :philister if defined? attr_accessible
 
-  after_save :save_scope_association_if_needed
+  before_save :save_scope_association_if_needed
+  before_save :assign_to_group_given_by_group_id
 
   def aktive
     if @aktive.nil?
-      @aktive = (parent_groups.first.kind_of?(Aktivitas) || parent_groups.first.kind_of?(Corporation))
+      @aktive = (group.kind_of?(Aktivitas) || group.kind_of?(Corporation))
     else
       @aktive
     end
@@ -16,7 +17,7 @@ class Event
 
   def philister
     if @philister.nil?
-      @philister = (parent_groups.first.kind_of?(Philisterschaft) || parent_groups.first.kind_of?(Corporation))
+      @philister = (group.kind_of?(Philisterschaft) || group.kind_of?(Corporation))
     else
       @philister
     end
@@ -33,8 +34,8 @@ class Event
   end
 
   def save_scope_association_if_needed
-    if parent_groups.first
-      if corporation = parent_groups.first.corporation
+    if group
+      if corporation = group.corporation
         if @scope_has_changed
           @scope_has_changed = false
           if aktive and philister
@@ -50,6 +51,7 @@ class Event
   end
 
   def assign_to_group_given_by_group_id
+    binding.pry
     if self.group_id && (corporation = Group.find(self.group_id)) && corporation.kind_of?(Corporation)
       if aktive and not philister
         self.group_id = corporation.aktivitas.id
@@ -58,7 +60,7 @@ class Event
       end
       @scope_has_changed = false
     end
-    self.group = Group.find(self.group_id) if self.group_id
+    #self.group = Group.find(self.group_id) if self.group_id
   end
 
 end

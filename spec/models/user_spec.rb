@@ -108,7 +108,7 @@ describe User do
     context "when joining an event of a corporation" do
       before do
         @corporationZ = create :wingolf_corporation, token: 'Z'
-        @event = @corporationZ.child_events.create
+        @event = @corporationZ.events.create
         @user.join @event; time_travel 2.seconds
         @user.reload
       end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170203122509) do
+ActiveRecord::Schema.define(version: 20170312094038) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -124,6 +124,7 @@ ActiveRecord::Schema.define(version: 20170203122509) do
     t.string   "location",                  limit: 255
     t.boolean  "publish_on_global_website"
     t.boolean  "publish_on_local_website"
+    t.integer  "group_id",                  limit: 4
   end
 
   create_table "flags", force: :cascade do |t|
