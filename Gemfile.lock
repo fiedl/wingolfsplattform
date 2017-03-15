@@ -6,8 +6,8 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 7468dd4206835fa69e4e3b31cffa0a6b96ea89cf
-  branch: sf/renew-cache-2017
+  revision: 87d63ba08b5a50d15ac68936b4f27ec886fc33ed
+  branch: sf/resource-layout-2017
   specs:
     your_platform (1.0.1)
       actionpack (>= 4.2.5.2)
