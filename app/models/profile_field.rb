@@ -25,5 +25,11 @@ class ProfileField
     ]
   end
 
+  if use_caching?
+    def self.cached_profileable_methods_depending_on_profile_fields
+      super + %w(w_nummer)
+    end
+  end
+
 end
 

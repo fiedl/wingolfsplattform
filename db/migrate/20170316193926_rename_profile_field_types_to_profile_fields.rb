@@ -1,6 +1,6 @@
 class RenameProfileFieldTypesToProfileFields < ActiveRecord::Migration
   def change
-    %w(Klammerung).each do |sub_type|
+    %w(About AcademicDegree Address BankAccount Competence Custom Date Description Email Employment General Homepage MailingListEmail NameSurrounding Organization Phone ProfessionalCategory Study Klammerung).each do |sub_type|
       rename_sti_type :profile_fields, "ProfileFieldTypes::#{sub_type}", "ProfileFields::#{sub_type}"
     end
   end

@@ -97,10 +97,19 @@ feature 'User page', js: false do
           within('.profile_field.university') { fill_in 'value', with: "FAU Erlangen" }
           within('.profile_field.subject')    { fill_in 'value', with: "Physics" }
           find('.save_button').click
+          page.should have_no_selector '.save_button', visible: true
 
-          wait_for_ajax
-          @user.profile_fields.where(type: 'ProfileFieldTypes::Study').count.should == 1
+          page.should have_text 'Undergraduate Studies'
+          page.should have_text "2006"
+          page.should have_text "2008"
+          page.should have_text "FAU Erlangen"
+          page.should have_text "Physics"
+
+          wait_for_ajax; wait_for_ajax
+
+          @user.profile_fields.where(type: 'ProfileFields::Study').count.should == 1
           study_field = @user.profile_fields.last
+
           study_field.label.should == "Undergraduate Studies"
           study_field.from.should == "2006"
           study_field.to.should == "2008"
@@ -114,7 +123,7 @@ feature 'User page', js: false do
             find('.best_in_place').click  # Physics
             fill_in 'value', with: "Theoretical and Experimental Physics\n"
 
-            wait_for_ajax
+            wait_for_ajax; wait_for_ajax; wait_for_ajax;
             study_field.reload.subject.should == "Theoretical and Experimental Physics"
           end
 
@@ -124,8 +133,8 @@ feature 'User page', js: false do
           find('.remove_button').click
           find('.save_button').click
 
-          wait_for_ajax
-          @user.profile_fields.where(type: 'ProfileFieldTypes::Study').count.should == 0
+          wait_for_ajax; wait_for_ajax; wait_for_ajax;
+          @user.profile_fields.where(type: 'ProfileFields::Study').count.should == 0
         end
       end
 
@@ -135,9 +144,9 @@ feature 'User page', js: false do
           subject.should have_selector('a.add_button', visible: true)
 
           click_on I18n.t(:add)
-          field_name = ProfileFieldTypes::Employment.name.demodulize.underscore
+          field_name = ProfileFields::Employment.name.demodulize.underscore
           subject.should have_selector("a#add_#{field_name}_field")
-          field_name2 = ProfileFieldTypes::ProfessionalCategory.name.demodulize.underscore
+          field_name2 = ProfileFields::ProfessionalCategory.name.demodulize.underscore
           subject.should have_selector("a#add_#{field_name2}_field")
 
           click_on I18n.t(field_name)
@@ -223,10 +232,10 @@ feature 'User page', js: false do
         end
 
         scenario 'the profile sections should be editable', js: true do
-          section_should_be_editable(:contact_information, [ProfileFieldTypes::Address, ProfileFieldTypes::Email, ProfileFieldTypes::Phone, ProfileFieldTypes::Homepage, ProfileFieldTypes::Custom])
+          section_should_be_editable(:contact_information, [ProfileFields::Address, ProfileFields::Email, ProfileFields::Phone, ProfileFields::Homepage, ProfileFields::Custom])
           section_should_be_editable(:about_myself)
           section_should_be_editable(:study_information)
-          section_should_be_editable(:career_information, [ProfileFieldTypes::Employment, ProfileFieldTypes::ProfessionalCategory])
+          section_should_be_editable(:career_information, [ProfileFields::Employment, ProfileFields::ProfessionalCategory])
           section_should_be_editable(:organizations)
           section_should_be_editable(:bank_account_information)
         end
