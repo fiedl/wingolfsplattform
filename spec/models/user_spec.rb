@@ -371,8 +371,8 @@ describe User do
       @bv2 = create(:bv_group, name: "BV 45 Europe", token: "BV 45")
       @address1 = "Pariser Platz 1\n 10117 Berlin"
       @address2 = "44 Rue de Stalingrad, Grenoble, Frankreich"
-      @address_field1 = @user.profile_fields.create(type: 'ProfileFieldTypes::Address', value: @address1).becomes ProfileFieldTypes::Address
-      @address_field2 = @user.profile_fields.create(type: 'ProfileFieldTypes::Address', value: @address2).becomes ProfileFieldTypes::Address
+      @address_field1 = @user.profile_fields.create(type: 'ProfileFields::Address', value: @address1).becomes ProfileFields::Address
+      @address_field2 = @user.profile_fields.create(type: 'ProfileFields::Address', value: @address2).becomes ProfileFields::Address
       BvMapping.create(bv_name: "BV 01", plz: "10117", town: "Berlin")
     end
     subject { @user.correct_bv }
@@ -424,8 +424,8 @@ describe User do
       @bv2 = create(:bv_group, name: "BV 45 Europe", token: "BV 45")
       @address1 = "Pariser Platz 1\n 10117 Berlin"
       @address2 = "44 Rue de Stalingrad, Grenoble, Frankreich"
-      @address_field1 = @user.profile_fields.create(type: 'ProfileFieldTypes::Address', value: @address1).becomes ProfileFieldTypes::Address
-      @address_field2 = @user.profile_fields.create(type: 'ProfileFieldTypes::Address', value: @address2).becomes ProfileFieldTypes::Address
+      @address_field1 = @user.profile_fields.create(type: 'ProfileFields::Address', value: @address1).becomes ProfileFields::Address
+      @address_field2 = @user.profile_fields.create(type: 'ProfileFields::Address', value: @address2).becomes ProfileFields::Address
       BvMapping.create(bv_name: "BV 01", plz: "10117", town: "Berlin")
     end
     subject { @user.adapt_bv_to_primary_address }

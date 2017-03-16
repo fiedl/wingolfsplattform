@@ -242,33 +242,33 @@ class User
   # Fill-in default profile.
   #
   def fill_in_template_profile_information
-    self.profile_fields.create(label: :personal_title, type: "ProfileFieldTypes::General")
-    self.profile_fields.create(label: :academic_degree, type: "ProfileFieldTypes::AcademicDegree")
-    self.profile_fields.create(label: :cognomen, type: "ProfileFieldTypes::General")
-    self.profile_fields.create(label: :klammerung, type: "ProfileFieldTypes::Klammerung")
+    self.profile_fields.create(label: :personal_title, type: "ProfileFields::General")
+    self.profile_fields.create(label: :academic_degree, type: "ProfileFields::AcademicDegree")
+    self.profile_fields.create(label: :cognomen, type: "ProfileFields::General")
+    self.profile_fields.create(label: :klammerung, type: "ProfileFields::Klammerung")
 
-    self.profile_fields.create(label: :home_address, type: "ProfileFieldTypes::Address") unless self.home_address
-    self.profile_fields.create(label: :work_or_study_address, type: "ProfileFieldTypes::Address") unless self.work_or_study_address
-    self.profile_fields.create(label: :phone, type: "ProfileFieldTypes::Phone") unless self.phone.present?
-    self.profile_fields.create(label: :mobile, type: "ProfileFieldTypes::Phone") unless self.mobile.present?
-    self.profile_fields.create(label: :fax, type: "ProfileFieldTypes::Phone")
-    self.profile_fields.create(label: :homepage, type: "ProfileFieldTypes::Homepage")
+    self.profile_fields.create(label: :home_address, type: "ProfileFields::Address") unless self.home_address
+    self.profile_fields.create(label: :work_or_study_address, type: "ProfileFields::Address") unless self.work_or_study_address
+    self.profile_fields.create(label: :phone, type: "ProfileFields::Phone") unless self.phone.present?
+    self.profile_fields.create(label: :mobile, type: "ProfileFields::Phone") unless self.mobile.present?
+    self.profile_fields.create(label: :fax, type: "ProfileFields::Phone")
+    self.profile_fields.create(label: :homepage, type: "ProfileFields::Homepage")
 
     if self.study_fields.count == 0
-      pf = self.profile_fields.build(label: :study, type: "ProfileFieldTypes::Study")
-      pf.becomes(ProfileFieldTypes::Study).save
+      pf = self.profile_fields.build(label: :study, type: "ProfileFields::Study")
+      pf.becomes(ProfileFields::Study).save
     end
 
-    self.profile_fields.create(label: :professional_category, type: "ProfileFieldTypes::ProfessionalCategory")
-    self.profile_fields.create(label: :occupational_area, type: "ProfileFieldTypes::ProfessionalCategory")
-    self.profile_fields.create(label: :employment_status, type: "ProfileFieldTypes::ProfessionalCategory")
-    self.profile_fields.create(label: :languages, type: "ProfileFieldTypes::Competence")
+    self.profile_fields.create(label: :professional_category, type: "ProfileFields::ProfessionalCategory")
+    self.profile_fields.create(label: :occupational_area, type: "ProfileFields::ProfessionalCategory")
+    self.profile_fields.create(label: :employment_status, type: "ProfileFields::ProfessionalCategory")
+    self.profile_fields.create(label: :languages, type: "ProfileFields::Competence")
 
-    pf = self.profile_fields.build(label: :bank_account, type: "ProfileFieldTypes::BankAccount")
-    pf.becomes(ProfileFieldTypes::BankAccount).save
+    pf = self.profile_fields.build(label: :bank_account, type: "ProfileFields::BankAccount")
+    pf.becomes(ProfileFields::BankAccount).save
 
-    pf = self.profile_fields.create(label: :name_field_wingolfspost, type: "ProfileFieldTypes::NameSurrounding")
-      .becomes(ProfileFieldTypes::NameSurrounding)
+    pf = self.profile_fields.create(label: :name_field_wingolfspost, type: "ProfileFields::NameSurrounding")
+      .becomes(ProfileFields::NameSurrounding)
     pf.text_above_name = ""; pf.name_prefix = "Herrn"; pf.name_suffix = ""; pf.text_below_name = ""
     pf.save
 
@@ -283,7 +283,7 @@ class User
     self.profile_fields.where(label: "W-Nummer").first.try(:value)
   end
   def w_nummer=(str)
-    field = profile_fields.where(label: "W-Nummer").first || profile_fields.create(type: 'ProfileFieldTypes::General', label: 'W-Nummer')
+    field = profile_fields.where(label: "W-Nummer").first || profile_fields.create(type: 'ProfileFields::General', label: 'W-Nummer')
     field.update_attribute(:value, str)
     field.delete_cache
   end
@@ -432,7 +432,7 @@ class User
   end
 
   def studium_export_string
-    self.profile_fields.where(type: "ProfileFieldTypes::Study").collect do |study|
+    self.profile_fields.where(type: "ProfileFields::Study").collect do |study|
       "Studium der #{study.subject} an der #{study.university} vom #{study.from} bis #{study.to}"
     end.join("\n")
   end

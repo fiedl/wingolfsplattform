@@ -1,7 +1,6 @@
-# This extends the your_platform ProfileFieldTypes module.
-require_dependency YourPlatform::Engine.root.join( 'app/models/profile_field_types/address' ).to_s
+require_dependency YourPlatform::Engine.root.join('app/models/profile_fields/address').to_s
 
-module ProfileFieldTypes
+module ProfileFields
 
   # Address Information
   #
@@ -53,7 +52,7 @@ module ProfileFieldTypes
       self.wingolfspost
     end
 
-    cache :bv_id
+    cache :bv_id if use_caching?
   end
 
 end

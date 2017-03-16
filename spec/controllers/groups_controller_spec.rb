@@ -65,7 +65,7 @@ describe GroupsController do
 
           # In order to create a phone list, the group needs a user with a phone number.
           #
-          group.members.first.profile_fields.create label: 'phone', value: '1234-56', type: 'ProfileFieldTypes::Phone'
+          group.members.first.profile_fields.create label: 'phone', value: '1234-56', type: 'ProfileFields::Phone'
         end
 
         it 'generates an address label pdf' do

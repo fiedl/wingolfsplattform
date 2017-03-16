@@ -196,7 +196,7 @@ module AbilityDefinitions
       # Regular users can only see their own bank accounts
       # as well as bank accounts of non-user objects, i.e. groups.
       #
-      not ((parent_field.type == 'ProfileFieldTypes::BankAccount') &&
+      not ((parent_field.type == 'ProfileFields::BankAccount') &&
         parent_field.profileable.kind_of?(User) && (parent_field.profileable.id != user.id))
     end
 

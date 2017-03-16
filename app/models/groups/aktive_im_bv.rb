@@ -7,7 +7,7 @@ class Groups::AktiveImBv < Groups::GeoSearchGroup
   end
 
   def users_within_bv
-    ProfileFieldTypes::Address.all.select { |address_field|
+    ProfileFields::Address.all.select { |address_field|
       (address_field.bv_id == self.bv_id) && (address_field.profileable_type == "User")
     }.collect(&:profileable)
   end

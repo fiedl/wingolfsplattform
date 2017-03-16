@@ -49,7 +49,7 @@ describe Ability do
       the_user.should_not be_able_to :manage, user
     end
     he "should be able to edit his own profile fields" do
-      @profile_field = user.profile_fields.create(type: "ProfileFieldTypes::Phone", value: "123-456789")
+      @profile_field = user.profile_fields.create(type: "ProfileFields::Phone", value: "123-456789")
 
       the_user.should be_able_to :create, ProfileField.new
       the_user.should be_able_to :read, @profile_field
@@ -90,12 +90,12 @@ describe Ability do
     end
     he "should not be able to read the bank account information of other users" do
       @other_user = create(:user)
-      @bank_account_of_other_user = @other_user.profile_fields.create(type: 'ProfileFieldTypes::BankAccount')
+      @bank_account_of_other_user = @other_user.profile_fields.create(type: 'ProfileFields::BankAccount')
       the_user.should_not be_able_to :read, @bank_account_of_other_user
     end
     he "should be able to read the bank account information of groups" do
       @group = create(:group)
-      @bank_account_of_group = @group.profile_fields.create(type: 'ProfileFieldTypes::BankAccount')
+      @bank_account_of_group = @group.profile_fields.create(type: 'ProfileFields::BankAccount')
       the_user.should be_able_to :read, @bank_account_of_group
     end
     he "should not be able to see the temporary activity log." do
@@ -527,19 +527,19 @@ describe Ability do
       he "should be able to manage the users' profile fields" do
         @other_user = create(:user)
         @group.assign_user @other_user
-        @profile_field = @other_user.profile_fields.create(label: "Home Address", type: 'ProfileFieldTypes::Address')
+        @profile_field = @other_user.profile_fields.create(label: "Home Address", type: 'ProfileFields::Address')
         the_user.should be_able_to :manage, @profile_field
       end
       he "should be able to update the user's structured profile fields" do
         @other_user = create(:user)
         @group.assign_user @other_user
-        @profile_field = @other_user.profile_fields.create(label: "Bank Account", type: 'ProfileFieldTypes::BankAccount').becomes(ProfileFieldTypes::BankAccount)
+        @profile_field = @other_user.profile_fields.create(label: "Bank Account", type: 'ProfileFields::BankAccount').becomes(ProfileFields::BankAccount)
         @profile_field.account_holder = "John Doe"
         @child_profile_field = @profile_field.children.first
         the_user.should be_able_to :update, @child_profile_field
       end
       he "should be able to manage the profile fields of the group" do
-        @profile_field = @group.profile_fields.create(label: "Bank Account", type: 'ProfileFieldTypes::BankAccount').becomes(ProfileFieldTypes::BankAccount)
+        @profile_field = @group.profile_fields.create(label: "Bank Account", type: 'ProfileFields::BankAccount').becomes(ProfileFields::BankAccount)
         the_user.should be_able_to :manage, @profile_field
       end
       he "should be able to update subgroups" do
