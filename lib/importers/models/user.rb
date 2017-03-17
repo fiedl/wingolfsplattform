@@ -210,7 +210,7 @@ class User
   
   def reset_corporation_memberships
     (self.reload.parent_groups(true) & Group.corporations_parent.descendant_groups).each do |group|
-      membership = UserGroupMembership.with_invalid.find_by_user_and_group(self, group)
+      membership = Membership.with_invalid.find_by_user_and_group(self, group)
       membership.destroy if membership.destroyable?
     end
   end
@@ -348,7 +348,7 @@ class User
         
         # Wenn kein Austrittsdatum vermerkt ist, wird das Datum der Statusgruppe übernommen.
         date_estimated = true unless date
-        date ||= UserGroupMembership.with_invalid.find_by_user_and_group(self, status_group).try(:valid_from)
+        date ||= Membership.with_invalid.find_by_user_and_group(self, status_group).try(:valid_from)
 
         status_group.unassign_user self, at: date
       end
@@ -440,7 +440,7 @@ class User
   
   def reset_bv_memberships
     (Bv.all & self.parent_groups).each do |group|
-      UserGroupMembership.with_invalid.find_by_user_and_group(self, group).destroy
+      Membership.with_invalid.find_by_user_and_group(self, group).destroy
     end
   end
   

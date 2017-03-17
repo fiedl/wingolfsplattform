@@ -63,7 +63,7 @@ describe Ability do
         @group.members << user
       end
       he 'should be able to edit his own user group membership dates' do
-        the_user.should be_able_to :update, UserGroupMembership.find_by_user_and_group(user, @group)
+        the_user.should be_able_to :update, Membership.find_by_user_and_group(user, @group)
       end
     end
     he "should be able to update his account, e.g. his password" do

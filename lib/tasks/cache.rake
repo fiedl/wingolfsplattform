@@ -26,7 +26,7 @@ namespace :cache do
     Corporation
     Flag
     AddressLabel
-    UserGroupMembership
+    Membership
     Bv
     
     User.find_each do |user|

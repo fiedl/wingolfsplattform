@@ -56,7 +56,7 @@ class User
   end
 
   def bv_membership
-    @bv_membership ||= UserGroupMembership.find_by_user_and_group(self, bv) if bv
+    @bv_membership ||= Membership.find_by_user_and_group(self, bv) if bv
   end
 
   # Diese Methode gibt die BVs zurück, denen der Benutzer zugewiesen ist. In der Regel
@@ -65,7 +65,7 @@ class User
   #
   def bv_memberships
     bv_ids.collect do |id|
-      UserGroupMembership.find_by_user_and_group(self, Group.find(id))
+      Membership.find_by_user_and_group(self, Group.find(id))
     end - [nil]
   end
 
@@ -156,7 +156,7 @@ class User
       # of the new bv. When DagLinks are allowed to exist several times, remove
       # this hack:
       #
-      if old_membership = UserGroupMembership.now_and_in_the_past.find_by_user_and_group(self, new_bv)
+      if old_membership = Membership.now_and_in_the_past.find_by_user_and_group(self, new_bv)
         if old_membership != self.bv_membership
           old_membership.destroy
         end
@@ -450,7 +450,7 @@ class User
       unless self.member_of? corporation.philisterschaft
         status_group_ids_in_this_corporation = StatusGroup.find_all_by_group(corporation.aktivitas).map(&:id)
         current_status_group = self.groups.where(id: status_group_ids_in_this_corporation).first
-        membership = UserGroupMembership.find_by_user_and_group(self, current_status_group)
+        membership = Membership.find_by_user_and_group(self, current_status_group)
         aenderungsdatum = philistrationsdatum
         aenderungsdatum = membership.valid_from + 1.day if membership.valid_from > aenderungsdatum
         membership.move_to corporation.philisterschaft.leaf_groups.first, at: aenderungsdatum

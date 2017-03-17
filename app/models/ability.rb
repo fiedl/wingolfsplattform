@@ -128,7 +128,7 @@ module AbilityDefinitions
         profile_field.profileable.nil? ||  # in order to create profile fields
           (can?(:update, profile_field.profileable) && profile_field.key != "W-Nummer")
       end
-      can :manage, UserGroupMembership do |membership|
+      can :manage, Membership do |membership|
         can? :update, membership.user
       end
 

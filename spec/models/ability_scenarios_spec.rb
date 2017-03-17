@@ -298,7 +298,7 @@ describe Ability do
 
     describe "if the admins has lost his rights less than five minutes ago" do
       before do
-        @membership = UserGroupMembership.with_past.find_by_user_and_group user, @corporation.aktivitas.admins_parent
+        @membership = Membership.with_past.find_by_user_and_group user, @corporation.aktivitas.admins_parent
         @membership.valid_from = 1.year.ago
         @membership.valid_to = 4.minutes.ago
         @membership.save
@@ -308,7 +308,7 @@ describe Ability do
 
     describe "if the admins has lost his rights more than five minutes ago" do
       before do
-        @membership = UserGroupMembership.with_past.find_by_user_and_group user, @corporation.aktivitas.admins_parent
+        @membership = Membership.with_past.find_by_user_and_group user, @corporation.aktivitas.admins_parent
         @membership.valid_from = 1.year.ago
         @membership.valid_to = 6.minutes.ago
         @membership.save

@@ -254,7 +254,7 @@ describe User do
 
         # Promote the user in order to make sure this does not cause problems.
         @date_of_promotion_in_first_corporation = 20.days.ago
-        UserGroupMembership.find_by_user_and_group(@user, @first_corporation.status_groups.first).move_to(@first_corporation.status_groups.second, at: @date_of_promotion_in_first_corporation)
+        Membership.find_by_user_and_group(@user, @first_corporation.status_groups.first).move_to(@first_corporation.status_groups.second, at: @date_of_promotion_in_first_corporation)
       end
       it { should == @date_of_joining_the_first_corporation.to_date }
     end
@@ -276,10 +276,10 @@ describe User do
 
         # Promote the user in order to make sure this does not cause problems.
         @date_of_promotion_in_first_corporation = "2010-02-21".to_datetime
-        UserGroupMembership.find_by_user_and_group(@user, @first_corporation.status_groups.first).move_to(@first_corporation.status_groups.second, at: @date_of_promotion_in_first_corporation)
+        Membership.find_by_user_and_group(@user, @first_corporation.status_groups.first).move_to(@first_corporation.status_groups.second, at: @date_of_promotion_in_first_corporation)
       end
       it "should update the membership date correctly" do
-        @membership = UserGroupMembership.with_invalid.find_by_user_and_group(@user, @first_corporation.status_groups.first)
+        @membership = Membership.with_invalid.find_by_user_and_group(@user, @first_corporation.status_groups.first)
         @membership.valid_from.to_date.should == @date_of_joining_the_first_corporation.to_date
         subject
         @membership.reload.valid_from.to_date.should == @new_date.to_date
@@ -450,7 +450,7 @@ describe User do
             @address_field1.bv.should == @bv1
           end
           it "should return the new membership" do
-            subject.should == UserGroupMembership.find_by_user_and_group(@user, @bv1)
+            subject.should == Membership.find_by_user_and_group(@user, @bv1)
           end
         end
       end
@@ -499,7 +499,7 @@ describe User do
         end
         it "should return the new membership" do
           new_membership = subject
-          membership_in_bv2 = UserGroupMembership.with_invalid.find_by_user_and_group(@user, @bv2)
+          membership_in_bv2 = Membership.with_invalid.find_by_user_and_group(@user, @bv2)
           membership_in_bv2.should_not == nil
           new_membership.should == membership_in_bv2
         end
@@ -533,7 +533,7 @@ describe User do
           @user.bv.token.should == "BV 00"
         end
         it "should return the new membership" do
-          subject.should == UserGroupMembership.find_by_user_and_group(@user, @bv0)
+          subject.should == Membership.find_by_user_and_group(@user, @bv0)
         end
       end
       describe "if the bv could not be determined by plz" do
@@ -557,8 +557,8 @@ describe User do
         it "should remove all old memberships" do
           subject
           time_travel 2.seconds
-          UserGroupMembership.find_by_user_and_group(@user, @bv0).should == nil
-          UserGroupMembership.find_by_user_and_group(@user, @bv1).should == nil
+          Membership.find_by_user_and_group(@user, @bv0).should == nil
+          Membership.find_by_user_and_group(@user, @bv1).should == nil
         end
         specify "the user should only have ONE bv membership, now" do
           subject
@@ -571,7 +571,7 @@ describe User do
           @user.reload.bv.should == @bv2
         end
         it "should return the new membership" do
-          subject.should == UserGroupMembership.find_by_user_and_group(@user, @bv2)
+          subject.should == Membership.find_by_user_and_group(@user, @bv2)
         end
       end
     end

@@ -100,7 +100,7 @@ module GroupMixins::Erstbandphilister
       membership_ids = self.corporation.philisterschaft.memberships_including_members.select do |membership|
         membership.user.first_corporation == corporation
       end.collect { |membership| membership.id }
-      UserGroupMembership.where(id: membership_ids)
+      Membership.where(id: membership_ids)
     else
       super(reload)
     end
