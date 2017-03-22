@@ -235,7 +235,7 @@ class User
     first_corporation.try(:membership_of, self).try(:valid_from).try(:to_date)
   end
   def aktivmeldungsdatum=(date)
-    (first_corporation || raise('user is not member of a corporation')).membership_of(self).update_attribute(:valid_from, date.to_datetime)
+    status_memberships.order(:valid_from).first.update_attributes valid_from: date.to_datetime
   end
 
 
