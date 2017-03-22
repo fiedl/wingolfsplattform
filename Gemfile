@@ -81,6 +81,7 @@ source 'https://rubygems.org' do
     gem 'guard-focus'
     gem 'rspec-rails'
     gem 'rspec-legacy_formatters'
+    gem 'rspec-instafail'
     gem 'rspec-its'
     gem 'guard-rspec'
     gem 'rspec-rerun'

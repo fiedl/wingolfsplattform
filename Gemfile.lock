@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 3299338f14b7861398804420fa692aac861d28dc
+  revision: 8e8f91f36eb9e4dd98464b935b60e2b7e6769cb4
   branch: sf/renew-cache-2017
   specs:
     your_platform (1.0.1)
@@ -561,6 +561,8 @@ GEM
     rspec-expectations (3.5.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.5.0)
+    rspec-instafail (1.0.0)
+      rspec
     rspec-its (1.2.0)
       rspec-core (>= 3.0.0)
       rspec-expectations (>= 3.0.0)
@@ -733,6 +735,7 @@ DEPENDENCIES
   rack-timeout!
   rails (~> 4.2.1)!
   redcarpet!
+  rspec-instafail!
   rspec-its!
   rspec-legacy_formatters!
   rspec-rails!
