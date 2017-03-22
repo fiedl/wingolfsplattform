@@ -476,16 +476,19 @@ class User
     raise 'We do not allow to create corporations on the fly in Wingolfsplattform.'
   end
 
-  cache :aktivitaetszahl
-  cache :fruehere_aktivitaetszahl
-  cache :name_affix
-  cache :title
-  cache :bv_id
-  cache :w_nummer
-  cache :aktiver?
-  cache :philister?
-  cache :administrated_aktivitates
-  cache :status_export_string
+  if use_caching?
+    cache :aktivitaetszahl
+    cache :fruehere_aktivitaetszahl
+    cache :name_affix
+    cache :title
+    cache :bv_id
+    cache :localized_bv_beitrittsdatum
+    cache :w_nummer
+    cache :aktiver?
+    cache :philister?
+    cache :administrated_aktivitates
+    cache :status_export_string
+  end
 
 end
 
