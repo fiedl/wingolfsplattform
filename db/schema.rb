@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170316193926) do
+ActiveRecord::Schema.define(version: 20170317110526) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -109,6 +109,7 @@ ActiveRecord::Schema.define(version: 20170316193926) do
     t.datetime "updated_at",                  null: false
     t.datetime "valid_to"
     t.datetime "valid_from"
+    t.string   "type",            limit: 255
   end
 
   add_index "dag_links", ["ancestor_id", "ancestor_type", "direct"], name: "dag_ancestor", using: :btree

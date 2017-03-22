@@ -86,12 +86,12 @@ describe User do
       @corporationE = create( :wingolf_corporation, :token => "E" )
       @corporationH = create( :wingolf_corporation, :token => "H" )
 
-      @first_membership_E = StatusGroupMembership.create( user: @user, group: @corporationE.status_group('Hospitanten') )
+      @first_membership_E = Memberships::Status.create( user: @user, group: @corporationE.status_group('Hospitanten') )
       @first_membership_E.update_attributes(valid_from: "2006-12-01".to_datetime)
-      @first_membership_H = StatusGroupMembership.create( user: @user, group: @corporationH.status_group('Hospitanten') )
+      @first_membership_H = Memberships::Status.create( user: @user, group: @corporationH.status_group('Hospitanten') )
       @first_membership_H.update_attributes(valid_from: "2008-12-01".to_datetime)
       @first_membership_E.invalidate
-      @second_membership_E = StatusGroupMembership.create( user: @user, group: @corporationE.status_group('Philister') )
+      @second_membership_E = Memberships::Status.create( user: @user, group: @corporationE.status_group('Philister') )
       @second_membership_E.update_attributes(valid_from: "2013-12-01".to_datetime)
       @user.reload
     end
@@ -151,12 +151,12 @@ describe User do
       @corporationH = create( :wingolf_corporation, :token => "H" )
       @corporationS = create( :wingolf_corporation, :token => "S" )
 
-      @first_membership_E = StatusGroupMembership.create( user: @user, group: @corporationE.status_group('Hospitanten') )
+      @first_membership_E = Memberships::Status.create( user: @user, group: @corporationE.status_group('Hospitanten') )
       @first_membership_E.update_attributes(valid_from: "2006-12-01".to_datetime)
-      @first_membership_H = StatusGroupMembership.create( user: @user, group: @corporationH.status_group('Hospitanten') )
+      @first_membership_H = Memberships::Status.create( user: @user, group: @corporationH.status_group('Hospitanten') )
       @first_membership_H.update_attributes(valid_from: "2008-12-01".to_datetime)
       @first_membership_E.invalidate
-      @second_membership_E = StatusGroupMembership.create( user: @user, group: @corporationE.status_group('Philister') )
+      @second_membership_E = Memberships::Status.create( user: @user, group: @corporationE.status_group('Philister') )
       @second_membership_E.update_attributes(valid_from: "2013-12-01".to_datetime)
     end
     subject { @user.aktivitaetszahl }
@@ -172,7 +172,7 @@ describe User do
     describe "if currently 'E06 H08' and after adding S in 2014 it" do
       before do
         @user.aktivitaetszahl
-        first_membership_S = StatusGroupMembership.create( user: @user, group: @corporationS.status_groups.first )
+        first_membership_S = Memberships::Status.create( user: @user, group: @corporationS.status_groups.first )
         first_membership_S.update_attributes(valid_from: "2014-05-01".to_datetime)
         time_travel 2.seconds
         @user.reload
