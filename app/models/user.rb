@@ -232,10 +232,10 @@ class User
   end
 
   def aktivmeldungsdatum
-    first_corporation.try(:membership_of, self).try(:valid_from).try(:to_date)
+    status_memberships.with_past.order(:valid_from).first.try(:valid_from).try(:to_date)
   end
   def aktivmeldungsdatum=(date)
-    status_memberships.order(:valid_from).first.update_attributes valid_from: date.to_datetime
+    status_memberships.with_past.order(:valid_from).first.update_attributes valid_from: date.to_datetime
   end
 
 
