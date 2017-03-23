@@ -109,11 +109,11 @@ module AbilityDefinitions
         can? :update, group
       end
 
-      can :execute, Workflow do |workflow|
+      can :execute, [Workflow, WorkflowKit::Workflow] do |workflow|
         # Local admins can execute workflows of groups they're admins of.
         # And they can execute the mark_as_deceased workflow, which is a global workflow.
         #
-        (workflow == Workflow.find_mark_as_deceased_workflow) or
+        (workflow.id == Workflow.find_mark_as_deceased_workflow_id) ||
         (workflow.admins_of_ancestors.include?(user))
       end
 
