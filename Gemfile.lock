@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 59aae47813a16e269aaf28422e2e3b12f0c89dad
+  revision: 0cc1b6e8f1654a8eb925a56527c6678372b86354
   branch: sf/renew-cache-2017
   specs:
     your_platform (1.0.1)
