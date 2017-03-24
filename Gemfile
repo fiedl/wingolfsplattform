@@ -81,9 +81,11 @@ source 'https://rubygems.org' do
     gem 'guard-focus'
     gem 'rspec-rails'
     gem 'rspec-legacy_formatters'
+    gem 'rspec-instafail'
     gem 'rspec-its'
     gem 'guard-rspec'
     gem 'rspec-rerun'
+    gem 'parallel_tests'
   #  gem 'rspec-mocks'
   #  gem 'listen'
   #  gem 'rb-inotify', '0.8.8' if RUBY_PLATFORM.downcase.include?("linux")
@@ -132,7 +134,8 @@ source 'https://rubygems.org' do
   gem 'browser', '1.1.0'
 
   # Profiling
-  gem 'rack-mini-profiler'
+  gem 'flamegraph'
+  gem 'stackprof'
 
   # Code Coverage Badge, coveralls.io
   gem 'coveralls', require: false

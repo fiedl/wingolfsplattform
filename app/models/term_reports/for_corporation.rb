@@ -68,12 +68,10 @@ module TermReportAdditions
   end
 
   def member_ids(group_name)
-    Rails.cache.fetch [self.cache_key, "member_ids", group_name] do
-      if corporation.sub_group(group_name)
-        corporation.sub_group(group_name).memberships.at_time(end_of_term).order(:valid_from).map(&:user_id)
-      else
-        []
-      end
+    if corporation.sub_group(group_name)
+      corporation.sub_group(group_name).memberships.at_time(end_of_term).order(:valid_from).map(&:user_id)
+    else
+      []
     end
   end
 

@@ -68,7 +68,7 @@ namespace :fix do
         print "* (#{user.id}) #{user.w_nummer} #{user.title} ... "
 
         correct_membership = user.adapt_bv_to_primary_address
-        raise 'no membership' unless correct_membership.kind_of? UserGroupMembership
+        raise 'no membership' unless correct_membership.kind_of? Membership
 
         if user.reload.bv
           log.info "#{user.reload.bv.token} ist korrekt."

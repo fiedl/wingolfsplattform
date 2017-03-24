@@ -34,8 +34,12 @@ class Corporation
   #   (c) nicht in Export-Listen und Etiketten enthalten sind.
   #
   def memberships(reload = nil)
-    aktivitas_and_philisterschaft_member_ids = aktivitas.member_ids + philisterschaft.member_ids
-    super(reload).where(descendant_id: aktivitas_and_philisterschaft_member_ids)
+    if aktivitas && philisterschaft
+      aktivitas_and_philisterschaft_member_ids = aktivitas.member_ids + philisterschaft.member_ids
+      super(reload).where(descendant_id: aktivitas_and_philisterschaft_member_ids)
+    else
+      super(reload)
+    end
   end
   def members(reload = nil)
     descendant_users(reload).includes(:links_as_descendant).where(dag_links: {id: memberships.pluck(:id)})

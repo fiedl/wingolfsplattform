@@ -17,7 +17,7 @@ feature 'Mark user as deceased' do
   
   specify 'prelims' do
     @user.current_status_group_in(@corporation).should == @philister
-    @user.current_status_membership_in(@corporation).should == @membership.becomes(StatusGroupMembership)
+    @user.current_status_membership_in(@corporation).should == @membership.becomes(Memberships::Status)
   end
   
   scenario 'mark the user as deceased', js: true do

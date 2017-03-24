@@ -1,4 +1,4 @@
-%h1.users_new.aktivmeldung= @title
+%h1.users_new.aktivmeldung= current_title
 %div.form
   %legend
     %p
@@ -13,7 +13,7 @@
       Wende Dich im Zweifel bitte an:
       %a{href: "mailto:support@wingolf.org"} support@wingolf.org
 
-  = semantic_form_for @user, action: :create do |f|
+  = semantic_form_for user, url: aktivmeldungen_path, action: :create do |f|
 
     = f.semantic_errors :state
 
@@ -27,14 +27,15 @@
 
       %h2 Verbindung
 
-      - corporations_collection = current_user.administrated_aktivitates.collect(&:corporation)
-      - # Pre-select corporation if only one:
-      - @user.add_to_corporation = corporations_collection.first.id if corporations_collection.count == 1
-
       - if current_user.global_admin?
+        - corporations_collection = Corporation.all
         = f.input :add_to_corporation, as: :select, label: t(:register_in), collection: corporations_collection
         = f.input :aktivmeldungsdatum, as: 'date_select', start_year: 10.years.ago.year, end_year: Time.zone.now.year
+
       - else
+        - corporations_collection = current_user.administrated_aktivitates.collect(&:corporation)
+        - # Pre-select corporation if only one:
+        - user.add_to_corporation = corporations_collection.first.id if corporations_collection.count == 1
         = f.input :add_to_corporation, as: :select, label: t(:register_in), collection: corporations_collection, required: true, validate: true, input_html: { class: 'required' }
         = f.input :aktivmeldungsdatum, as: 'date_select', start_year: 10.years.ago.year, end_year: Time.zone.now.year, required: true, validate: true, input_html: { class: 'required' }
 
@@ -53,7 +54,7 @@
           = address.input :postal_code, validate: true, required: true, input_html: { class: 'required' }
           = address.input :city, validate: true, required: true, input_html: { class: 'required' }
           = address.input :region, required: false
-          = address.input :country_code, as: :select, collection: ProfileFieldTypes::Address.country_codes_hash, include_blank: false
+          = address.input :country_code, as: :select, collection: ProfileFields::Address.country_codes_hash, include_blank: false
 
       %h3 Elternanschrift
 
@@ -64,7 +65,7 @@
           = address.input :postal_code, validate: true, required: true, input_html: { class: 'required' }
           = address.input :city, validate: true, required: true, input_html: { class: 'required' }
           = address.input :region, required: false
-          = address.input :country_code, as: :select, collection: ProfileFieldTypes::Address.country_codes_hash, include_blank: false
+          = address.input :country_code, as: :select, collection: ProfileFields::Address.country_codes_hash, include_blank: false
 
       %h2 Studium
 

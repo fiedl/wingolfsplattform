@@ -9,26 +9,6 @@ require_dependency YourPlatform::Engine.root.join( 'app/models/group' ).to_s
 
 class Group
 
-  # This method is called by a nightly rake task to renew the cache of this object.
-  #
-  def fill_cache
-
-    # Memberships
-    memberships_for_member_list
-    memberships_this_year
-    latest_memberships
-
-    # Other Groups
-    leaf_groups
-    corporation
-
-    # Address Labels
-    members_postal_addresses
-    cached_members_postal_addresses_created_at
-
-  end
-
-
   # Mailing lists
   #
   alias_method :original_mailing_list_sender_filter_settings, :mailing_list_sender_filter_settings
@@ -43,6 +23,34 @@ class Group
       user.wingolfit?
     else
       original_user_matches_mailing_list_sender_filter?(user)
+    end
+  end
+
+  # Group exports
+  #
+  def self.export_list_presets
+    super + [
+      :stammdaten,
+      :wingolfsblaetter
+    ]
+  end
+
+  def export_stammdaten_list
+    ListExports::Stammdaten.from_group(self)
+  end
+
+  def export_wingolfsblaetter_list
+    ListExports::Wingolfsblaetter.from_group(self)
+  end
+
+  def list_export_by_preset(preset, options = {})
+    case preset.to_s
+    when 'stammdaten'
+      self.export_stammdaten_list
+    when 'wingolfsblaetter'
+      self.export_wingolfsblaetter_list
+    else
+      super
     end
   end
 
@@ -68,7 +76,7 @@ class Group
   end
 
   def self.create_bvs_parent_group
-    bvs_parent_group = create_special_group(:bvs_parent)
+    bvs_parent_group = create_special_group(:bvs_parent, type: 'Groups::BvsParent')
     bvs_parent_group.parent_pages << Page.intranet_root
     return bvs_parent_group
   end

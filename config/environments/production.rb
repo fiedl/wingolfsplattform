@@ -88,9 +88,9 @@ Rails.application.configure do
   # -> moved to config/application.rb
 
   if ::STAGE.to_s.include? 'master'
-    config.asset_host = 'http://master.wingolfsplattform.org'
+    config.asset_host = 'https://master.wingolfsplattform.org'
   elsif ::STAGE.to_s.include? 'sandbox'
-    config.asset_host = 'http://sandbox.wingolfsplattform.org'
+    config.asset_host = 'https://sandbox.wingolfsplattform.org'
   else
     config.asset_host = 'https://wingolfsplattform.org'
   end

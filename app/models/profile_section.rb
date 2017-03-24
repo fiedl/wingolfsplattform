@@ -8,7 +8,7 @@ class ProfileSection
   def profile_field_types
     case(self.title.to_sym)
       when :general
-        orig_profile_field_types + [ "ProfileFieldTypes::Klammerung" ]
+        orig_profile_field_types + [ "ProfileFields::Klammerung" ]
       else
         orig_profile_field_types
     end

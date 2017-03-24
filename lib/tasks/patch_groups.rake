@@ -101,7 +101,7 @@ namespace :patch do
       counter = 0
       User.find_each do |user|
         for group in groups
-          membership = UserGroupMembership.with_invalid.find_by_user_and_group(user, group)
+          membership = Membership.with_invalid.find_by_user_and_group(user, group)
           if membership
             membership.recalculate_validity_range_from_direct_memberships!
             print ".".green
@@ -113,7 +113,7 @@ namespace :patch do
       end
       
       log.info ""
-      log.success "#{counter} UserGroupMemberships aktualisiert."
+      log.success "#{counter} Memberships aktualisiert."
     end
     
     task :full_members_flags => [:environment, :requirements, :print_info] do

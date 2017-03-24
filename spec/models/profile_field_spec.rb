@@ -11,10 +11,10 @@ end
 # Address Information
 # ==========================================================================================
 
-describe ProfileFieldTypes::Address do
+describe ProfileFields::Address do
 
   before do
-    @address_field = ProfileFieldTypes::Address.create( label: "Address of the Brandenburg Gate",
+    @address_field = ProfileFields::Address.create( label: "Address of the Brandenburg Gate",
                                                         value: "Pariser Platz 1\n 10117 Berlin" )
     @address_field.convert_to_format_with_separate_fields
 
@@ -43,7 +43,7 @@ describe ProfileFieldTypes::Address do
     @user = create :user
     @corporation = create :wingolf_corporation
     @corporation.philisterschaft.assign_user @user, at: 1.year.ago
-    @address_field = @user.profile_fields.create type: 'ProfileFieldTypes::Address', label: 'Address', value: '44 Rue de Stalingrad, Grenoble, Frankreich'
+    @address_field = @user.profile_fields.create type: 'ProfileFields::Address', label: 'Address', value: '44 Rue de Stalingrad, Grenoble, Frankreich'
     @address_field.convert_to_format_with_separate_fields
     @country_code_field = @address_field.find_child_by_key(:country_code)
     @city_field = @address_field.find_child_by_key(:city)
@@ -62,9 +62,9 @@ end
 # Studies Information
 # ==========================================================================================
 
-describe ProfileFieldTypes::Study do
+describe ProfileFields::Study do
 
-  subject { ProfileFieldTypes::Study.create() }
+  subject { ProfileFields::Study.create() }
 
   its( 'children.count' ) { should == 5 }
   it { should respond_to :from }

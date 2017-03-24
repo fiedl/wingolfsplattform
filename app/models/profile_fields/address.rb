@@ -1,7 +1,6 @@
-# This extends the your_platform ProfileFieldTypes module.
-require_dependency YourPlatform::Engine.root.join( 'app/models/profile_field_types/address' ).to_s
+require_dependency YourPlatform::Engine.root.join('app/models/profile_fields/address').to_s
 
-module ProfileFieldTypes
+module ProfileFields
 
   # Address Information
   #
@@ -16,7 +15,7 @@ module ProfileFieldTypes
     end
 
     def bv_id
-      cached { Bv.by_address_field(self).try(:id) }
+      Bv.by_address_field(self).try(:id)
     end
 
     # The html output method is overridden here, in order to display the bv as well.
@@ -53,6 +52,7 @@ module ProfileFieldTypes
       self.wingolfspost
     end
 
+    cache :bv_id if use_caching?
   end
 
 end

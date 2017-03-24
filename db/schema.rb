@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170203122509) do
+ActiveRecord::Schema.define(version: 20170317110526) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -109,6 +109,7 @@ ActiveRecord::Schema.define(version: 20170203122509) do
     t.datetime "updated_at",                  null: false
     t.datetime "valid_to"
     t.datetime "valid_from"
+    t.string   "type",            limit: 255
   end
 
   add_index "dag_links", ["ancestor_id", "ancestor_type", "direct"], name: "dag_ancestor", using: :btree
@@ -124,6 +125,7 @@ ActiveRecord::Schema.define(version: 20170203122509) do
     t.string   "location",                  limit: 255
     t.boolean  "publish_on_global_website"
     t.boolean  "publish_on_local_website"
+    t.integer  "group_id",                  limit: 4
   end
 
   create_table "flags", force: :cascade do |t|

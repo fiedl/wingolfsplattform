@@ -17,7 +17,7 @@ describe Event do
         @event.aktive = false; @event.save
         @event.aktive.should == false
         @event.philister.should == true
-        @event.parent_groups(true).to_a.should == [@corporation.philisterschaft]
+        @event.group(true).should == @corporation.philisterschaft
       end
     end
 
@@ -26,14 +26,14 @@ describe Event do
         @event.philister = false; @event.save
         @event.aktive.should == true
         @event.philister.should == false
-        @event.parent_groups(true).to_a.should == [@corporation.aktivitas]
+        @event.group(true).should == @corporation.aktivitas
       end
     end
 
     describe "#aktive=false, #philister=false" do
       it "should leave the event under the corporation" do
         @event.aktive = false; @event.philister = false; @event.save
-        @event.ancestor_groups(true).to_a.should include @corporation
+        @event.group(true).should == @corporation
       end
     end
   end
@@ -46,8 +46,7 @@ describe Event do
     describe "#aktive=false, #philister=false" do
       it "should leave the event in its subgroup" do
         @event.aktive = false; @event.philister = false; @event.save
-        @event.parent_groups(true).to_a.should include @sibling
-        @event.ancestor_groups(true).to_a.should include @corporation
+        @event.group(true).should == @sibling
       end
     end
   end
@@ -62,7 +61,7 @@ describe Event do
         @event.philister = true; @event.save
         @event.aktive.should == true
         @event.philister.should == true
-        @event.parent_groups(true).to_a.should == [@corporation]
+        @event.group(true).should == @corporation
       end
     end
 
@@ -71,7 +70,7 @@ describe Event do
         @event.philister = true; @event.aktive = false; @event.save
         @event.aktive.should == false
         @event.philister.should == true
-        @event.parent_groups(true).to_a.should == [@corporation.philisterschaft]
+        @event.group(true).should == @corporation.philisterschaft
       end
     end
   end
@@ -86,7 +85,7 @@ describe Event do
         @event.aktive = true; @event.save
         @event.aktive.should == true
         @event.philister.should == true
-        @event.parent_groups(true).to_a.should == [@corporation]
+        @event.group(true).should == @corporation
       end
     end
 
@@ -95,7 +94,7 @@ describe Event do
         @event.philister = false; @event.aktive = true; @event.save
         @event.aktive.should == true
         @event.philister.should == false
-        @event.parent_groups(true).to_a.should == [@corporation.aktivitas]
+        @event.group(true).should == @corporation.aktivitas
       end
     end
   end
@@ -106,12 +105,12 @@ describe Event do
       before { @args = {} }
       its(:group) { should == @corporation }
     end
-    describe "(aktive: true)" do
-      before { @args = {aktive: true} }
+    describe "{aktive: true, philister: false}" do
+      before { @args = {aktive: true, philister: false} }
       its(:group) { should == @corporation.aktivitas }
     end
-    describe "(philister: true)" do
-      before { @args = {philister: true} }
+    describe "{philister: true, aktive: false}" do
+      before { @args = {philister: true, aktive: false} }
       its(:group) { should == @corporation.philisterschaft }
     end
     describe "(aktive: true, philister: true)" do

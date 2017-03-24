@@ -139,8 +139,8 @@ describe GroupMixins::Erstbandphilister do
     describe "#members" do
       specify "presumption: @user is erstbandphilister of A but not of B" do
         @user.reload
-        UserGroupMembership.find_by_user_and_group( @user, @philisterschaft_a ).valid_from.should <
-          UserGroupMembership.find_by_user_and_group( @user, @philisterschaft_b ).valid_from
+        Membership.find_by_user_and_group( @user, @philisterschaft_a ).valid_from.should <
+          Membership.find_by_user_and_group( @user, @philisterschaft_b ).valid_from
         @erstbandphilister_a.reload.members.should include @user
         @erstbandphilister_b.reload.members.should_not include @user
       end

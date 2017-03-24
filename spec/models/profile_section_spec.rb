@@ -8,7 +8,7 @@ describe ProfileSection do
         @user = create(:user)
         @profile_section = @user.profile.section_by_title(:general)
       end
-      it { should include "ProfileFieldTypes::Klammerung" }
+      it { should include "ProfileFields::Klammerung" }
     end
   end
 end

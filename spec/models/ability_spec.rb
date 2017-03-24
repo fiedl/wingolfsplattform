@@ -29,7 +29,11 @@ describe Ability do
     let(:user) { create(:user_with_account) }
     let(:ability) { Ability.new(user) }
     subject { ability }
-    let(:the_user) { subject }
+
+    def the_user(reload = false)
+      @the_user_ability = nil if reload
+      @the_user_ability ||= Ability.new(user.reload)
+    end
 
     #
     # Regular Users
@@ -45,7 +49,7 @@ describe Ability do
       the_user.should_not be_able_to :manage, user
     end
     he "should be able to edit his own profile fields" do
-      @profile_field = user.profile_fields.create(type: "ProfileFieldTypes::Phone", value: "123-456789")
+      @profile_field = user.profile_fields.create(type: "ProfileFields::Phone", value: "123-456789")
 
       the_user.should be_able_to :create, ProfileField.new
       the_user.should be_able_to :read, @profile_field
@@ -59,7 +63,7 @@ describe Ability do
         @group.members << user
       end
       he 'should be able to edit his own user group membership dates' do
-        the_user.should be_able_to :update, UserGroupMembership.find_by_user_and_group(user, @group)
+        the_user.should be_able_to :update, Membership.find_by_user_and_group(user, @group)
       end
     end
     he "should be able to update his account, e.g. his password" do
@@ -86,12 +90,12 @@ describe Ability do
     end
     he "should not be able to read the bank account information of other users" do
       @other_user = create(:user)
-      @bank_account_of_other_user = @other_user.profile_fields.create(type: 'ProfileFieldTypes::BankAccount')
+      @bank_account_of_other_user = @other_user.profile_fields.create(type: 'ProfileFields::BankAccount')
       the_user.should_not be_able_to :read, @bank_account_of_other_user
     end
     he "should be able to read the bank account information of groups" do
       @group = create(:group)
-      @bank_account_of_group = @group.profile_fields.create(type: 'ProfileFieldTypes::BankAccount')
+      @bank_account_of_group = @group.profile_fields.create(type: 'ProfileFields::BankAccount')
       the_user.should be_able_to :read, @bank_account_of_group
     end
     he "should not be able to see the temporary activity log." do
@@ -155,7 +159,7 @@ describe Ability do
     context "(joining events)" do
       before do
         @group = create :group
-        @event = @group.child_events.create
+        @event = @group.events.create
       end
       he { should be_able_to :read, @event }
       he { should be_able_to :join, @event }
@@ -284,22 +288,22 @@ describe Ability do
           the_user.should be_able_to :create_event, @group
         end
         he "should be able to update events in his group" do
-          @event = @group.child_events.create
+          @event = @group.events.create
           the_user.should be_able_to :update, @event
         end
         he "should be able to create events in subgroups of his group" do
           the_user.should be_able_to :create_event, @sub_group
         end
         he "should be able to update events in subgroups of his group" do
-          @event = @sub_group.child_events.create
+          @event = @sub_group.events.create
           the_user.should be_able_to :update, @event
         end
         he "should be able to update events in sub sub groups of his group" do
-          @event = @sub_sub_group.child_events.create
+          @event = @sub_sub_group.events.create
           the_user.should be_able_to :update, @event
         end
         he "should be able to update the contact people of an event" do
-          @event = @group.child_events.create
+          @event = @group.events.create
           the_user.should be_able_to :update, @event.contact_people_group
         end
       end
@@ -523,19 +527,19 @@ describe Ability do
       he "should be able to manage the users' profile fields" do
         @other_user = create(:user)
         @group.assign_user @other_user
-        @profile_field = @other_user.profile_fields.create(label: "Home Address", type: 'ProfileFieldTypes::Address')
+        @profile_field = @other_user.profile_fields.create(label: "Home Address", type: 'ProfileFields::Address')
         the_user.should be_able_to :manage, @profile_field
       end
       he "should be able to update the user's structured profile fields" do
         @other_user = create(:user)
         @group.assign_user @other_user
-        @profile_field = @other_user.profile_fields.create(label: "Bank Account", type: 'ProfileFieldTypes::BankAccount').becomes(ProfileFieldTypes::BankAccount)
+        @profile_field = @other_user.profile_fields.create(label: "Bank Account", type: 'ProfileFields::BankAccount').becomes(ProfileFields::BankAccount)
         @profile_field.account_holder = "John Doe"
         @child_profile_field = @profile_field.children.first
         the_user.should be_able_to :update, @child_profile_field
       end
       he "should be able to manage the profile fields of the group" do
-        @profile_field = @group.profile_fields.create(label: "Bank Account", type: 'ProfileFieldTypes::BankAccount').becomes(ProfileFieldTypes::BankAccount)
+        @profile_field = @group.profile_fields.create(label: "Bank Account", type: 'ProfileFields::BankAccount').becomes(ProfileFields::BankAccount)
         the_user.should be_able_to :manage, @profile_field
       end
       he "should be able to update subgroups" do
@@ -635,9 +639,6 @@ describe Ability do
         @sub_group_user = create :user
         @sub_group.assign_user @sub_group_user, at: 1.hour.ago
       end
-      def the_user
-        Ability.new(User.find user.id)
-      end
       specify "admin assignment and un-assignent should update the admin rights for the sub objects properly" do
 
         # 1. The user is no admin.
@@ -653,7 +654,7 @@ describe Ability do
         # 2. The user becomes admin of @group.
         #
         @group.admins_parent.assign_user user; wait_for_cache
-        the_user.should_not be_able_to :manage, @parent_group
+        the_user(true).should_not be_able_to :manage, @parent_group
         the_user.should be_able_to :update, @group
         the_user.should be_able_to :manage, @page
         the_user.should be_able_to :manage, @sub_page
@@ -664,7 +665,7 @@ describe Ability do
         # 3. The user loses his admin status.
         #
         @group.admins_parent.unassign_user user; wait_for_cache
-        the_user.should_not be_able_to :manage, @parent_group
+        the_user(true).should_not be_able_to :manage, @parent_group
         the_user.should_not be_able_to :update, @group
         the_user.should_not be_able_to :manage, @page
         the_user.should_not be_able_to :manage, @sub_page
@@ -689,7 +690,7 @@ describe Ability do
         @any_page = create :page
         @any_user = create :user
 
-        @event = @any_group.child_events.create name: 'Special Event'
+        @event = @any_group.events.create name: 'Special Event'
       end
       he { should be_able_to :export_member_list, @any_group }
       he { should be_able_to :create_post_for, @any_group }
@@ -734,11 +735,11 @@ describe Ability do
 
         user.global_admin = false
         wait_for_cache
-        Ability.new(User.find user.id).should_not be_able_to :manage, @page
+        the_user(true).should_not be_able_to :manage, @page
 
         user.global_admin = true
         wait_for_cache
-        Ability.new(User.find user.id).should be_able_to :manage, @page
+        the_user(true).should be_able_to :manage, @page
       end
     end
   end
