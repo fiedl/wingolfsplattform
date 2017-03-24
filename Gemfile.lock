@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 64ac50d62dc5822e90378e8ed1b0f578323fc6ec
+  revision: 36bc2db3e2252090132d83dd0906c6a6b616ba6c
   branch: master
   specs:
     your_platform (1.0.1)
@@ -54,7 +54,7 @@ GIT
       mail_form
       merit
       mini_magick
-      nokogiri (>= 1.6.8)
+      nokogiri (>= 1.7.1)
       omniauth-facebook (~> 3.0.0)
       omniauth-github
       omniauth-google-oauth2
@@ -393,7 +393,7 @@ GEM
     mysql2 (0.4.5)
     netrc (0.11.0)
     newrelic_rpm (3.17.0.325)
-    nokogiri (1.7.0.1)
+    nokogiri (1.7.1)
       mini_portile2 (~> 2.1.0)
     oauth (0.5.1)
     oauth2 (1.3.1)
