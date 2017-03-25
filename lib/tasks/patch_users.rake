@@ -84,8 +84,8 @@ namespace :patch do
           eph_group = corporation.status_group("Ehrenphilister")
           phil_group = corporation.status_group("Philister")
           if user.in? phil_group.child_users
-            eph_membership = UserGroupMembership.now_and_in_the_past.find_by_user_and_group(user, eph_group)
-            phil_membership = UserGroupMembership.now_and_in_the_past.find_by_user_and_group(user, phil_group)
+            eph_membership = Membership.now_and_in_the_past.find_by_user_and_group(user, eph_group)
+            phil_membership = Membership.now_and_in_the_past.find_by_user_and_group(user, phil_group)
             
             if eph_membership
               eph_membership.update_attribute :valid_to, phil_membership.valid_to
@@ -130,7 +130,7 @@ namespace :patch do
       
       counter = 0
       for membership_link in membership_links
-        membership = membership_link.becomes UserGroupMembership
+        membership = membership_link.becomes Membership
         if membership.valid_to
           membership.update_attribute(:valid_to, nil)
 
@@ -296,7 +296,7 @@ namespace :patch do
     task :reimport_ef_corporation_memberships => [:environment, :requirements, :print_info] do
       log.section "Re-Import der Erfurter Aktiven"
       log.info "Da Erfurt (Ef) im Netenv-LDAP als 'Erf' kodiert war, ist hier ein erneuter Import"
-      log.info "der UserGroupMemberships der Korporationen der Erfurter Aktiven von Nöten,"
+      log.info "der Memberships der Korporationen der Erfurter Aktiven von Nöten,"
       log.info "um ihren aktuellen Aktivenstatus korrekt in das neue System zu übertragen."
       log.info ""
       log.info "Korrigierte Benutzer:"

@@ -26,6 +26,34 @@ class Group
     end
   end
 
+  # Group exports
+  #
+  def self.export_list_presets
+    super + [
+      :stammdaten,
+      :wingolfsblaetter
+    ]
+  end
+
+  def export_stammdaten_list
+    ListExports::Stammdaten.from_group(self)
+  end
+
+  def export_wingolfsblaetter_list
+    ListExports::Wingolfsblaetter.from_group(self)
+  end
+
+  def list_export_by_preset(preset, options = {})
+    case preset.to_s
+    when 'stammdaten'
+      self.export_stammdaten_list
+    when 'wingolfsblaetter'
+      self.export_wingolfsblaetter_list
+    else
+      super
+    end
+  end
+
 
   # Special Groups
   # ==========================================================================================

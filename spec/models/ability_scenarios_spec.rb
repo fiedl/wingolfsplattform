@@ -18,7 +18,7 @@ describe Ability do
 
   describe "Seminarbeauftragter des Wingolfs" do
     before do
-      @wingolfsseminar_page = Page.intranet_root.child_pages.create name: "Wingolfsseminar"  # no author!
+      @wingolfsseminar_page = Page.intranet_root.child_pages.create title: "Wingolfsseminar"  # no author!
       @wingolfsseminar_page.update_attribute :created_at, 10.days.ago
       @seminarbeauftragter_group = @wingolfsseminar_page.officers_parent.child_groups.create name: "Seminarbeauftragter des Wingolfs"
       @seminarbeauftragter_group << user
@@ -29,7 +29,7 @@ describe Ability do
     he "should be able to create and update a sub-page" do
       the_user.should be_able_to :create_page_for, @wingolfsseminar_page
 
-      @sub_page = @wingolfsseminar_page.child_pages.create name: "Sub Page"
+      @sub_page = @wingolfsseminar_page.child_pages.create title: "Sub Page"
       the_user.should be_able_to :update, @sub_page
     end
 
@@ -64,7 +64,7 @@ describe Ability do
 
         describe "Wenn er eine Unterseite mit Tagungsunterlagen erstellt hat" do
           before do
-            @tagungsunterlagen_page = @seminar_event.child_pages.create name: "Tagungsunterlagen"
+            @tagungsunterlagen_page = @seminar_event.child_pages.create title: "Tagungsunterlagen"
             @tagungsunterlagen_page.update_attribute :author_user_id, user.id
           end
 
@@ -79,8 +79,8 @@ describe Ability do
     before do
       @phr_group = create :group, name: "Philisterrat"
       @phr_group.assign_user user, at: 1.year.ago
-      @protokolle_page = @phr_group.child_pages.create name: "Protokolle"
-      @protokoll_attachment = @protokolle_page.attachments.create name: "Protokoll"
+      @protokolle_page = @phr_group.child_pages.create title: "Protokolle"
+      @protokoll_attachment = @protokolle_page.attachments.create title: "Protokoll"
       @protokoll_attachment.update_attribute :author_user_id, create(:user).id
     end
 
@@ -98,7 +98,7 @@ describe Ability do
 
       describe "Als Verfasser eines Protokolls" do
         before do
-          @protokoll_attachment = @protokolle_page.attachments.create name: "Protokoll"
+          @protokoll_attachment = @protokolle_page.attachments.create title: "Protokoll"
           @protokoll_attachment.update_attribute :author_user_id, user.id
         end
 
@@ -125,7 +125,7 @@ describe Ability do
 
   describe "Schriftleiter der Wingolfsblätter" do
     before do
-      @wbl_page = Page.intranet_root.child_pages.create name: "Wingolfsblätter"
+      @wbl_page = Page.intranet_root.child_pages.create title: "Wingolfsblätter"
       @schriftleiter_group = @wbl_page.officers_parent.child_groups.create name: "Schriftleiter der Wingolfsblätter"
       @schriftleiter_group << user
 
@@ -143,7 +143,7 @@ describe Ability do
 
     describe "Wenn er die Unterseite Wingolfsblätter 2014 nicht selbst erstellt hat" do
       before do
-        @wbl_2014_page = @wbl_page.child_pages.create name: "Wingolfsblätter 2014"
+        @wbl_2014_page = @wbl_page.child_pages.create title: "Wingolfsblätter 2014"
         @wbl_2014_page.update_attribute :author_user_id, create(:user).id
       end
 
@@ -162,7 +162,7 @@ describe Ability do
 
     describe "Wenn er die Seite 'Wingolfsblätter 2015' erstellt hat" do
       before do
-        @wbl_2015_page = @wbl_page.child_pages.create name: "Wingolfsblätter 2015"
+        @wbl_2015_page = @wbl_page.child_pages.create title: "Wingolfsblätter 2015"
         @wbl_2015_page.update_attribute :author_user_id, user.id
       end
 
@@ -298,7 +298,7 @@ describe Ability do
 
     describe "if the admins has lost his rights less than five minutes ago" do
       before do
-        @membership = UserGroupMembership.with_past.find_by_user_and_group user, @corporation.aktivitas.admins_parent
+        @membership = Membership.with_past.find_by_user_and_group user, @corporation.aktivitas.admins_parent
         @membership.valid_from = 1.year.ago
         @membership.valid_to = 4.minutes.ago
         @membership.save
@@ -308,7 +308,7 @@ describe Ability do
 
     describe "if the admins has lost his rights more than five minutes ago" do
       before do
-        @membership = UserGroupMembership.with_past.find_by_user_and_group user, @corporation.aktivitas.admins_parent
+        @membership = Membership.with_past.find_by_user_and_group user, @corporation.aktivitas.admins_parent
         @membership.valid_from = 1.year.ago
         @membership.valid_to = 6.minutes.ago
         @membership.save

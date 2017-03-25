@@ -27,7 +27,6 @@ source 'https://rubygems.org' do
   gem 'unicorn'
 
   # RAILS-3-MIGRATION TEMPORARY GEMS, TODO: REMOVE THOSE
-  gem 'protected_attributes', require: 'protected_attributes'
   gem 'activesupport-json_encoder'
 
   # Deploy with Capistrano
@@ -81,6 +80,7 @@ source 'https://rubygems.org' do
     gem 'guard-focus'
     gem 'rspec-rails'
     gem 'rspec-legacy_formatters'
+    gem 'rspec-instafail'
     gem 'rspec-its'
     gem 'guard-rspec'
     gem 'rspec-rerun'
@@ -162,6 +162,9 @@ source 'https://rubygems.org' do
 
   # Temporary fixes
   gem 'gemoji', '~> 2.1.0'
+
+  # Security Fixes
+  gem 'rubyzip', '>= 1.2.1'  # CVE-2017-5946
 end
 
 source 'https://rails-assets.org'

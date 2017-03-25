@@ -8,7 +8,6 @@ require_dependency YourPlatform::Engine.root.join( 'app/models/user' ).to_s
 # this re-opened class contains all wingolf-specific additions to the user model.
 #
 class User
-  attr_accessible :wingolfsblaetter_abo, :hidden, :localized_bv_beitrittsdatum
 
   # This method returns a kind of label for the user, e.g. for menu items representing the user.
   # Use this rather than the name attribute itself, since the title method is likely to be overridden
@@ -56,7 +55,7 @@ class User
   end
 
   def bv_membership
-    @bv_membership ||= UserGroupMembership.find_by_user_and_group(self, bv) if bv
+    @bv_membership ||= Membership.find_by_user_and_group(self, bv) if bv
   end
 
   # Diese Methode gibt die BVs zurück, denen der Benutzer zugewiesen ist. In der Regel
@@ -65,7 +64,7 @@ class User
   #
   def bv_memberships
     bv_ids.collect do |id|
-      UserGroupMembership.find_by_user_and_group(self, Group.find(id))
+      Membership.find_by_user_and_group(self, Group.find(id))
     end - [nil]
   end
 
@@ -156,7 +155,7 @@ class User
       # of the new bv. When DagLinks are allowed to exist several times, remove
       # this hack:
       #
-      if old_membership = UserGroupMembership.now_and_in_the_past.find_by_user_and_group(self, new_bv)
+      if old_membership = Membership.now_and_in_the_past.find_by_user_and_group(self, new_bv)
         if old_membership != self.bv_membership
           old_membership.destroy
         end
@@ -232,43 +231,43 @@ class User
   end
 
   def aktivmeldungsdatum
-    first_corporation.try(:membership_of, self).try(:valid_from).try(:to_date)
+    status_memberships.with_past.order(:valid_from).first.try(:valid_from).try(:to_date)
   end
   def aktivmeldungsdatum=(date)
-    (first_corporation || raise('user is not member of a corporation')).membership_of(self).update_attribute(:valid_from, date.to_datetime)
+    status_memberships.with_past.order(:valid_from).first.update_attributes valid_from: date.to_datetime
   end
 
 
   # Fill-in default profile.
   #
   def fill_in_template_profile_information
-    self.profile_fields.create(label: :personal_title, type: "ProfileFieldTypes::General")
-    self.profile_fields.create(label: :academic_degree, type: "ProfileFieldTypes::AcademicDegree")
-    self.profile_fields.create(label: :cognomen, type: "ProfileFieldTypes::General")
-    self.profile_fields.create(label: :klammerung, type: "ProfileFieldTypes::Klammerung")
+    self.profile_fields.create(label: :personal_title, type: "ProfileFields::General")
+    self.profile_fields.create(label: :academic_degree, type: "ProfileFields::AcademicDegree")
+    self.profile_fields.create(label: :cognomen, type: "ProfileFields::General")
+    self.profile_fields.create(label: :klammerung, type: "ProfileFields::Klammerung")
 
-    self.profile_fields.create(label: :home_address, type: "ProfileFieldTypes::Address") unless self.home_address
-    self.profile_fields.create(label: :work_or_study_address, type: "ProfileFieldTypes::Address") unless self.work_or_study_address
-    self.profile_fields.create(label: :phone, type: "ProfileFieldTypes::Phone") unless self.phone.present?
-    self.profile_fields.create(label: :mobile, type: "ProfileFieldTypes::Phone") unless self.mobile.present?
-    self.profile_fields.create(label: :fax, type: "ProfileFieldTypes::Phone")
-    self.profile_fields.create(label: :homepage, type: "ProfileFieldTypes::Homepage")
+    self.profile_fields.create(label: :home_address, type: "ProfileFields::Address") unless self.home_address
+    self.profile_fields.create(label: :work_or_study_address, type: "ProfileFields::Address") unless self.work_or_study_address
+    self.profile_fields.create(label: :phone, type: "ProfileFields::Phone") unless self.phone.present?
+    self.profile_fields.create(label: :mobile, type: "ProfileFields::Phone") unless self.mobile.present?
+    self.profile_fields.create(label: :fax, type: "ProfileFields::Phone")
+    self.profile_fields.create(label: :homepage, type: "ProfileFields::Homepage")
 
     if self.study_fields.count == 0
-      pf = self.profile_fields.build(label: :study, type: "ProfileFieldTypes::Study")
-      pf.becomes(ProfileFieldTypes::Study).save
+      pf = self.profile_fields.build(label: :study, type: "ProfileFields::Study")
+      pf.becomes(ProfileFields::Study).save
     end
 
-    self.profile_fields.create(label: :professional_category, type: "ProfileFieldTypes::ProfessionalCategory")
-    self.profile_fields.create(label: :occupational_area, type: "ProfileFieldTypes::ProfessionalCategory")
-    self.profile_fields.create(label: :employment_status, type: "ProfileFieldTypes::ProfessionalCategory")
-    self.profile_fields.create(label: :languages, type: "ProfileFieldTypes::Competence")
+    self.profile_fields.create(label: :professional_category, type: "ProfileFields::ProfessionalCategory")
+    self.profile_fields.create(label: :occupational_area, type: "ProfileFields::ProfessionalCategory")
+    self.profile_fields.create(label: :employment_status, type: "ProfileFields::ProfessionalCategory")
+    self.profile_fields.create(label: :languages, type: "ProfileFields::Competence")
 
-    pf = self.profile_fields.build(label: :bank_account, type: "ProfileFieldTypes::BankAccount")
-    pf.becomes(ProfileFieldTypes::BankAccount).save
+    pf = self.profile_fields.build(label: :bank_account, type: "ProfileFields::BankAccount")
+    pf.becomes(ProfileFields::BankAccount).save
 
-    pf = self.profile_fields.create(label: :name_field_wingolfspost, type: "ProfileFieldTypes::NameSurrounding")
-      .becomes(ProfileFieldTypes::NameSurrounding)
+    pf = self.profile_fields.create(label: :name_field_wingolfspost, type: "ProfileFields::NameSurrounding")
+      .becomes(ProfileFields::NameSurrounding)
     pf.text_above_name = ""; pf.name_prefix = "Herrn"; pf.name_suffix = ""; pf.text_below_name = ""
     pf.save
 
@@ -283,7 +282,7 @@ class User
     self.profile_fields.where(label: "W-Nummer").first.try(:value)
   end
   def w_nummer=(str)
-    field = profile_fields.where(label: "W-Nummer").first || profile_fields.create(type: 'ProfileFieldTypes::General', label: 'W-Nummer')
+    field = profile_fields.where(label: "W-Nummer").first || profile_fields.create(type: 'ProfileFields::General', label: 'W-Nummer')
     field.update_attribute(:value, str)
     field.delete_cache
   end
@@ -432,7 +431,7 @@ class User
   end
 
   def studium_export_string
-    self.profile_fields.where(type: "ProfileFieldTypes::Study").collect do |study|
+    self.profile_fields.where(type: "ProfileFields::Study").collect do |study|
       "Studium der #{study.subject} an der #{study.university} vom #{study.from} bis #{study.to}"
     end.join("\n")
   end
@@ -450,7 +449,7 @@ class User
       unless self.member_of? corporation.philisterschaft
         status_group_ids_in_this_corporation = StatusGroup.find_all_by_group(corporation.aktivitas).map(&:id)
         current_status_group = self.groups.where(id: status_group_ids_in_this_corporation).first
-        membership = UserGroupMembership.find_by_user_and_group(self, current_status_group)
+        membership = Membership.find_by_user_and_group(self, current_status_group)
         aenderungsdatum = philistrationsdatum
         aenderungsdatum = membership.valid_from + 1.day if membership.valid_from > aenderungsdatum
         membership.move_to corporation.philisterschaft.leaf_groups.first, at: aenderungsdatum
@@ -476,16 +475,19 @@ class User
     raise 'We do not allow to create corporations on the fly in Wingolfsplattform.'
   end
 
-  cache :aktivitaetszahl
-  cache :fruehere_aktivitaetszahl
-  cache :name_affix
-  cache :title
-  cache :bv_id
-  cache :w_nummer
-  cache :aktiver?
-  cache :philister?
-  cache :administrated_aktivitates
-  cache :status_export_string
+  if use_caching?
+    cache :aktivitaetszahl
+    cache :fruehere_aktivitaetszahl
+    cache :name_affix
+    cache :title
+    cache :bv_id
+    cache :localized_bv_beitrittsdatum
+    cache :w_nummer
+    cache :aktiver?
+    cache :philister?
+    cache :administrated_aktivitates
+    cache :status_export_string
+  end
 
 end
 

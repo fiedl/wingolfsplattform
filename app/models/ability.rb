@@ -109,11 +109,11 @@ module AbilityDefinitions
         can? :update, group
       end
 
-      can :execute, Workflow do |workflow|
+      can :execute, [Workflow, WorkflowKit::Workflow] do |workflow|
         # Local admins can execute workflows of groups they're admins of.
         # And they can execute the mark_as_deceased workflow, which is a global workflow.
         #
-        (workflow == Workflow.find_mark_as_deceased_workflow) or
+        (workflow.id == Workflow.find_mark_as_deceased_workflow_id) ||
         (workflow.admins_of_ancestors.include?(user))
       end
 
@@ -128,7 +128,7 @@ module AbilityDefinitions
         profile_field.profileable.nil? ||  # in order to create profile fields
           (can?(:update, profile_field.profileable) && profile_field.key != "W-Nummer")
       end
-      can :manage, UserGroupMembership do |membership|
+      can :manage, Membership do |membership|
         can? :update, membership.user
       end
 
@@ -196,7 +196,7 @@ module AbilityDefinitions
       # Regular users can only see their own bank accounts
       # as well as bank accounts of non-user objects, i.e. groups.
       #
-      not ((parent_field.type == 'ProfileFieldTypes::BankAccount') &&
+      not ((parent_field.type == 'ProfileFields::BankAccount') &&
         parent_field.profileable.kind_of?(User) && (parent_field.profileable.id != user.id))
     end
 

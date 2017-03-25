@@ -17,8 +17,8 @@ describe ListExport do
 
   describe "name_list: " do
     before do
-      @user.profile_fields.create(type: 'ProfileFieldTypes::AcademicDegree', value: "Dr. rer. nat.", label: :academic_degree)
-      @user.profile_fields.create(type: 'ProfileFieldTypes::General', value: "Dr.", label: :personal_title)
+      @user.profile_fields.create(type: 'ProfileFields::AcademicDegree', value: "Dr. rer. nat.", label: :academic_degree)
+      @user.profile_fields.create(type: 'ProfileFields::General', value: "Dr.", label: :personal_title)
 
       @list_export = ListExports::NameList.from_group(@group)
     end

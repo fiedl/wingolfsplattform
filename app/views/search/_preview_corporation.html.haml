@@ -1,7 +1,7 @@
 %h4= link_to obj.name, obj
 %p
   Telefon:
-  = obj.profile_fields.where(type: 'ProfileFieldTypes::Phone').first.try(:value)
+  = obj.profile_fields.where(type: 'ProfileFields::Phone').first.try(:value)
 
 %h5= link_to "Aktivitas", obj.aktivitas
 %p

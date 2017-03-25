@@ -24,6 +24,11 @@ FactoryGirl.define do
       corporation.sub_group("Verstorbene").add_flag :deceased_parent
       corporation.sub_group("Ehemalige").add_flag :former_members_parent
 
+      # Um die Status-Gruppen mit dem Typ `StatusGroup` zu versehen,
+      # wird einfach die entsprechende Reparatur-Methode aufgerufen, die auch
+      # für production vorgesehen war.
+      StatusGroup.repair
+
       status_workflow = Workflow.create name: 'Reception', description: "Macht aus einem Hospitanten einen Kraßfuxen."
 
       # # Does not work:

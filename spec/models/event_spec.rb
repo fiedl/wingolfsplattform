@@ -105,12 +105,12 @@ describe Event do
       before { @args = {} }
       its(:group) { should == @corporation }
     end
-    describe "(aktive: true)" do
-      before { @args = {aktive: true} }
+    describe "{aktive: true, philister: false}" do
+      before { @args = {aktive: true, philister: false} }
       its(:group) { should == @corporation.aktivitas }
     end
-    describe "(philister: true)" do
-      before { @args = {philister: true} }
+    describe "{philister: true, aktive: false}" do
+      before { @args = {philister: true, aktive: false} }
       its(:group) { should == @corporation.philisterschaft }
     end
     describe "(aktive: true, philister: true)" do

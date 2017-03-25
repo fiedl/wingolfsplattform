@@ -49,58 +49,6 @@ describe GroupsController do
       end
     end
 
-    describe 'GET #show' do
-      describe "(list exports)" do
-        let(:group) { create :group, :with_members }
-
-        before do
-          # Make sure it also works when users with empty birthday are present (bug fix).
-          #
-          @user_without_birthday = create :user
-          @user_without_birthday.date_of_birth = nil
-          @user_without_birthday.save
-
-          group.assign_user @user_without_birthday, at: 2.seconds.ago
-          group.reload
-
-          # In order to create a phone list, the group needs a user with a phone number.
-          #
-          group.members.first.profile_fields.create label: 'phone', value: '1234-56', type: 'ProfileFieldTypes::Phone'
-        end
-
-        it 'generates an address label pdf' do
-          get :show, id: group.id, format: 'pdf'
-          response.content_type.should == 'application/pdf'
-        end
-
-        it 'generates excel name lists' do
-          get :show, id: group.id, format: 'xls'
-          response.content_type.should include 'application/xls'
-        end
-
-        ['name_list', 'birthday_list', 'phone_list', 'email_list', 'member_development'].each do |preset|
-          it "generates an excel #{preset}" do
-            get(:show, {id: group.id, list: preset, format: 'xls'})
-            response.content_type.should include 'application/xls'
-            response.body.should include group.members.first.last_name
-          end
-        end
-
-        it 'generates csv name lists' do
-          get :show, id: group.id, format: 'csv'
-          response.content_type.to_s.should == 'text/csv'
-        end
-
-        ['name_list', 'birthday_list', 'phone_list', 'email_list', 'member_development'].each do |preset|
-          it "generates an csv #{preset}" do
-            get(:show, {id: group.id, list: preset, format: 'csv'})
-            response.content_type.to_s.should == 'text/csv'
-            response.body.should include group.members.first.last_name
-          end
-        end
-      end
-    end
-
     describe 'POST #create' do
       before {
         post :create # to make sure all role groups are already set up.

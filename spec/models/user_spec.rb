@@ -86,12 +86,12 @@ describe User do
       @corporationE = create( :wingolf_corporation, :token => "E" )
       @corporationH = create( :wingolf_corporation, :token => "H" )
 
-      @first_membership_E = StatusGroupMembership.create( user: @user, group: @corporationE.status_group('Hospitanten') )
+      @first_membership_E = Memberships::Status.create( user: @user, group: @corporationE.status_group('Hospitanten') )
       @first_membership_E.update_attributes(valid_from: "2006-12-01".to_datetime)
-      @first_membership_H = StatusGroupMembership.create( user: @user, group: @corporationH.status_group('Hospitanten') )
+      @first_membership_H = Memberships::Status.create( user: @user, group: @corporationH.status_group('Hospitanten') )
       @first_membership_H.update_attributes(valid_from: "2008-12-01".to_datetime)
       @first_membership_E.invalidate
-      @second_membership_E = StatusGroupMembership.create( user: @user, group: @corporationE.status_group('Philister') )
+      @second_membership_E = Memberships::Status.create( user: @user, group: @corporationE.status_group('Philister') )
       @second_membership_E.update_attributes(valid_from: "2013-12-01".to_datetime)
       @user.reload
     end
@@ -151,12 +151,12 @@ describe User do
       @corporationH = create( :wingolf_corporation, :token => "H" )
       @corporationS = create( :wingolf_corporation, :token => "S" )
 
-      @first_membership_E = StatusGroupMembership.create( user: @user, group: @corporationE.status_group('Hospitanten') )
+      @first_membership_E = Memberships::Status.create( user: @user, group: @corporationE.status_group('Hospitanten') )
       @first_membership_E.update_attributes(valid_from: "2006-12-01".to_datetime)
-      @first_membership_H = StatusGroupMembership.create( user: @user, group: @corporationH.status_group('Hospitanten') )
+      @first_membership_H = Memberships::Status.create( user: @user, group: @corporationH.status_group('Hospitanten') )
       @first_membership_H.update_attributes(valid_from: "2008-12-01".to_datetime)
       @first_membership_E.invalidate
-      @second_membership_E = StatusGroupMembership.create( user: @user, group: @corporationE.status_group('Philister') )
+      @second_membership_E = Memberships::Status.create( user: @user, group: @corporationE.status_group('Philister') )
       @second_membership_E.update_attributes(valid_from: "2013-12-01".to_datetime)
     end
     subject { @user.aktivitaetszahl }
@@ -172,7 +172,7 @@ describe User do
     describe "if currently 'E06 H08' and after adding S in 2014 it" do
       before do
         @user.aktivitaetszahl
-        first_membership_S = StatusGroupMembership.create( user: @user, group: @corporationS.status_groups.first )
+        first_membership_S = Memberships::Status.create( user: @user, group: @corporationS.status_groups.first )
         first_membership_S.update_attributes(valid_from: "2014-05-01".to_datetime)
         time_travel 2.seconds
         @user.reload
@@ -254,7 +254,7 @@ describe User do
 
         # Promote the user in order to make sure this does not cause problems.
         @date_of_promotion_in_first_corporation = 20.days.ago
-        UserGroupMembership.find_by_user_and_group(@user, @first_corporation.status_groups.first).move_to(@first_corporation.status_groups.second, at: @date_of_promotion_in_first_corporation)
+        Membership.find_by_user_and_group(@user, @first_corporation.status_groups.first).move_to(@first_corporation.status_groups.second, at: @date_of_promotion_in_first_corporation)
       end
       it { should == @date_of_joining_the_first_corporation.to_date }
     end
@@ -276,10 +276,10 @@ describe User do
 
         # Promote the user in order to make sure this does not cause problems.
         @date_of_promotion_in_first_corporation = "2010-02-21".to_datetime
-        UserGroupMembership.find_by_user_and_group(@user, @first_corporation.status_groups.first).move_to(@first_corporation.status_groups.second, at: @date_of_promotion_in_first_corporation)
+        Membership.find_by_user_and_group(@user, @first_corporation.status_groups.first).move_to(@first_corporation.status_groups.second, at: @date_of_promotion_in_first_corporation)
       end
       it "should update the membership date correctly" do
-        @membership = UserGroupMembership.with_invalid.find_by_user_and_group(@user, @first_corporation.status_groups.first)
+        @membership = Membership.with_invalid.find_by_user_and_group(@user, @first_corporation.status_groups.first)
         @membership.valid_from.to_date.should == @date_of_joining_the_first_corporation.to_date
         subject
         @membership.reload.valid_from.to_date.should == @new_date.to_date
@@ -371,8 +371,8 @@ describe User do
       @bv2 = create(:bv_group, name: "BV 45 Europe", token: "BV 45")
       @address1 = "Pariser Platz 1\n 10117 Berlin"
       @address2 = "44 Rue de Stalingrad, Grenoble, Frankreich"
-      @address_field1 = @user.profile_fields.create(type: 'ProfileFieldTypes::Address', value: @address1).becomes ProfileFieldTypes::Address
-      @address_field2 = @user.profile_fields.create(type: 'ProfileFieldTypes::Address', value: @address2).becomes ProfileFieldTypes::Address
+      @address_field1 = @user.profile_fields.create(type: 'ProfileFields::Address', value: @address1).becomes ProfileFields::Address
+      @address_field2 = @user.profile_fields.create(type: 'ProfileFields::Address', value: @address2).becomes ProfileFields::Address
       BvMapping.create(bv_name: "BV 01", plz: "10117", town: "Berlin")
     end
     subject { @user.correct_bv }
@@ -424,8 +424,8 @@ describe User do
       @bv2 = create(:bv_group, name: "BV 45 Europe", token: "BV 45")
       @address1 = "Pariser Platz 1\n 10117 Berlin"
       @address2 = "44 Rue de Stalingrad, Grenoble, Frankreich"
-      @address_field1 = @user.profile_fields.create(type: 'ProfileFieldTypes::Address', value: @address1).becomes ProfileFieldTypes::Address
-      @address_field2 = @user.profile_fields.create(type: 'ProfileFieldTypes::Address', value: @address2).becomes ProfileFieldTypes::Address
+      @address_field1 = @user.profile_fields.create(type: 'ProfileFields::Address', value: @address1).becomes ProfileFields::Address
+      @address_field2 = @user.profile_fields.create(type: 'ProfileFields::Address', value: @address2).becomes ProfileFields::Address
       BvMapping.create(bv_name: "BV 01", plz: "10117", town: "Berlin")
     end
     subject { @user.adapt_bv_to_primary_address }
@@ -450,7 +450,7 @@ describe User do
             @address_field1.bv.should == @bv1
           end
           it "should return the new membership" do
-            subject.should == UserGroupMembership.find_by_user_and_group(@user, @bv1)
+            subject.should == Membership.find_by_user_and_group(@user, @bv1)
           end
         end
       end
@@ -499,7 +499,7 @@ describe User do
         end
         it "should return the new membership" do
           new_membership = subject
-          membership_in_bv2 = UserGroupMembership.with_invalid.find_by_user_and_group(@user, @bv2)
+          membership_in_bv2 = Membership.with_invalid.find_by_user_and_group(@user, @bv2)
           membership_in_bv2.should_not == nil
           new_membership.should == membership_in_bv2
         end
@@ -533,7 +533,7 @@ describe User do
           @user.bv.token.should == "BV 00"
         end
         it "should return the new membership" do
-          subject.should == UserGroupMembership.find_by_user_and_group(@user, @bv0)
+          subject.should == Membership.find_by_user_and_group(@user, @bv0)
         end
       end
       describe "if the bv could not be determined by plz" do
@@ -557,8 +557,8 @@ describe User do
         it "should remove all old memberships" do
           subject
           time_travel 2.seconds
-          UserGroupMembership.find_by_user_and_group(@user, @bv0).should == nil
-          UserGroupMembership.find_by_user_and_group(@user, @bv1).should == nil
+          Membership.find_by_user_and_group(@user, @bv0).should == nil
+          Membership.find_by_user_and_group(@user, @bv1).should == nil
         end
         specify "the user should only have ONE bv membership, now" do
           subject
@@ -571,7 +571,7 @@ describe User do
           @user.reload.bv.should == @bv2
         end
         it "should return the new membership" do
-          subject.should == UserGroupMembership.find_by_user_and_group(@user, @bv2)
+          subject.should == Membership.find_by_user_and_group(@user, @bv2)
         end
       end
     end
