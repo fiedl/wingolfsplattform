@@ -1,5 +1,4 @@
 class BvMapping < ActiveRecord::Base
-  attr_accessible :bv_name, :plz, :town
 
   def self.find_or_create(args)
     plz = args[:plz] || raise('Keine :plz angegeben.')

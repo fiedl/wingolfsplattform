@@ -2,8 +2,6 @@ require_dependency YourPlatform::Engine.root.join('app/models/event').to_s
 
 class Event
 
-  attr_accessible :aktive, :philister if defined? attr_accessible
-
   before_save :change_group_id_according_to_aktive_and_philister
 
   def aktive

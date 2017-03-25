@@ -10,7 +10,7 @@ class RelationshipsController < ApplicationController
   end
 
   def create
-    @relationship = Relationship.create( params[ :relationship ] )    
+    @relationship = Relationship.create(relationship_params)
   end
 
   def destroy
@@ -18,7 +18,13 @@ class RelationshipsController < ApplicationController
   end
 
   def update
-    @relationship.update_attributes params[ :relationship ]
+    @relationship.update_attributes(relationship_params)
     respond_with @relationship
+  end
+
+  private
+
+  def relationship_params
+    params.require(:relationship)
   end
 end

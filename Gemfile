@@ -27,7 +27,6 @@ source 'https://rubygems.org' do
   gem 'unicorn'
 
   # RAILS-3-MIGRATION TEMPORARY GEMS, TODO: REMOVE THOSE
-  gem 'protected_attributes', require: 'protected_attributes'
   gem 'activesupport-json_encoder'
 
   # Deploy with Capistrano

@@ -6,8 +6,6 @@ module ProfileFields
   #
   class Address
 
-    attr_accessible :wingolfspost
-
     # This method returns the Bv associated with the given address.
     #
     def bv

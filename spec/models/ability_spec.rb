@@ -111,12 +111,12 @@ describe Ability do
     context "(reading pages and documents)" do
       before do
         @group = create(:group)
-        @page_of_group = @group.child_pages.create name: "This page belongs to the group."
+        @page_of_group = @group.child_pages.create title: "This page belongs to the group."
         @attachment_of_group = @page_of_group.attachments.create description: "This attachments belongs to the group."
-        @subpage_of_group = @page_of_group.child_pages.create name: "This subpage belongs to the group."
+        @subpage_of_group = @page_of_group.child_pages.create title: "This subpage belongs to the group."
         @subpage_attachment_of_group = @subpage_of_group.attachments.create description: "This attachments belongs to the group."
         @subgroup = @group.child_groups.create name: "Subgroup"
-        @page_of_subgroup = @subgroup.child_pages.create name: "This page belongs to the subgroup."
+        @page_of_subgroup = @subgroup.child_pages.create title: "This page belongs to the subgroup."
         @attachment_of_subgroup = @page_of_subgroup.attachments.create description: "This attachments belongs to the subgroup."
       end
       context "when the user is not member of a group" do
