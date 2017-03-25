@@ -1,0 +1,87 @@
+!!!
+
+- @hide_vertical_nav = true
+
+%html
+  %head
+    %meta{:content => 'text/html; charset=utf-8', 'http-equiv' => 'Content-type'}/
+    %title= website_title_with_app_name
+
+    = stylesheet_link_tag    'bootstrap_setup', :media => 'all'
+    = stylesheet_link_tag    'wingolf_layout', :media => 'all'
+    = stylesheet_link_tag    'wingolf_2017_layout', :media => 'all'
+    = stylesheet_link_tag    'application', :media => 'all'
+    = stylesheet_link_tag    'print', :media => 'print'
+
+    = favicon_link_tag 'favicon.ico'
+    = favicon_link_tag 'fahne-144x144.png', rel: 'apple-touch-icon', type: 'image/png'
+
+    %link{rel: 'search', href: opensearch_path, title: "Wingolfsplattform-Suche", type: 'application/opensearchdescription+xml'}
+
+    = javascript_include_tag 'application'
+    = gmaps4rails_api_script_tags
+    = csrf_meta_tags
+    = yield :head
+  = body_tag do
+    - if user_account_signed_in?
+      - Rack::MiniProfiler.step("#logged-in-bar") do
+        #logged-in-bar.hidden-print
+          #backendBar
+            .content
+              %ul.backendBarItems
+                %li.first.backendBarItem.dropdown
+                  %span.user_avatar
+                    = render 'layouts/session_bar_avatar'
+                  %span.user_name#user_name.obscure-in-demo{data: {email: current_user.email, id: current_user.id, title: current_user.title}}
+                    = link_to current_user.title, current_user
+                  %b.caret
+                  %ul.dropdown-menu
+                    %li.user_name.obscure-in-demo= current_user.title
+                    %li.user_email.obscure-in-demo= current_user.email
+                    %li= link_to t(:my_posts), posts_path
+                    %li= link_to t(:my_profile), current_user
+                    %li= link_to t(:change_avatar), user_path(current_user, trigger_change_avatar: true), class: 'change_avatar'
+                    %li= link_to t(:change_password), change_password_path
+                    %li= link_to t(:settings), user_settings_path(current_user), class: 'user_settings'
+                    %li= button_to t(:sign_out), sign_out_path, method: :delete
+
+                - # role indicator and preview menu
+                -#= render partial: 'layouts/role_preview_switcher'
+
+                -#= render partial: 'notifications/notifications_dropdown'
+
+            .clear
+    - Rack::MiniProfiler.step("#header-bar") do
+      #header-bar
+        #headerBg.hidden-print
+          #header
+            #header_claim
+              = image_tag( 'claim.png' )
+            #header_logo
+              = link_to( image_tag( 'logo.png' ), root_path )
+              = beta_badge_with_link
+            #header_help
+              = render partial: 'support_requests/help_button'
+            #header_search
+              = render partial: 'shared/search_box'
+            %span#category_indicator
+              = render partial: 'layouts/horizontal_nav'
+        #print-logo.visible-print
+          .right= image_tag('logo.png')
+    #contentBgLayer1
+      #contentBgLayer2
+        #contentBgLayer3
+          #content_wrapper
+            #toolbar
+              Aktuelle Seite:
+              = render partial: 'layouts/breadcrumbs'
+              %span#access_indicator
+                = access_indicator if current_user
+            = render partial: 'layouts/horizontal_structure_nav'
+            #content
+              = render partial: 'layouts/multi_column_content_area'
+              .clear
+
+    .bottom_page_footer.hidden-print= render partial: 'layouts/footer' unless @hide_footer
+    .hidden-print= debug(params) if Rails.env.development?
+    = yield :scripts

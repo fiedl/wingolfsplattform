@@ -1,0 +1,54 @@
+body.wingolf-2017-layout
+
+  #resource_nav > ul > li
+    float: none
+
+  .horizontal_structure_nav
+    text-align: center
+    margin-bottom: 15px
+    > ul
+      > li
+        float: none
+        display: inline-block
+        margin-bottom: 3px
+      > li > a
+        background: #f1eeee
+      > li > a:hover
+        background: #fbfbfb
+      > li.child.page > a
+      > li.child.page > a:hover
+      > li.sub_page > a
+        padding: 6px 15px
+      > li.child.group > a
+      > li.child.group > a:hover
+      > li.resource > a
+
+body.group_pages.wingolf-2017-layout
+  h4
+    text-align: center
+
+=active-resource-li
+  background: #e4e1da
+  a
+    color: #7e0f0d
+
+body.wingolf-2017-layout #resources_nav
+  height: 100%
+  ul
+    height: 100%
+    li
+      height: 100%
+      a
+        height: 100%
+        border-radius: 0px
+body.wingolf-2017-layout #resources_nav li a:hover
+  background: #e4e1da
+  color: #7e0f0d
+body.group_news.wingolf-2017-layout #resources_nav li.news
+  +active-resource-li
+body.group_members.wingolf-2017-layout #resources_nav li.members
+  +active-resource-li
+body.pages.wingolf-2017-layout #resources_nav li.documents
+  +active-resource-li
+body.group_pages.wingolf-2017-layout #resources_nav li.documents
+  +active-resource-li

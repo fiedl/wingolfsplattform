@@ -6,10 +6,12 @@ class ApplicationController
   before_action :new_relic_params
   before_action :collect_data_for_exception_notifier
 
+  before_action :prepend_wingolf_layout_view_path
+
   protected
 
   def permitted_layouts
-    super + ['wingolf']
+    super + ['wingolf', 'wingolf-2017']
   end
 
   def default_layout
@@ -32,6 +34,28 @@ class ApplicationController
     request.env["exception_notifier.exception_data"] = {
       :current_user => current_user
     }
+  end
+
+  # Each layout may define override views.
+  # When using the layout `foo`, the view
+  #
+  #     app/views/foo/pages/show.html.haml
+  #
+  # takes precedence over the usual:
+  #
+  #     app/views/pages/show.html.haml
+  #
+  def prepend_wingolf_layout_view_path
+    prepend_view_path Rails.application.root.join("app/views/#{current_layout}").to_s
+  end
+
+  def resource_centred_layouts
+    super + %w(wingolf-2017)
+  end
+
+  def set_current_navable(navable)
+    super(navable)
+    prepend_wingolf_layout_view_path
   end
 
 end

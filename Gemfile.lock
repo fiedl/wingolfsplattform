@@ -6,8 +6,8 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: da978cb0458fb0dc365da3d6acc56612fce6dfbe
-  branch: master
+  revision: 94209da35e42468d50b3aaca168d9abbdb6dc519
+  branch: sf/resource-layout-2017
   specs:
     your_platform (1.0.1)
       actionpack (>= 4.2.5.2)

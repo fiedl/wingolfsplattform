@@ -1,5 +1,5 @@
 # YourPlatform
-gem 'your_platform', git: 'https://github.com/fiedl/your_platform', branch: 'master'
+gem 'your_platform', git: 'https://github.com/fiedl/your_platform', branch: 'sf/resource-layout-2017'
 
 source 'https://rubygems.org' do
   # Ruby License, http://www.ruby-lang.org/en/LICENSE.txt
