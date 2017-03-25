@@ -7,7 +7,7 @@ module UsersControllerModifications
   def user_params
     additional_permitted_keys = []
     additional_permitted_keys += [:wingolfsblaetter_abo, :localized_bv_beitrittsdatum] if @user && can?(:update, @user)
-    super.merge params.require(:user).permit(*additional_permitted_keys)
+    params.require(:user).permit(*(super.keys + additional_permitted_keys))
   end
 
 end

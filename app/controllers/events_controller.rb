@@ -5,7 +5,7 @@ module EventsControllerModifications
   private
 
   def event_params
-    super.permit(:aktive, :philister)
+    params.fetch(:events, {}).permit(*(super.keys + [:aktive, :philister]))
   end
 
 end

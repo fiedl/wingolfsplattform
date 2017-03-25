@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 4f212515a38df4b4b113c4365af2def58dde2f3f
+  revision: 57a3743a955dc61bfb4c448750729f7a1460d944
   branch: master
   specs:
     your_platform (1.0.1)
@@ -23,7 +23,7 @@ GIT
       bootstrap-sass (= 3.3.3)
       bootstrap_tokenfield_rails
       bundler (>= 1.9.4)
-      cancan
+      cancancan
       carrierwave (~> 0.11)
       chartkick
       coffee-rails (>= 4.1.0)
@@ -175,7 +175,7 @@ GEM
     browser (1.1.0)
     builder (3.2.2)
     callsite (0.0.11)
-    cancan (1.6.10)
+    cancancan (1.16.0)
     capybara (2.10.1)
       addressable
       mime-types (>= 1.16)

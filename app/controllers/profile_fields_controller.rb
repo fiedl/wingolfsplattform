@@ -5,7 +5,7 @@ module ProfileFieldsControllerModifications
   private
 
   def profile_field_params
-    super.permit(:wingolfspost)
+    params.fetch(:profile_field, {}).permit(*(super.keys + [:wingolfspost]))
   end
 
 end
