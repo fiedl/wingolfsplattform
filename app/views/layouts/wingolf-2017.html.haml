@@ -45,6 +45,10 @@
                     %li= link_to t(:settings), user_settings_path(current_user), class: 'user_settings'
                     %li= button_to t(:sign_out), sign_out_path, method: :delete
 
+                - current_user.main_groups.each do |group|
+                  %li.backendBarItem
+                    = link_to group.token, current_tab_path(group)
+
                 - # role indicator and preview menu
                 -#= render partial: 'layouts/role_preview_switcher'
 
