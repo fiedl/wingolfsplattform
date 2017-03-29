@@ -146,9 +146,6 @@ source 'https://rubygems.org' do
   # Maintenance Mode
   gem 'turnout'
 
-  # Sidekiq Error Web UI
-  gem 'sidekiq-failures'
-
   gem 'newrelic_rpm'
   #gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
 
