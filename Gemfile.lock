@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 71189403ae02032cb91b562fe2cebaf07b5728df
+  revision: 7e24539a5031511b9553625bc685b2e5c507f593
   branch: master
   specs:
     your_platform (1.0.1)
@@ -85,7 +85,6 @@ GIT
       rubyzip (>= 1.2.1)
       sass-rails (>= 3.2)
       sidekiq (>= 3.4.2)
-      sidekiq-limit_fetch
       simple_form
       sprockets-rails (~> 2.3)
       sugar-rails
@@ -603,8 +602,6 @@ GEM
       redis-namespace (~> 1.5, >= 1.5.2)
     sidekiq-failures (0.4.5)
       sidekiq (>= 2.16.0)
-    sidekiq-limit_fetch (2.4.2)
-      sidekiq (>= 2.6.5, < 4.0)
     simple_form (3.4.0)
       actionpack (> 4, < 5.1)
       activemodel (> 4, < 5.1)
