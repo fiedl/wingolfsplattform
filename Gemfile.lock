@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 9c5ab8ad745fc93f456b421ffc734c13351f08a6
+  revision: 77bbf4ef350a116e1788fdb5baab4e561fa87b11
   branch: master
   specs:
     your_platform (1.0.1)
@@ -23,7 +23,7 @@ GIT
       bootstrap-sass (= 3.3.3)
       bootstrap_tokenfield_rails
       bundler (>= 1.9.4)
-      cancancan
+      cancancan (~> 1.15.0)
       carrierwave (~> 0.11)
       chartkick
       coffee-rails (>= 4.1.0)
@@ -174,7 +174,7 @@ GEM
     browser (1.1.0)
     builder (3.2.2)
     callsite (0.0.11)
-    cancancan (1.16.0)
+    cancancan (1.15.0)
     capybara (2.10.1)
       addressable
       mime-types (>= 1.16)
@@ -282,7 +282,7 @@ GEM
     flamegraph (0.9.5)
     font-awesome-rails (4.7.0.1)
       railties (>= 3.2, < 5.1)
-    foreman (0.83.0)
+    foreman (0.84.0)
       thor (~> 0.19.1)
     formatador (0.2.5)
     formtastic (3.1.5)
@@ -383,7 +383,7 @@ GEM
     method_source (0.8.2)
     mime-types (2.99.3)
     mimemagic (0.3.2)
-    mini_magick (4.6.1)
+    mini_magick (4.7.0)
     mini_portile2 (2.1.0)
     minitest (5.10.1)
     multi_json (1.12.1)
