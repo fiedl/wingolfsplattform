@@ -722,6 +722,7 @@ DEPENDENCIES
   meta_request!
   mysql2!
   newrelic_rpm!
+  nokogiri (>= 1.7.1)!
   parallel_tests!
   poltergeist!
   pry!

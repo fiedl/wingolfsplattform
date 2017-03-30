@@ -162,6 +162,7 @@ source 'https://rubygems.org' do
 
   # Security Fixes
   gem 'rubyzip', '>= 1.2.1'  # CVE-2017-5946
+  gem 'nokogiri', '>= 1.7.1'  #  USN-3235-1
 end
 
 source 'https://rails-assets.org'
