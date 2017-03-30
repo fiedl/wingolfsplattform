@@ -15,7 +15,7 @@
 
       %link{rel: 'search', href: opensearch_path, title: "Wingolfsplattform-Suche", type: 'application/opensearchdescription+xml'}
 
-      = javascript_include_tag 'application'
+      = javascript_include_tag 'application', data: {turbolinks_eval: false}
       = gmaps4rails_api_script_tags
       = csrf_meta_tags
       = yield :head
