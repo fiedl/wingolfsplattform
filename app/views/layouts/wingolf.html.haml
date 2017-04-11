@@ -20,6 +20,7 @@
       = csrf_meta_tags
       = yield :head
   = body_tag do
+    = render partial: 'shared/current_masquerade'
     - if user_account_signed_in?
       - if can? :use, :site_links
         #site-links
