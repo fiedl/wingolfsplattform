@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 22f85dff008ebd95d96ad432852e31c3e3181f40
+  revision: 5080e9076db0dce16d497e202eae78ad153db624
   branch: master
   specs:
     your_platform (1.0.1)
@@ -85,7 +85,7 @@ GIT
       rest-client (>= 1.8)
       rubyzip (>= 1.2.1)
       sass-rails (>= 3.2)
-      sidekiq (>= 3.4.2)
+      sidekiq (>= 3.5.1)
       simple_form
       sprockets-rails (~> 2.3)
       sugar-rails
