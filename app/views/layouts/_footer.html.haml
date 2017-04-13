@@ -31,6 +31,8 @@
                 %a(href="http://www.mumble.com/mumble-download.php") Client herunterladen
               %li
                 %a.btn.btn-default(href="mumble://wingolfsplattform.org") Mit Konferenz verbinden
+      %li.discourse
+        = link_to "Discourse", "https://discourse.wingolfsplattform.org"
       %li
         = link_to t(:imprint), Page.find_by_flag(:imprint)
       - if current_user

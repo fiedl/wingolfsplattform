@@ -253,6 +253,9 @@ module AbilityDefinitions
       (group.members.include?(user) || group.memberships.at_time(5.minutes.ago).map(&:user_id).include?(user.id)) &&
         group.has_flag?(:admins_parent) && group.scope.kind_of?(Aktivitas)
     end
+
+    # Globale Site-Link-Leiste
+    can :use, :site_links
   end
 
   # ===============================================================================================
@@ -340,8 +343,6 @@ module AbilityDefinitions
 
   def rights_for_developers
     super
-
-    can :use, :site_links
   end
 
 end

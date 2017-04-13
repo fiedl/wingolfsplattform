@@ -77,6 +77,7 @@
             #header_logo
               = link_to( image_tag( 'logo.png' ), root_path )
               = beta_badge_with_link
+            = render partial: 'shared/feature_spotlight'
             #header_help
               = render partial: 'support_requests/help_button'
             #header_search
