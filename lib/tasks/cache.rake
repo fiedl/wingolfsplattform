@@ -1,6 +1,6 @@
 namespace :cache do
 
-  task :requirements do
+  task :requirements => [:environment] do
     require 'importers/models/log'
   end
 
@@ -34,16 +34,16 @@ namespace :cache do
     #
     task :all => [:groups, :wingolfiten]
 
-    task :wingolfiten do
+    task :wingolfiten => [:requirements] do
       Group.alle_wingolfiten.members.each(&:renew_cache_later)
       log.success "Die Caches aller Wingolfiten werden nun im Hintergrund erneuert (Sidekiq)."
     end
-    task :groups do
+    task :groups => [:requirements] do
       Group.all.each(&:renew_cache_later)
       log.success "Die Caches aller Gruppen werden nun im Hintergrund erneuert (Sidekiq)."
     end
 
-    task :corporations do
+    task :corporations => [:requirements] do
       Corporation.all.each(&:renew_cache_later)
       log.success "Die Caches aller Korporationen werden nun im Hintergrund erneuert (Sidekiq.)"
     end
