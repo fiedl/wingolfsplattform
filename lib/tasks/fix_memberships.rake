@@ -10,10 +10,7 @@ namespace :fix do
 
     task :all => [:environment, :print_info] do
       log.section "Fixing indirect membership validity ranges"
-      Membership.with_past.indirect.where(ancestor_type: "Group", descendant_type: "User").order('id desc').all.each do |membership|
-        membership.recalculate_validity_range_from_direct_memberships
-        print ".".green if membership.save
-      end
+      DagLink.recalculate_indirect_validity_ranges
       log.success "\nFertig."
     end
 

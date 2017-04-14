@@ -6,7 +6,7 @@ namespace :cache do
 
   task :print_info => [:requirements] do
     log.head "Cache"
-    log.info "Dieser Task erneuert abgelaufene Caches."
+    log.info "Dieser Task erneuert Caches."
     log.info ""
   end
 
@@ -18,6 +18,17 @@ namespace :cache do
     :pages,
     :wbl_exports
   ]
+
+  namespace :renew_later do
+    task :wingolfiten do
+      Group.alle_wingolfiten.members.each(&:renew_cache_later)
+      log.success "Die Caches aller Wingolfiten werden nun im Hintergrund erneuert (Sidekiq)."
+    end
+    task :groups do
+      Group.all.each(&:renew_cache_later)
+      log.success "Die Caches aller Gruppen werden nun im Hintergrund erneuert (Sidekiq)."
+    end
+  end
 
   # Call this with time parameter like this:
   #

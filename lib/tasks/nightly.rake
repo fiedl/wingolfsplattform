@@ -3,30 +3,36 @@ namespace :nightly do
 
   # This task is run by a cron job every night.
   #
-  task :all => [
-    :print_info,
-    'fix:bvs',
-    'issues:all',
-    :memberships,
-    :cache,
-    :print_info_finish
-  ]
-
-  task :print_info => [:environment] do
+  task :all => [:environment] do
     log.head "Nächtliche Aufgaben: #{I18n.localize(Time.zone.now)}"
-  end
-  task :print_info_finish => [:environment] do
-    log.head "Nächtliche Aufgaben"
-    log.success "Abgeschlossen: #{I18n.localize(Time.zone.now)}"
-  end
-  task :cache => ['cache:all']
 
-  task :memberships => [:environment] do
-    log.section "Mitgliedschaften"
-    log.info "Jeden Donnerstag werden die indirekten Benutzergruppenmitgliedschaften gewartet, d.h. die validity ranges neu berechnet."
-    if Time.zone.now.thursday?
+    if Time.zone.now.monday?
+      log.info "Montag: BV-Mitgliedschaften reparieren"
+      Rake::Task["fix:bvs"].invoke
+    end
+
+    if Time.zone.now.tuesday?
+      log.info "Dienstag: Gruppen-Mitgliedschaften reparieren"
       Rake::Task["fix:memberships"].invoke
     end
+
+    if Time.zone.now.wednesday?
+      log.info "Mittwoch: Auf Verwaltungsprobleme scannen"
+      Rake::Task["issues:all"].invoke
+    end
+
+    if Time.zone.now.thursday?
+      log.info "Donnerstag: Wingolfiten-Caches erneuern (Sidekiq)"
+      Rake::Task["cache:renew_later:wingolfiten"].invoke
+    end
+
+    if Time.zone.now.friday?
+      log.info "Freitag: Gruppen-Caches erneuern (Sidekiq)"
+      Rake::Task["cache:renew_later:groups"].invoke
+    end
+
+    log.head "Nächtliche Aufgaben"
+    log.success "Abgeschlossen: #{I18n.localize(Time.zone.now)}"
   end
 
 end
