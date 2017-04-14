@@ -12,4 +12,6 @@ class Groups::PhvsParent < Groups::GroupOfGroups
     end
     rows
   end
+
+  cache :child_groups_table_rows
 end
