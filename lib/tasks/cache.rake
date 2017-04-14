@@ -20,6 +20,20 @@ namespace :cache do
   ]
 
   namespace :renew_later do
+
+    # Die Tasks werden in umgekehrter Reihenfolge abgearbeitet: Was zuletzt aufgerufen wird,
+    # wird zuerst erledigt. Das hat den Vorteil, dass der spätere Aufruf einen späteren Zeitstempel
+    # hat: Wenn ein anderer Aufruf den gleichen Wert berechnen würde, aber zu einem früheren
+    # Zeitstempel, dann wird er einfach übersprungen, weil bereits ein neuerer Wert vorliegt.
+    #
+    # Die Gruppen-Caches greifen auf die Caches der Wingolfiten zurück. Deswegen wäre es prima,
+    # wenn die Wingolfiten-Caches dann bereits vorliegen, wenn die Gruppen-Caches erzeugt werden.
+    # Da die zuletzt eingereihten Aufgaben zuerst ausgeführt werden, müssen die Caches, die zuerst
+    # berechnet werden sollen, zuletzt eingereiht werden. Also müssen zuerst die Gruppen,
+    # dann die Wingolfiten eingereiht werden.
+    #
+    task :all => [:groups, :wingolfiten]
+
     task :wingolfiten do
       Group.alle_wingolfiten.members.each(&:renew_cache_later)
       log.success "Die Caches aller Wingolfiten werden nun im Hintergrund erneuert (Sidekiq)."
@@ -27,6 +41,11 @@ namespace :cache do
     task :groups do
       Group.all.each(&:renew_cache_later)
       log.success "Die Caches aller Gruppen werden nun im Hintergrund erneuert (Sidekiq)."
+    end
+
+    task :corporations do
+      Corporation.all.each(&:renew_cache_later)
+      log.success "Die Caches aller Korporationen werden nun im Hintergrund erneuert (Sidekiq.)"
     end
   end
 
