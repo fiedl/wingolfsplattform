@@ -1,0 +1,23 @@
+- @hide_vertical_nav = true
+
+%h1.group_of_groups= @group.name
+%div
+  %table.group_of_groups.datatable
+    %thead
+      %tr
+        %th= t :token
+        %th= t :group
+        %th= t :members
+        %th Erstbandträger
+        - @group.important_officer_keys.each do |key|
+          %th= t key
+    %tbody
+      - @group.child_groups_table_rows.each do |row|
+        - child_group = Group.find row[:child_group_id]
+        %tr
+          %td= link_to child_group.token, child_group
+          %td= link_to child_group.extensive_name, child_group
+          %td= row[:members_count]
+          %td= row[:erstbandtraeger_count]
+          - @group.important_officer_keys.each do |key|
+            %td= user_links(User.find(row["#{key}_ids"]))
