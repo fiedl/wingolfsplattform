@@ -11,7 +11,7 @@ class Philisterschaft < Group
   end
 
   def find_or_create_erstbandphilister_parent
-    child_groups.where(name: "Erstbandphilister", type: "Groups::Erstbandtraeger").first_or_create
+    child_groups.where(name: "Erstbandphilister", type: "Groups::Erstbandtraeger").first_or_create.becomes(Groups::Erstbandtraeger)
   end
 
 end

@@ -20,16 +20,16 @@ feature 'Change Password', :js => true do
 
     describe "and clicking #{I18n.t(:change_password)}" do
       background do
-        # 
+        #
         # Currently, we experience an issue with the edge version of turbolinks:
-        # 
+        #
         #     TypeError: 'undefined' is not an object (evaluating 'currentState.url')
         #     TypeError: 'undefined' is not an object (evaluating 'currentState.url')
         #         at http://127.0.0.1:61891/assets/application.js:64080
         #         at http://127.0.0.1:61891/assets/application.js:63963
         #         at http://127.0.0.1:61891/assets/application.js:64566 in Click
         #         at http://127.0.0.1:61891/assets/application.js:64555
-        # 
+        #
         # This does only occur in the specs, not when run in the browser.
         # Threfore, we circumvent turbolinks at this point in this spec.
         #
