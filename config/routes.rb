@@ -6,6 +6,11 @@ Rails.application.routes.draw do
   resources :groups, path: :philisterschaften, as: :philisterschaften
   resources :groups, path: :bvs, as: :bvs
 
+  namespace :groups, path: "" do
+    resources :phvs_parents, controller: 'groups_of_groups'
+    resources :bvs_parent, controller: 'groups_of_groups'
+  end
+
   resources :aktivmeldungen
 
   resources :users do
