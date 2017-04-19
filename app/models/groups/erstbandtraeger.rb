@@ -11,7 +11,7 @@ class Groups::Erstbandtraeger < Group
 
   def member_ids
     parent.members.select do |member|
-      member.first_corporation.id == parent_corporation.id
+      parent_corporation && (member.first_corporation.try(:id) == parent_corporation.id)
     end.map(&:id)
   end
 
