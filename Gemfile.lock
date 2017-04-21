@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 1a85a97af910fd6b0117976a7922449444646341
+  revision: 96f9d6d9450811e491e70938789e4c8ccdbac588
   branch: master
   specs:
     your_platform (1.0.1)
@@ -15,6 +15,7 @@ GIT
       acts-as-dag (>= 2.5.7)
       acts-as-taggable-on (~> 4.0)
       acts_as_tree
+      apipie-rails (~> 0.4.0)
       auto_html (~> 1.6.4)
       autosize-rails
       bcrypt (>= 3.0.1)
@@ -152,6 +153,9 @@ GEM
     addressable (2.5.0)
       public_suffix (~> 2.0, >= 2.0.2)
     ambry (1.0.0)
+    apipie-rails (0.4.0)
+      json
+      rails (>= 4.0)
     arel (6.0.4)
     auto_html (1.6.4)
       redcarpet (~> 3.1)
@@ -485,7 +489,7 @@ GEM
     rails-assets-bootstrap-social (5.1.1)
       rails-assets-bootstrap (~> 3)
       rails-assets-font-awesome (~> 4.7)
-    rails-assets-datatables (1.10.13)
+    rails-assets-datatables (1.10.15)
       rails-assets-jquery (>= 1.7.0)
     rails-assets-font-awesome (4.7.0)
     rails-assets-inline-attachment (2.0.3)
@@ -673,7 +677,7 @@ GEM
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.3)
+    unf_ext (0.0.7.4)
     unicorn (5.1.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
