@@ -14,5 +14,10 @@ namespace :fix do
       log.success "\nFertig."
     end
 
+    task :later => [:environment, :print_info] do
+      log.section "Fixing indirect membership validity ranges"
+      DagLink.recalculate_indirect_validity_ranges_later
+    end
+
   end
 end

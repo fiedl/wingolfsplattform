@@ -13,7 +13,7 @@ namespace :nightly do
 
     if Time.zone.now.tuesday?
       log.info "Dienstag: Gruppen-Mitgliedschaften reparieren"
-      Rake::Task["fix:memberships"].invoke
+      Rake::Task["fix:memberships:later"].invoke
     end
 
     if Time.zone.now.wednesday?
