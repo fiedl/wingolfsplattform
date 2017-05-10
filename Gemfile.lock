@@ -332,8 +332,7 @@ GEM
       guard (~> 2.0)
       guard-compat (~> 1.0)
       spork (>= 0.8.4)
-    haml (5.0.1)
-      temple (>= 0.8.0)
+    haml (4.0.7)
       tilt
     has_secure_token (1.0.0)
       activerecord (>= 3.0)
@@ -641,7 +640,6 @@ GEM
     sugar-rails (1.4.1)
       railties (>= 3.0.0)
     table-formatter (0.4.1)
-    temple (0.8.0)
     term-ansicolor (1.4.0)
       tins (~> 1.0)
     therubyracer (0.12.2)
@@ -730,6 +728,7 @@ DEPENDENCIES
   guard-focus!
   guard-rspec!
   guard-spork!
+  haml (~> 4.0)!
   json!
   launchy!
   letter_opener!
