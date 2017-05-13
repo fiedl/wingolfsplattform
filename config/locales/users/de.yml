@@ -14,6 +14,9 @@ de:
 
   personal_title_max_10_chars:    Persönlicher Titel
 
+  local_postal_mail_subscription: Ich möchte Verbindungspost per Post erhalten
+  for_users_with_local_postal_mail_subscription: für Mitglieder, die ihre Verbindungspost per Post erhalten möchten
+
   activerecord:
     attributes:
       user:
