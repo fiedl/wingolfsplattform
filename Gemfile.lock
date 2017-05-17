@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 6d9118619db97c5f2da75ccb86428ff1acbb6fe1
+  revision: 486cc1777f3dbe455694a2014504563fb92c83c0
   branch: master
   specs:
     your_platform (1.0.1)
@@ -53,7 +53,7 @@ GIT
       jquery-fileupload-rails
       jquery-turbolinks
       judge
-      mail (>= 2.6.6.rc1)
+      mail (~> 2.6.6.rc1)
       mail_form
       merit
       mini_magick
