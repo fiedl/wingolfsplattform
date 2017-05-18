@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170327235551) do
+ActiveRecord::Schema.define(version: 20170517204116) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -22,8 +22,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.text     "parameters",     limit: 65535
     t.integer  "recipient_id",   limit: 4
     t.string   "recipient_type", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   add_index "activities", ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type", using: :btree
@@ -36,8 +36,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.text     "description",    limit: 65535
     t.integer  "parent_id",      limit: 4
     t.string   "parent_type",    limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.string   "content_type",   limit: 255
     t.integer  "file_size",      limit: 4
     t.integer  "author_user_id", limit: 4
@@ -75,8 +75,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.integer  "bookmarkable_id",   limit: 4
     t.string   "bookmarkable_type", limit: 255
     t.integer  "user_id",           limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
   add_index "bookmarks", ["user_id"], name: "bookmarks_user_id_fk", using: :btree
@@ -84,8 +84,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
   create_table "bv_mappings", force: :cascade do |t|
     t.string   "bv_name",    limit: 255
     t.string   "plz",        limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.string   "town",       limit: 255
   end
 
@@ -105,8 +105,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.string   "descendant_type", limit: 255
     t.boolean  "direct"
     t.integer  "count",           limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.datetime "valid_to"
     t.datetime "valid_from"
     t.string   "type",            limit: 255
@@ -120,8 +120,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.text     "description",               limit: 65535
     t.datetime "start_at"
     t.datetime "end_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.string   "location",                  limit: 255
     t.boolean  "publish_on_global_website"
     t.boolean  "publish_on_local_website"
@@ -132,8 +132,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.string   "key",           limit: 255
     t.integer  "flagable_id",   limit: 4
     t.string   "flagable_type", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   add_index "flags", ["flagable_id", "flagable_type", "key"], name: "flagable_key", using: :btree
@@ -148,8 +148,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.string   "country_code", limit: 255
     t.string   "city",         limit: 255
     t.string   "postal_code",  limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.datetime "queried_at"
     t.string   "street",       limit: 255
     t.string   "state",        limit: 255
@@ -159,8 +159,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
 
   create_table "groups", force: :cascade do |t|
     t.string   "name",                       limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
     t.string   "token",                      limit: 255
     t.string   "extensive_name",             limit: 255
     t.string   "internal_token",             limit: 255
@@ -186,8 +186,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.string   "description",         limit: 255
     t.integer  "link_to_object_id",   limit: 4
     t.string   "link_to_object_type", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
   end
 
   add_index "last_seen_activities", ["user_id"], name: "last_seen_activities_user_id_fk", using: :btree
@@ -255,8 +255,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.boolean  "hidden_menu"
     t.integer  "navable_id",        limit: 4
     t.string   "navable_type",      limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.boolean  "hidden_teaser_box"
   end
 
@@ -288,8 +288,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
   create_table "pages", force: :cascade do |t|
     t.string   "title",             limit: 255
     t.text     "content",           limit: 65535
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.string   "redirect_to",       limit: 255
     t.integer  "author_user_id",    limit: 4
     t.string   "type",              limit: 255
@@ -328,8 +328,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.string   "external_author", limit: 255
     t.datetime "sent_at"
     t.boolean  "sticky"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.text     "entire_message",  limit: 65535
     t.string   "message_id",      limit: 255
     t.string   "content_type",    limit: 255
@@ -344,8 +344,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.string   "label",            limit: 255
     t.string   "type",             limit: 255
     t.text     "value",            limit: 65535
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.string   "profileable_type", limit: 255
     t.integer  "parent_id",        limit: 4
   end
@@ -366,8 +366,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.string   "name",       limit: 255
     t.integer  "user1_id",   limit: 4
     t.integer  "user2_id",   limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   add_index "relationships", ["user1_id"], name: "relationships_user1_id_fk", using: :btree
@@ -403,8 +403,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.text     "value",      limit: 65535
     t.integer  "thing_id",   limit: 4
     t.string   "thing_type", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   add_index "settings", ["thing_type", "thing_id", "var"], name: "index_settings_on_thing_type_and_thing_id_and_var", unique: true, using: :btree
@@ -422,8 +422,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.integer  "membership_id",           limit: 4
     t.integer  "promoted_by_workflow_id", limit: 4
     t.integer  "promoted_on_event_id",    limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
   end
 
   create_table "taggings", force: :cascade do |t|
@@ -484,8 +484,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.integer  "number_of_membership_ends",              limit: 4
     t.integer  "number_of_deaths",                       limit: 4
     t.integer  "number_of_events",                       limit: 4
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
+    t.datetime "created_at",                                                        null: false
+    t.datetime "updated_at",                                                        null: false
     t.integer  "anzahl_aktivmeldungen",                  limit: 4
     t.integer  "anzahl_aller_aktiven",                   limit: 4
     t.integer  "anzahl_burschungen",                     limit: 4
@@ -505,6 +505,16 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.string   "type",                                   limit: 255
     t.integer  "anzahl_erstbandtraeger_aktivitas",       limit: 4
     t.integer  "anzahl_erstbandtraeger_philisterschaft", limit: 4
+    t.integer  "number_of_status_changes",               limit: 4
+    t.integer  "number_of_good_events",                  limit: 4
+    t.integer  "number_of_events_with_pictures",         limit: 4
+    t.integer  "number_of_semester_calendars",           limit: 4
+    t.integer  "number_of_semester_calendar_pdfs",       limit: 4
+    t.integer  "number_of_current_officers",             limit: 4
+    t.integer  "number_of_documents",                    limit: 4
+    t.integer  "number_of_good_member_profiles",         limit: 4
+    t.integer  "number_of_current_member_profiles",      limit: 4
+    t.decimal  "score",                                              precision: 10
   end
 
   create_table "terms", force: :cascade do |t|
@@ -515,10 +525,10 @@ ActiveRecord::Schema.define(version: 20170327235551) do
   end
 
   create_table "user_accounts", force: :cascade do |t|
-    t.string   "encrypted_password",     limit: 255, default: "", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
     t.integer  "user_id",                limit: 4
+    t.string   "encrypted_password",     limit: 255, default: "", null: false
     t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -537,8 +547,8 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.string   "alias",               limit: 255
     t.string   "first_name",          limit: 255
     t.string   "last_name",           limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.boolean  "female"
     t.string   "accepted_terms",      limit: 255
     t.datetime "accepted_terms_at"
@@ -555,16 +565,16 @@ ActiveRecord::Schema.define(version: 20170327235551) do
     t.string   "value",              limit: 255
     t.integer  "parameterable_id",   limit: 4
     t.string   "parameterable_type", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   create_table "workflow_kit_steps", force: :cascade do |t|
     t.integer  "sequence_index", limit: 4
     t.integer  "workflow_id",    limit: 4
     t.string   "brick_name",     limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   add_index "workflow_kit_steps", ["workflow_id"], name: "workflow_kit_steps_workflow_id_fk", using: :btree
@@ -572,14 +582,14 @@ ActiveRecord::Schema.define(version: 20170327235551) do
   create_table "workflow_kit_workflows", force: :cascade do |t|
     t.string   "name",        limit: 255
     t.string   "description", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "workflows", force: :cascade do |t|
     t.string   "name",       limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   add_foreign_key "attachments", "users", column: "author_user_id", name: "attachments_author_user_id_fk"

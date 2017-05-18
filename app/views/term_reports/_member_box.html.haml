@@ -23,8 +23,9 @@
       %tr.second_for_member
         - if can? :read, member
           %td.date_of_birth
-            geb.
-            = localize member.date_of_birth.to_date
+            - if member.date_of_birth
+              geb.
+              = localize member.date_of_birth.to_date
         %td.w_nummer
           = member.w_nummer
         - if can? :read, member
