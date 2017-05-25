@@ -1,0 +1,9 @@
+- # Spezielle Startseite während des Wartburgfestes
+
+= render Event.find_by name: "76. Wartburgfest des Wingolfs 2017"
+= render Page.find_by title: "Unterlagen, Anmeldung, Teilnehmerliste zum Wartburgfest 2017"
+
+#social_stream
+  .row.insert_loaded_content_here
+  .row.scroll_to_load
+    = render 'root/scroll_to_load'
