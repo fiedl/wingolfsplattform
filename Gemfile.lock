@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 5933f66870878b606795c8b3a58618fbf498301c
+  revision: 085fa5aafc1cbb74b1cbd41d7ff6cdb491d66a2f
   branch: master
   specs:
     your_platform (1.0.1)
@@ -71,7 +71,6 @@ GIT
       rack-ssl (>= 1.3.4)
       rails (>= 4.2.5.1)
       rails-assets-bootstrap-social
-      rails-assets-datatables (>= 1.10.10)
       rails-assets-inline-attachment
       rails-assets-jquery-ui
       rails-assets-jquery-ujs
@@ -490,8 +489,6 @@ GEM
     rails-assets-bootstrap-social (5.1.1)
       rails-assets-bootstrap (~> 3)
       rails-assets-font-awesome (~> 4.7)
-    rails-assets-datatables (1.10.15)
-      rails-assets-jquery (>= 1.7.0)
     rails-assets-font-awesome (4.7.0)
     rails-assets-inline-attachment (2.0.3)
     rails-assets-jquery (3.2.1)
