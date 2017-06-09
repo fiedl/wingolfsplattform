@@ -30,6 +30,8 @@
         = link_to group_list_export_path(@abonnenten, format: 'xls', list: 'wingolfsblaetter'), class: 'btn btn-default' do
           = excel_icon
           Export der Empfänger-Liste
+        = link_to wbl_abo_address_caches_path, method: :delete, remote: true, class: 'btn btn-default has_tooltip destroy_wbl_abo_address_caches', title: "Adress-Caches löschen, um nach kurzfristigen Änderungen eine aktuelle Liste zu erhalten. Der Export dauert danach ca. 12 Minuten." do
+          = icon :repeat
     %li
       %strong Plausibilitätsprüfung.
       %br

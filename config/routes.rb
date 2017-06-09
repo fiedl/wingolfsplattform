@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
   get :wingolfsblaetter, to: 'wingolfsblaetter#index'
   get :wbl, to: 'wingolfsblaetter#index'
+  resource :wbl_abo_address_caches
 
   get 'issues/wingolfsblaetter', to: 'issues#index', scope: 'wingolfsblaetter', as: 'wingolfsblaetter_issues'
 
