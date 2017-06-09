@@ -20,7 +20,11 @@ env:
   - "RSPEC_RERUN_PATTERN=./spec/models/[s-t]*_spec.rb NO_RENEW_CACHE=true RAILS_ENV=test CI_CATEGORY=models DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=6"
   - "RSPEC_RERUN_PATTERN=./spec/models/[u-z]*_spec.rb NO_RENEW_CACHE=true RAILS_ENV=test CI_CATEGORY=models DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=6"
   - "RSPEC_RERUN_PATTERN=./spec/controllers/*_spec.rb RAILS_ENV=test CI_CATEGORY=controllers DB=mysql COVERALLS_SILENT=true CI=travis RSPEC_RERUN_RETRY_COUNT=6"
-cache: bundler
+cache:
+  bundler: true
+  directories:
+    - node_modules
+  yarn: true
 sudo: false
 addons:
   apt:
@@ -36,12 +40,19 @@ before_install:
   - travis_retry gem install bundler
 install:
   - travis_retry bundle install
+  - bundle install
+  - nvm install node
+  - node -v
+  - npm i -g yarn
+  - yarn
 before_script:
   - cp config/database.travis.yml config/database.yml
   - cp config/secrets.example.yml config/secrets.yml
   - mkdir -p public/uploads
   - mkdir -p tmp/cache
   - bundle exec rake db:create db:migrate
+  - rake your_platform:install:node_modules || echo 'task not found'
+  - bundle exec rake assets:precompile 2>/dev/null
 script:
   - bundle exec rake rspec-rerun:spec
 notifications:
