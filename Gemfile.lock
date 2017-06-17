@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 0fe0040ba23f22e507e06fb7a1c5bbb4bc48e89d
+  revision: 0a6631c1afbf4bbebb4938c5d3056d8ca8b83d7f
   branch: master
   specs:
     your_platform (1.0.1)
@@ -454,6 +454,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-remote (0.1.8)
+      pry (~> 0.9)
+      slop (~> 3.0)
     public_activity (1.4.3)
       actionpack (>= 3.0.0)
       activerecord (>= 3.0)
@@ -739,6 +742,7 @@ DEPENDENCIES
   parallel_tests!
   poltergeist!
   pry!
+  pry-remote!
   rack-timeout!
   rails (~> 4.2.1)!
   redcarpet!

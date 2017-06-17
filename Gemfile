@@ -107,6 +107,7 @@ source 'https://rubygems.org' do
 
   # Pry Console Addon
   gem 'pry', group: :development
+  gem 'pry-remote', group: :development
 
   # Receiving Mails
   gem 'mailman', require: false
