@@ -6,20 +6,20 @@
 #
 # Parameters:
 #
-#     WORKER_ID             1, 2, 3, 4, ...
+#     WORKER_ID             0, 1, 2, 3, 4, ...
 #     NUMBER_OF_WORKERS     10
 #     CI_CATEGORY           features, models, others
 
 #
 # Example workers:
 #
+#     CI_CATEGORY=features WORKER_ID=0 NUMBER_OF_WORKERS=10   bundle exec ruby script/tests
 #     CI_CATEGORY=features WORKER_ID=1 NUMBER_OF_WORKERS=10   bundle exec ruby script/tests
-#     CI_CATEGORY=features WORKER_ID=2 NUMBER_OF_WORKERS=10   bundle exec ruby script/tests
 #     CI_CATEGORY=features ...
+#     CI_CATEGORY=models WORKER_ID=0 NUMBER_OF_WORKERS=10     bundle exec ruby script/tests
 #     CI_CATEGORY=models WORKER_ID=1 NUMBER_OF_WORKERS=10     bundle exec ruby script/tests
-#     CI_CATEGORY=models WORKER_ID=2 NUMBER_OF_WORKERS=10     bundle exec ruby script/tests
 #     CI_CATEGORY=models ...
-#     CI_CATEGORY=others WORKER_ID=1 NUMBER_OF_WORKERS=1      bundle exec ruby script/tests
+#     CI_CATEGORY=others WORKER_ID=0 NUMBER_OF_WORKERS=1      bundle exec ruby script/tests
 
 json_list_of_specs = `rspec --seed 1 --format json --out tmp/specs.json --dry-run`
 
