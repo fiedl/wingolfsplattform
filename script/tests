@@ -21,7 +21,9 @@
 #     CI_CATEGORY=models ...
 #     CI_CATEGORY=others WORKER_ID=0 NUMBER_OF_WORKERS=1      bundle exec ruby script/tests
 
-json_list_of_specs = `rspec --seed 1 --format json --out tmp/specs.json --dry-run`
+rspec_args = ARGV.to_a.join(" ")
+
+json_list_of_specs = `rspec --seed 1 --format json --out tmp/specs.json --dry-run #{rspec_args}`
 
 require 'json'
 data = JSON.parse(File.read("tmp/specs.json"))
@@ -70,7 +72,18 @@ def shell(command)
 end
 
 result = shell "bin/rspec #{specs_to_run_by_this_worker.join(' ')}"
-number_of_failures = result.scan(/examples, ([0-9]*) failures/).last[0].to_i
 
-exit(number_of_failures)
+failed_specs = result.scan(/\nrspec .\/([^\s]*) # /).collect { |match| match[0] }
 
+print "\nRerunning failed specs ...\n\n".blue
+
+finally_failing_specs = []
+failed_specs.each do |spec|
+  result = shell "bin/rspec #{spec}"
+  number_of_failing_specs = result.scan(/example[s]?, ([0-9]*) failure[s]?/).last[0].to_i
+  finally_failing_specs << spec if number_of_failing_specs != 0
+end
+
+print "\nFailing specs: #{finally_failing_specs.join(' ')}\n\n".red
+
+exit(finally_failing_specs.count)
