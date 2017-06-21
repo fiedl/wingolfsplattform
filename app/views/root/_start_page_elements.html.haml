@@ -1,5 +1,7 @@
 .row
   .col-sm-12.col-xs-4
+    = render partial: 'shared/latest_discourse_topics'
+  .col-sm-12.col-xs-4
     = render partial: 'root/latest_members_box', locals: {box_heading: 'Aktivmeldungen', group: Group.alle_aktiven}
   .col-sm-12.col-xs-4
     = render partial: 'root/latest_members_box', locals: {box_heading: 'Philistrationen', group: Group.alle_philister}
