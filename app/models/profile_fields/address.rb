@@ -1,10 +1,7 @@
 require_dependency YourPlatform::Engine.root.join('app/models/profile_fields/address').to_s
 
 module ProfileFields
-
-  # Address Information
-  #
-  class Address
+  module AddressOverrides
 
     # This method returns the Bv associated with the given address.
     #
@@ -19,7 +16,7 @@ module ProfileFields
     # The html output method is overridden here, in order to display the bv as well.
     #
     def display_html
-      text_to_display = self.value
+      text_to_display = self.composed_value
 
       if self.bv
         text_to_display = "
@@ -49,8 +46,11 @@ module ProfileFields
     def wingolfspost?
       self.wingolfspost
     end
+  end
+
+  class Address
+    prepend AddressOverrides
 
     cache :bv_id if use_caching?
   end
-
 end
