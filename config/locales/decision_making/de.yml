@@ -1,0 +1,10 @@
+de:
+  enter_password_to_sign_document: "Gib Dein Passwort ein und klicke danach den Bestätigungsknopf, um das Dokument verbindlich zu unterschreiben."
+  after_signing_the_document_cannot_be_changed: "Nachdem Du das Dokument unterschrieben haben, kann es nicht mehr verändert werden."
+
+  submit_federal_ballot_to_global_officers: Bundesantrag an den Vorort übermitteln
+  ballot_has_been_submitted_to_global_officers: Der Bundesantrag wurde an den Vorort übermittelt, der ihn nach einer Prüfung an die Bundesglieder zur Abstimmung übergeben wird.
+  the_federal_ballot_needs_to_be_submitted_by_an_authorized_officer: Der Bundesantrag kann nur vom Senior der Verbindung an den Vorort übermittelt werden.
+  str_has_submitted_a_new_ballot: "%{str} hat einen neuen Bundesantrag eingereicht."
+  federal_ballot_waiting_for_approval: Warte auf Freigabe durch den Vorort
+  publish_federal_ballot_for_voting: Antrag zur Abstimmung an die Bundesglieder übermitteln
