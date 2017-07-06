@@ -21,7 +21,7 @@ module ProfileFields
       if self.bv
         text_to_display = "
         <p>#{text_to_display}</p>
-        <p class=\"address_is_in_bv\">
+          <p class=\"address_is_in_bv\">
           (#{I18n.translate( :address_is_in_the )} " +
           ActionController::Base.helpers.link_to( self.bv.name,
                                                   Rails.application.routes.url_helpers.group_path( self.bv.becomes( Group ) ) ) +

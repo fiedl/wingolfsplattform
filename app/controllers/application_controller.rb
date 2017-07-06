@@ -1,7 +1,12 @@
 # This extends the your_platform ApplicationController
 require_dependency YourPlatform::Engine.root.join('app/controllers/application_controller').to_s
 
+module ApplicationControllerOverrides
+
+end
+
 class ApplicationController
+  prepend ApplicationControllerOverrides
 
   before_action :new_relic_params
   before_action :collect_data_for_exception_notifier

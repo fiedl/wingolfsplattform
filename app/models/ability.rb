@@ -121,13 +121,6 @@ module AbilityDefinitions
         (workflow.admins_of_ancestors.include?(user))
       end
 
-      can :manage, Page do |page|
-        page.admins_of_self_and_ancestors.include? user
-      end
-      can :manage, Attachment do |attachment|
-        can? :manage, attachment.parent
-      end
-
       can :manage, ProfileField do |profile_field|
         profile_field.profileable.nil? ||  # in order to create profile fields
           (can?(:update, profile_field.profileable) && profile_field.key != "W-Nummer")
@@ -142,6 +135,10 @@ module AbilityDefinitions
       can :create, User do
         user.administrated_aktivitates.count > 0
       end
+
+      # Öffentliche Homepages
+      can :index, :home_pages
+      can :create, Pages::HomePage
 
       # Lokale Administratoren dürfen Semesterprogramme löschen.
       #
@@ -331,6 +328,13 @@ module AbilityDefinitions
     #
     can [:read, :download], Attachment do |attachment|
       attachment.parent_type == "SemesterCalendar"
+    end
+
+    # Jeder Internetbenutzer darf Wingolfshaus-Bilder bzw. Wappen herunterladen,
+    # da diese auf den öffentlichen Homepages eingebunden werden.
+    #
+    can [:read, :download], Attachment do |attachment|
+      Attachment.wingolfshaus.include?(attachment) || Attachment.wappen.include?(attachment)
     end
 
     # Nobody, not even global admins, can send posts to deceased-groups.

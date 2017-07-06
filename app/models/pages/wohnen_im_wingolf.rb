@@ -4,6 +4,10 @@
 #
 class Pages::WohnenImWingolf < Page
 
+  def attachments
+    Attachment.wingolfshaus
+  end
+
   # To save us from managing separate routes and controllers for this
   # subclass, override the model name.
   #

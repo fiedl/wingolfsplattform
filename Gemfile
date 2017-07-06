@@ -94,8 +94,6 @@ source 'https://rubygems.org' do
     gem 'launchy'
     gem 'factory_girl_rails', '>= 4.0.0' # '1.4.0'
     gem 'database_cleaner'
-    gem 'guard-spork'
-    gem 'spork'
     gem 'simplecov', require: false
     gem 'email_spec'
     gem 'timecop'  # time_travel
@@ -103,6 +101,10 @@ source 'https://rubygems.org' do
     gem "codeclimate-test-reporter", require: nil
     gem 'poltergeist'
     gem 'selenium-webdriver'
+  end
+  group :development do
+    gem 'spring'
+    gem 'spring-commands-rspec'
   end
 
   # Pry Console Addon
@@ -124,8 +126,6 @@ source 'https://rubygems.org' do
   # readline (for rails console)
   # see https://github.com/luislavena/rb-readline/issues/84#issuecomment-17335885
   #gem 'rb-readline', '~> 0.5.0', group: :development, require: 'readline'
-
-  gem 'gmaps4rails', '~> 2.0.1', git: 'https://github.com/fiedl/Google-Maps-for-Rails.git'
 
   # To customly set timeout time we need rack-timeout
   gem 'rack-timeout'

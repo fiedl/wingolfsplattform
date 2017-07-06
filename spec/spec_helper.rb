@@ -13,10 +13,10 @@
 #                   background during development.
 #                   https://github.com/guard/guard
 #
-# Spork             Keeping some less frequently changing components in memory
+# Spring             Keeping some less frequently changing components in memory
 #                   in order to increase test performance, i.e. minimize the time
 #                   Guard needs to restart the tests.
-#                   https://github.com/sporkrb/spork
+#                   https://github.com/rails/spring
 #
 # Capybara          Simulating user interaction in order to write high level
 #                   integration tests.
@@ -49,10 +49,6 @@
 # This uses simplecov, coveralls and codeclimate.
 # See https://gist.github.com/jaryl/6554599
 #
-# Resource on using SimpleCov together with Spork:
-# https://github.com/colszowka/simplecov/issues/42#issuecomment-4440284
-#
-require "codeclimate-test-reporter"
 require 'simplecov' unless ENV['DRB']
 require 'coveralls'
 formatters = [SimpleCov::Formatter::HTMLFormatter]
@@ -60,347 +56,353 @@ formatters << Coveralls::SimpleCov::Formatter if ENV['COVERALLS_REPO_TOKEN']
 formatters << CodeClimate::TestReporter::Formatter if ENV['CODECLIMATE_REPO_TOKEN']
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter::new(formatters)
 SimpleCov.start 'rails'
-CodeClimate::TestReporter.start
 # Coveralls.wear! 'rails'
 
+if ENV['CI'] == 'travis'
+  require "codeclimate-test-reporter"
+  CodeClimate::TestReporter.start
+end
 
 # Required Basic Libraries
 # ==========================================================================================
 
-# These libraries are required to load Spork. Since every test requires, i.e. loads
-# this spec helper, they are loaded separately for each test run.
-#
-# In order to increase performance, loading of the other libraries takes place within
-# the `Spork.prefork` block. This causes the libraries being cached in memory rather
-# than being loaded for each run separately.
-#
 require 'rubygems'
-require 'spork'
-# uncomment the following line to use spork with the debugger
-# require 'spork/ext/ruby-debug'
 
 
-# Requirements and Configurations Cached by Spork
-# ==========================================================================================
+# Required Application Environment
+# ----------------------------------------------------------------------------------------
+ENV['RAILS_ENV'] ||= 'test'
+require File.expand_path('../../config/environment', __FILE__)
 
-# These requirements and configurations are loaded by Spork. Spork will cache them
-# in memory.
+# Stop if the database is not migrated.
+ActiveRecord::Migration.check_pending!
+
+
+# The original setting whether the renew-cache mechanism should be skipped
+# falling back to the delete-cache mechanism.
 #
-# Remember to restart Spork (kill and restart guard) whenever you need to reload one
-# of the components. If you find yourself to often restarting guard because of this,
-# you should probably move the concerning component into the `Spork.each_run` block.
+# This is default for model specs, since it makes no difference to them and the
+# delete-cache mechanism is faster as caches are only filled when needed instead
+# of eagerly filling every cache.
 #
-Spork.prefork do
+ENV_NO_RENEW_CACHE = ENV['NO_RENEW_CACHE']
+ENV_NO_CACHING = ENV['NO_CACHING']
 
 
-  # Required Application Environment
-  # ----------------------------------------------------------------------------------------
-  ENV['RAILS_ENV'] ||= 'test'
-  require File.expand_path('../../config/environment', __FILE__)
+# Required Libraries
+# ----------------------------------------------------------------------------------------
+
+require 'rspec/rails'
+require 'rspec/autorun'
+require 'nokogiri'
+require 'capybara/poltergeist'
+require 'rspec/expectations'
+require 'sidekiq/testing'
 
 
-  # The original setting whether the renew-cache mechanism should be skipped
-  # falling back to the delete-cache mechanism.
+# Required Support Files (that help you testing)
+# ----------------------------------------------------------------------------------------
+
+# Requires supporting ruby files with custom matchers and macros, etc,
+# in spec/support/ and its subdirectories.
+
+Dir[Rails.root.join('spec/support/**/*.rb')].each {|f| require f}
+Dir[YourPlatform::Engine.root.join('spec/support/**/*.rb')].each {|f| require f}
+
+
+# Factories, Stubs and Mocks
+# ----------------------------------------------------------------------------------------
+
+# Mock objects are simplified objects ("stub") that are used rather than the
+# real, more complex objects, e.g. in order to increase performance.
+#
+# Rather than `rspec-mocks` fixtures, we use FactoryGirl instead.
+#
+FactoryGirl.definition_file_paths = [
+  'spec/factories',
+  YourPlatform::Engine.root.join('spec/factories')
+]
+
+# In order to not hit the geocoding API, we use stub data for geocoding.
+#
+Geocoder.configure( lookup: :test )
+
+
+# Capybara & Poltergeist  Configuration
+# ----------------------------------------------------------------------------------------
+
+unless ENV['SELENIUM']
+  Capybara.register_driver :poltergeist do |app|
+    # The `inspector: true` argument gives you the possibility to stop the execution
+    # of the tests using `page.driver.debug` in your spec code. This will open an
+    # inspector in the browser that allows you to see the current DOM structure and
+    # other information useful for debugging tests.
+    #
+    Capybara::Poltergeist::Driver.new(app, inspector: true, js_errors: (not ENV['NO_JS_ERRORS'].present?))
+  end
+  Capybara.javascript_driver = :poltergeist
+end
+
+# Set the time that Capybara should wait for ajax requests to be finished.
+# The default is 2 seconds.
+#
+# See: https://github.com/jnicklas/capybara#asynchronous-javascript-ajax-and-friends
+#
+Capybara.default_max_wait_time = 15
+
+# Background Jobs:
+# Perform all background jobs immediately.
+#
+Sidekiq::Testing.inline!
+
+
+# Rspec Configuration
+# ----------------------------------------------------------------------------------------
+
+RSpec.configure do |config|
+
+  # Inclusion of helper methods.
+  # ......................................................................................
   #
-  # This is default for model specs, since it makes no difference to them and the
-  # delete-cache mechanism is faster as caches are only filled when needed instead
-  # of eagerly filling every cache.
+  # The methods contained in the modules marked to be included here, will be
+  # available in the spec code, without being prefixed.
   #
-  ENV_NO_RENEW_CACHE = ENV['NO_RENEW_CACHE']
-  ENV_NO_CACHING = ENV['NO_CACHING']
-
-
-  # Stop if the database is not migrated.
+  # For example, including the url_helpers allows to use `url_for(some_object)`
+  # in the specs.
   #
-  ActiveRecord::Migration.check_pending!
+  config.include RSpec::Matchers
+  config.include Rails.application.routes.url_helpers
+  config.include FactoryGirl::Syntax::Methods
+  config.include EmailSpec::Helpers
+  config.include EmailSpec::Matchers
 
-
-  # Required Libraries
-  # ----------------------------------------------------------------------------------------
-
-  require 'rspec/rails'
-  require 'rspec/autorun'
-  require 'nokogiri'
-  require 'capybara/poltergeist'
-  require 'rspec/expectations'
-  require 'sidekiq/testing'
-
-
-  # Required Support Files (that help you testing)
-  # ----------------------------------------------------------------------------------------
-
-  # Requires supporting ruby files with custom matchers and macros, etc,
-  # in spec/support/ and its subdirectories.
-
-  Dir[Rails.root.join('spec/support/**/*.rb')].each {|f| require f}
-  Dir[YourPlatform::Engine.root.join('spec/support/**/*.rb')].each {|f| require f}
-
-
-  # Factories, Stubs and Mocks
-  # ----------------------------------------------------------------------------------------
-
-  # Mock objects are simplified objects ("stub") that are used rather than the
-  # real, more complex objects, e.g. in order to increase performance.
+  # TimeTravel abilities: time_travel 2.seconds
+  # This can be used for caching, validity range, etc.
   #
-  # Rather than `rspec-mocks` fixtures, we use FactoryGirl instead.
+  config.include TimeTravel
+
+  # rspec-rails 3 will no longer automatically infer an example group's
+  # spec type from the file location. You can explicitly opt-in to this
+  # feature using this snippet:
   #
-  FactoryGirl.definition_file_paths = [
-    'spec/factories',
-    YourPlatform::Engine.root.join('spec/factories')
-  ]
+  config.infer_spec_type_from_file_location!
 
-  # In order to not hit the geocoding API, we use stub data for geocoding.
+  # Enables both, the new `expect` and the old `should` syntax.
+  # https://www.relishapp.com/rspec/rspec-expectations/docs/syntax-configuration
   #
-  Geocoder.configure( lookup: :test )
-
-
-  # Capybara & Poltergeist  Configuration
-  # ----------------------------------------------------------------------------------------
-
-  unless ENV['SELENIUM']
-    Capybara.register_driver :poltergeist do |app|
-      # The `inspector: true` argument gives you the possibility to stop the execution
-      # of the tests using `page.driver.debug` in your spec code. This will open an
-      # inspector in the browser that allows you to see the current DOM structure and
-      # other information useful for debugging tests.
-      #
-      Capybara::Poltergeist::Driver.new(app, inspector: true, js_errors: (not ENV['NO_JS_ERRORS'].present?))
-    end
-    Capybara.javascript_driver = :poltergeist
+  config.expect_with :rspec do |c|
+    c.syntax = [:should, :expect]
   end
 
-
-  # Set the time that Capybara should wait for ajax requests to be finished.
-  # The default is 2 seconds.
+  # This introduces the method `wait_for_ajax`, which can be used when the Capybara
+  # matchers do not wait properly for ajax code to be finished.
+  # This is just a sleep command with a time determined by a simple benchmark.
   #
-  # See: https://github.com/jnicklas/capybara#asynchronous-javascript-ajax-and-friends
+  # see spec/support/wait_for_ajax.rb
   #
-  Capybara.default_max_wait_time = 15
+  config.include WaitForAjax
 
-
-  # Background Jobs:
-  # Perform all background jobs immediately.
+  # Also, wait for the cache to invalidate.
+  # This can be done with time_travel.
   #
-  Sidekiq::Testing.inline!
+  config.include WaitForCache
+
+  # This introduces the methods `send_key(field_id, key)` and `press_enter(field_id)`.
+  #
+  config.include PressEnter
+
+  # Auto complete fields
+  #
+  config.include AutoComplete
+
+  # Debug
+  # Call `debug` to enter pry.
+  #
+  config.include Debug
+
+  # Devise test helper for controller tests
+  config.include Devise::Test::ControllerHelpers, :type => :controller
+  config.extend ControllerMacros, :type => :controller
+
+  # Include Capybara helpers:
+  config.include SessionSteps, type: :feature
+  config.include CapybaraHelper, type: :feature
+  config.include WysiwygSpecHelper, type: :feature
+  config.include TabSpecHelper, type: :feature
+
+  # Devise test helper for controller tests
+  config.include Devise::Test::ControllerHelpers, :type => :controller
+  config.extend ControllerMacros, :type => :controller
 
 
-  # Rspec Configuration
-  # ----------------------------------------------------------------------------------------
+  # Database Wiping Policy
+  # ......................................................................................
 
-  RSpec.configure do |config|
+  # For each separate test, the test database is wiped. There are several ways
+  # to acomplish this. But, in high level integration tests, especially when
+  # using AJAX requests, there may be complications:
+  #   a) Several components are hitting the database: The test code as well as
+  #        the simulated browser through Capybara.
+  #   b) There may be cases when asynchronous requests hit the database
+  #        after passing on to the next test, when the database is wiped again
+  #        already. Beware of these cases, which really produce strange errors.
+  #
+  # Some resources on this topic:
+  # * http://stackoverflow.com/questions/8178120/
+  # * http://stackoverflow.com/questions/10692161/
+  # * http://p373.net/2012/08/07/capybara-ajax-requirejs-and-how-to-pull-your-hair-out-in-8-easy-hours/
 
-    # rspec-rails 3 will no longer automatically infer an example group's
-    # spec type from the file location. You can explicitly opt-in to this
-    # feature using this snippet:
+  config.use_transactional_fixtures = false
+
+  config.before(:each) do
+
+    # Do not use the renew_cache mechanism but fall back to delete_cache
+    # in the model layer. This means that caches are created on the fly
+    # when needed and not eagerly, which is faster.
     #
-    config.infer_spec_type_from_file_location!
-
-    # Enables both, the new `expect` and the old `should` syntax.
-    # https://www.relishapp.com/rspec/rspec-expectations/docs/syntax-configuration
-    #
-    config.expect_with :rspec do |c|
-      c.syntax = [:should, :expect]
-    end
-
-    # Inclusion of helper methods.
-    # ......................................................................................
-    #
-    # The methods contained in the modules marked to be included here, will be
-    # available in the spec code, without being prefixed.
-    #
-    # For example, including the url_helpers allows to use `url_for(some_object)`
-    # in the specs.
-    #
-    config.include RSpec::Matchers
-    config.include Rails.application.routes.url_helpers
-    config.include FactoryGirl::Syntax::Methods
-    config.include EmailSpec::Helpers
-    config.include EmailSpec::Matchers
-
-    # TimeTravel abilities: time_travel 2.seconds
-    # This can be used for caching, validity range, etc.
-    #
-    config.include TimeTravel
-
-    # This introduces the method `wait_for_ajax`, which can be used when the Capybara
-    # matchers do not wait properly for ajax code to be finished.
-    # This is just a sleep command with a time determined by a simple benchmark.
-    #
-    # see spec/support/wait_for_ajax.rb
-    #
-    config.include WaitForAjax
-
-    # Also, wait for the cache to invalidate.
-    # This can be done with time_travel.
-    #
-    config.include WaitForCache
-
-    # This introduces the methods `send_key(field_id, key)` and `press_enter(field_id)`.
-    #
-    config.include PressEnter
-
-    # Auto complete fields
-    #
-    config.include AutoComplete
-
-    # Debug
-    # Call `debug` to enter pry.
-    #
-    config.include Debug
-
-    # Devise test helper for controller tests
-    config.include Devise::Test::ControllerHelpers, :type => :controller
-    config.extend ControllerMacros, :type => :controller
-
-
-    # Database Wiping Policy
-    # ......................................................................................
-
-    # For each separate test, the test database is wiped. There are several ways
-    # to acomplish this. But, in high level integration tests, especially when
-    # using AJAX requests, there may be complications:
-    #   a) Several components are hitting the database: The test code as well as
-    #        the simulated browser through Capybara.
-    #   b) There may be cases when asynchronous requests hit the database
-    #        after passing on to the next test, when the database is wiped again
-    #        already. Beware of these cases, which really produce strange errors.
-    #
-    # Some resources on this topic:
-    # * http://stackoverflow.com/questions/8178120/
-    # * http://stackoverflow.com/questions/10692161/
-    # * http://p373.net/2012/08/07/capybara-ajax-requirejs-and-how-to-pull-your-hair-out-in-8-easy-hours/
-
-    config.use_transactional_fixtures = false
-
-    config.before(:suite) do
-      DatabaseCleaner.clean
-    end
-
-    config.before(:each) do
-
-      # Do not use the renew_cache mechanism but fall back to delete_cache
-      # in the model layer. This means that caches are created on the fly
-      # when needed and not eagerly, which is faster.
-      #
-      if Capybara.current_driver == :rack_test # no integration test
-        unless ENV_NO_RENEW_CACHE
-          ENV['NO_RENEW_CACHE'] = "true"
-        end
-      else # integration test
-        unless ENV_NO_RENEW_CACHE
-          ENV['NO_RENEW_CACHE'] = nil
-        end
+    if Capybara.current_driver == :rack_test # no integration test
+      unless ENV_NO_RENEW_CACHE
+        ENV['NO_RENEW_CACHE'] = "true"
       end
-
-      # This distinction reduces the run time of the test suite by over a factor of 4:
-      # From 40 to a couple of minutes, since the truncation method, which is slower,
-      # is only used when needed by Capybara, i.e. when running integration tests,
-      # possibly with asynchronous requests.
-      #
-      if Capybara.current_driver == :rack_test
-        DatabaseCleaner.strategy = :transaction
-      else
-        DatabaseCleaner.strategy = :truncation
+    else # integration test
+      unless ENV_NO_RENEW_CACHE
+        ENV['NO_RENEW_CACHE'] = nil
       end
-      DatabaseCleaner.start
-
-      # Clear the cache.
-      Rails.cache.clear
-
-      # create the basic objects that are needed for all specs
-      Group.find_or_create_everyone_group
-      Group.find_or_create_corporations_parent_group
-      Group.find_or_create_bvs_parent_group
-      Page.create_root
-      Page.create_intranet_root
-      Workflow.find_or_create_mark_as_deceased_workflow
-
-      # Emulate Application Settings
-      Setting.support_email = "support@example.com"
-
     end
-
-    config.after(:each) do
-      DatabaseCleaner.clean
-    end
-
-    config.after(:suite) do
-      DatabaseCleaner.clean
-    end
-
-
-    # Spec Filtering: Focus on Current Specs
-    # ......................................................................................
-
-    # By including the `focus: true` in `describe` or `it` calls in the spec code,
-    # cause the test suite to focus on these blocks, i.e. run only them. This can be
-    # useful if are working on a tricky one.
-    #
-    # BUT REMEMBER to reove the `focus: true` before comitting the spec code.
-    # Otherwise you prevent other tests from being run regularly.
-    #
-    # config.filter_run :focus => true
-    #
-    # EDIT: The filter is not set here, but using guar (i.e. in the Guardfile).
-    # Thus, when using `bundle exec rake`, always all specs run,
-    # which is important on the server.
-    #
-    config.run_all_when_everything_filtered = true
-
-
-    # Further Rspec Configuration
-    # ......................................................................................
-
-    # If true, the base class of anonymous controllers will be inferred
-    # automatically. This will be the default behavior in future versions of
-    # rspec-rails.
-    #
-    config.infer_base_class_for_anonymous_controllers = false
-
-    config.treat_symbols_as_metadata_keys_with_true_values = true
 
   end
 
+  config.before(:suite) do
+    DatabaseCleaner.clean
+  end
 
-  # Internationalization Settings
-  # ----------------------------------------------------------------------------------------
+  config.before(:each) do
 
-  # Set the default locale.
-  # Notice: This has to be set to the same value as in config/application.rb.
-  # Because, in tests withs :js => true, the setting from config/application.rb is used.
+    # This distinction reduces the run time of the test suite by over a factor of 4:
+    # From 40 to a couple of minutes, since the truncation method, which is slower,
+    # is only used when needed by Capybara, i.e. when running integration tests,
+    # possibly with asynchronous requests.
+    #
+    if Capybara.current_driver == :rack_test
+      DatabaseCleaner.strategy = :transaction
+    else
+      DatabaseCleaner.strategy = :truncation
+    end
+    DatabaseCleaner.start
+
+    # Clear the cache.
+    Rails.cache.clear unless ENV['NO_CACHING']
+
+    # # Clear cookies
+    # # https://makandracards.com/makandra/16117
+    # browser = Capybara.current_session.driver.browser
+    # if browser.respond_to?(:clear_cookies)
+    #   # Rack::MockSession
+    #   browser.clear_cookies
+    # elsif browser.respond_to?(:manage) and browser.manage.respond_to?(:delete_all_cookies)
+    #   # Selenium::WebDriver
+    #   browser.manage.delete_all_cookies
+    # else
+    #   raise "Don't know how to clear cookies. Weird driver?"
+    # end
+
+    # create the basic objects that are needed for all specs
+    Group.find_or_create_everyone_group
+    Group.find_or_create_corporations_parent_group
+    Page.create_root
+    Page.create_intranet_root
+    Workflow.find_or_create_mark_as_deceased_workflow
+
+
+    # Memory management
+    # ......................................................................................
+
+    # In order to free phantomjs memory, reset it after each spec.
+    # This tries to avoid "failed to reach server".
+    # https://github.com/fiedl/your_platform/pull/19#issuecomment-283803871
+    #
+    config.after(:each) { page.driver.reset! if defined?(page) && page.respond_to?(:driver) && page.driver.respond_to?(:reset!) }
+
+    # Emulate Application Settings
+    Setting.support_email = "support@example.com"
+
+    # There are some actions FactoryGirl needs to perform on every run.
+    #
+    FactoryGirl.reload
+    # Dir[Rails.root.join('../../spec/support/**/*.rb')].each {|f| require f}
+
+  end
+
+  config.after(:each, js: true) do
+    # https://github.com/jnicklas/capybara/issues/1089
+    #page.execute_script "window.stop()"
+    give_it_some_time_to_finish_the_test_before_wiping_the_database
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+
+  config.after(:suite) do
+    DatabaseCleaner.clean
+  end
+
+  # Spec Filtering: Focus on Current Specs
+  # ......................................................................................
+
+  # By including the `focus: true` in `describe` or `it` calls in the spec code,
+  # cause the test suite to focus on these blocks, i.e. run only them. This can be
+  # useful if are working on a tricky one.
   #
-  I18n.default_locale = :de
-  I18n.locale = :de
+  # BUT REMEMBER to reove the `focus: true` before comitting the spec code.
+  # Otherwise you prevent other tests from being run regularly.
+  #
+  # config.filter_run :focus => true
+  #
+  # EDIT: The filter is not set here, but using guar (i.e. in the Guardfile).
+  # Thus, when using `bundle exec rake`, always all specs run,
+  # which is important on the server.
+  #
+  config.run_all_when_everything_filtered = true
 
 
-  # Request Host
-  # ----------------------------------------------------------------------------------------
+  # Further Rspec Configuration
+  # ......................................................................................
 
-  # Override the request.host to be http://example.com rather than the default
-  # http://www.example.com. Otherwise, each spec would first trigger the non-www redirect
-  # in the your_platform application controller.
+  # If true, the base class of anonymous controllers will be inferred
+  # automatically. This will be the default behavior in future versions of
+  # rspec-rails.
   #
-  # http://stackoverflow.com/questions/6536503
-  #
-  # Edit: Does not work for all specs.
-  # For the moment, I've just deactivated the www redirect in the test env. --Fiedl
-  #
-  # Capybara.app_host = "http://localhost"
+  config.infer_base_class_for_anonymous_controllers = false
+
+  config.treat_symbols_as_metadata_keys_with_true_values = true
 
 end
 
 
-# Requirements and Configurations NOT Cached by Spork
-# ==========================================================================================
+# Internationalization Settings
+# ----------------------------------------------------------------------------------------
 
-# These requirements and configurations are loaded on each run of the test suite
-# without being cached by Spork.
+# Set the default locale.
+# Notice: This has to be set to the same value as in config/application.rb.
+# Because, in tests withs :js => true, the setting from config/application.rb is used.
 #
-Spork.each_run do
+I18n.default_locale = :de
+I18n.locale = :de
 
-  # There are some actions FactoryGirl needs to perform on every run.
-  #
-  FactoryGirl.reload
-  Dir[Rails.root.join('spec/support/**/*.rb')].each {|f| require f}
 
-end
+# Request Host
+# ----------------------------------------------------------------------------------------
+
+# Override the request.host to be http://example.com rather than the default
+# http://www.example.com. Otherwise, each spec would first trigger the non-www redirect
+# in the your_platform application controller.
+#
+# http://stackoverflow.com/questions/6536503
+#
+# Edit: Does not work for all specs.
+# For the moment, I've just deactivated the www redirect in the test env. --Fiedl
+#
+# Capybara.app_host = "http://localhost"
+
+

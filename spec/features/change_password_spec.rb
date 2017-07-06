@@ -11,6 +11,7 @@ feature 'Change Password', :js => true do
       @current_password = @user.account.password
       login(@user)
       visit user_path(@user)
+      click_tab :more_info_tab
       within('.box.section.access') do
         click_on I18n.t(:edit)
       end
@@ -124,6 +125,7 @@ feature 'Change Password', :js => true do
       @user = create(:user_with_account)
       login(:user)
       visit user_path(@user)
+      click_tab :more_info_tab
     end
 
     it { should_not have_link(I18n.t(:change_password))}
@@ -134,6 +136,7 @@ feature 'Change Password', :js => true do
       @user = create(:user_with_account)
       login(:admin)
       visit user_path(@user)
+      click_tab :more_info_tab
     end
 
     it { should_not have_link(I18n.t(:change_password))}

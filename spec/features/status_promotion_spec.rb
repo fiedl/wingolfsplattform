@@ -41,6 +41,7 @@ feature 'Status Promotion' do
     #
     wait_until(timeout: 120.seconds) { @user_to_promote.reload.ancestor_groups(true).include? @corporation.status_groups.second }
 
+    click_tab :corporate_info_tab
     within("#corporate_vita") { page.should have_text @corporation.status_groups.second.name.singularize }
 
     @user_to_promote.should be_member_of @corporation.status_groups.second

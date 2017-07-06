@@ -15,10 +15,12 @@
 
       %link{rel: 'search', href: opensearch_path, title: "Wingolfsplattform-Suche", type: 'application/opensearchdescription+xml'}
 
+      %meta{name: 'viewport', content: 'width=device-width, initial-scale=1'}
       = javascript_include_tag 'application', data: {turbolinks_eval: false}
-      = gmaps4rails_api_script_tags
+      = google_maps_api_script_tag
       = csrf_meta_tags
       = yield :head
+
   = body_tag do
     = render partial: 'shared/current_masquerade'
     - if user_account_signed_in?
@@ -46,7 +48,7 @@
                     %li= link_to t(:change_password), change_password_path
                     %li= link_to t(:settings), user_settings_path(current_user), class: 'user_settings'
                     %li= button_to t(:sign_out), sign_out_path, method: :delete
-                %li.backendBarItem
+                %li.backendBarItem.hidden-xs.hidden-sm
                   = link_to t(:my_profile), current_user, :class => 'my_profile'
                 %li.backendBarItem.dropdown
                   - Rack::MiniProfiler.step("my groups") do
@@ -57,39 +59,25 @@
                       = render partial: 'users/groups', object: current_user, as: :user
 
                 - # role indicator and preview menu
-                = render partial: 'layouts/role_preview_switcher'
+                .hidden-xs= render partial: 'layouts/role_preview_switcher'
 
-                = render partial: 'notifications/notifications_dropdown'
+                .hidden-xs= render partial: 'notifications/notifications_dropdown'
 
                 - # %li.backendBarItem.dropdown
                 - #   = link_to t(:bookmarks), my_bookmarks_path
                 - #   %ul.dropdown-menu.my-favorites
                 - #     = bookmarked_objects_lis( current_user )
-                %li.last.backendBarItem
+
+                %li.last.backendBarItem.hidden-xs.hidden-sm
                   = button_to t(:sign_out), sign_out_path, method: :delete, id: 'sign_out'
             .clear
     - Rack::MiniProfiler.step("#header-bar") do
-      #header-bar
-        #headerBg.hidden-print
-          #header
-            #header_claim
-              = image_tag( 'claim.png' )
-            #header_logo
-              = link_to( image_tag( 'logo.png' ), root_path )
-              = beta_badge_with_link
-            = render partial: 'shared/feature_spotlight'
-            #header_help
-              = render partial: 'support_requests/help_button'
-            #header_search
-              = render partial: 'shared/search_box'
-            %span#category_indicator
-              = render partial: 'layouts/horizontal_nav'
-        #print-logo.visible-print
-          .right= image_tag('logo.png')
+      .row#header-bar-wrapper
+        = render partial: 'layouts/header_bar'
     #contentBgLayer1
       #contentBgLayer2
         #contentBgLayer3
-          #content_wrapper
+          #content_wrapper.container-fluid
             #toolbar
               - Rack::MiniProfiler.step('toolbar') do
                 - # %span#star_tool
@@ -98,7 +86,8 @@
                 %span#access_indicator
                   = access_indicator if current_user
             #content
-              = render partial: 'layouts/multi_column_content_area'
+              .row
+                = render partial: 'layouts/multi_column_content_area'
               .clear
 
     .bottom_page_footer.hidden-print= render partial: 'layouts/footer' unless @hide_footer
