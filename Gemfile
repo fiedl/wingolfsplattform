@@ -117,9 +117,6 @@ source 'https://rubygems.org' do
   # To customly set timeout time we need rack-timeout
   gem 'rack-timeout'
 
-  # Metrics
-  gem 'browser', '1.1.0'
-
   # Profiling
   gem 'flamegraph'
   gem 'stackprof'
