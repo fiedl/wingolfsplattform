@@ -13,11 +13,11 @@ class ApplicationController
 
   before_action :prepend_wingolf_layout_view_path
 
-  protected
-
   def permitted_layouts
     super + ['wingolf', 'wingolf-2017']
   end
+
+  protected
 
   def default_layout
     if Rails.env.test?
