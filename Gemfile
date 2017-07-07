@@ -65,7 +65,6 @@ source 'https://rubygems.org' do
   # Security Tools
   group :development, :test do
     gem 'brakeman', '>= 2.3.1'
-    gem 'guard-brakeman', '>= 0.8.1'
   end
 
   # Documentation Tools
@@ -76,17 +75,12 @@ source 'https://rubygems.org' do
 
   # RSpec, see: http://ruby.railstutorial.org/chapters/static-pages#sec:first_tests
   group :test, :development do
-    gem 'guard', '~> 2.2.5'
-    gem 'guard-focus'
     gem 'rspec-rails'
     gem 'rspec-legacy_formatters'
     gem 'rspec-instafail'
     gem 'rspec-its'
-    gem 'guard-rspec'
-    gem 'rspec-rerun'
     gem 'parallel_tests'
   #  gem 'rspec-mocks'
-  #  gem 'listen'
   #  gem 'rb-inotify', '0.8.8' if RUBY_PLATFORM.downcase.include?("linux")
   end
   group :test do
@@ -145,8 +139,6 @@ source 'https://rubygems.org' do
   gem 'exception_notification'
 
   #gem 'bootstrap', git: 'https://github.com/twbs/bootstrap-rubygem'
-
-  gem 'sidekiq', '~> 3.5.1'
 
   # Temporary fixes
   gem 'gemoji', '~> 2.1.0'
