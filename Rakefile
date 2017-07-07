@@ -12,7 +12,7 @@ Wingolfsplattform::Application.load_tasks
 # https://github.com/rspec/rspec-rails/issues/936#issuecomment-36129887
 #
 task 'test:prepare' do
-  p "test:prepare: THIS TASK DOESN'T DO ANYTHING ANYMORE."
+  # This task does not do anything.
 end
 
 task :tests do
