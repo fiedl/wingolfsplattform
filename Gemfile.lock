@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 8b24f4ae160515a62f64048db5e98990467d3d67
+  revision: 831e7dd239b5dcf2b8cbfe58c316f7ad30c106ef
   branch: sf/wingolf-org-with-caching
   specs:
     your_platform (1.0.1)

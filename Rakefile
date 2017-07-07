@@ -3,8 +3,6 @@
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
 require File.expand_path('../config/application', __FILE__)
-require 'rspec/core/rake_task'
-require 'rspec-rerun/tasks'
 
 # This is needed for `rake db:migrate` et cetera:
 #
@@ -17,19 +15,12 @@ task 'test:prepare' do
   p "test:prepare: THIS TASK DOESN'T DO ANYTHING ANYMORE."
 end
 
-pattern = "{./spec/**/*_spec.rb,./vendor/engines/**/spec/**/*_spec.rb}"
+task :tests do
+  sh "rspec spec/models spec/features"
+end
 
-ENV['RSPEC_RERUN_RETRY_COUNT'] ||= '3'
-ENV['RSPEC_RERUN_PATTERN'] ||= pattern
-
-task default: 'rspec-rerun:spec'
-
-# task :default => :spec
-#
-# Rake::Task[ :spec ].clear
-# RSpec::Core::RakeTask.new( :spec ) do |t|
-#   t.pattern = pattern
-# end
+task test: :tests
+task default: :tests
 
 # https://github.com/github/gemoji
 # run `rake emoji` to copy emoji files to `public/emoji`
