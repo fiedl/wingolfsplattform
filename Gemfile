@@ -109,11 +109,6 @@ source 'https://rubygems.org' do
   gem 'pry', group: :development
   gem 'pry-remote', group: :development
 
-  # Receiving Mails
-  gem 'mailman', require: false
-  # gem 'rb-inotify', '~> 0.9', group: :production
-    # https://github.com/fiedl/wingolfsplattform/commit/2dafbda71af2bed2be46c79b558cbff8548b0df2
-    # Removed rb-inotify due to asset compilation issues after updating to rails 3.2.21.
 
   # View Helpers
   # gem 'rails-gallery', git: 'https://github.com/kristianmandrup/rails-gallery'
