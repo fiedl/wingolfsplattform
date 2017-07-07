@@ -94,11 +94,9 @@ source 'https://rubygems.org' do
     gem 'launchy'
     gem 'factory_girl_rails', '>= 4.0.0' # '1.4.0'
     gem 'database_cleaner'
-    gem 'simplecov', require: false
     gem 'email_spec'
     gem 'timecop'  # time_travel
     gem 'fuubar' # better progress bar for specs
-    gem "codeclimate-test-reporter", require: nil
     gem 'poltergeist'
     gem 'selenium-webdriver'
   end
@@ -136,9 +134,6 @@ source 'https://rubygems.org' do
   # Profiling
   gem 'flamegraph'
   gem 'stackprof'
-
-  # Code Coverage Badge, coveralls.io
-  gem 'coveralls', require: false
 
   # Temporary Dependency Resolving
   # TODO Remove when obsolete
