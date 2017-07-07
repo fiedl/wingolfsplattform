@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 0671ca9419574a20eac045f23c6506a07dbf1c7c
-  branch: sf/wingolf-org-with-caching
+  revision: c4523a37229881288a1d01baad3854b8e44da035
+  branch: master
   specs:
     your_platform (1.0.1)
       actionpack (>= 4.2.5.2)
