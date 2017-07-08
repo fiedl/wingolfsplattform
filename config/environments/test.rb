@@ -23,6 +23,16 @@ Rails.application.configure do
   config.action_controller.perform_caching = true  # default: false
   config.cache_store = :redis_store, 'redis://localhost:6379/0/', { expires_in: 90.minutes, namespace: 'test_cache' }
 
+  # Debug mode disables concatenation and preprocessing of assets.
+  # This option may cause significant delays in view rendering with a large
+  # number of complex assets.
+  config.assets.debug = true
+
+  # Adds additional error checking when serving assets at runtime.
+  # Checks for improperly declared sprockets dependencies.
+  # Raises helpful error messages.
+  config.assets.raise_runtime_errors = true
+
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
 
