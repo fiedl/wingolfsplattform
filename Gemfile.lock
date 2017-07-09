@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: c4523a37229881288a1d01baad3854b8e44da035
+  revision: 57d3473ea95cae75f7021779d614a050234e75de
   branch: master
   specs:
     your_platform (1.0.1)
@@ -69,7 +69,6 @@ GIT
       rails-assets-bootstrap-social
       rails-assets-imagesloaded
       rails-assets-inline-attachment
-      rails-assets-jquery-masonry
       rails-assets-jquery-ui
       rails-assets-jquery-ujs
       rails-assets-trentrichardson--jQuery-Timepicker-Addon (>= 1.6.3)
@@ -438,27 +437,16 @@ GEM
     rails-assets-bootstrap-social (5.1.1)
       rails-assets-bootstrap (~> 3)
       rails-assets-font-awesome (~> 4.7)
-    rails-assets-desandro-matches-selector (2.0.2)
     rails-assets-ev-emitter (1.1.1)
-    rails-assets-fizzy-ui-utils (2.0.5)
-      rails-assets-desandro-matches-selector (>= 2.0.0, < 3)
     rails-assets-font-awesome (4.7.0)
-    rails-assets-get-size (2.0.2)
     rails-assets-imagesloaded (4.1.3)
       rails-assets-ev-emitter (>= 1.0.0, < 2)
     rails-assets-inline-attachment (2.0.3)
     rails-assets-jquery (3.2.1)
-    rails-assets-jquery-masonry (4.2.0)
-      rails-assets-get-size (>= 2.0.2, < 3)
-      rails-assets-outlayer (>= 2.1.0, < 3)
     rails-assets-jquery-ui (1.12.1)
       rails-assets-jquery (>= 1.6)
     rails-assets-jquery-ujs (1.2.2)
       rails-assets-jquery (> 1.8)
-    rails-assets-outlayer (2.1.1)
-      rails-assets-ev-emitter (>= 1.0.0, < 2)
-      rails-assets-fizzy-ui-utils (>= 2.0.0, < 3)
-      rails-assets-get-size (>= 2.0.2, < 3)
     rails-assets-trentrichardson--jQuery-Timepicker-Addon (1.6.3)
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
