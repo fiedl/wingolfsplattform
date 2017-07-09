@@ -510,22 +510,14 @@ GEM
     reverse_markdown (1.0.3)
       nokogiri
     rinku (1.5.1)
-    rspec (3.5.0)
-      rspec-core (~> 3.5.0)
-      rspec-expectations (~> 3.5.0)
-      rspec-mocks (~> 3.5.0)
     rspec-core (3.5.4)
       rspec-support (~> 3.5.0)
     rspec-expectations (3.5.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.5.0)
-    rspec-instafail (1.0.0)
-      rspec
     rspec-its (1.2.0)
       rspec-core (>= 3.0.0)
       rspec-expectations (>= 3.0.0)
-    rspec-legacy_formatters (1.0.1)
-      rspec (~> 3.0)
     rspec-mocks (3.5.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.5.0)
@@ -669,9 +661,7 @@ DEPENDENCIES
   rack-timeout!
   rails (~> 4.2.1)!
   redcarpet!
-  rspec-instafail!
   rspec-its!
-  rspec-legacy_formatters!
   rspec-rails!
   rubyzip (>= 1.2.1)!
   sass-rails (>= 4.0.3)!

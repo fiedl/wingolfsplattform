@@ -76,8 +76,6 @@ source 'https://rubygems.org' do
   # RSpec, see: http://ruby.railstutorial.org/chapters/static-pages#sec:first_tests
   group :test, :development do
     gem 'rspec-rails'
-    gem 'rspec-legacy_formatters'
-    gem 'rspec-instafail'
     gem 'rspec-its'
     gem 'parallel_tests'
   #  gem 'rspec-mocks'
