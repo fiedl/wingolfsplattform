@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 57d3473ea95cae75f7021779d614a050234e75de
+  revision: 3497d35121de263fb95484e12652f62df76691ba
   branch: master
   specs:
     your_platform (1.0.1)
@@ -186,6 +186,9 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    capybara-selenium (0.0.6)
+      capybara
+      selenium-webdriver
     carrierwave (0.11.2)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -196,7 +199,6 @@ GEM
     chartkick (2.2.4)
     childprocess (0.7.1)
       ffi (~> 1.0, >= 1.0.11)
-    cliver (0.3.2)
     coderay (1.1.1)
     coffee-rails (4.2.1)
       coffee-script (>= 2.2.0)
@@ -385,10 +387,6 @@ GEM
     passgen (1.0.2)
     pdf-core (0.6.1)
     phony (2.15.46)
-    poltergeist (1.11.0)
-      capybara (~> 2.1)
-      cliver (~> 0.3.1)
-      websocket-driver (>= 0.2.0)
     prawn (2.0.2)
       pdf-core (~> 0.6.0)
       ttfunk (~> 1.4.0)
@@ -619,9 +617,6 @@ GEM
       activemodel (>= 4.2)
       debug_inspector
       railties (>= 4.2)
-    websocket-driver (0.6.4)
-      websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.2)
     will_paginate (3.1.6)
     xpath (2.0.0)
       nokogiri (~> 1.3)
@@ -635,6 +630,7 @@ DEPENDENCIES
   binding_of_caller!
   brakeman (>= 2.3.1)!
   capybara!
+  capybara-selenium!
   charlock_holmes!
   coffee-rails (>= 4.0.0)!
   colored!
@@ -655,7 +651,6 @@ DEPENDENCIES
   newrelic_rpm!
   nokogiri (>= 1.7.1)!
   parallel_tests!
-  poltergeist!
   pry!
   pry-remote!
   rack-timeout!

@@ -89,8 +89,8 @@ source 'https://rubygems.org' do
     gem 'email_spec'
     gem 'timecop'  # time_travel
     gem 'fuubar' # better progress bar for specs
-    gem 'poltergeist'
     gem 'selenium-webdriver'
+    gem 'capybara-selenium'
   end
   group :development do
     gem 'spring'
