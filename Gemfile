@@ -88,7 +88,6 @@ source 'https://rubygems.org' do
     gem 'database_cleaner'
     gem 'email_spec'
     gem 'timecop'  # time_travel
-    gem 'fuubar' # better progress bar for specs
     gem 'selenium-webdriver'
     gem 'capybara-selenium'
   end
