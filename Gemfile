@@ -82,14 +82,14 @@ source 'https://rubygems.org' do
   #  gem 'rb-inotify', '0.8.8' if RUBY_PLATFORM.downcase.include?("linux")
   end
   group :test do
-    gem 'capybara'
     gem 'launchy'
     gem 'factory_girl_rails', '>= 4.0.0' # '1.4.0'
     gem 'database_cleaner'
     gem 'email_spec'
     gem 'timecop'  # time_travel
+    gem 'capybara', '2.13.0'
     gem 'selenium-webdriver'
-    gem 'capybara-selenium'
+    gem 'poltergeist', '1.11.0'
   end
   group :development do
     gem 'spring'
