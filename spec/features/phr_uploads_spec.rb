@@ -6,9 +6,9 @@ feature "PhR Uploads" do
   background do
     @everyone = Group.everyone
     @intranet_root = Page.intranet_root
-    @vaw = @intranet_root.child_pages.create title: 'VAW'
+    @vaw = @intranet_root.child_pages.create title: 'VAW', published_at: 1.day.ago
     @phr = @vaw.child_groups.create name: 'PhR'
-    @phr_documents = @phr.child_pages.create title: 'PhR Documents', content: 'secret content'
+    @phr_documents = @phr.child_pages.create title: 'PhR Documents', content: 'secret content', published_at: 1.day.ago
 
     @member = create :user_with_account; @phr.assign_user @member, at: 2.months.ago
     @other_member = create :user_with_account; @phr.assign_user @other_member, at: 2.months.ago
