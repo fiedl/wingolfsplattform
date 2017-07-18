@@ -21,7 +21,3 @@ end
 
 task test: :tests
 task default: :tests
-
-# https://github.com/github/gemoji
-# run `rake emoji` to copy emoji files to `public/emoji`
-load 'tasks/emoji.rake'
