@@ -1,4 +1,4 @@
-class BvMapping < ActiveRecord::Base
+class BvMapping < ApplicationRecord
 
   def self.find_or_create(args)
     plz = args[:plz] || raise('Keine :plz angegeben.')
