@@ -1,9 +1,9 @@
 # YourPlatform
-gem 'your_platform', git: 'https://github.com/fiedl/your_platform', branch: 'master'
+gem 'your_platform', git: 'https://github.com/fiedl/your_platform', branch: 'sf/rails-5'
 
 source 'https://rubygems.org' do
   # Ruby License, http://www.ruby-lang.org/en/LICENSE.txt
-  gem 'rails', '~> 4.2.1'	 # MIT License
+  gem 'rails', '~> 5.0.0'
 
   gem 'mysql2'	# MIT License
   gem 'transaction_retry' # rescue from deadlocks
@@ -25,9 +25,6 @@ source 'https://rubygems.org' do
 
   # Use unicorn as the app server
   gem 'unicorn'
-
-  # RAILS-3-MIGRATION TEMPORARY GEMS, TODO: REMOVE THOSE
-  gem 'activesupport-json_encoder'
 
   # Deploy with Capistrano
   # gem 'capistrano'
@@ -57,7 +54,6 @@ source 'https://rubygems.org' do
     #gem 'debugger'
 
     gem 'binding_of_caller'
-    gem 'meta_request'
 
     gem 'letter_opener'
   end
@@ -118,10 +114,6 @@ source 'https://rubygems.org' do
   gem 'flamegraph'
   gem 'stackprof'
 
-  # Temporary Dependency Resolving
-  # TODO Remove when obsolete
-  gem 'tilt', '~> 1.4.1'
-
   # Maintenance Mode
   gem 'turnout'
 
@@ -134,13 +126,14 @@ source 'https://rubygems.org' do
 
   #gem 'bootstrap', git: 'https://github.com/twbs/bootstrap-rubygem'
 
-  # Temporary fixes
-  gem 'gemoji', '~> 2.1.0'
-  gem 'haml', '~> 4.0'
-
   # Security Fixes
   gem 'rubyzip', '>= 1.2.1'  # CVE-2017-5946
   gem 'nokogiri', '>= 1.7.1'  #  USN-3235-1
+
+  # Temporary Forks and Overrides
+  gem 'acts-as-dag', git: 'https://github.com/fiedl/acts-as-dag', branch: 'sf/rails-5'
+  gem 'refile', git: 'https://github.com/sobrinho/refile'
+  gem 'refile-mini_magick', git: 'https://github.com/refile/refile-mini_magick'
 end
 
 source 'https://rails-assets.org'
