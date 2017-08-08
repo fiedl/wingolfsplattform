@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 2b1e75a22fa44a1c1e8aa8467f358e745a82c242
+  revision: b90eb31a5dff03eaa5358588084914a5d4a111de
   branch: master
   specs:
     your_platform (1.0.1)
@@ -24,7 +24,7 @@ GIT
       coffee-rails (>= 4.1.0)
       decent_exposure (~> 3.0)
       devise (>= 3.5.4)
-      devise_masquerade
+      devise_masquerade (~> 0.5.3)
       discourse_api
       edit_mode (>= 1.0.2)
       elasticsearch-model
@@ -157,7 +157,7 @@ GEM
     auto_html (1.6.4)
       redcarpet (~> 3.1)
       rinku (~> 1.5.0)
-    autoprefixer-rails (7.1.2.1)
+    autoprefixer-rails (7.1.2.3)
       execjs
     autosize-rails (1.18.17)
       rails (>= 3.1)
@@ -227,7 +227,7 @@ GEM
       rack (>= 1.6)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
-    edit_mode (1.0.2)
+    edit_mode (1.0.3)
       jquery-rails
       jquery-turbolinks
       rails (>= 3.2)
@@ -260,9 +260,9 @@ GEM
     factory_girl_rails (4.7.0)
       factory_girl (~> 4.7.0)
       railties (>= 3.0.0)
-    faker (1.8.0)
+    faker (1.8.4)
       i18n (~> 0.5)
-    faraday (0.12.1)
+    faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.11.0.1)
       faraday (>= 0.7.4, < 1.0)
@@ -288,7 +288,7 @@ GEM
       tilt
     has_secure_token (1.0.0)
       activerecord (>= 3.0)
-    hashie (3.5.5)
+    hashie (3.5.6)
     htmlentities (4.3.4)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -325,7 +325,7 @@ GEM
     mail_form (1.7.0)
       actionmailer (>= 3.2, < 5.2)
       activemodel (>= 3.2, < 5.2)
-    merit (2.4.0)
+    merit (3.0.0)
       ambry (~> 1.0.0)
     meta_request (0.4.0)
       callsite (~> 0.0, >= 0.0.11)
@@ -360,7 +360,7 @@ GEM
     omniauth-github (1.3.0)
       omniauth (~> 1.5)
       omniauth-oauth2 (>= 1.4.0, < 2.0)
-    omniauth-google-oauth2 (0.5.0)
+    omniauth-google-oauth2 (0.5.1)
       jwt (~> 1.5)
       multi_json (~> 1.3)
       omniauth (>= 1.1.1)
@@ -380,7 +380,7 @@ GEM
       parallel
     passgen (1.0.2)
     pdf-core (0.6.1)
-    phony (2.15.46)
+    phony (2.15.47)
     poltergeist (1.11.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -469,7 +469,7 @@ GEM
       actionpack (>= 4.0, < 6)
       redis-rack (>= 1, < 3)
       redis-store (>= 1.1.0, < 1.4.0)
-    redis-activesupport (5.0.2)
+    redis-activesupport (5.0.3)
       activesupport (>= 3, < 6)
       redis-store (~> 1.3.0)
     redis-namespace (1.5.3)
