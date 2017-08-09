@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 06bfe24e4fcf1aa5e5671c80e467734a854db1b9
+  revision: 1e4e699ccb4e54aa2568cdefb3b8f396dbd7cee7
   branch: sf/rails-5
   specs:
     your_platform (1.0.1)
@@ -18,7 +18,7 @@ GIT
       acts-as-dag (>= 4.0)
       acts-as-taggable-on (~> 4.0)
       acts_as_tree
-      apipie-rails (~> 0.4.0)
+      apipie-rails (~> 0.5)
       auto_html (~> 1.6.4)
       autosize-rails
       bcrypt (>= 3.0.1)
@@ -35,10 +35,11 @@ GIT
       devise (>= 3.5.4)
       devise_masquerade
       discourse_api
-      edit_mode (>= 1.0.2)
+      edit_mode (>= 1.0.3)
       elasticsearch-model
       eventmachine (>= 1.0.7)
       excelinator
+      exception_notification
       execjs (>= 2.5.2)
       faker
       font-awesome-rails (>= 4.7)
@@ -50,11 +51,11 @@ GIT
       gravatar_image_tag
       groupdate
       haml (~> 4.0)
-      has_secure_token
       i18n-js (>= 3.0.0.rc8)
       icalendar
       jquery-atwho-rails (>= 1.1.0)
       jquery-fileupload-rails
+      jquery-rails
       jquery-turbolinks
       judge
       mail (~> 2.6.6.rc1)
@@ -78,7 +79,6 @@ GIT
       rails-assets-imagesloaded
       rails-assets-inline-attachment
       rails-assets-jquery-ui
-      rails-assets-jquery-ujs
       rails-assets-trentrichardson--jQuery-Timepicker-Addon (>= 1.6.3)
       rails-i18n
       rails-settings-cached (>= 0.6.5)
@@ -98,13 +98,11 @@ GIT
       sugar-rails
       table-formatter
       to_xls
-      transaction_retry
       turboboost
       turbolinks (>= 5.0)
       uglifier (>= 2.7.2)
       vcardigan
       wannabe_bool
-      web-console
       will_paginate (> 3.0)
 
 GIT
@@ -173,9 +171,8 @@ GEM
     addressable (2.5.0)
       public_suffix (~> 2.0, >= 2.0.2)
     ambry (1.0.0)
-    apipie-rails (0.4.0)
-      json
-      rails (>= 4.0)
+    apipie-rails (0.5.0)
+      rails (>= 4.1)
     arel (7.1.4)
     auto_html (1.6.4)
       redcarpet (~> 3.1)
@@ -190,7 +187,6 @@ GEM
       railties (>= 3.2)
     biggs (0.3.3)
       activerecord (>= 3.0)
-    bindex (0.5.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     bootstrap-sass (3.3.7)
@@ -239,7 +235,7 @@ GEM
       railties (>= 4.1.0, < 5.2)
       responders
       warden (~> 1.2.3)
-    devise_masquerade (0.5.3)
+    devise_masquerade (0.6.0)
       devise (>= 2.1.0)
       railties (>= 3.0)
     diff-lcs (1.2.5)
@@ -249,7 +245,7 @@ GEM
       rack (>= 1.6)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
-    edit_mode (1.0.2)
+    edit_mode (1.0.3)
       jquery-rails
       jquery-turbolinks
       rails (>= 3.2)
@@ -284,7 +280,7 @@ GEM
       railties (>= 3.0.0)
     faker (1.8.4)
       i18n (~> 0.5)
-    faraday (0.12.1)
+    faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.11.0.1)
       faraday (>= 0.7.4, < 1.0)
@@ -306,8 +302,6 @@ GEM
       activesupport (>= 3)
     haml (4.0.7)
       tilt
-    has_secure_token (1.0.0)
-      activerecord (>= 3.0)
     hashie (3.5.6)
     htmlentities (4.3.4)
     http-cookie (1.0.3)
@@ -346,7 +340,7 @@ GEM
     mail_form (1.7.0)
       actionmailer (>= 3.2, < 5.2)
       activemodel (>= 3.2, < 5.2)
-    merit (2.4.0)
+    merit (3.0.0)
       ambry (~> 1.0.0)
     method_source (0.8.2)
     mime-types (2.99.3)
@@ -379,7 +373,7 @@ GEM
     omniauth-github (1.3.0)
       omniauth (~> 1.5)
       omniauth-oauth2 (>= 1.4.0, < 2.0)
-    omniauth-google-oauth2 (0.5.0)
+    omniauth-google-oauth2 (0.5.1)
       jwt (~> 1.5)
       multi_json (~> 1.3)
       omniauth (>= 1.1.1)
@@ -457,8 +451,6 @@ GEM
     rails-assets-jquery (3.2.1)
     rails-assets-jquery-ui (1.12.1)
       rails-assets-jquery (>= 1.6)
-    rails-assets-jquery-ujs (1.2.2)
-      rails-assets-jquery (> 1.8)
     rails-assets-trentrichardson--jQuery-Timepicker-Addon (1.6.3)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
@@ -588,11 +580,6 @@ GEM
     timecop (0.8.1)
     to_xls (1.5.3)
       spreadsheet
-    transaction_isolation (1.0.3)
-      activerecord (>= 3.0.11)
-    transaction_retry (1.0.2)
-      activerecord (>= 3.0.11)
-      transaction_isolation (>= 1.0.2)
     ttfunk (1.4.0)
     turboboost (0.1.1)
       coffee-rails
@@ -621,11 +608,6 @@ GEM
     wannabe_bool (0.6.0)
     warden (1.2.7)
       rack (>= 1.0)
-    web-console (3.5.1)
-      actionview (>= 5.0)
-      activemodel (>= 5.0)
-      bindex (>= 0.4.0)
-      railties (>= 5.0)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
@@ -676,7 +658,6 @@ DEPENDENCIES
   stackprof!
   therubyracer!
   timecop!
-  transaction_retry!
   turnout!
   uglifier (>= 1.3.0)!
   unicorn!
