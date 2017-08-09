@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: afa3747ff7765c06195879796b2b0d60547f6807
+  revision: 2ed962cbff7437a04a0699acc3affe06ea6a2220
   branch: master
   specs:
     your_platform (1.0.1)
