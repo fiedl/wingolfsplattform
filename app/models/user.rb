@@ -119,7 +119,7 @@ class User
   # tut diese Methode nichts.
   #
   def adapt_bv_to_primary_address
-    self.groups(true) # reload groups
+    self.groups.reload
     new_bv = correct_bv
 
     # Wenn der Philister einen Wunsch-BV hat, wird die automatische Zuordnung
@@ -181,7 +181,7 @@ class User
     #self.delay.delete_cached :bv
     #self.delay.delete_cached :bv_membership
 
-    self.groups(true) # reload groups
+    self.groups.reload
     return new_membership
   end
 

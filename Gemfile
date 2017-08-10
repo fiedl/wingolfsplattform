@@ -7,6 +7,8 @@ source 'https://rubygems.org' do
 
   gem 'mysql2'	# MIT License
 
+  gem 'web-console', group: :development
+
   gem 'sass-rails', '>= 4.0.3'
   gem 'uglifier', '>= 1.3.0'  # MIT License
   gem 'coffee-rails', '>= 4.0.0'
@@ -92,8 +94,10 @@ source 'https://rubygems.org' do
   end
 
   # Pry Console Addon
-  gem 'pry', group: :development
-  gem 'pry-remote', group: :development
+  group :development, :test do
+    gem 'pry'
+    gem 'pry-remote'
+  end
 
 
   # View Helpers

@@ -19,7 +19,7 @@ class CreateAktivmeldungJob < ApplicationJob
     user.home_address_field.save
     user.study_fields.create
 
-    user.address_fields(true).first.update_attributes user_params["study_address_field"]
+    user.address_fields.reload.first.update_attributes user_params["study_address_field"]
     user.address_fields.second.update_attributes user_params["home_address_field"]
     user.study_fields.first.update_attributes user_params["primary_study_field"]
 
