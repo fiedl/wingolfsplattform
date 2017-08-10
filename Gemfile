@@ -84,9 +84,8 @@ source 'https://rubygems.org' do
     gem 'database_cleaner'
     gem 'email_spec'
     gem 'timecop'  # time_travel
-    gem 'capybara', '2.13.0'
+    gem 'capybara'
     gem 'selenium-webdriver'
-    gem 'poltergeist', '1.11.0'
   end
   group :development do
     gem 'spring'
