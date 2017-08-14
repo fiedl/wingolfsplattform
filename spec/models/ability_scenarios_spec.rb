@@ -333,7 +333,8 @@ describe Ability do
   describe "(Semesterprogramme)" do
     before do
       @corporation = create :wingolf_corporation
-      @semester_calendar = @corporation.semester_calendars.create year: Time.zone.now.year, term: :summer_term
+      @term = Term.by_year_and_type Time.zone.now.year, "Terms::Summer"
+      @semester_calendar = @corporation.semester_calendars.create term_id: @term.id
       @pdf = @semester_calendar.attachments.create
     end
 
