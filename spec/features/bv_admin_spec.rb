@@ -55,6 +55,8 @@ feature "BV-Admins" do
         page.should have_text 'Getränkekassenwart'
       end
 
+      wait_until { OfficerGroup.last.name == 'Getränkekassenwart' }
+
       # The changes should be persistent:
       visit group_officers_path(@bv)
       within '.box.first' do

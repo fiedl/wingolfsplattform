@@ -122,13 +122,8 @@ feature 'User page', js: false do
 
           # Changing the study field.
           #
-          within '.profile_field.subject' do
-            find('.best_in_place').click  # Physics
-            fill_in 'value', with: "Theoretical and Experimental Physics\n"
-
-            wait_for_ajax; wait_for_ajax; wait_for_ajax;
-            study_field.reload.subject.should == "Theoretical and Experimental Physics"
-          end
+          enter_in_place '.profile_field.subject', "Theoretical and Experimental Physics"
+          study_field.reload.subject.should == "Theoretical and Experimental Physics"
 
           # Removing the study field.
           #
@@ -165,7 +160,7 @@ feature 'User page', js: false do
             subject.should have_selector('input[type=text]', count: 6)
           end
 
-          find('.remove_button').trigger :click # the button has no size in the spec.
+          find('.remove_button').click
           page.should have_no_selector('.profile_field')
         end
       end
