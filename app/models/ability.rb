@@ -72,6 +72,12 @@ module AbilityDefinitions
         not group.has_flag?(:admins_parent)
       end
 
+      # Administratoren von Gruppen dürfen Untergruppen erstellen.
+      #
+      can :create_group_for, Group do |group|
+        group.admins_of_self_and_ancestors.include?(user)
+      end
+
       # Administratoren einer Aktivitas dürfen ihr Amt weitergeben.
       # Siehe: https://trello.com/c/SSciMMfB/1101-aktiven-admins-durfen-ihr-amt-weitergeben
       # Und: http://support.wingolfsplattform.org/tickets/1530#reply-3682
@@ -82,6 +88,18 @@ module AbilityDefinitions
       #
       # Da für einen gewesenen Admin die Methode `rights_for_local_admins` nicht mehr
       # aufgerufen wird, ist dies unter `rights_for_signed_in_users` definiert.
+
+      # Administratoren dürfen Mitglieder zu Gruppen auch manuell hinzufügen.
+      # Das wird beispielsweise bei Bandverleihungen benötigt.
+      #
+      # Wichtig ist aber, dass man Mitglieder nicht versehentlich zu einer Obergruppe
+      # hinzufügt, z.B. also zum "Erlanger Wingolf", statt "Erlanger Wingolf > Philisterschaft > Philister".
+      # Es ist also verboten, Mitglieder zu Gruppen hinzuzufügen, wenn diese Gruppen
+      # noch Statusgruppen unterhalb haben.
+      #
+      can :add_member_to, Group do |group|
+        can?(:update, group) && (not group.descendant_groups.where(type: "StatusGroup").any?)
+      end
 
       can :create_memberships, Group do |group|
         can? :update, group
