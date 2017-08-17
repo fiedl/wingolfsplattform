@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: ed6bfb8bea5291508b33fbd31f1c40e05311e809
+  revision: 8b368979ac11d3bc5e86b70f15d7839daf5e4a2f
   branch: sf/rails-5
   specs:
     your_platform (1.0.1)
