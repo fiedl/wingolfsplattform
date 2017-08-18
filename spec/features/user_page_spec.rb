@@ -400,6 +400,8 @@ feature 'User page', js: false do
           expect { click_on I18n.t(:create_account) }.to change(UserAccount, :count).by 1
           @user_wo_account.reload_account.should_not be_nil
         end
+
+        give_it_some_time_to_finish_the_test_before_wiping_the_database
       end
 
     end
