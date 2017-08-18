@@ -398,7 +398,7 @@ feature 'User page', js: false do
           page.should have_link(I18n.t(:create_account) )
 
           expect { click_on I18n.t(:create_account) }.to change(UserAccount, :count).by 1
-          @user_wo_account.reload_account should_not be_nil
+          @user_wo_account.reload_account.should_not be_nil
         end
       end
 
