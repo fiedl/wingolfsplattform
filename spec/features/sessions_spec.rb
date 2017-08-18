@@ -159,9 +159,7 @@ feature 'Sessions' do
         click_first_link_in_email
       end
 
-      unless ENV['CI'] == 'travis' # This fails "Ignoring Selenium UnknownError during driver quit: quit" on travis. TODO: Reactivate when updating the test suite.
-        it { should have_field('user_account_password') }
-      end
+      it { should have_field('user_account_password') }
       it { should have_field('user_account_password_confirmation') }
       it { should have_field(I18n.t(:i_agree_i_do_not_use_the_same_password_on_other_services), :checked => false) }
       it { should have_button(I18n.t(:submit_changed_password), visible: false) }
@@ -178,9 +176,7 @@ feature 'Sessions' do
             check(I18n.t(:i_agree_i_do_not_use_the_same_password_on_other_services))
           end
 
-          unless ENV['CI'] == 'travis' # This fails "Ignoring Selenium UnknownError during driver quit: quit" on travis. TODO: Reactivate when updating the test suite.
-            it { should have_button(I18n.t('submit_changed_password')) }
-          end
+          it { should have_button(I18n.t('submit_changed_password')) }
 
           describe '- after clicking submit'do
             before do
