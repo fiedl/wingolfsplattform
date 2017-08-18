@@ -33,6 +33,8 @@ cache:
 dist: trusty
 sudo: true
 addons:
+  firefox: latest
+  chrome: stable
   apt:
     packages:
       - pwgen
