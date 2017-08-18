@@ -28,7 +28,7 @@ class ApplicationController
   end
 
   def new_relic_params
-    ::NewRelic::Agent.add_custom_parameters({
+    ::NewRelic::Agent.add_custom_attributes({
       path: request.path,
       user_id: (current_user ? current_user.id : nil),
       role_view: current_role_view
