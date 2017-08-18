@@ -39,7 +39,7 @@ feature 'Status Promotion' do
     # In production, the status workflows controller makes sure that the cache
     # is properly renewed.
     #
-    wait_until(timeout: 120.seconds) { @user_to_promote.reload.ancestor_groups(true).include? @corporation.status_groups.second }
+    wait_until(timeout: 120.seconds) { @user_to_promote.reload.ancestor_groups.reload.include? @corporation.status_groups.second }
 
     click_tab :corporate_info_tab
     within("#corporate_vita") { page.should have_text @corporation.status_groups.second.name.singularize }
