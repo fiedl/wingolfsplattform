@@ -9,8 +9,8 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: a0041f7f87fb60048107d40d37f325de6dd5f919
-  branch: sf/rails-5
+  revision: d194061f5d97e3acf720548fa1308879b9a1150c
+  branch: master
   specs:
     your_platform (1.0.1)
       actionpack (>= 4.2.5.2)
