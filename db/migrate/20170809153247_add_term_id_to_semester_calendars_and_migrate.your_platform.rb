@@ -1,4 +1,5 @@
-class AddTermIdToSemesterCalendarsAndMigrate < ActiveRecord::Migration
+# This migration comes from your_platform (originally 20170809151252)
+class AddTermIdToSemesterCalendarsAndMigrate < ActiveRecord::Migration[4.2]
   def up
     rename_column :semester_calendars, :term, :term_type
     add_column :semester_calendars, :term_id, :integer

@@ -122,13 +122,8 @@ feature 'User page', js: false do
 
           # Changing the study field.
           #
-          within '.profile_field.subject' do
-            find('.best_in_place').click  # Physics
-            fill_in 'value', with: "Theoretical and Experimental Physics\n"
-
-            wait_for_ajax; wait_for_ajax; wait_for_ajax;
-            study_field.reload.subject.should == "Theoretical and Experimental Physics"
-          end
+          enter_in_place '.profile_field.subject', "Theoretical and Experimental Physics"
+          study_field.reload.subject.should == "Theoretical and Experimental Physics"
 
           # Removing the study field.
           #
@@ -165,7 +160,7 @@ feature 'User page', js: false do
             subject.should have_selector('input[type=text]', count: 6)
           end
 
-          find('.remove_button').trigger :click # the button has no size in the spec.
+          find('.remove_button').click
           page.should have_no_selector('.profile_field')
         end
       end
@@ -241,21 +236,60 @@ feature 'User page', js: false do
           visit user_path(@user)
         end
 
-        scenario 'the profile sections should be editable', js: true do
-
+        scenario 'adding and removing an address', :js do
           click_tab :contact_info_tab
-          section_should_be_editable(:contact_information, [ProfileFields::Address, ProfileFields::Email, ProfileFields::Phone, ProfileFields::Homepage, ProfileFields::Custom])
-
-          click_tab :study_and_work_tab
-          section_should_be_editable(:about_myself)
-          section_should_be_editable(:study_information)
-          section_should_be_editable(:career_information, [ProfileFields::Employment, ProfileFields::ProfessionalCategory])
-          section_should_be_editable(:organizations)
-
-          click_tab :more_info_tab
-          section_should_be_editable(:bank_account_information)
+          section_should_be_editable :contact_information, [ProfileFields::Address]
         end
 
+        scenario 'adding and removing an email address', :js do
+          click_tab :contact_info_tab
+          section_should_be_editable :contact_information, [ProfileFields::Email]
+        end
+
+        scenario 'adding and removing a phone number', :js do
+          click_tab :contact_info_tab
+          section_should_be_editable :contact_information, [ProfileFields::Phone]
+        end
+
+        scenario 'adding and removing a homepage', :js do
+          click_tab :contact_info_tab
+          section_should_be_editable :contact_information, [ProfileFields::Homepage]
+        end
+
+        scenario 'adding and removing a custom profile field', :js do
+          click_tab :contact_info_tab
+          section_should_be_editable :contact_information, [ProfileFields::Custom]
+        end
+
+        scenario 'adding and removing a field in the about-myself section', :js do
+          click_tab :study_and_work_tab
+          section_should_be_editable :about_myself
+        end
+
+        scenario 'adding and removing a field in the study section', :js do
+          click_tab :study_and_work_tab
+          section_should_be_editable :study_information
+        end
+
+        scenario 'adding and removing an employment', :js do
+          click_tab :study_and_work_tab
+          section_should_be_editable :career_information, [ProfileFields::Employment]
+        end
+
+        scenario 'adding and removing a professional category', :js do
+          click_tab :study_and_work_tab
+          section_should_be_editable :career_information, [ProfileFields::ProfessionalCategory]
+        end
+
+        scenario 'adding and removing an organization', :js do
+          click_tab :study_and_work_tab
+          section_should_be_editable :organizations
+        end
+
+        scenario 'adding and removing a bank account', :js do
+          click_tab :more_info_tab
+          section_should_be_editable :bank_account_information
+        end
 
         it { should have_selector('h1', text: I18n.t(:contact_information)) }
         it { should have_selector('h1', text: I18n.t(:about_myself)) }
@@ -364,7 +398,7 @@ feature 'User page', js: false do
           page.should have_link(I18n.t(:create_account) )
 
           expect { click_on I18n.t(:create_account) }.to change(UserAccount, :count).by 1
-          @user_wo_account.account should_not be_nil
+          @user_wo_account.reload_account.should_not be_nil
         end
       end
 

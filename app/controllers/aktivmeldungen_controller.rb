@@ -28,7 +28,7 @@ class AktivmeldungenController < ApplicationController
       render :action => "new"
     else
 
-      CreateAktivmeldungJob.perform_later(user_params)
+      CreateAktivmeldungJob.perform_later(user_params.to_h)
       flash[:notice] = "Die Aktivmeldung wurde eingetragen. Es dauert ein paar Minuten, bis der neue Wingolfit auf der Plattform angezeigt wird."
       redirect_to root_path
 

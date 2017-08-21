@@ -17,7 +17,7 @@ describe Event do
         @event.aktive = false; @event.save
         @event.aktive.should == false
         @event.philister.should == true
-        @event.group(true).should == @corporation.philisterschaft
+        @event.reload_group.should == @corporation.philisterschaft
       end
     end
 
@@ -26,14 +26,14 @@ describe Event do
         @event.philister = false; @event.save
         @event.aktive.should == true
         @event.philister.should == false
-        @event.group(true).should == @corporation.aktivitas
+        @event.reload_group.should == @corporation.aktivitas
       end
     end
 
     describe "#aktive=false, #philister=false" do
       it "should leave the event under the corporation" do
         @event.aktive = false; @event.philister = false; @event.save
-        @event.group(true).should == @corporation
+        @event.reload_group.should == @corporation
       end
     end
   end
@@ -46,7 +46,7 @@ describe Event do
     describe "#aktive=false, #philister=false" do
       it "should leave the event in its subgroup" do
         @event.aktive = false; @event.philister = false; @event.save
-        @event.group(true).should == @sibling
+        @event.reload_group.should == @sibling
       end
     end
   end
@@ -61,7 +61,7 @@ describe Event do
         @event.philister = true; @event.save
         @event.aktive.should == true
         @event.philister.should == true
-        @event.group(true).should == @corporation
+        @event.reload_group.should == @corporation
       end
     end
 
@@ -70,7 +70,7 @@ describe Event do
         @event.philister = true; @event.aktive = false; @event.save
         @event.aktive.should == false
         @event.philister.should == true
-        @event.group(true).should == @corporation.philisterschaft
+        @event.reload_group.should == @corporation.philisterschaft
       end
     end
   end
@@ -85,7 +85,7 @@ describe Event do
         @event.aktive = true; @event.save
         @event.aktive.should == true
         @event.philister.should == true
-        @event.group(true).should == @corporation
+        @event.reload_group.should == @corporation
       end
     end
 
@@ -94,7 +94,7 @@ describe Event do
         @event.philister = false; @event.aktive = true; @event.save
         @event.aktive.should == true
         @event.philister.should == false
-        @event.group(true).should == @corporation.aktivitas
+        @event.reload_group.should == @corporation.aktivitas
       end
     end
   end
