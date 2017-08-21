@@ -8,7 +8,7 @@
 [![Dependency Status](https://gemnasium.com/fiedl/wingolfsplattform.png)](https://gemnasium.com/fiedl/wingolfsplattform)
 [![security](https://hakiri.io/github/fiedl/wingolfsplattform/master.svg)](https://hakiri.io/github/fiedl/wingolfsplattform/master)
 
-Dies ist der Quellcode der entstehenden neuen Plattform von Wingolfsbund und VAW, der sog. **Wingolfsplattform**. Die Plattform soll vier Hauptaufgaben erfüllen: Hilfestellung bei der Verwaltung der Mitglieder des Wingolfs, Netzwerk der Mitglieder, Austausch von Informationen und Dokumenten, Präsentation nach außen. 
+Dies ist der Quellcode der entstehenden neuen Plattform von Wingolfsbund und VAW, der sog. **Wingolfsplattform**. Die Plattform soll vier Hauptaufgaben erfüllen: Hilfestellung bei der Verwaltung der Mitglieder des Wingolfs, Netzwerk der Mitglieder, Austausch von Informationen und Dokumenten, Präsentation nach außen.
 Nähere Informationen zum Anforderungsspektrum unter http://wingolf.org/ak-internet.
 
 **Ansprechpartner**:
@@ -25,7 +25,7 @@ Den aktuell bereitgestellten Commit kann man hier abfragen: http://wingolfsplatt
 
 ### Contribution
 
-Als Server-Side-Framework verwenden wir [Ruby on Rails](http://rubyonrails.org/) 4.2 mit Ruby 2.2. Wir empfehlen die Verwendung von [rbenv](https://github.com/sstephenson/rbenv/).
+Als Server-Side-Framework verwenden wir [Ruby on Rails](http://rubyonrails.org/) 5.0.
 
 **[GETTING STARTED](https://github.com/fiedl/wingolfsplattform/wiki/Getting-Started)** -- von der Installation der Entwicklungsumgebung bis zum Durchführen der automatisierten Tests.
 
@@ -48,7 +48,7 @@ bundle exec rails server
 
 ### your_platform
 
-Der abstrakte Teil des Quellcodes, d.h. derjenige Teil, der auch von anderen Organisationen als dem Wingolf verwendet werden kann, ist in der [`your_platform`-Engine](https://github.com/fiedl/your_platform) unterzubringen. Die Konkretisierung und Anpassung auf die wingolfitischen Bedürfnisse erfolgt in der Haupt-Applikation. 
+Der abstrakte Teil des Quellcodes, d.h. derjenige Teil, der auch von anderen Organisationen als dem Wingolf verwendet werden kann, ist in der [`your_platform`-Engine](https://github.com/fiedl/your_platform) unterzubringen. Die Konkretisierung und Anpassung auf die wingolfitischen Bedürfnisse erfolgt in der Haupt-Applikation.
 
 
 ### Code-Dokumentation
@@ -69,7 +69,7 @@ Der abstrakte Teil des Quellcodes, d.h. derjenige Teil, der auch von anderen Org
   cdy
   brakeman -o ~/Desktop/your_platform.brakeman.html
   ```
-  
+
 * *brakeman* ist außerdem in unsere *guard*-Konfiguration eingebunden, sodass die guard-Ausgabe auch Brakeman-Sicherheitsmeldungen enthält.
 
 
@@ -78,12 +78,12 @@ Der abstrakte Teil des Quellcodes, d.h. derjenige Teil, der auch von anderen Org
 * [Trello Board "AK Internet: Entwicklung"](https://trello.com/board/ak-internet-entwicklung/50006d110ad48e941e8496d2)
 * http://wingolf.org/ak-internet
 
-[![Travis-CI-Server](https://raw.githubusercontent.com/fiedl/wingolfsplattform/master/public/images/supporttravis.png)](http://travis-ci.org)  
+[![Travis-CI-Server](https://raw.githubusercontent.com/fiedl/wingolfsplattform/master/public/images/supporttravis.png)](http://travis-ci.org)
 
 
 ### Urheber, Mitarbeiter und Lizenz
 
-Copyright (c) 2012-2016, Sebastian Fiedlschuster
+Copyright (c) 2012-2017, Sebastian Fiedlschuster
 
 Mitarbeiter: Jörg Reichardt, Manuel Zerpies, Joachim Back
 
