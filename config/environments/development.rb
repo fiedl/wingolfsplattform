@@ -42,4 +42,15 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  # Simulate asset stuff to mimic production.
+  if ENV['SIMULATE_PRODUCTION']
+    config.assets.js_compressor = :uglifier
+    config.assets.css_compressor = :sass
+    config.assets.compile = false
+    config.assets.digest = true
+    config.assets.debug = false
+    config.public_file_server.enabled = true
+  end
+
 end
