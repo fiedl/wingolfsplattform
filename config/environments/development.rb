@@ -17,6 +17,7 @@ Rails.application.configure do
   config.cache_store = :redis_store, 'redis://localhost:6379/0/', { expires_in: 1.day, namespace: 'development_cache' }
 
   # Mailing
+  config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_caching = false
   config.action_mailer.default_url_options = {host: 'wingolfsplattform.dev', protocol: 'http'}
