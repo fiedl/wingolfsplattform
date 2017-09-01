@@ -18,11 +18,14 @@
 
     %link{rel: 'search', href: opensearch_path, title: "Wingolfsplattform-Suche", type: 'application/opensearchdescription+xml'}
 
-    = javascript_include_tag 'application'
-    = gmaps4rails_api_script_tags
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1'}
+    = javascript_include_tag 'application', data: {turbolinks_eval: false}
+    = google_maps_api_script_tag
     = csrf_meta_tags
     = yield :head
+
   = body_tag do
+    = render partial: 'shared/current_masquerade'
     - if user_account_signed_in?
       - Rack::MiniProfiler.step("#logged-in-bar") do
         #logged-in-bar.hidden-print
