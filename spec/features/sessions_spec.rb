@@ -159,60 +159,16 @@ feature 'Sessions' do
         click_first_link_in_email
       end
 
-      it { should have_field('user_account_password') }
+      it { should have_field('password') }
       it { should have_field('user_account_password_confirmation') }
       it { should have_field(I18n.t(:i_agree_i_do_not_use_the_same_password_on_other_services), :checked => false) }
       it { should have_button(I18n.t(:submit_changed_password), visible: false) }
 
-      describe 'and matching password and confirmation' do
-        before do
-          @password = 'fordprefecthasanawesometowel!'
-          fill_in 'user_account_password', with: @password
-          fill_in 'user_account_password_confirmation', with: @password
-        end
-
-        describe 'and having checked the agreement' do
-          before do
-            check(I18n.t(:i_agree_i_do_not_use_the_same_password_on_other_services))
-          end
-
-          it { should have_button(I18n.t('submit_changed_password')) }
-
-          describe '- after clicking submit'do
-            before do
-              click_button I18n.t(:submit_changed_password)
-              accept_terms_of_use
-            end
-
-            #it { should have_notice(I18n.t('devise.passwords.updated')) }
-
-            # TODO: It works in the browser. Fix this spec:
-            # pending { should be_logged_in }
-          end
-        end
-
-        describe 'but not having checked the agreement' do
-          it { should have_button(I18n.t('submit_changed_password'), visible: false) }
-        end
-      end
-
-      describe 'and matching simple password and confirmation' do
-        before do
-          @password = 'Password123'
-          fill_in 'user_account_password', with: @password
-          fill_in 'user_account_password_confirmation', with: @password
-          check(I18n.t(:i_agree_i_do_not_use_the_same_password_on_other_services))
-        end
-
-        it { should have_no_notice(I18n.t('devise.passwords.updated')) }
-        it { should have_button(I18n.t('submit_changed_password'), visible: false) }
-
-      end
-
       describe 'but without matching password confirmation' do
         before do
           @password = 'fordprefecthasanawesometowel!'
-          fill_in 'user_account_password', with: @password
+
+          fill_in 'password', with: @password
           fill_in 'user_account_password_confirmation', with: 'invalid'
         end
 
