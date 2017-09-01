@@ -8,4 +8,4 @@ Rails.application.config.assets.version = '1.0'
 
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-Rails.application.config.assets.precompile += ['wingolf_layout.css', 'wingolf_2017_layout.css', 'print.css', 'bootstrap_layout.css', 'bootstrap_setup.css', 'galleria-classic.css', 'galleria-classic.js', 'password_strength.js', 'zxcvbn.js']
+Rails.application.config.assets.precompile += ['wingolf_layout.css', 'wingolf_2017_layout.css', 'print.css', 'bootstrap_layout.css', 'bootstrap_setup.css', 'galleria-classic.css', 'galleria-classic.js']
