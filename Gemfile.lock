@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 0d938dcf517fc63eb84145a3860d78b3d2633e64
+  revision: 0773b6ba91b33d43cf0a5b33ed256f2886db72d5
   branch: master
   specs:
     your_platform (1.0.1)
@@ -36,7 +36,7 @@ GIT
       devise (>= 3.5.4)
       devise_masquerade (~> 0.5.3)
       discourse_api
-      edit_mode (>= 1.0.4)
+      edit_mode (>= 1.0.5)
       elasticsearch-model
       eventmachine (>= 1.0.7)
       excelinator
@@ -245,7 +245,7 @@ GEM
       rack (>= 1.6)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
-    edit_mode (1.0.4)
+    edit_mode (1.0.5)
       jquery-rails
       jquery-turbolinks
       rails (>= 3.2)
