@@ -9,6 +9,8 @@ source 'https://rubygems.org' do
   gem 'coffee-rails', '>= 4.0.0'
   gem 'turbolinks'
 
+  gem 'puma'
+
   group :production do
     gem 'unicorn'
   end
