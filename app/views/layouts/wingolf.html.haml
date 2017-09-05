@@ -22,71 +22,72 @@
       = yield :head
 
   = body_tag do
-    = render partial: 'shared/current_masquerade'
-    - if user_account_signed_in?
-      - Rack::MiniProfiler.step("#logged-in-bar") do
-        #logged-in-bar.hidden-print
-          #backendBar
-            .content
-              %ul.backendBarItems
-                %li.first.backendBarItem.dropdown
-                  %span.user_avatar
-                    = render 'layouts/session_bar_avatar'
-                  %span.user_name#user_name.obscure-in-demo{data: {email: current_user.email, id: current_user.id, title: current_user.title}}
-                    = link_to current_user.title, current_user
-                  -#- if can? :use, :merit
-                  -#  = link_to merit_indicator(current_user), user_path(current_user) + "#merit"
-                  %b.caret
-                  %ul.dropdown-menu
-                    %li.user_name.obscure-in-demo= current_user.title
-                    %li.user_email.obscure-in-demo= current_user.email
-                    %li= link_to t(:my_posts), posts_path
-                    %li= link_to t(:my_profile), current_user
-                    %li= link_to t(:change_avatar), user_path(current_user, trigger_change_avatar: true), class: 'change_avatar'
-                    %li= link_to t(:change_password), change_password_path
-                    %li= link_to t(:settings), user_settings_path(current_user), class: 'user_settings'
-                    %li= button_to t(:sign_out), sign_out_path, method: :delete
-                %li.backendBarItem.hidden-xs.hidden-sm
-                  = link_to t(:my_profile), current_user, :class => 'my_profile'
-                %li.backendBarItem.dropdown
-                  - Rack::MiniProfiler.step("my groups") do
-                    = link_to my_groups_path, class: 'dropdown-toggle' do
-                      = t :my_groups
-                      %b.caret
+    #vue-app
+      = render partial: 'shared/current_masquerade'
+      - if user_account_signed_in?
+        - Rack::MiniProfiler.step("#logged-in-bar") do
+          #logged-in-bar.hidden-print
+            #backendBar
+              .content
+                %ul.backendBarItems
+                  %li.first.backendBarItem.dropdown
+                    %span.user_avatar
+                      = render 'layouts/session_bar_avatar'
+                    %span.user_name#user_name.obscure-in-demo{data: {email: current_user.email, id: current_user.id, title: current_user.title}}
+                      = link_to current_user.title, current_user
+                    -#- if can? :use, :merit
+                    -#  = link_to merit_indicator(current_user), user_path(current_user) + "#merit"
+                    %b.caret
                     %ul.dropdown-menu
-                      = render partial: 'users/groups', object: current_user, as: :user
+                      %li.user_name.obscure-in-demo= current_user.title
+                      %li.user_email.obscure-in-demo= current_user.email
+                      %li= link_to t(:my_posts), posts_path
+                      %li= link_to t(:my_profile), current_user
+                      %li= link_to t(:change_avatar), user_path(current_user, trigger_change_avatar: true), class: 'change_avatar'
+                      %li= link_to t(:change_password), change_password_path
+                      %li= link_to t(:settings), user_settings_path(current_user), class: 'user_settings'
+                      %li= button_to t(:sign_out), sign_out_path, method: :delete
+                  %li.backendBarItem.hidden-xs.hidden-sm
+                    = link_to t(:my_profile), current_user, :class => 'my_profile'
+                  %li.backendBarItem.dropdown
+                    - Rack::MiniProfiler.step("my groups") do
+                      = link_to my_groups_path, class: 'dropdown-toggle' do
+                        = t :my_groups
+                        %b.caret
+                      %ul.dropdown-menu
+                        = render partial: 'users/groups', object: current_user, as: :user
 
-                - # role indicator and preview menu
-                .hidden-xs= render partial: 'layouts/role_preview_switcher'
+                  - # role indicator and preview menu
+                  .hidden-xs= render partial: 'layouts/role_preview_switcher'
 
-                .hidden-xs= render partial: 'notifications/notifications_dropdown'
+                  .hidden-xs= render partial: 'notifications/notifications_dropdown'
 
-                - # %li.backendBarItem.dropdown
-                - #   = link_to t(:bookmarks), my_bookmarks_path
-                - #   %ul.dropdown-menu.my-favorites
-                - #     = bookmarked_objects_lis( current_user )
+                  - # %li.backendBarItem.dropdown
+                  - #   = link_to t(:bookmarks), my_bookmarks_path
+                  - #   %ul.dropdown-menu.my-favorites
+                  - #     = bookmarked_objects_lis( current_user )
 
-                %li.last.backendBarItem.hidden-xs.hidden-sm
-                  = button_to t(:sign_out), sign_out_path, method: :delete, id: 'sign_out'
-            .clear
-    - Rack::MiniProfiler.step("#header-bar") do
-      .row#header-bar-wrapper
-        = render partial: 'layouts/header_bar'
-    #contentBgLayer1
-      #contentBgLayer2
-        #contentBgLayer3
-          #content_wrapper.container-fluid
-            #toolbar
-              - Rack::MiniProfiler.step('toolbar') do
-                - # %span#star_tool
-                - #   = star_tool( current_user, @navable )
-                = render partial: 'layouts/breadcrumbs'
-                %span#access_indicator
-                  = access_indicator if current_user
-            #content
-              .row
-                = render partial: 'layouts/multi_column_content_area'
+                  %li.last.backendBarItem.hidden-xs.hidden-sm
+                    = button_to t(:sign_out), sign_out_path, method: :delete, id: 'sign_out'
               .clear
+      - Rack::MiniProfiler.step("#header-bar") do
+        .row#header-bar-wrapper
+          = render partial: 'layouts/header_bar'
+      #contentBgLayer1
+        #contentBgLayer2
+          #contentBgLayer3
+            #content_wrapper.container-fluid
+              #toolbar
+                - Rack::MiniProfiler.step('toolbar') do
+                  - # %span#star_tool
+                  - #   = star_tool( current_user, @navable )
+                  = render partial: 'layouts/breadcrumbs'
+                  %span#access_indicator
+                    = access_indicator if current_user
+              #content
+                .row
+                  = render partial: 'layouts/multi_column_content_area'
+                .clear
 
-    .bottom_page_footer.hidden-print= render partial: 'layouts/footer' unless @hide_footer
+      .bottom_page_footer.hidden-print= render partial: 'layouts/footer' unless @hide_footer
     = yield :scripts
