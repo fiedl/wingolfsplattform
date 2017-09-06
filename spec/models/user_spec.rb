@@ -35,6 +35,27 @@ describe User do
     it { should == @user }
   end
 
+  describe "#summary_string" do
+    subject { @user.summary_string }
+
+    before do
+      @user = User.create last_name: "Wein", first_name: "Björn"
+      @user.localized_date_of_birth = "19.12.1980"
+      @user.home_address = "Feinhäuser Allee 25, 35037 Marburg"
+      @user.phone = "06421-12345"
+      @user.save
+
+      @m = create(:wingolf_corporation, token: "M")
+      @dp = create(:wingolf_corporation, token: "Dp")
+
+      @m.status_group('Hospitanten').assign_user @user, at: "2010-04-01".to_time
+      @dp.status_group('Hospitanten').assign_user @user, at: "2013-10-02".to_time
+      @dp.descendant_groups.find_by(name: "Neustifter").assign_user @user, at: "2013-10-02".to_time
+    end
+
+    it { should == "Wein, Björn (M 10, Dp Nstft 13), *19.12.1980, Feinhäuser Allee 25, 35037 Marburg, 06421-12345" }
+  end
+
   describe "#bv" do
     before do
       @bv = create( :bv_group )

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # This extends the your_platform User model.
 require_dependency YourPlatform::Engine.root.join( 'app/models/user' ).to_s
 
@@ -7,7 +5,18 @@ require_dependency YourPlatform::Engine.root.join( 'app/models/user' ).to_s
 # While the most part of the user class is contained in the your_platform engine,
 # this re-opened class contains all wingolf-specific additions to the user model.
 #
+module UserOverrides
+
+  def summary_components
+    hash = super
+    hash[:name_affix] = "(#{aktivitaetszahl_in_vademecum_format})"
+    hash
+  end
+
+end
+
 class User
+  prepend UserOverrides
 
   def name_affix
     "#{aktivitaetszahl} #{string_for_death_symbol}".gsub("  ", " ").strip
@@ -203,6 +212,25 @@ class User
     addition += " Eph" if self.member_of? corporation.descendant_groups.find_by_name("Ehrenphilister"), also_in_the_past: true
     addition += " " if addition != ""
     return addition.strip
+  end
+
+  def aktivitaetszahl_in_vademecum_format
+    aktivitaetszahl_in_format_mit_komma
+  end
+
+  def aktivitaetszahl_in_format_mit_halben_leerzeichen
+    # Perfect regex tester: http://rubular.com
+    aktivitaetszahl.gsub(/([A-Za-z]+)([0-9]+)/, '\1&thinsp;\2')
+      .gsub(" Stft ", "&thinsp;Stft&thinsp;")
+      .gsub(" Nstft ", "&thinsp;Nstft&thinsp;")
+      .gsub(" Eph ", "&thinsp;Eph&thinsp;")
+      .gsub("&thinsp;", " ")
+  end
+  def aktivitaetszahl_in_format_mit_komma
+    aktivitaetszahl.gsub(" ", ", ").gsub(/([A-Za-z]+)([0-9]+)/, '\1 \2')
+      .gsub(", Stft, ", " Stft ")
+      .gsub(", Nstft, ", " Nstft ")
+      .gsub(", Eph, ", " Eph ")
   end
 
   def klammerung
