@@ -4,7 +4,7 @@ module AvatarHelperOverrides
 
   def user_avatar_default_url(user = nil, options = {})
     if user.try(:wingolfit?)
-      "https://wingolfsplattform.org/assets/avatar_128.png"
+      "https://github.com/fiedl/wingolfsplattform/raw/master/app/assets/images/avatar_480.png"
     else
       super
     end
