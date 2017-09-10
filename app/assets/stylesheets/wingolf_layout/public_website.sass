@@ -1,0 +1,56 @@
+body.wingolf_layout.public-website
+
+  // Sticky header bar when screen is large enough.
+  @media (min-height: 800px) and (min-width: 800px)
+    #header-bar-wrapper
+      position: sticky
+      top: 0px
+      z-index: 100
+    #logged-in-bar
+      z-index: 200
+
+  // No meta information in regular pages.
+  .box.page:not(.blog_post)
+    .box_meta
+      display: none
+
+  // No picture info for regular pages.
+  .box.page:not(.blog_post):not(.pages-wohnen_im_wingolf)
+    .box_meta, .picture-info
+      display: none
+
+  // No title bar
+  #content .box.page:not(.blog_post)
+    .box_header
+      height: 0px
+      padding: 0px
+    .box_toolbar
+      height: 40px
+      z-index: 10
+      padding: 10px
+
+  // Large centred main headings.
+  #content .box.page:not(.blog_post), #public-root-events-box
+    h1, .head h1
+      text-align: center
+      margin-top: 3em
+      margin-bottom: 1em
+      font-size: 23pt
+
+    .box_header
+      background: transparent
+      border: none
+
+  // Better events arrangement.
+  ul.website-events
+    width: 100%
+    display: flex
+    padding: 0px
+    li
+      flex-grow: 1
+      padding: 10px
+      text-align: center
+      .event.name
+        font-size: 13pt
+      .event-icon
+        font-size: 16pt
