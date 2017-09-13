@@ -64,11 +64,7 @@ class User
     I18n.localize bv_beitrittsdatum.to_date if bv_beitrittsdatum
   end
   def localized_bv_beitrittsdatum=(str)
-    if str == "-"
-      self.bv_membership.valid_from = nil
-    else
-      self.bv_membership.valid_from = str.to_date.to_datetime
-    end
+    self.bv_membership.valid_from = str.to_date.to_datetime
     self.bv_membership.save
   end
 
