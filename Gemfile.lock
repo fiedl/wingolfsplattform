@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: b02c7cbe2845d50041e55741c06403c96e145c98
+  revision: 22020270aff3040dedb2b0713ebbfe8539d26f62
   branch: master
   specs:
     your_platform (1.0.1)
@@ -63,7 +63,7 @@ GIT
       mail_form
       merit
       mini_magick
-      nokogiri (>= 1.7.2)
+      nokogiri (>= 1.8.1)
       omniauth-facebook (~> 3.0.0)
       omniauth-github
       omniauth-google-oauth2
@@ -166,7 +166,7 @@ GEM
       tzinfo (~> 1.1)
     acts-as-taggable-on (4.0.0)
       activerecord (>= 4.0)
-    acts_as_tree (2.6.1)
+    acts_as_tree (2.7.0)
       activerecord (>= 3.0.0)
     addressable (2.5.1)
       public_suffix (~> 2.0, >= 2.0.2)
@@ -293,7 +293,7 @@ GEM
     formtastic (3.1.5)
       actionpack (>= 3.2.13)
     gemoji (3.0.0)
-    gender_detector (1.0.0)
+    gender_detector (2.0.0)
     geocoder (1.4.4)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
@@ -347,7 +347,7 @@ GEM
     mimemagic (0.3.2)
     mini_magick (4.8.0)
     mini_mime (0.1.4)
-    mini_portile2 (2.2.0)
+    mini_portile2 (2.3.0)
     minitest (5.10.3)
     multi_json (1.12.2)
     multi_xml (0.6.0)
@@ -357,8 +357,8 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (4.3.0.335)
     nio4r (2.1.0)
-    nokogiri (1.8.0)
-      mini_portile2 (~> 2.2.0)
+    nokogiri (1.8.1)
+      mini_portile2 (~> 2.3.0)
     oauth (0.5.3)
     oauth2 (1.4.0)
       faraday (>= 0.8, < 0.13)
