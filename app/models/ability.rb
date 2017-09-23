@@ -101,6 +101,10 @@ module AbilityDefinitions
         can?(:update, group) && (not group.descendant_groups.where(type: "StatusGroup").any?)
       end
 
+      can :index_memberships, Group do |group|
+        can? :update, group
+      end
+
       can :create_memberships, Group do |group|
         can? :update, group
       end
