@@ -542,7 +542,7 @@ describe User do
           @user.bv.should == @bv2
           @membership2.reload.valid_to.should == nil
         end
-        it { should == @membership2 }
+        it { sleep 2; should == @membership2 }
       end
       describe "for a user without address" do
         before do
