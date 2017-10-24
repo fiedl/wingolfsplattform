@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: f5039b66b59d9c4fecf227bf06957cb6818c3a72
+  revision: b54df50094fe0e1dc0bb1c6396ef37d337438ab2
   branch: master
   specs:
     your_platform (1.0.1)
@@ -63,6 +63,8 @@ GIT
       mail_form
       merit
       mini_magick
+      neography
+      net-ldap
       nokogiri (>= 1.8.1)
       omniauth-facebook (~> 3.0.0)
       omniauth-github
@@ -177,7 +179,7 @@ GEM
     auto_html (1.6.4)
       redcarpet (~> 3.1)
       rinku (~> 1.5.0)
-    autoprefixer-rails (7.1.4)
+    autoprefixer-rails (7.1.5)
       execjs
     autosize-rails (1.18.17)
       rails (>= 3.1)
@@ -239,7 +241,7 @@ GEM
       devise (>= 2.1.0)
       railties (>= 3.0)
     diff-lcs (1.3)
-    discourse_api (0.17.0)
+    discourse_api (0.18.0)
       faraday (~> 0.9)
       faraday_middleware (~> 0.10)
       rack (>= 1.6)
@@ -272,6 +274,7 @@ GEM
     exception_notification (4.2.2)
       actionmailer (>= 4.0, < 6)
       activesupport (>= 4.0, < 6)
+    excon (0.59.0)
     execjs (2.7.0)
     factory_girl (4.8.0)
       activesupport (>= 3.0.0)
@@ -354,6 +357,14 @@ GEM
     multipart-post (2.0.0)
     mustermann (1.0.0)
     mysql2 (0.4.9)
+    neography (1.8.0)
+      excon (>= 0.33.0)
+      json (>= 1.7.7)
+      multi_json (>= 1.3.2)
+      os (>= 0.9.6)
+      rake (>= 0.8.7)
+      rubyzip (>= 1.0.0)
+    net-ldap (0.16.0)
     netrc (0.11.0)
     newrelic_rpm (4.3.0.335)
     nio4r (2.1.0)
@@ -366,7 +377,7 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
-    omniauth (1.6.1)
+    omniauth (1.7.1)
       hashie (>= 3.4.6, < 3.6.0)
       rack (>= 1.6.2, < 3)
     omniauth-facebook (3.0.0)
@@ -389,6 +400,7 @@ GEM
       omniauth-oauth (~> 1.1)
       rack
     orm_adapter (0.5.0)
+    os (1.0.0)
     parallel (1.12.0)
     parallel_tests (2.14.3)
       parallel
@@ -470,25 +482,25 @@ GEM
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
     redcarpet (3.4.0)
-    redis (3.3.3)
-    redis-actionpack (5.0.1)
+    redis (3.3.5)
+    redis-actionpack (5.0.2)
       actionpack (>= 4.0, < 6)
       redis-rack (>= 1, < 3)
-      redis-store (>= 1.1.0, < 1.4.0)
-    redis-activesupport (5.0.3)
+      redis-store (>= 1.1.0, < 2)
+    redis-activesupport (5.0.4)
       activesupport (>= 3, < 6)
-      redis-store (~> 1.3.0)
+      redis-store (>= 1.3, < 2)
     redis-namespace (1.5.3)
       redis (~> 3.0, >= 3.0.4)
-    redis-rack (2.0.2)
+    redis-rack (2.0.3)
       rack (>= 1.5, < 3)
-      redis-store (>= 1.2, < 1.4)
+      redis-store (>= 1.2, < 2)
     redis-rails (5.0.2)
       redis-actionpack (>= 5.0, < 6)
       redis-activesupport (>= 5.0, < 6)
       redis-store (>= 1.2, < 2)
-    redis-store (1.3.0)
-      redis (>= 2.2)
+    redis-store (1.4.1)
+      redis (>= 2.2, < 5)
     ref (2.0.0)
     responders (2.4.0)
       actionpack (>= 4.2.0, < 5.3)
