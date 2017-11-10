@@ -3,6 +3,7 @@ body.wingolf_layout.public-website
   // Sticky header bar when screen is large enough.
   @media (min-height: 800px) and (min-width: 800px)
     #header-bar-wrapper
+      position: -webkit-sticky
       position: sticky
       top: 0px
       z-index: 100
@@ -20,10 +21,12 @@ body.wingolf_layout.public-website
       display: none
 
   // No title bar
-  #content .box.page:not(.blog_post)
+  #content .box.page.with_picture:not(.blog_post)
     .box_header
       height: 0px
       padding: 0px
+      h1
+        display: none
     .box_toolbar
       height: 40px
       z-index: 10
@@ -38,8 +41,14 @@ body.wingolf_layout.public-website
       font-size: 23pt
 
     .box_header
+      display: block
       background: transparent
       border: none
+
+    .box_toolbar
+      position: absolute
+      top: 0px
+      right: 0px
 
   // Better events arrangement.
   ul.website-events
