@@ -24,7 +24,7 @@
   = body_tag do
     #vue-app
       = render partial: 'shared/current_masquerade'
-      - if user_account_signed_in?
+      - if current_user
         - Rack::MiniProfiler.step("#logged-in-bar") do
           #logged-in-bar.hidden-print
             #backendBar

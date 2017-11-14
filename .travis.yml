@@ -1,35 +1,35 @@
 rvm:
   - "2.3.3"
 env:
-  - "WORKER_ID=0  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql SELENIUM=true"
-  - "WORKER_ID=1  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql SELENIUM=true"
-  - "WORKER_ID=2  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql SELENIUM=true"
-  - "WORKER_ID=3  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql SELENIUM=true"
-  - "WORKER_ID=4  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql SELENIUM=true"
-  - "WORKER_ID=5  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql SELENIUM=true"
-  - "WORKER_ID=6  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql SELENIUM=true"
-  - "WORKER_ID=7  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql SELENIUM=true"
-  - "WORKER_ID=8  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql SELENIUM=true"
-  - "WORKER_ID=9  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql SELENIUM=true"
-  - "WORKER_ID=10 NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql SELENIUM=true"
-  - "WORKER_ID=11 NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql SELENIUM=true"
-  - "WORKER_ID=12 NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql SELENIUM=true"
-  - "WORKER_ID=13 NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql SELENIUM=true"
-  - "WORKER_ID=14 NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql SELENIUM=true"
-  - "WORKER_ID=0  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql"
-  - "WORKER_ID=1  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql"
-  - "WORKER_ID=2  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql"
-  - "WORKER_ID=3  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql"
-  - "WORKER_ID=4  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql"
-  - "WORKER_ID=5  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql"
-  - "WORKER_ID=6  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql"
-  - "WORKER_ID=7  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql"
-  - "WORKER_ID=8  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql"
-  - "WORKER_ID=9  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql"
-  - "WORKER_ID=0  NUMBER_OF_WORKERS=3  CI_CATEGORY=models      NO_CACHING=true              RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql"
-  - "WORKER_ID=1  NUMBER_OF_WORKERS=3  CI_CATEGORY=models      NO_CACHING=true              RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql"
-  - "WORKER_ID=2  NUMBER_OF_WORKERS=3  CI_CATEGORY=models      NO_CACHING=true              RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql"
-  - "WORKER_ID=0  NUMBER_OF_WORKERS=1  CI_CATEGORY=others                                   RAILS_ENV=test CI=travis COVERALLS_SILENT=true DB=mysql"
+  - "WORKER_ID=0  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql SELENIUM=true"
+  - "WORKER_ID=1  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql SELENIUM=true"
+  - "WORKER_ID=2  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql SELENIUM=true"
+  - "WORKER_ID=3  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql SELENIUM=true"
+  - "WORKER_ID=4  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql SELENIUM=true"
+  - "WORKER_ID=5  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql SELENIUM=true"
+  - "WORKER_ID=6  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql SELENIUM=true"
+  - "WORKER_ID=7  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql SELENIUM=true"
+  - "WORKER_ID=8  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql SELENIUM=true"
+  - "WORKER_ID=9  NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql SELENIUM=true"
+  - "WORKER_ID=10 NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql SELENIUM=true"
+  - "WORKER_ID=11 NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql SELENIUM=true"
+  - "WORKER_ID=12 NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql SELENIUM=true"
+  - "WORKER_ID=13 NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql SELENIUM=true"
+  - "WORKER_ID=14 NUMBER_OF_WORKERS=15 CI_CATEGORY=features                                 RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql SELENIUM=true"
+  - "WORKER_ID=0  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql"
+  - "WORKER_ID=1  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql"
+  - "WORKER_ID=2  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql"
+  - "WORKER_ID=3  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql"
+  - "WORKER_ID=4  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql"
+  - "WORKER_ID=5  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql"
+  - "WORKER_ID=6  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql"
+  - "WORKER_ID=7  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql"
+  - "WORKER_ID=8  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql"
+  - "WORKER_ID=9  NUMBER_OF_WORKERS=10 CI_CATEGORY=models      NO_RENEW_CACHE=true          RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql"
+  - "WORKER_ID=0  NUMBER_OF_WORKERS=3  CI_CATEGORY=models      NO_CACHING=true              RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql"
+  - "WORKER_ID=1  NUMBER_OF_WORKERS=3  CI_CATEGORY=models      NO_CACHING=true              RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql"
+  - "WORKER_ID=2  NUMBER_OF_WORKERS=3  CI_CATEGORY=models      NO_CACHING=true              RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql"
+  - "WORKER_ID=0  NUMBER_OF_WORKERS=1  CI_CATEGORY=others                                   RAILS_ENV=test CI=travis COVERALLS_SILENT=true NEO4J_REST_URL_TEST=http://neo4j:neo4j@localhost:7474 DB=mysql"
 cache:
   bundler: true
   directories:
@@ -48,6 +48,7 @@ addons:
     repo_token: e0efa94b3c7a8a2049f5ff1ded51a21e922bf29845e658de598b01c964c17275
 services:
   - redis-server
+  - neo4j
 before_install:
   - travis_retry gem update --system
   - travis_retry gem install bundler
