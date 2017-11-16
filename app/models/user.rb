@@ -490,7 +490,6 @@ class User
     cache :fruehere_aktivitaetszahl
     cache :name_affix
     cache :title
-    cache :bv_id
     cache :localized_bv_beitrittsdatum
     cache :w_nummer
     cache :aktiver?
