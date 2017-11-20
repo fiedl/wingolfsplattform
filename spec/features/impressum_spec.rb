@@ -5,7 +5,7 @@ feature 'Impressum' do
 
   describe 'for an imprint Page existing' do
     background do
-      @imprint = Page.create(title: "Imprint", content: "This is the imprint.", published_at: 1.day.ago)
+      @imprint = Page.find_root.child_pages.create(title: "Imprint", content: "This is the imprint.", published_at: 1.day.ago)
       @imprint.add_flags :imprint
     end
     scenario 'clicking on the imprint link in the footer' do

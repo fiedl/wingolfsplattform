@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: b55a5c6f0987fd5c75aac1dbb3ad064213091747
+  revision: 9f4965283579c981378881ae7ef34908ef7af75e
   branch: master
   specs:
     your_platform (1.0.1)
@@ -509,7 +509,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
-    reverse_markdown (1.0.3)
+    reverse_markdown (1.0.4)
       nokogiri
     rinku (1.5.1)
     rspec (3.6.0)
