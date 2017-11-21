@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 9f4965283579c981378881ae7ef34908ef7af75e
+  revision: d7f1465d1a3c3f1e9a3bd8fee056b0b79b7d2c09
   branch: master
   specs:
     your_platform (1.0.1)
@@ -570,7 +570,7 @@ GEM
       rack-protection (= 2.0.0)
       tilt (~> 2.0)
     slop (3.6.0)
-    spreadsheet (1.1.4)
+    spreadsheet (1.1.5)
       ruby-ole (>= 1.0)
     spring (2.0.2)
       activesupport (>= 4.2)
