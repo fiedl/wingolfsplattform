@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: cbcc9d0652d80e7dec8ab82f240ea5de342ad5f8
+  revision: 624f06014e105b30b458bac5c8b2c024fac2876f
   branch: master
   specs:
     your_platform (1.0.1)
@@ -241,7 +241,7 @@ GEM
       devise (>= 2.1.0)
       railties (>= 3.0)
     diff-lcs (1.3)
-    discourse_api (0.18.0)
+    discourse_api (0.19.0)
       faraday (~> 0.9)
       faraday_middleware (~> 0.10)
       rack (>= 1.6)

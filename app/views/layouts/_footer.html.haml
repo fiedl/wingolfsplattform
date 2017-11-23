@@ -5,13 +5,13 @@
   #footer_bg
   #footer_navi
     %ul
-      %li
-        %a(href="http://status.wingolf.org") Status
-      %li
-        %a{href: "/api"} API
-      %li
-        %a(href="https://github.com/fiedl/wingolfsplattform") Github
       - if current_user
+        %li
+          %a(href="http://status.wingolf.org") Status
+        %li
+          %a{href: "/api"} API
+        %li
+          %a(href="https://github.com/fiedl/wingolfsplattform") Github
         %li
           %a.has_popover{href: 'irc://kornbluth.freenode.net/wingolfsplattform', data: {placement: popover_placement, title: 'IRC-Chat'}} IRC
           -# kornbluth.freenode.net, Frankfurt
@@ -33,15 +33,15 @@
                 %a(href="http://www.mumble.com/mumble-download.php") Client herunterladen
               %li
                 %a.btn.btn-default(href="mumble://wingolfsplattform.org") Mit Konferenz verbinden
-      %li.discourse
-        = link_to "Discourse", "https://discourse.wingolfsplattform.org"
-      %li
-        = link_to t(:imprint), Page.find_by_flag(:imprint)
-      - if current_user
+        %li.discourse
+          = link_to "Discourse", "https://discourse.wingolfsplattform.org"
         %li
           = link_to t(:terms_of_use), terms_path
         %li
           = link_to t(:privacy), privacy_path
+      - current_home_page && current_home_page.descendant_pages.flagged(:footer).each do |footer_page|
+        %li
+          = link_to footer_page.title, footer_page
       %li
         = language_switcher_html
     .clear

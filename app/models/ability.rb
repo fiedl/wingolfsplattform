@@ -345,6 +345,7 @@ module AbilityDefinitions
     # Feature Switches
     cannot :create_comment_for, BlogPost
     cannot :use, :omni_auth
+    can :use, :fast_lane
 
     # Jeder Internetbenutzer kann Semesterprogramm-PDFs herunterladen, damit
     # die Verbindungen die Möglichkeit haben, die PDFs zu verlinken.

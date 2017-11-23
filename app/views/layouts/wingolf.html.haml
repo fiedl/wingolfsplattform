@@ -3,6 +3,8 @@
   %head
     - Rack::MiniProfiler.step('wingolf layout head') do
       %meta{:content => 'text/html; charset=utf-8', 'http-equiv' => 'Content-type'}/
+      %meta{name: 'turbolinks-cache-control', content: 'no-cache'}/
+
       %title= website_title_with_app_name
 
       = stylesheet_link_tag    'bootstrap_setup', :media => 'all'
