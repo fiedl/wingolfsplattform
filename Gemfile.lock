@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 624f06014e105b30b458bac5c8b2c024fac2876f
+  revision: a3d058cc828a3c17670c5c0c0884194ccfc9438d
   branch: master
   specs:
     your_platform (1.0.1)
@@ -431,7 +431,7 @@ GEM
     rack (2.0.3)
     rack-accept (0.4.5)
       rack (>= 0.4)
-    rack-mini-profiler (0.10.6)
+    rack-mini-profiler (0.10.7)
       rack (>= 1.2.0)
     rack-protection (2.0.0)
       rack
