@@ -17,9 +17,18 @@ module MapItemOverrides
       # Um die Karte kompakt darzustellen, wurde Estland verkleinert und verschoben.
       # Die Koordinate von Dorpat muss daher korrigiert werden.
       15.8
+    when "Hohenheimer Wingolf-Verbindung Fraternitas Academica"
+      # Hohenheim müssen wir etwas nach rechts versetzen, damit
+      # es Stuttgart nicht verdeckt.
+      super + 0.3
     when "Marburger Wingolf"
-      # Den Marburger Wingolf versetzen wir etwas, da er sonst auf dem ClzM liegt.
-      super * 1.01
+      # Den Marburger Wingolf versetzen wir etwas, da er sonst
+      # auf dem ClzM liegt.
+      super + 0.3
+    when "Heidelberger Wingolf"
+      # Den Heidelberger Wingolf auch nach rechts, damit er nicht
+      # auf Mannheim liegt.
+      super + 0.3
     else
       super
     end
