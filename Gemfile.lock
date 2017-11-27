@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: a3d058cc828a3c17670c5c0c0884194ccfc9438d
+  revision: d5bd600b3530655d6d016e371fdfc95a80fbab85
   branch: master
   specs:
     your_platform (1.0.1)
@@ -406,7 +406,7 @@ GEM
       parallel
     passgen (1.0.2)
     pdf-core (0.6.1)
-    phony (2.15.48)
+    phony (2.15.49)
     poltergeist (1.16.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)

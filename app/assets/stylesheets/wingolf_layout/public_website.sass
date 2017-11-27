@@ -12,45 +12,25 @@ body.wingolf_layout.public-website
     #logged-in-bar
       z-index: 200
 
-  // No meta information in regular pages.
-  .box.page:not(.blog_post)
-    .box_meta
-      display: none
-
   // No picture info for regular pages.
   .box.page:not(.blog_post):not(.pages-wohnen_im_wingolf)
     .box_meta, .picture-info
       display: none
 
-  // No title bar
-  #content .box.page.with_picture:not(.blog_post)
+  // On the public website, we want only blog posts,
+  // which have a meta section in the box, to have a
+  // white box header. The other boxes should have no
+  // white box header but big centered headings.
+  //
+  #content .box:not(.blog_post)
     .box_header
-      height: 0px
-      padding: 0px
-      h1
-        display: none
-    .box_toolbar
-      height: 40px
-      z-index: 10
-      padding: 10px
-
-  // Large centred main headings.
-  #content .box.page:not(.blog_post), #public-root-events-box
-    h1, .head h1
+      background: transparent
+      border: none
+    .box_header > .box_title > h1, h1
       text-align: center
       margin-top: 3em
       margin-bottom: 1em
       font-size: 23pt
-
-    .box_header
-      display: block
-      background: transparent
-      border: none
-
-    .box_toolbar
-      position: absolute
-      top: 0px
-      right: 0px
 
   // Better events arrangement.
   ul.website-events
@@ -71,3 +51,15 @@ body.wingolf_layout.public-website
 
   #horizontal-nav-bar ul.nav li.horizontal-nav-link > a.mitgliederbereich
     color: $brand-primary
+
+  .box.page:not(.blog_post).first
+    .galleria:before
+      position: absolute
+      top: -2px
+      left: -2px
+      z-index: 50
+      content: ''
+      background: image-url("schwarz-weiss-gold.png")
+      width: 95px
+      height: 93px
+      pointer-events: none

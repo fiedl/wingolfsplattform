@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170817134825) do
+ActiveRecord::Schema.define(version: 20171124102833) do
 
   create_table "activities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "trackable_type"
@@ -345,6 +345,7 @@ ActiveRecord::Schema.define(version: 20170817134825) do
     t.text     "box_configuration", limit: 65535
     t.text     "teaser_text",       limit: 65535
     t.datetime "published_at"
+    t.boolean  "embedded"
     t.index ["author_user_id"], name: "pages_author_user_id_fk", using: :btree
   end
 
