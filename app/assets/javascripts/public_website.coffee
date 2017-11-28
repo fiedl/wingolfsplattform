@@ -16,6 +16,9 @@ process_public_website_elements = (element)->
         link.text("Mitgliederbereich")
         link.addClass 'mitgliederbereich'
 
+    # E-Mail-Links sollen Buttons sein.
+    $(element).find('.box.page .box_content a[href^="mailto:"]').addClass('btn btn-default')
+
 $(document).ready ->
   process_public_website_elements($('body'))
 
