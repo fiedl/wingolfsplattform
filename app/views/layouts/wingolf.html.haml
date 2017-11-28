@@ -86,6 +86,7 @@
                   = render partial: 'layouts/breadcrumbs'
                   %span#access_indicator
                     = access_indicator if current_user
+                  = render partial: 'layouts/toolbar'
               #content
                 .row
                   = render partial: 'layouts/multi_column_content_area'
