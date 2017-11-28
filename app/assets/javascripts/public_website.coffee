@@ -2,8 +2,8 @@ process_public_website_elements = (element)->
 
   if $('body').hasClass('public-website')
     App.scrollreveal '.box', {reset: true}
-    App.scrollreveal '#group-map-box', {origin: 'left', beforeReveal: App.hide_group_map_items, afterReveal: App.animate_group_map_items}
-    App.scrollreveal '.box.pages-wohnen_im_wingolf', {origin: 'right'}
+    App.scrollreveal '.group_map_box', {reset: false, origin: 'left', beforeReveal: App.hide_group_map_items, afterReveal: App.animate_group_map_items}
+    App.scrollreveal '.box.pages-wohnen_im_wingolf', {reset: false, origin: 'right'}
     App.scrollreveal '#goto_start_page', {reset: true}
 
     $(element).find('ul.website-events li').each ->
