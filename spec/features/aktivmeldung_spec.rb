@@ -473,7 +473,7 @@ feature "Aktivmeldung" do
     within '#corporate_vita' do
       page.should have_content @corporation.title
       page.should have_no_content "02.12.#{@aktivmeldungsjahr}"
-      page.should have_content I18n.localize(Date.today)
+      page.should have_content I18n.localize(Date.today.in_time_zone(@local_admin_user.time_zone).to_date)
     end
 
     page.should have_content I18n.t(:name_field_wingolfspost)

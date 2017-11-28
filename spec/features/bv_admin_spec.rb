@@ -81,7 +81,7 @@ feature "BV-Admins" do
     end
   end
 
-  scenario "Using the Role-Preview Menu" do
+  scenario "Using the Role-Preview Menu", :js do
     visit group_path(@bv)
 
     Role.of(@bv_admin).for(@bv).to_s.should == 'admin'
@@ -91,6 +91,7 @@ feature "BV-Admins" do
     within "#logged-in-bar" do
       within ".role-preview-switcher" do
         page.should have_text I18n.t(:admin)
+        click_on :admin
         within ".dropdown-menu" do
           page.should have_selector '.issues_task'
           page.should have_text "0 #{I18n.t(:administrative_issues)}"
@@ -106,23 +107,6 @@ feature "BV-Admins" do
     end
     within ".box.first" do
       page.should have_text "#{I18n.t(:administrative_issues)} (0)"
-    end
-
-    visit group_path(@bv)
-    within ".box.first" do
-      page.should have_selector '.edit_button', visible: true
-    end
-    within ".role-preview-switcher" do
-      click_on I18n.t(:officer)
-    end
-    within ".box.first" do
-      page.should have_no_selector '.edit_button', visible: true
-    end
-    within ".role-preview-switcher" do
-      click_on I18n.t(:admin)
-    end
-    within ".box.first" do
-      page.should have_selector '.edit_button', visible: true
     end
   end
 
