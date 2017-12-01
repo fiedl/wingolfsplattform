@@ -1,6 +1,6 @@
 process_public_website_elements = (element)->
 
-  if $('body').hasClass('public-website')
+  if $('body').hasClass('public-website wingolf-layout')
     App.scrollreveal '.box', {reset: true}
     App.scrollreveal '.group_map_box', {reset: false, origin: 'left', beforeReveal: App.hide_group_map_items, afterReveal: App.animate_group_map_items}
     App.scrollreveal '.box.pages-wohnen_im_wingolf', {reset: false, origin: 'right'}
@@ -18,6 +18,9 @@ process_public_website_elements = (element)->
 
     # E-Mail-Links sollen Buttons sein.
     $(element).find('.box.page .box_content a[href^="mailto:"]').addClass('btn btn-default')
+
+    # In großen Gallery-Boxen keine Light-Box verwenden.
+    App.no_lightbox_for_large_boxes = true
 
 $(document).ready ->
   process_public_website_elements($('body'))
