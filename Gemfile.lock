@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 0a1305336b774a9aee8c0ef31f849d503aad62fc
+  revision: af40b3d25c470f1c25de5e8a2f1b29d579f99461
   branch: master
   specs:
     your_platform (1.0.1)
@@ -179,7 +179,7 @@ GEM
     auto_html (1.6.4)
       redcarpet (~> 3.1)
       rinku (~> 1.5.0)
-    autoprefixer-rails (7.1.6)
+    autoprefixer-rails (7.2.1)
       execjs
     autosize-rails (1.18.17)
       rails (>= 3.1)
@@ -297,7 +297,7 @@ GEM
       actionpack (>= 3.2.13)
     gemoji (3.0.0)
     gender_detector (2.0.0)
-    geocoder (1.4.4)
+    geocoder (1.4.5)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
     gravatar_image_tag (1.2.0)
