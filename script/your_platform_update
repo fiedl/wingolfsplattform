@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+#
+# This will bring the your_platform engine to the current
+# master commit and display the changelog.
+
+require 'fiedl/log'
+
+log = Fiedl::Log::Log.new
+log.head "Updating YourPlatform Engine"
+
+main_app_path = File.expand_path(File.join(__FILE__, "..", ".."))
+your_platform_path = File.expand_path(File.join(main_app_path, "..", "your_platform"))
+
+log.section "Installing bundle"
+log.shell "cd #{main_app_path} && bundle install"
+
+log.section "YourPlatform Changelog"
+old_and_new_your_platform_commit_ids = log.shell("cd #{main_app_path} &&
+    git diff Gemfile.lock |grep revision |cut -d ' ' -f 4").split("\n")
+old_commit_id = old_and_new_your_platform_commit_ids.first
+new_commit_id = old_and_new_your_platform_commit_ids.last
+
+commits = log.shell("cd #{your_platform_path} &&
+    git log --oneline #{old_commit_id}..#{new_commit_id}").split("\n")
+
+log.section "Commit message"
+
+log.info "Updating YourPlatform Engine"
+log.info ""
+for commit in commits
+  commit_id = commit.split(" ").first
+  commit_link = "[#{commit_id}](https://github.com/fiedl/your_platform/commit/#{commit_id})"
+  log.info "- #{commit.gsub(commit_id, commit_link)}"
+end
+
