@@ -3,6 +3,10 @@ require_dependency YourPlatform::Engine.root.join('app/controllers/application_c
 
 module ApplicationControllerOverrides
 
+  def current_help_topics
+    super + [:wingolf]
+  end
+
 end
 
 class ApplicationController
