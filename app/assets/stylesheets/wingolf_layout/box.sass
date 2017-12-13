@@ -10,12 +10,6 @@
   width: 100%
   //display: inline-block
   position: relative
-  border: #d3e0e9 1px solid
-  background: repeat
-  background-image: image-url("box_bg.jpg")
-  //background: #f7f6f4
-  ////rgba(255,255,255,0.7)
-  margin-bottom: 13px
   .head
     padding-top: 6px
     padding-bottom: 6px
@@ -44,11 +38,7 @@
       padding-left: 0px
       padding-right: 0px
 
-.box.first
-  background: repeat scroll 0 0 transparent !important
-  background-image: image-url("bg_bundeswappen_light.jpg") !important
-
-.box
+      .box
   .head
     h1
       padding: 7px 0 0 9px
@@ -77,3 +67,18 @@
 .box
   .panel-heading
     background: #fbfbfb
+
+
+body.wingolf_layout
+
+  .box.first
+    background: repeat scroll 0 0 transparent !important
+    background-image: image-url("bg_bundeswappen_light.jpg") !important
+
+  #content * .box
+    border: #d3e0e9 1px solid
+    background: repeat
+    background-image: image-url("box_bg.jpg")
+    //background: #f7f6f4
+    ////rgba(255,255,255,0.7)
+    margin-bottom: 13px

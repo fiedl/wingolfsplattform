@@ -1,36 +1,42 @@
-#contentBgLayer1
-  background: repeat
-  background-image: image-url("content_wrapper.gif")
+body.wingolf_layout, body.greifenstein_layout
 
-#contentBgLayer2
-  background: repeat-x
-  background-image: image-url("content_wrapper_bg.jpg")
+  #content_wrapper
+    margin: 0 auto
+    max-width: 896px
+    padding: 12px 25px
+    min-height: 593px
 
-#contentBgLayer3
-  background: no-repeat center 0
-  background-image: image-url("bg_shadow.png")
+  #content
+    margin-top: 13px
+    position: relative
 
-#content_wrapper
-  margin: 0 auto
-  max-width: 896px
-  padding: 12px 25px
-  min-height: 593px
+  .content_twoCols_left, .fancybox .content_twoCols_left, .content_twoCols_right, .fancybox .content_twoCols_right
+    float: left
 
-#content
-  margin-top: 13px
-  position: relative
+  .content_twoCols_left, .fancybox .content_twoCols_left
+    width: 198px
 
-.content_twoCols_left, .fancybox .content_twoCols_left, .content_twoCols_right, .fancybox .content_twoCols_right
-  float: left
+  .content_twoCols_right, .fancybox .content_twoCols_right
+    padding-left: 18px
+    width: 648px
 
-.content_twoCols_left, .fancybox .content_twoCols_left
-  width: 198px
+  .content_twoCols_right
+    > div.col-xs-12
+      padding-left: 8px
+      padding-right: 8px
 
-.content_twoCols_right, .fancybox .content_twoCols_right
-  padding-left: 18px
-  width: 648px
+body.wingolf_layout
 
-.content_twoCols_right
-  > div.col-xs-12
-    padding-left: 8px
-    padding-right: 8px
+  #contentBgLayer1
+    background: repeat
+    background-image: image-url("content_wrapper.gif")
+
+  #contentBgLayer2
+    background: repeat-x
+    background-image: image-url("content_wrapper_bg.jpg")
+
+  #contentBgLayer3
+    background: no-repeat center 0
+    background-image: image-url("bg_shadow.png")
+
+
