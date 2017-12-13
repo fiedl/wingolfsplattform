@@ -7,6 +7,14 @@ module ApplicationControllerOverrides
     super + [:wingolf]
   end
 
+  def current_layout
+    if current_navable && (current_navable.has_flag?(:intranet_root) || (current_navable.ancestor_pages.flagged(:intranet_root).count > 0))
+      "wingolf"
+    else
+      super
+    end
+  end
+
 end
 
 class ApplicationController
@@ -18,7 +26,7 @@ class ApplicationController
   before_action :prepend_wingolf_layout_view_path
 
   def permitted_layouts
-    super + ['wingolf', 'wingolf-2017']
+    super + ['wingolf', 'wingolf-2017', 'greifenstein']
   end
 
   protected

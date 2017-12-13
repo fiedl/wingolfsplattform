@@ -1,0 +1,5 @@
+- content_for :head do
+  = stylesheet_link_tag 'greifenstein_layout', :media => 'all', data: {turbolinks_track: 'reload'}
+  = javascript_include_tag 'greifenstein', data: {turbolinks_track: 'reload'}
+
+= render file: Rails.root.join('app/views/layouts/wingolf').to_s
