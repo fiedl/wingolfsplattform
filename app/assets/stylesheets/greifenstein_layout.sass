@@ -3,6 +3,17 @@ body.greifenstein_layout
   #header-bar-wrapper
     border-bottom: 1px solid #aaa
 
+  #claim-area
+    display: none
+
+  #first-header-line
+    @media (min-width: 501px)
+      margin-bottom: -35px
+
+  #horizontal_nav #nav_dropdown
+    display: none
+    visibility: hidden
+
   #footer
     border-top: 1px solid #aaa
 
@@ -22,10 +33,13 @@ body.greifenstein_layout
       background: none
       border: none
 
+  .box .galleria:before
+    background: none
+
   .box.blog_post
     border-bottom: 1px solid #ddd
 
-  .galleria
+  .galleria, .galleria-container
     background: white
 
   p
