@@ -2,7 +2,7 @@ process_public_website_elements = (element)->
 
   if $('body').hasClass('wingolf-layout') || $('body').hasClass('greifenstein-layout')
     if $('body').hasClass('public-website')
-      App.scrollreveal '.box', {reset: true}
+      App.scrollreveal '.box', {reset: true, viewFactor: 0.005, delay: 50}
       App.scrollreveal '.group_map_box', {reset: false, origin: 'left', beforeReveal: App.hide_group_map_items, afterReveal: App.animate_group_map_items}
       App.scrollreveal '.box.pages-wohnen_im_wingolf', {reset: false, origin: 'right'}
       App.scrollreveal '#goto_start_page', {reset: true}
