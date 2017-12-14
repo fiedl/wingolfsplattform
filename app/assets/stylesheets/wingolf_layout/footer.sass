@@ -1,50 +1,67 @@
-.bottom_page_footer
+body.wingolf_layout, body.greifenstein_layout
 
-  #footer
-    height: 162px
+  .bottom_page_footer
+
+    #footer
+      min-height: 162px
+      position: relative
+      padding-bottom: 60px
+
+    #footer_bg
+      height: 162px
+      position: absolute
+      top: 0px
+      width: 110%
+
+    #footer_embedded_pages
+      font-family: "Helvetica Neue"
+      font-size: 90%
+      padding: 50px
+      margin-bottom: 30px
+      textarea
+        background: transparent
+      h1, h2, h3, h4
+        font-family: "Helvetica Neue"
+        font-weight: bold
+        font-size: 110%
+        margin-top: 1em
+        margin-bottom: 1em
+
+
+    #footer_navi
+      position: relative
+      margin: 0 auto
+      z-index: 5
+      text-align: center
+      ul
+        margin: 0
+        padding: 0
+        list-style: none
+        padding: 10px 0 8px 0
+      li
+        margin: 0
+        padding: 0
+        list-style: none
+        padding: 10px 0 8px 0
+        display: inline
+        margin-left: 11px
+      a
+        color: #000000
+
+      #btn-feedback
+        color: #FFFFFF
+
+  #footer_line
     position: relative
+    border-top: 1px solid #ffeda7
+    border-bottom: 1px solid #dcb000
+    z-index: 5
 
-  #footer_bg
-    height: 162px
-    position: absolute
-    top: 0px
-    width: 100%
-    z-index: 1
-
-  #footer_navi
+  #version_footer
     position: relative
-    margin: 0 auto
     z-index: 5
     text-align: center
-    ul
-      margin: 0
-      padding: 0
-      list-style: none
-      padding: 10px 0 8px 0
-    li
-      margin: 0
-      padding: 0
-      list-style: none
-      padding: 10px 0 8px 0
-      display: inline
-      margin-left: 11px
-    a
-      color: #000000
-
-    #btn-feedback
-      color: #FFFFFF
-
-#footer_line
-  position: relative
-  border-top: 1px solid #ffeda7
-  border-bottom: 1px solid #dcb000
-  z-index: 5
-
-#version_footer
-  position: relative
-  z-index: 5
-  text-align: center
-  margin-top: 6px
+    margin-top: 6px
 
 
 body.wingolf_layout
