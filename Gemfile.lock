@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 48eee4781fe39c19ba0da9cb4e18fafb79bfaa56
+  revision: 02b676b400b03c7a21d23c65ee82eda9f58dd576
   branch: master
   specs:
     your_platform (1.0.1)
@@ -274,7 +274,7 @@ GEM
     exception_notification (4.2.2)
       actionmailer (>= 4.0, < 6)
       activesupport (>= 4.0, < 6)
-    excon (0.59.0)
+    excon (0.60.0)
     execjs (2.7.0)
     factory_girl (4.8.0)
       activesupport (>= 3.0.0)
