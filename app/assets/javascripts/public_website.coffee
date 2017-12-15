@@ -17,9 +17,6 @@ process_public_website_elements = (element)->
           link.text("Mitgliederbereich")
           link.addClass 'mitgliederbereich'
 
-      # E-Mail-Links sollen Buttons sein.
-      $(element).find('.box.page .box_content a[href^="mailto:"]').addClass('btn btn-default')
-
       # In großen Gallery-Boxen keine Light-Box verwenden.
       App.no_lightbox_for_large_boxes = true
 
