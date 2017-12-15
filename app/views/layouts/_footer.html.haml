@@ -40,11 +40,11 @@
           = link_to t(:terms_of_use), terms_path
         %li
           = link_to t(:privacy), privacy_path
-      - current_home_page && current_home_page.descendant_pages.flagged(:footer).each do |footer_page|
+      - current_home_page && current_home_page.descendant_pages.flagged(:footer).visible_to(current_user).each do |footer_page|
         %li
           = link_to footer_page.title, footer_page
-      %li
-        = language_switcher_html
+      -#%li
+      -#  = language_switcher_html
     .clear
   #footer_line
   .clear
