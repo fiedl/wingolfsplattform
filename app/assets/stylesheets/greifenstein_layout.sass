@@ -20,6 +20,9 @@ body.greifenstein_layout
     border-top: 1px solid #aaa
     color: #ddd
 
+    #footer_bg
+      display: none
+
     #footer_line
       display: none
 
@@ -79,17 +82,26 @@ body.greifenstein_layout
     margin-right: -900px
     width: 500%
 
+  #contentBgLayer1
+    overflow-x: hidden
 
   #content
-    .col.col-sm-12
-      .box#public-root-events-box, .box.group_map_box, .box.blog
+    .col.grey_background
+      padding-left: 900px
+      margin-left: -900px
+      padding-right: 900px
+      margin-right: -900px
+      width: 500%
+      .box
         background: #f1f1f1
         padding-left: 900px
         margin-left: -900px
         padding-right: 900px
         margin-right: -900px
         width: 500%
+        .box_header
+          position: relative // needed for tool buttons' position absolute
 
-    .blog_post.teaser_box.box
-      background: #f1f1f1
-      padding: 20px
+    //.blog_post.teaser_box.box
+    //  background: #f1f1f1
+    //  padding: 20px
