@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: e8248c813071f469352bf8b3762688a5ec740f64
+  revision: c867b78fb9e231067f26771d19aacf0c793ccecc
   branch: master
   specs:
     your_platform (1.0.1)
@@ -305,7 +305,7 @@ GEM
       activesupport (>= 3)
     haml (4.0.7)
       tilt
-    hashie (3.5.6)
+    hashie (3.5.7)
     htmlentities (4.3.4)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
