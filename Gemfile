@@ -91,6 +91,9 @@ source 'https://rubygems.org' do
   # Maintenance Mode
   gem 'turnout'
 
+  # Entity relationship diagrams
+  gem 'rails-erd', require: false, group: :development
+
 end
 
 source 'https://rails-assets.org'
