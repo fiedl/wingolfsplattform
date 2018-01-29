@@ -6,16 +6,18 @@
 #
 # Trello: https://trello.com/c/ZAxCtj5W/1233-entity-relationship
 
-require 'rails_erd/domain/relationship'
+if defined? RailsERD
+  require 'rails_erd/domain/relationship'
 
-module RailsERD
-  class Domain
-    class Relationship
-      class << self
-        private
+  module RailsERD
+    class Domain
+      class Relationship
+        class << self
+          private
 
-        def association_identity(association)
-          Set[association_owner(association), association_target(association)]
+          def association_identity(association)
+            Set[association_owner(association), association_target(association)]
+          end
         end
       end
     end
