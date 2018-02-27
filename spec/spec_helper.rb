@@ -99,7 +99,7 @@ Geocoder.configure( lookup: :test )
 # Capybara & Poltergeist  Configuration
 # ----------------------------------------------------------------------------------------
 
-unless ENV['SELENIUM']
+if ENV['PHANTOMJS']
   require 'capybara/poltergeist'
   Capybara.register_driver :poltergeist do |app|
     # The `inspector: true` argument gives you the possibility to stop the execution
