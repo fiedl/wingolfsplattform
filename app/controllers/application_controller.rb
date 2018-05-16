@@ -20,7 +20,7 @@ end
 class ApplicationController
   prepend ApplicationControllerOverrides
 
-  before_action :new_relic_params
+  # before_action :new_relic_params
   before_action :collect_data_for_exception_notifier
 
   before_action :prepend_wingolf_layout_view_path
@@ -39,13 +39,13 @@ class ApplicationController
     end
   end
 
-  def new_relic_params
-    ::NewRelic::Agent.add_custom_attributes({
-      path: request.path,
-      user_id: (current_user ? current_user.id : nil),
-      role_view: current_role_view
-    })
-  end
+  # def new_relic_params
+  #   ::NewRelic::Agent.add_custom_attributes({
+  #     path: request.path,
+  #     user_id: (current_user ? current_user.id : nil),
+  #     role_view: current_role_view
+  #   })
+  # end
 
   def collect_data_for_exception_notifier
     request.env["exception_notifier.exception_data"] = {

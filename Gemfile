@@ -86,7 +86,7 @@ source 'https://rubygems.org' do
   gem 'stackprof'
 
   # New relic profiling
-  gem 'newrelic_rpm'
+  # gem 'newrelic_rpm'
 
   # Maintenance Mode
   gem 'turnout'
