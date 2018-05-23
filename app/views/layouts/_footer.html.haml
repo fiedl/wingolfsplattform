@@ -13,33 +13,10 @@
           %a{href: "/api"} API
         %li
           %a(href="https://github.com/fiedl/wingolfsplattform") Github
-        %li
-          %a.has_popover{href: 'irc://kornbluth.freenode.net/wingolfsplattform', data: {placement: popover_placement, title: 'IRC-Chat'}} IRC
-          -# kornbluth.freenode.net, Frankfurt
-          .popover_content
-            %ul
-              %li Server: kornbluth.freenode.net, Frankfurt, DE
-              %li Kanal: wingolfsplattform
-              %li
-                %a(href="http://de.wikipedia.org/wiki/IRC-Client#G.C3.A4ngige_IRC-Clients") Client herunterladen
-              %li
-                %a.btn.btn-default(href="irc://kornbluth.freenode.net/wingolfsplattform") Mit Chat verbinden
-        %li
-          %a.has_popover{href: 'mumble://wingolfsplattform.org', data: {placement: popover_placement, title: 'Mumble-Konferenz'}} Mumble
-          -# kornbluth.freenode.net, Frankfurt
-          .popover_content
-            %ul
-              %li Server: wingolfsplattform.org
-              %li
-                %a(href="http://www.mumble.com/mumble-download.php") Client herunterladen
-              %li
-                %a.btn.btn-default(href="mumble://wingolfsplattform.org") Mit Konferenz verbinden
         %li.discourse
           = link_to "Discourse", "https://discourse.wingolfsplattform.org"
         %li
           = link_to t(:terms_of_use), terms_path
-        %li
-          = link_to t(:privacy), privacy_path
       - current_home_page && current_home_page.descendant_pages.flagged(:footer).visible_to(current_user).each do |footer_page|
         %li
           = link_to footer_page.nav_title, footer_page
