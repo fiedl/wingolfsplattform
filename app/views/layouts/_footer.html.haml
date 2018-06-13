@@ -6,6 +6,8 @@
   #footer_embedded_pages= render partial: 'layouts/footer_embedded_pages'
   #footer_navi
     %ul
+      %li
+        = link_to t(:privacy), "/datenschutz"
       - if current_user
         %li
           %a(href="http://status.wingolf.org") Status
