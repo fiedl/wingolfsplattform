@@ -30,3 +30,12 @@
     = render partial: 'member_box', locals: {group_name: "Inaktive Burschen non loci"}
     = render partial: 'member_box', locals: {group_name: "Konkneipanten"}
 
+-#- content_for :explorer_nav do
+-#  %h3 Semesterstatistiken
+-#  %li= link_to "Übersicht", term_reports_path
+-#  %li
+-#    Verbindungen
+-#    %ul
+-#      - Corporation.aktive_verbindungen.each do |corporation|
+-#        %li{class: ("active" if corporation.id == group.id)}
+-#          = link_to corporation.name, search_term_report_path(group_id: corporation.id, year: term_report.year, term_type: term_report.term.type)
