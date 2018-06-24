@@ -7,12 +7,8 @@ module ApplicationControllerOverrides
     super + [:wingolf]
   end
 
-  def current_layout
-    if current_navable && (current_navable.has_flag?(:intranet_root) || (current_navable.ancestor_pages.flagged(:intranet_root).count > 0))
-      "wingolf"
-    else
-      super
-    end
+  def intranet_layout
+    "wingolf"
   end
 
 end
