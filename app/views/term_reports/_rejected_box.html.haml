@@ -1,0 +1,13 @@
+#term_report_rejected
+  - if term_report.rejected? && !term_report.accepted?
+    .alert.alert-danger
+      %strong Semesterstatistik abgelehnt.
+      Diese Semesterstatistik wurde vom Vorort am
+      = localize term_report.rejected_at.to_date
+      abgelehnt. Bitte korrigieren und erneut abschicken.
+      .comment.media
+        .media-left= user_avatar term_report.rejected_by
+        .media-body
+          .author
+            = link_to term_report.rejected_by.title, term_report.rejected_by
+          .text= term_report.rejected_state.comment

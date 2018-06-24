@@ -14,7 +14,7 @@ class Charts::TermReports::AktiveUndPhilisterController < ChartsController
   # GET /charts/term_reports/aktive_und_philister/anzahl_per_jahr.json?corporation_id=12
   #
   def anzahl_per_jahr
-    authorize! :index, :charts
+    authorize! :index, TermReport
 
     render json: [
       {

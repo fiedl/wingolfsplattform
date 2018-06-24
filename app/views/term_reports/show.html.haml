@@ -5,24 +5,28 @@
   .panel-body
     = render partial: 'chart'
 
-.panel
-  .panel-body
+= box do
+  - content_for(:box_title) { t(:term_report) }
+  - content_for :box_filter do
     = render partial: 'select_form'
 
+= render partial: 'rejected_box'
 = render partial: 'submission_box'
 = render partial: 'acception_box'
 
-.col-sm-6
-  = render partial: 'some_numbers'
+.row
+  .col-sm-6.col-xs-12
+    = render partial: 'some_numbers'
 
-.col-sm-6
-  = render partial: 'officers'
-  = render partial: 'semester_calendar'
+  .col-sm-6.col-xs-12
+    = render partial: 'officers'
+    = render partial: 'semester_calendar'
 
-.col-sm-12
-  = render partial: 'member_box', locals: {group_name: "Hospitanten"} if term_report.hospitanten.any?
-  = render partial: 'member_box', locals: {group_name: "Fuxen"}
-  = render partial: 'member_box', locals: {group_name: "Aktive Burschen"}
-  = render partial: 'member_box', locals: {group_name: "Inaktive Burschen loci"}
-  = render partial: 'member_box', locals: {group_name: "Inaktive Burschen non loci"}
-  = render partial: 'member_box', locals: {group_name: "Konkneipanten"}
+  .col-sm-12.col-xs-12
+    = render partial: 'member_box', locals: {group_name: "Hospitanten"} if term_report.hospitanten.any?
+    = render partial: 'member_box', locals: {group_name: "Fuxen"}
+    = render partial: 'member_box', locals: {group_name: "Aktive Burschen"}
+    = render partial: 'member_box', locals: {group_name: "Inaktive Burschen loci"}
+    = render partial: 'member_box', locals: {group_name: "Inaktive Burschen non loci"}
+    = render partial: 'member_box', locals: {group_name: "Konkneipanten"}
+
