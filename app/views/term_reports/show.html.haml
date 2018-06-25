@@ -1,18 +1,19 @@
-- if group
-  = render partial: 'groups/tabs', locals: {group: group, active: 'members'}
+.col-sm-12
+  - if group
+    = render partial: 'groups/tabs', locals: {group: group, active: 'members'}
 
-.panel
-  .panel-body
-    = render partial: 'chart'
+  .panel
+    .panel-body
+      = render partial: 'chart'
 
-= box do
-  - content_for(:box_title) { t(:term_report) }
-  - content_for :box_filter do
-    = render partial: 'select_form'
+  = box do
+    - content_for(:box_title) { t(:term_report) }
+    - content_for :box_filter do
+      = render partial: 'select_form'
 
-= render partial: 'rejected_box'
-= render partial: 'submission_box'
-= render partial: 'acception_box'
+  = render partial: 'rejected_box'
+  = render partial: 'submission_box'
+  = render partial: 'acception_box'
 
 .row
   .col-sm-6.col-xs-12
