@@ -149,6 +149,9 @@ class Group
     memberships_including_members
   end
 
+  def self.ak_internet
+    self.flagged(:ak_internet).first
+  end
 
   # Jeder
   #   |

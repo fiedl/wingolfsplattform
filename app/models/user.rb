@@ -485,6 +485,24 @@ class User
     raise 'We do not allow to create corporations on the fly in Wingolfsplattform.'
   end
 
+
+  # Early-Access-Features
+  # https://trello.com/c/o5m2FveV/1290-early-access
+  #
+  #
+  def early_access?
+    aktiver? || beta_tester? || mitglied_im_ak_internet? || global_admin?
+  end
+
+  def mitglied_im_ak_internet?
+    self.groups.include? Group.ak_internet
+  end
+  def ak_internet?
+    mitglied_im_ak_internet?
+  end
+
+
+
   if use_caching?
     cache :aktivitaetszahl
     cache :fruehere_aktivitaetszahl
@@ -496,6 +514,7 @@ class User
     cache :philister?
     cache :administrated_aktivitates
     cache :status_export_string
+    cache :early_access
   end
 
 end
