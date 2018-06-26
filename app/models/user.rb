@@ -514,7 +514,7 @@ class User
     cache :philister?
     cache :administrated_aktivitates
     cache :status_export_string
-    cache :early_access
+    cache :early_access?
   end
 
 end
