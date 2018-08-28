@@ -28,6 +28,7 @@ source 'https://rubygems.org' do
     gem 'letter_opener'
     gem 'letter_opener_web'
     gem 'pry-remote'
+    gem 'web-console'
   end
 
   group :test, :development do
