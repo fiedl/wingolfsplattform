@@ -15,6 +15,7 @@ end
 
 class ApplicationController
   prepend ApplicationControllerOverrides
+  include CurrentEarlyAccessRestrictions
 
   # before_action :new_relic_params
   before_action :collect_data_for_exception_notifier

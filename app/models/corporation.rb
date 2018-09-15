@@ -20,6 +20,10 @@ class Corporation
     self.child_groups.where(name: "Verstorbene").first
   end
 
+  def chargierte
+    descendant_groups.where(name: "Chargierte").first.try(:members) || []
+  end
+
   def self.find_all_wingolf_corporations
     self.all.select do |corporation|
       not corporation.token.include? "!"  # Falkensteiner!

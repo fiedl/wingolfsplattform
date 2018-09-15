@@ -8,6 +8,12 @@ require_dependency YourPlatform::Engine.root.join('app/models/ability').to_s
 
 module AbilityDefinitions
 
+  #def initialize(user, options = {})
+  #  can :read, :all
+  #  can :index, :all
+  #  can :download, :all
+  #end
+
   # Define yoyur abilities below in the appropriate sections.
   # If you want to circumvent the authorization process from your_platform
   # including role preview etc., you can override the `initialize` method:
@@ -279,6 +285,9 @@ module AbilityDefinitions
 
     # Globale Site-Link-Leiste
     can :use, :site_links
+
+    # Semesterstatistiken
+    can [:index, :read], TermReport
   end
 
   # ===============================================================================================
@@ -313,6 +322,10 @@ module AbilityDefinitions
       end
       can [:update, :destroy, :invite_to], Event do |event|
         event.group.try(:corporation) && user.corporations_the_user_is_officer_in.include?(event.group.corporation)
+      end
+
+      can :submit, TermReport do |term_report|
+        user.in? term_report.corporation.chargierte
       end
 
     end

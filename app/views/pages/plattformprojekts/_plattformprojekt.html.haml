@@ -1,0 +1,22 @@
+%div
+  %ul.nav.nav-tabs
+    %li.active
+      %a{href: "#aktuelles", data: {toggle: 'tab'}} Aktuelles
+    %li
+      %a{href: "#ueberblick", data: {toggle: 'tab'}} Überblick
+    %li
+      %a{href: "#ansprechpartner", data: {toggle: 'tab'}} Ansprechpartner
+    %li
+      %a{href: "#sitzungen", data: {toggle: 'tab'}} Sitzungen
+    %li
+      %a{href: "#berichte", data: {toggle: 'tab'}} Berichte
+
+  .tab-content
+    #aktuelles.tab-pane.fade.in.active
+      %h1 Aktuelles
+      %div
+        Foo
+    #ueberblick.tab-pane.fade
+    #ansprechpartner.tab-pane.fade
+    #sitzungen.tab-pane.fade
+    #berichte.tab-pane.fade
