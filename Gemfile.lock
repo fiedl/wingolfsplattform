@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: d00ffe5a07ec0ad442fbbb59ea7fdf79216f67de
+  revision: dfc1daa15f9e703c87edecce8525a28b9d98836f
   branch: master
   specs:
     your_platform (1.0.1)
@@ -517,7 +517,7 @@ GEM
       redis-actionpack (>= 5.0, < 6)
       redis-activesupport (>= 5.0, < 6)
       redis-store (>= 1.2, < 2)
-    redis-store (1.5.0)
+    redis-store (1.6.0)
       redis (>= 2.2, < 5)
     ref (2.0.0)
     responders (2.4.0)
