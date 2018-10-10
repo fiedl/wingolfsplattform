@@ -178,6 +178,17 @@ module AbilityDefinitions
       can :destroy, SemesterCalendar do |semester_calendar|
         can?(:update, semester_calendar.group)
       end
+
+      # Lokale Administratoren, d.h. diejenigen Bundesbrüder, die Benutzerprofile
+      # pflegen dürfen, dürfen auch die Semesterstatistik aktualisieren, solange
+      # die Statistik noch nicht abgesendet wurde.
+      #
+      # An den Vorort übermitteln dürfen die Statistik nur die Chargierten.
+      #
+      can :recalculate, TermReport do |term_report|
+        user.in?(term_report.corporation.admins)
+      end
+
     end
   end
 
@@ -324,7 +335,7 @@ module AbilityDefinitions
         event.group.try(:corporation) && user.corporations_the_user_is_officer_in.include?(event.group.corporation)
       end
 
-      can :submit, TermReport do |term_report|
+      can [:submit, :recalculate], TermReport do |term_report|
         user.in? term_report.corporation.chargierte
       end
 
