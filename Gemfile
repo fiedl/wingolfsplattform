@@ -1,5 +1,5 @@
 # YourPlatform
-gem 'your_platform', git: 'https://github.com/fiedl/your_platform', branch: 'master'
+gem 'your_platform', git: 'https://github.com/fiedl/your_platform', branch: 'sf/primer-semester-calendars-early-access'
 
 source 'https://rubygems.org' do
   gem 'rails', '~> 5.0'
@@ -103,4 +103,4 @@ source 'https://rails-assets.org'
 #  gem 'rails-assets-tether', '>= 1.1.0'
 #end
 
-ruby '2.3.3'
+ruby '2.5.1'
