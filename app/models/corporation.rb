@@ -30,6 +30,10 @@ class Corporation
     end
   end
 
+  def self.active
+    self.aktive_verbindungen
+  end
+
   def self.aktive_verbindungen
     Corporation.where(id: aktive_verbindungen_ids).order(:name)
   end
