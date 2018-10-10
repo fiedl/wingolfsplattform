@@ -389,6 +389,9 @@ module AbilityDefinitions
 
   def rights_for_developers
     super
+
+    can :use, :find_and_filter
+    can :use, :term_reports
   end
 
 end
