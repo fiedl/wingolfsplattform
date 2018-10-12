@@ -1,5 +1,5 @@
 # YourPlatform
-gem 'your_platform', git: 'https://github.com/fiedl/your_platform', branch: 'sf/primer-semester-calendars-early-access'
+gem 'your_platform', git: 'https://github.com/fiedl/your_platform', branch: 'master'
 
 source 'https://rubygems.org' do
   gem 'rails', '~> 5.0'

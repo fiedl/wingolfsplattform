@@ -9,8 +9,8 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 798c4e0a2c51346c5d631799e492e2f5f5d4aafc
-  branch: sf/primer-semester-calendars-early-access
+  revision: 124b4ad37033cf51388db94993506f34de679648
+  branch: master
   specs:
     your_platform (1.0.1)
       actionpack (>= 4.2.5.2)
