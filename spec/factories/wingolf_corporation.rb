@@ -29,6 +29,25 @@ FactoryGirl.define do
       # für production vorgesehen war.
       StatusGroup.repair
 
+      # Ein paar Ämter anlegen
+      corporation.aktivitas.officers_parent
+      chargierte = corporation.aktivitas.create_officer_group name: "Chargierte"
+
+      senior = chargierte.child_groups.create name: "Senior"
+      senior.update_attribute :type, "OfficerGroup"
+      senior.add_flag :senior
+      senior = Group.find senior.id
+
+      fuxmajor = chargierte.child_groups.create name: "Fuxmajor"
+      fuxmajor.update_attribute :type, "OfficerGroup"
+      fuxmajor.add_flag :fuxmajor
+      fuxmajor = Group.find fuxmajor.id
+
+      kneipwart = chargierte.child_groups.create name: "Kneipwart"
+      kneipwart.update_attribute :type, "OfficerGroup"
+      kneipwart.add_flag :kneipwart
+      kneipwart = Group.find kneipwart.id
+
       status_workflow = Workflow.create name: 'Reception', description: "Macht aus einem Hospitanten einen Kraßfuxen."
 
       # # Does not work:
