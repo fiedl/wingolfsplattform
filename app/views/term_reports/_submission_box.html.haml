@@ -15,6 +15,10 @@
         Ab dem
         = localize term_report.due_at
         wird Chargierten an dieser Stelle ein Knopf zum Abschicken der Statistik angezeigt.
+        .buttons
+          - if can? :recalculate, term_report
+            = button_to term_report_recalculate_path(term_report_id: term_report.id), class: 'btn btn-default recalculate_term_report', method: :post do
+              Neu berechnen
     - if term_report.due?
       .alert.alert-warning
         %strong Semesterstatistik noch nicht abgeschickt!
