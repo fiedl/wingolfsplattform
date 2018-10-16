@@ -396,6 +396,8 @@ module AbilityDefinitions
 
   def rights_for_beta_testers
     super
+
+    can :use, :term_reports
   end
 
   def rights_for_developers
