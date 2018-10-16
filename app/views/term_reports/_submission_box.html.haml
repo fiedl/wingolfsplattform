@@ -5,7 +5,7 @@
       Diese Semesterstatistik wurde am
       = localize term_report.submitted_at
       von
-      = link_to term_report.submitted_by.title, term_report.submitted_by
+      = link_to term_report.submitted_by.title, user_path(term_report.submitted_by)
       abgeschickt.
   - elsif not term_report.too_old_to_submit?
     - if not term_report.due?
