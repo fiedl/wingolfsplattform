@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 84d1e491b4897bb5a467add404d41b3859598f19
+  revision: acf0408214e48cecfb0053c3242284e014dcaa87
   branch: master
   specs:
     your_platform (1.0.1)
@@ -175,13 +175,13 @@ GEM
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
     ambry (1.0.0)
-    apipie-rails (0.5.10)
+    apipie-rails (0.5.11)
       rails (>= 4.1)
     arel (7.1.4)
     auto_html (1.6.4)
       redcarpet (~> 3.1)
       rinku (~> 1.5.0)
-    autoprefixer-rails (9.1.4)
+    autoprefixer-rails (9.2.0)
       execjs
     autosize-rails (1.18.17)
       rails (>= 3.1)
@@ -288,7 +288,7 @@ GEM
       railties (>= 3.0.0)
     faker (1.9.1)
       i18n (>= 0.7)
-    faraday (0.12.2)
+    faraday (0.15.3)
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
@@ -306,7 +306,7 @@ GEM
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     gravatar_image_tag (1.2.0)
-    groupdate (4.0.1)
+    groupdate (4.0.2)
       activesupport (>= 4.2)
     haml (4.0.7)
       tilt
@@ -339,7 +339,7 @@ GEM
     json (2.1.0)
     judge (3.0.0)
       rails (>= 5.0)
-    jwt (1.5.6)
+    jwt (2.1.0)
     kgio (2.11.0)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -385,9 +385,9 @@ GEM
     nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
     oauth (0.5.4)
-    oauth2 (1.4.0)
-      faraday (>= 0.8, < 0.13)
-      jwt (~> 1.0)
+    oauth2 (1.4.1)
+      faraday (>= 0.8, < 0.16.0)
+      jwt (>= 1.0, < 3.0)
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
