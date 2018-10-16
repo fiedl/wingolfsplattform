@@ -78,7 +78,7 @@ source 'https://rubygems.org' do
   gem 'acts-as-dag', git: 'https://github.com/fiedl/acts-as-dag', branch: 'sf/rails-5'
   gem 'refile', git: 'https://github.com/sobrinho/refile'
   gem 'refile-mini_magick', git: 'https://github.com/refile/refile-mini_magick'
-
+  gem 'rails-settings-cached', '0.7.1'
 
   # To customly set timeout time we need rack-timeout
   gem 'rack-timeout'
