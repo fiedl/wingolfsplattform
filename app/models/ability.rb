@@ -371,6 +371,9 @@ module AbilityDefinitions
     cannot :use, :omni_auth
     can :use, :fast_lane
     can :use, :mail_delivery_account_filter
+    can :use, :term_reports do
+      user.early_access?
+    end
 
     # Jeder Internetbenutzer kann Semesterprogramm-PDFs herunterladen, damit
     # die Verbindungen die Möglichkeit haben, die PDFs zu verlinken.
@@ -396,15 +399,12 @@ module AbilityDefinitions
 
   def rights_for_beta_testers
     super
-
-    can :use, :term_reports
   end
 
   def rights_for_developers
     super
 
     can :use, :find_and_filter
-    can :use, :term_reports
   end
 
 end
