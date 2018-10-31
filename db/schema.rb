@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180623154246) do
+ActiveRecord::Schema.define(version: 20181031133909) do
 
   create_table "activities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
     t.integer  "trackable_id"
@@ -596,19 +596,22 @@ ActiveRecord::Schema.define(version: 20180623154246) do
   end
 
   create_table "user_accounts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
     t.integer  "user_id"
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "encrypted_password",                   default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0
+    t.integer  "sign_in_count",                        default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.string   "auth_token"
+    t.text     "tokens",                 limit: 65535
+    t.text     "provider",               limit: 65535
+    t.text     "uid",                    limit: 65535
     t.index ["reset_password_token"], name: "index_user_accounts_on_reset_password_token", unique: true, using: :btree
     t.index ["user_id"], name: "user_accounts_user_id_fk", using: :btree
   end
