@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 98e4550212a62f00a2796ba4e7d86660aac23613
+  revision: dc9bafde6515d1110682f7746a27503a4751930a
   branch: master
   specs:
     your_platform (1.0.1)
@@ -77,6 +77,7 @@ GIT
       prawn (= 2.0.2)
       public_activity (~> 1.4.1)
       rack (>= 1.6.2)
+      rack-cors
       rack-mini-profiler
       rack-ssl (>= 1.3.4)
       rails (~> 5.0.0)
@@ -448,6 +449,7 @@ GEM
     rack (2.0.5)
     rack-accept (0.4.5)
       rack (>= 0.4)
+    rack-cors (1.0.2)
     rack-mini-profiler (1.0.0)
       rack (>= 1.2.0)
     rack-protection (2.0.4)

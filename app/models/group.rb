@@ -8,6 +8,7 @@ require_dependency YourPlatform::Engine.root.join( 'app/models/group' ).to_s
 # this re-opened class contains all wingolf-specific additions to the group model.
 
 class Group
+  include GroupNameConstants
 
   # Mailing lists
   #

@@ -6,13 +6,13 @@ module TermReportAdditions
     super
     self.anzahl_aktivmeldungen = number_of_new_members
     self.anzahl_aller_aktiven = corporation.aktivitas.memberships.at_time(end_of_term).count
-    self.anzahl_burschungen = anzahl_neue "Burschen"
-    self.anzahl_burschen = anzahl "Burschen"
-    self.anzahl_fuxen = anzahl "Fuxen"
-    self.anzahl_aktiver_burschen = anzahl "Aktive Burschen"
-    self.anzahl_inaktiver_burschen_loci = anzahl "Inaktive Burschen loci"
-    self.anzahl_inaktiver_burschen_non_loci = anzahl "Inaktive Burschen non loci"
-    self.anzahl_konkneipwanten = anzahl "Konkneipanten"
+    self.anzahl_burschungen = anzahl_neue BURSCHEN_GROUP_NAMES
+    self.anzahl_burschen = anzahl BURSCHEN_GROUP_NAMES
+    self.anzahl_fuxen = anzahl FUXEN_GROUP_NAMES
+    self.anzahl_aktiver_burschen = anzahl AKTIVE_BURSCHEN_GROUP_NAMES
+    self.anzahl_inaktiver_burschen_loci = anzahl INAKTIVE_LOCI_GROUP_NAMES
+    self.anzahl_inaktiver_burschen_non_loci = anzahl INAKTIVE_NON_LOCI_GROUP_NAMES
+    self.anzahl_konkneipwanten = anzahl KONKNEIPANTEN_GROUP_NAMES
     self.anzahl_philistrationen = corporation.philisterschaft.memberships.where(valid_from: term_time_range).count
     self.anzahl_philister = corporation.philisterschaft.memberships.at_time(end_of_term).count
     self.anzahl_austritte = number_of_membership_ends
@@ -25,12 +25,12 @@ module TermReportAdditions
 
     self.member_entries.destroy_all
     if term.kind_of?(Terms::Summer) or term.kind_of?(Terms::Winter)
-      create_member_entries_for "Hospitanten"
-      create_member_entries_for "Fuxen"
-      create_member_entries_for "Aktive Burschen"
-      create_member_entries_for "Inaktive Burschen loci"
-      create_member_entries_for "Inaktive Burschen non loci"
-      create_member_entries_for "Konkneipanten"
+      create_member_entries_for HOSPITANTEN_GROUP_NAMES
+      create_member_entries_for FUXEN_GROUP_NAMES
+      create_member_entries_for AKTIVE_BURSCHEN_GROUP_NAMES
+      create_member_entries_for INAKTIVE_LOCI_GROUP_NAMES
+      create_member_entries_for INAKTIVE_NON_LOCI_GROUP_NAMES
+      create_member_entries_for KONKNEIPANTEN_GROUP_NAMES
     end
 
     return self
@@ -39,12 +39,12 @@ module TermReportAdditions
   #Anzahl Amtsträger
   ## Anzahl Kalender-Abonnenten
 
-  def anzahl(group_name)
-    corporation.sub_group(group_name).memberships.at_time(end_of_term).count
+  def anzahl(group_names)
+    corporation.sub_group(group_names).memberships.at_time(end_of_term).count
   end
 
-  def anzahl_neue(group_name)
-    corporation.sub_group(group_name).memberships.where(valid_from: term_time_range).count
+  def anzahl_neue(group_names)
+    corporation.sub_group(group_names).memberships.where(valid_from: term_time_range).count
   end
 
   def senior
@@ -67,55 +67,55 @@ module TermReportAdditions
     officer(:kassenwart)
   end
 
-  def member_ids(group_name)
-    if corporation.sub_group(group_name)
-      corporation.sub_group(group_name).memberships.at_time(end_of_term).order(:valid_from).map(&:user_id)
+  def member_ids(group_names)
+    if corporation.sub_group(group_names)
+      corporation.sub_group(group_names).memberships.at_time(end_of_term).order(:valid_from).map(&:user_id)
     else
       []
     end
   end
 
-  def members(group_name)
-    User.where id: member_ids(group_name)
+  def members(group_names)
+    User.where id: member_ids(group_names)
   end
 
-  def create_member_entries_for(group_name)
-    members(group_name).each do |user|
-      self.member_entries.create_from_user(user, category: group_name)
+  def create_member_entries_for(group_names)
+    members(group_names).each do |user|
+      self.member_entries.create_from_user(user, category: group_names.first)
     end
   end
 
 
   def hospitanten
-    members "Hospitanten"
+    members HOSPITANTEN_GROUP_NAMES
   end
 
   def fuxen
-    members "Fuxen"
+    members FUXEN_GROUP_NAMES
   end
 
   def aktive_burschen
-    members "Aktive Burschen"
+    members AKTIVE_BURSCHEN_GROUP_NAMES
   end
 
   def inaktive_burschen_loci
-    members "Inaktive Burschen loci"
+    members INAKTIVE_LOCI_GROUP_NAMES
   end
 
   def inaktive_burschen_non_loci
-    members "Inaktive Burschen non loci"
+    members INAKTIVE_NON_LOCI_GROUP_NAMES
   end
 
   def konkneipanten
-    members "Konkneipanten"
+    members KONKNEIPANTEN_GROUP_NAMES
   end
 
   def erstbandtraeger_der_aktivitas
-    members("Aktivitas").select { |user| user.primary_corporation(at: end_of_term).id == corporation.id }
+    members(AKTIVITAS_GROUP_NAMES).select { |user| user.primary_corporation(at: end_of_term).id == corporation.id }
   end
 
   def erstbandtraeger_der_philisterschaft
-    (members("Philisterschaft") + members("Altherrenschaft")).select { |user| user.primary_corporation(at: end_of_term).id == corporation.id }
+    members(PHILISTERSCHAFT_GROUP_NAMES).select { |user| user.primary_corporation(at: end_of_term).id == corporation.id }
   end
 
 
@@ -130,5 +130,7 @@ module TermReportAdditions
 end
 
 class TermReports::ForCorporation
+  include GroupNameConstants
+
   prepend TermReportAdditions
 end
