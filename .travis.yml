@@ -70,7 +70,7 @@ before_script:
   - mkdir -p public/uploads
   - mkdir -p tmp/cache
   - bundle exec rake db:create db:migrate
-  - rake your_platform:install:node_modules || echo 'task not found'
+  - bundle exec rake your_platform:install:node_modules || echo 'task not found'
   - "export DISPLAY=:99.0" # https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
