@@ -11,6 +11,7 @@ feature 'Status Promotion' do
     @corporation.aktivitas.admins << @local_admin
 
     @workflow = @corporation.status_groups.first.child_workflows.first
+    @workflow.delete_cache
   end
 
   specify 'prelims' do
