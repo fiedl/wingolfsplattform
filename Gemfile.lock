@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: dc9bafde6515d1110682f7746a27503a4751930a
+  revision: eab522047a29cf039da7d078c2d0c4bdb89c1193
   branch: master
   specs:
     your_platform (1.0.1)
@@ -311,7 +311,7 @@ GEM
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     gravatar_image_tag (1.2.0)
-    groupdate (4.0.2)
+    groupdate (4.1.0)
       activesupport (>= 4.2)
     haml (4.0.7)
       tilt
@@ -321,7 +321,7 @@ GEM
       domain_name (~> 0.5)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
-    i18n-js (3.0.11)
+    i18n-js (3.1.0)
       i18n (>= 0.6.6, < 2)
     icalendar (2.5.1)
       ice_cube (~> 0.16)
