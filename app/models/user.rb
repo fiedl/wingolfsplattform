@@ -491,7 +491,7 @@ class User
   #
   #
   def early_access?
-    aktiver? || beta_tester? || mitglied_im_ak_internet? || global_admin?
+    aktiver? || beta_tester? || mitglied_im_ak_internet? || global_admin? || has_flag?(:dummy)
   end
 
   def mitglied_im_ak_internet?
