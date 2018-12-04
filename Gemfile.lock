@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 1b6b67f2e1a7bf8c5a7ecf595e5cf9fb5cdd1cbe
+  revision: 4cf7ae97dbe95752708747e091869e34c2a398f5
   branch: master
   specs:
     your_platform (1.0.1)
@@ -183,7 +183,7 @@ GEM
     auto_html (1.6.4)
       redcarpet (~> 3.1)
       rinku (~> 1.5.0)
-    autoprefixer-rails (9.3.1)
+    autoprefixer-rails (9.4.0)
       execjs
     autosize-rails (1.18.17)
       rails (>= 3.1)
@@ -293,7 +293,7 @@ GEM
       railties (>= 3.0.0)
     faker (1.9.1)
       i18n (>= 0.7)
-    faraday (0.15.3)
+    faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
