@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 5f2480e0ea02b05b473ce612b8a18f0599b34c2d
+  revision: 7ed1d6838b2920f67924278007bd1a1e177233e8
   branch: master
   specs:
     your_platform (1.0.1)
@@ -183,7 +183,7 @@ GEM
     auto_html (1.6.4)
       redcarpet (~> 3.1)
       rinku (~> 1.5.0)
-    autoprefixer-rails (9.4.0)
+    autoprefixer-rails (9.4.2)
       execjs
     autosize-rails (1.18.17)
       rails (>= 3.1)
