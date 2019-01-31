@@ -83,7 +83,7 @@ Der abstrakte Teil des Quellcodes, d.h. derjenige Teil, der auch von anderen Org
 
 ### Urheber, Mitarbeiter und Lizenz
 
-Copyright (c) 2012-2017, Sebastian Fiedlschuster
+Copyright (c) 2012-2019, Sebastian Fiedlschuster
 
 Mitarbeiter: Jörg Reichardt, Manuel Zerpies, Joachim Back
 
@@ -98,3 +98,5 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Vorrangige Sonderbestimmung für den VAW e.V.: Aufgrund des sog. neuen Entwicklungsmodells ist eine Nutzung der Software durch Philister des VAW e.V. ab Commit `c748222315` und später an die finanzielle Vergütung der jeweiligen Entwicklungsarbeit geknüpft.
