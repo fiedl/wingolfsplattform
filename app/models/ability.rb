@@ -374,6 +374,10 @@ module AbilityDefinitions
     can :use, :term_reports do
       user.early_access?
     end
+    can :use, :mailing_lists do
+      user.early_access?
+    end
+    can :use, :caching
 
     # Jeder Internetbenutzer kann Semesterprogramm-PDFs herunterladen, damit
     # die Verbindungen die Möglichkeit haben, die PDFs zu verlinken.
