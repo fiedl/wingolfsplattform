@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 8c1ede84da0b1adb9ea2b54e78bdf332aeea0350
+  revision: 8107682946610845bf93d3ce7ebe38528fb56e99
   branch: master
   specs:
     your_platform (1.0.1)
@@ -729,7 +729,7 @@ DEPENDENCIES
   your_platform!
 
 RUBY VERSION
-   ruby 2.5.1p57
+   ruby 2.5.5p157
 
 BUNDLED WITH
-   1.16.4
+   1.17.3
