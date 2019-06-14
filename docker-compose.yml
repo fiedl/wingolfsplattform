@@ -1,0 +1,63 @@
+version: '3'
+
+volumes:
+  wingolfsplattform_uploads: {}
+  wingolfsplattform_assets: {}
+  wingolfsplattform_mysql_data: {}
+  wingolfsplattform_redis_data: {}
+  wingolfsplattform_neo4j_data: {}
+
+networks:
+  backend:
+    driver: bridge
+
+services:
+  wingolfsplattform:
+    build: .
+    depends_on:
+      - wingolfsplattform_mysql
+      - wingolfsplattform_redis
+    volumes:
+      - "wingolfsplattform_uploads:/app/uploads"
+      - "wingolfsplattform_assets:/app/public/assets"
+      #- "./services/wingolfsplattform/config/secrets.yml:/app/config/secrets.yml"
+    expose:
+      - 3000
+    environment:
+      RAILS_ENV: production
+      MYSQL_DATABASE: wingolfsplattform
+      MYSQL_USER: wingolfsplattform
+      MYSQL_PASSWORD: secret
+      MYSQL_HOST: wingolfsplattform_mysql
+      REDIS_HOST: wingolfsplattform_redis
+    networks:
+      - default
+      - backend
+    command:
+      - ./start
+
+  wingolfsplattform_mysql:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: "wingolfsplattform"
+      MYSQL_PASSWORD: "secret"
+      MYSQL_ROOT_PASSWORD: "secret"
+      MYSQL_USER: "wingolfsplattform"
+    volumes:
+      - "wingolfsplattform_mysql_data:/var/lib/mysql"
+
+  wingolfsplattform_redis:
+    image: redis
+    volumes:
+      - wingolfsplattform_redis_data:/var/lib/redis
+
+  wingolfsplattform_neo4j:
+    image: neo4j
+    volumes:
+      - wingolfsplattform_neo4j_data:/data
+    ports:
+      - "0.0.0.0:7474:7474"
+      - "0.0.0.0:7687:7687"
+    environment:
+      NEO4J_AUTH: "neo4j/trinity"
+
