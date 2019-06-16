@@ -8,7 +8,7 @@ module ApplicationControllerOverrides
   end
 
   def intranet_layout
-    "wingolf"
+    "bootstrap"
   end
 
 end
@@ -29,11 +29,7 @@ class ApplicationController
   protected
 
   def default_layout
-    if Rails.env.test?
-      'bootstrap'
-    else
-      'wingolf'
-    end
+    'bootstrap'
   end
 
   # def new_relic_params
