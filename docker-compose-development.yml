@@ -1,0 +1,39 @@
+# Start with:
+# docker-compose --file docker-compose-development.yml up
+
+version: '3'
+
+volumes:
+  mysql_data: {}
+  redis_data: {}
+  neo4j_data: {}
+
+services:
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: "wingolfsplattform_development"
+      MYSQL_PASSWORD: "secret"
+      MYSQL_ROOT_PASSWORD: "secret"
+      MYSQL_USER: "wingolfsplattform"
+    volumes:
+      - "mysql_data:/var/lib/mysql"
+    ports:
+      - 0.0.0.0:3306:3306
+
+  redis:
+    image: redis
+    volumes:
+      - redis_data:/var/lib/redis
+
+  neo4j:
+    image: neo4j
+    volumes:
+      - neo4j_data:/data
+    ports:
+      - "0.0.0.0:7474:7474"
+      - "0.0.0.0:7687:7687"
+    environment:
+      NEO4J_AUTH: "neo4j/trinity"
+
