@@ -103,4 +103,4 @@ source 'https://rails-assets.org'
 #  gem 'rails-assets-tether', '>= 1.1.0'
 #end
 
-ruby '2.5.5'
+ruby '2.6.2'
