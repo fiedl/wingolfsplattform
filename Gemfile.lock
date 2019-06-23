@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 5bfa9079933c73c474440f78052570ee6003929e
+  revision: b95c42d630faf52f800f87304623eb0612cce69d
   branch: master
   specs:
     your_platform (1.0.1)
@@ -31,7 +31,7 @@ GIT
       cancancan (~> 1.15.0)
       carrierwave (~> 0.11)
       charlock_holmes
-      chartkick
+      chartkick (>= 3.2.0)
       coffee-rails (>= 4.1.0)
       decent_exposure
       devise (>= 3.5.4)
