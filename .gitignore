@@ -84,8 +84,10 @@ Thumbs.db
 # aptana project
 .project
 # vim swap files
-*.swp 
+*.swp
 
 
 brakeman.html
 rspec.failures
+
+backups
