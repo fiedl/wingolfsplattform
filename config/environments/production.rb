@@ -51,9 +51,6 @@ Rails.application.configure do
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
 
-  # Use a different cache store in production.
-  config.cache_store = :redis_store, "redis://localhost:6379/0/", { expires_in: 1.week, namespace: "#{::STAGE}_cache", timeout: 15.0 }
-
   # Use a real queuing backend for Active Job (and separate queues per environment)
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "wingolfsplattform_#{Rails.env}"
