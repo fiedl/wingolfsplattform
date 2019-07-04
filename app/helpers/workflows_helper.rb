@@ -7,7 +7,11 @@ module WorkflowsHelper
   def link_to_workflow(workflow, context_infos = {})
 
     if workflow.name == "Reaktivierung"
-      link_to(icon("chevron-up") + " Reaktivierung (zur Zeit defekt)", "#")
+      # Den Reaktivierungs-Link im Moment garnicht anzeigen, weil er defekt ist.
+      # Wir zeigen ihn wieder, wenn das Workflow-System umgestellt ist
+      # und unser Backend Reaktivierungen unterstützt.
+      #
+      # link_to(icon("chevron-up") + " Reaktivierung (zur Zeit defekt)", "#", class: context_infos[:class])
     else
       original_link_to_workflow(workflow, context_infos)
     end

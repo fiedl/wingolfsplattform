@@ -8,7 +8,7 @@ module ApplicationControllerOverrides
   end
 
   def intranet_layout
-    "bootstrap"
+    "strappy"
   end
 
 end
@@ -29,7 +29,7 @@ class ApplicationController
   protected
 
   def default_layout
-    'bootstrap'
+    'strappy'
   end
 
   # def new_relic_params

@@ -64,7 +64,7 @@ source 'https://rubygems.org' do
 
   # JavaScript Runtime
   gem 'execjs'
-  gem 'therubyracer', :platform => :ruby
+  gem 'mini_racer'
 
   # Other helpers
   gem 'json'
