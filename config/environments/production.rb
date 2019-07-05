@@ -61,7 +61,7 @@ Rails.application.configure do
       address: 'smtp.1und1.de',
       user_name: Rails.application.secrets.smtp_user,
       password: Rails.application.secrets.smtp_password,
-      domain: 'wingolfsplattform.org',
+      domain: 'wingolf.yourplatform.io',
       enable_starttls_auto: true,
       # only if certificate malfunctions:
       # openssl_verify_mode: OpenSSL::SSL::VERIFY_NONE
@@ -69,10 +69,10 @@ Rails.application.configure do
 
   # See: http://stackoverflow.com/a/12609856/2066546
   config.action_mailer.default_options = {
-    from: 'Wingolfsplattform <wingolfsplattform@wingolf.org>'
+    from: 'Wingolfsplattform <noreply@wingolf.yourplatform.io>'
   }
 
-  config.action_mailer.default_url_options = { host: 'wingolfsplattform.org', protocol: 'https' }
+  config.action_mailer.default_url_options = { host: 'wingolf.yourplatform.io', protocol: 'https' }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
