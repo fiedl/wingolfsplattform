@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: c70530fe044a9509368532a84ae8687ddad0bcef
+  revision: 8de0c7a6f152e84ea91ee4a606c1b3c8af3fac35
   branch: master
   specs:
     your_platform (1.0.1)
@@ -217,7 +217,7 @@ GEM
       mime-types (>= 1.16)
       mimemagic (>= 0.3.0)
     charlock_holmes (0.7.6)
-    chartkick (3.2.0)
+    chartkick (3.2.1)
     childprocess (0.7.1)
       ffi (~> 1.0, >= 1.0.11)
     choice (0.2.0)
