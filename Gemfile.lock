@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: c5e96edb370735b29f91b90820b7560800526575
+  revision: 7e102b8df3c3f9b1e467e3c9c0c4a10d75857fe9
   branch: master
   specs:
     your_platform (1.0.1)
@@ -65,7 +65,7 @@ GIT
       mail (~> 2.6.6.rc1)
       mail_form
       merit
-      mini_magick
+      mini_magick (>= 4.9.4)
       neography
       net-ldap
       nokogiri (>= 1.8.1)
@@ -367,7 +367,7 @@ GEM
     method_source (0.8.2)
     mime-types (2.99.3)
     mimemagic (0.3.3)
-    mini_magick (4.8.0)
+    mini_magick (4.9.5)
     mini_mime (0.1.4)
     mini_portile2 (2.4.0)
     mini_racer (0.2.6)
