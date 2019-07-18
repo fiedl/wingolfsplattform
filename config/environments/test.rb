@@ -35,7 +35,7 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
   config.action_mailer.default_url_options = { :host => 'localhost' }
   config.action_mailer.default_options = {
-    from: 'Wingolfsplattform <wingolfsplattform@wingolf.org>'
+    from: 'Wingolfsplattform <wingolfsplattform@wingolf.io>'
   }
 
   # Tell Action Mailer not to deliver emails to the real world.

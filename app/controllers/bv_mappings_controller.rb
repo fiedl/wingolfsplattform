@@ -20,7 +20,7 @@ class BvMappingsController < ApplicationController
     else
       BvMapping.create! bv_mapping_params
       flash[:error] = nil
-      flash[:notice] = "Die Zuordnung #{bv_mapping_params.to_s} wurde erfolgreich eingetragen. Es erfolgt aber keine automatische Neuzuordnung! Bitte lege bei Philistern, die diese Zuordnung betrifft, die Adresse einfach neu an. Falls es sich um mehr als einen Philister handelt, wende Dich bitte an support@wingolf.org."
+      flash[:notice] = "Die Zuordnung #{bv_mapping_params.to_s} wurde erfolgreich eingetragen. Es erfolgt aber keine automatische Neuzuordnung! Bitte lege bei Philistern, die diese Zuordnung betrifft, die Adresse einfach neu an. Falls es sich um mehr als einen Philister handelt, wende Dich bitte an support@wingolf.io."
     end
 
     render action: :index

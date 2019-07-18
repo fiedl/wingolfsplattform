@@ -5,7 +5,7 @@ module FeaturesControllerOverride
   private
 
   def discourse_features_url
-    "https://discourse.wingolfsplattform.org/c/plattform-features"
+    super # overwrite if needed
   end
 
   def github_issues_url

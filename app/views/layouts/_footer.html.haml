@@ -10,13 +10,9 @@
         = link_to t(:privacy), "/datenschutz"
       - if current_user
         %li
-          %a(href="http://status.wingolf.org") Status
-        %li
           %a{href: "/api"} API
         %li
           %a(href="https://github.com/fiedl/wingolfsplattform") Github
-        %li.discourse
-          = link_to "Discourse", "https://discourse.wingolfsplattform.org"
         %li
           = link_to t(:terms_of_use), terms_path
       - current_home_page && current_home_page.descendant_pages.flagged(:footer).visible_to(current_user).each do |footer_page|
