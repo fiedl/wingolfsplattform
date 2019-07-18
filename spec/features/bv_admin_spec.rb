@@ -81,33 +81,35 @@ feature "BV-Admins" do
     end
   end
 
-  scenario "Using the Role-Preview Menu", :js do
-    visit group_path(@bv)
+  # # TODO: Reinstate when the issue feature and the role-preview feature are re-enabled.
 
-    Role.of(@bv_admin).for(@bv).to_s.should == 'admin'
-    Role.of(@bv_admin).for(@bv).admin?.should == true
-    Role.of(@bv_admin).for(@bv).officer?.should == true
-
-    within "#logged-in-bar" do
-      within ".role-preview-switcher" do
-        page.should have_text I18n.t(:admin)
-        click_on :admin
-        within ".dropdown-menu" do
-          page.should have_selector '.issues_task'
-          page.should have_text "0 #{I18n.t(:administrative_issues)}"
-          page.should have_text I18n.t(:admin)
-          page.should have_text I18n.t(:officer)
-          page.should have_text I18n.t(:user)
-        end
-      end
-    end
-
-    within ".role-preview-switcher" do
-      click_on "0 #{I18n.t(:administrative_issues)}"
-    end
-    within ".box.first" do
-      page.should have_text "#{I18n.t(:administrative_issues)} (0)"
-    end
-  end
+  #scenario "Using the Role-Preview Menu", :js do
+  #  visit group_path(@bv)
+  #
+  #  Role.of(@bv_admin).for(@bv).to_s.should == 'admin'
+  #  Role.of(@bv_admin).for(@bv).admin?.should == true
+  #  Role.of(@bv_admin).for(@bv).officer?.should == true
+  #
+  #  within "#logged-in-bar" do
+  #    within ".role-preview-switcher" do
+  #      page.should have_text I18n.t(:admin)
+  #      click_on :admin
+  #      within ".dropdown-menu" do
+  #        page.should have_selector '.issues_task'
+  #        page.should have_text "0 #{I18n.t(:administrative_issues)}"
+  #        page.should have_text I18n.t(:admin)
+  #        page.should have_text I18n.t(:officer)
+  #        page.should have_text I18n.t(:user)
+  #      end
+  #    end
+  #  end
+  #
+  #  within ".role-preview-switcher" do
+  #    click_on "0 #{I18n.t(:administrative_issues)}"
+  #  end
+  #  within ".box.first" do
+  #    page.should have_text "#{I18n.t(:administrative_issues)} (0)"
+  #  end
+  #end
 
 end
