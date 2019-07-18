@@ -336,6 +336,8 @@ describe Ability do
       @term = Term.by_year_and_type Time.zone.now.year, "Terms::Summer"
       @semester_calendar = @corporation.semester_calendars.create term_id: @term.id
       @pdf = @semester_calendar.attachments.create
+      @internal_event = create :event, publish_on_local_website: false, publish_on_global_website: false
+      @public_event = create :event, publish_on_local_website: true
     end
 
     describe "Der Senior" do
@@ -368,7 +370,9 @@ describe Ability do
 
     describe "Irgendein Internetbenutzer" do
       before { user.account.destroy; user.reload }
-      he { should_not be_able_to :read, @semester_calendar }
+      he { should be_able_to :read, @semester_calendar }
+      he { should be_able_to :read, @public_event }
+      he { should_not be_able_to :read, @internal_event }
       he { should be_able_to :read, @semester_calendar.attachments.first }
       he { should be_able_to :download, @semester_calendar.attachments.first }
     end
