@@ -58,10 +58,10 @@ Rails.application.configure do
   # Mailing
   config.action_mailer.perform_caching = false
   config.action_mailer.smtp_settings = {
-      address: 'smtp.1und1.de',
+      address: Rails.application.secrets.smtp_host,
       user_name: Rails.application.secrets.smtp_user,
       password: Rails.application.secrets.smtp_password,
-      domain: 'wingolf.yourplatform.io',
+      domain: Rails.application.secrets.smtp_domain,
       enable_starttls_auto: true,
       # only if certificate malfunctions:
       # openssl_verify_mode: OpenSSL::SSL::VERIFY_NONE
