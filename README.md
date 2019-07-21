@@ -1,5 +1,6 @@
 ## Wingolfsplattform
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/fiedl/wingolfsplattform?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
+[![Gitter](https://badges.gitter.im/Join_Chat.svg)](https://gitter.im/fiedl/wingolfsplattform?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Build Status on master](https://travis-ci.org/fiedl/wingolfsplattform.png?branch=master "master")](https://travis-ci.org/fiedl/wingolfsplattform)
 [![security](https://hakiri.io/github/fiedl/wingolfsplattform/master.svg)](https://hakiri.io/github/fiedl/wingolfsplattform/master)
 
