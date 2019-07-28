@@ -378,4 +378,42 @@ describe Ability do
     end
   end
 
+  describe "(Amtsträger eintragen)" do
+    before do
+      @corporation = create :wingolf_corporation
+      @aktivitas = @corporation.aktivitas
+      @senior_group = @aktivitas.create_officer_group name: "Senior"
+    end
+
+    describe "Der Senior" do
+      before do
+        @senior_group.assign_user user
+      end
+      specify "sollte nicht neue Amtsträger eintragen können" do
+        subject.should_not be_able_to :update_memberships, @senior_group
+      end
+      specify "sollte keine neuen Ämter anlegen können" do
+        subject.should_not be_able_to :create_officer_group_for, @aktivitas
+      end
+      specify "sollte nicht die Ämterhistorie bearbeiten können" do
+        subject.should_not be_able_to :index_memberships, @senior_group
+      end
+    end
+
+    describe "Der lokale Admin" do
+      before do
+        @aktivitas.assign_admin user
+      end
+      specify "sollte neue Amtsträger eintragen können" do
+        subject.should be_able_to :update_memberships, @senior_group
+      end
+      specify "sollte neuen Ämter anlegen können" do
+        subject.should be_able_to :create_officer_group_for, @aktivitas
+      end
+      specify "sollte die Ämterhistorie bearbeiten können" do
+        subject.should be_able_to :index_memberships, @senior_group
+      end
+    end
+  end
+
 end
