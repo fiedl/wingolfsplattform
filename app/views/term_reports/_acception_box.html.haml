@@ -21,5 +21,5 @@
 
         = form_tag term_report_accept_path(term_report_id: term_report.id), class: 'term_report_acception_tools' do
           %textarea.form-control{name: "state_comment", placeholder: "Kommentar hinzufügen"}
-          = submit_tag "Verbindlich akzeptieren", class: 'btn btn-default accept_term_report', name: "accept"
+          = submit_tag "Verbindlich akzeptieren", class: 'btn btn-outline-secondary accept_term_report', name: "accept"
           = submit_tag "Ablehnen", class: 'btn btn-danger reject_term_report', name: "reject"

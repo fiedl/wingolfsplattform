@@ -6,5 +6,5 @@
     %div
       = render partial: 'users/workflow_triggers'
       - if can? :manage, @user
-        = link_to t(:show_group_memberships), user_memberships_path(user_id: @user.id), class: 'btn btn-default right'
+        = link_to t(:show_group_memberships), user_memberships_path(user_id: @user.id), class: 'btn btn-outline-secondary right'
       = corporate_vita_for_user @user

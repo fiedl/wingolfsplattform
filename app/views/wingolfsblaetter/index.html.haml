@@ -19,7 +19,7 @@
         %strong
           müssen vor dem Export gelöst werden!
         %p
-          = link_to @issues_path, class: 'btn btn-default' do
+          = link_to @issues_path, class: 'btn btn-outline-secondary' do
             = icon :flag
             Verwaltungsprobleme lösen
     %li
@@ -27,10 +27,10 @@
       %br
       Der Export kann mehrere Minuten dauern. Falls ein Timeout auftritt, einfach nocheinmal exportieren.
       %p
-        = link_to group_list_export_path(@abonnenten, format: 'xls', list: 'wingolfsblaetter'), class: 'btn btn-default' do
+        = link_to group_list_export_path(@abonnenten, format: 'xls', list: 'wingolfsblaetter'), class: 'btn btn-outline-secondary' do
           = excel_icon
           Export der Empfänger-Liste
-        = link_to wbl_abo_address_caches_path, method: :delete, remote: true, class: 'btn btn-default has_tooltip destroy_wbl_abo_address_caches', title: "Adress-Caches löschen, um nach kurzfristigen Änderungen eine aktuelle Liste zu erhalten. Der Export dauert danach ca. 12 Minuten." do
+        = link_to wbl_abo_address_caches_path, method: :delete, remote: true, class: 'btn btn-outline-secondary has_tooltip destroy_wbl_abo_address_caches', title: "Adress-Caches löschen, um nach kurzfristigen Änderungen eine aktuelle Liste zu erhalten. Der Export dauert danach ca. 12 Minuten." do
           = icon :repeat
     %li
       %strong Plausibilitätsprüfung.
@@ -50,7 +50,7 @@
     %strong=t list_preset
   %p.explanation=t "#{list_preset}_explanation"
   %p.buttons
-    = link_to statistics_path(list: list_preset, format: 'csv'), class: 'btn btn-default' do
+    = link_to statistics_path(list: list_preset, format: 'csv'), class: 'btn btn-outline-secondary' do
       = csv_icon
       Als CSV-Tabelle herunterladen
 
@@ -59,19 +59,19 @@
 %div
   Philister-Geburtstage exportieren.
   %p
-    = link_to group_list_export_path(@philister, :format => :xls, :list => :special_birthdays), class: 'btn btn-default' do
+    = link_to group_list_export_path(@philister, :format => :xls, :list => :special_birthdays), class: 'btn btn-outline-secondary' do
       = excel_icon
       = t :birthday_list
-    = link_to group_list_export_path(@philister, :format => :xls, :list => :special_birthdays, quarter: 1), class: 'btn btn-default' do
+    = link_to group_list_export_path(@philister, :format => :xls, :list => :special_birthdays, quarter: 1), class: 'btn btn-outline-secondary' do
       = excel_icon
       Quartal 1
-    = link_to group_list_export_path(@philister, :format => :xls, :list => :special_birthdays, quarter: 2), class: 'btn btn-default' do
+    = link_to group_list_export_path(@philister, :format => :xls, :list => :special_birthdays, quarter: 2), class: 'btn btn-outline-secondary' do
       = excel_icon
       Quartal 2
-    = link_to group_list_export_path(@philister, :format => :xls, :list => :special_birthdays, quarter: 3), class: 'btn btn-default' do
+    = link_to group_list_export_path(@philister, :format => :xls, :list => :special_birthdays, quarter: 3), class: 'btn btn-outline-secondary' do
       = excel_icon
       Quartal 3
-    = link_to group_list_export_path(@philister, :format => :xls, :list => :special_birthdays, quarter: 4), class: 'btn btn-default' do
+    = link_to group_list_export_path(@philister, :format => :xls, :list => :special_birthdays, quarter: 4), class: 'btn btn-outline-secondary' do
       = excel_icon
       Quartal 4
 
@@ -84,7 +84,7 @@
     = link_to "letzten Wingolfsblättern", @wbl_page
     abgleichen, sodass die bereits veröffentlichten Todesfälle nicht nocheinmal abgedruckt werden.
   %p
-    = link_to group_list_export_path(@verstorbene, format: :xls, list: :deceased_members), class: 'btn btn-default' do
+    = link_to group_list_export_path(@verstorbene, format: :xls, list: :deceased_members), class: 'btn btn-outline-secondary' do
       = excel_icon
       Liste unserer Toten der letzten zwölf Monate
 
@@ -97,7 +97,7 @@
       %strong= link_to @wbl_blog_post.title, @wbl_blog_post
       klicken.
       %p
-        = link_to @wbl_blog_post, class: 'btn btn-default' do
+        = link_to @wbl_blog_post, class: 'btn btn-outline-secondary' do
           = icon :book
           = @wbl_blog_post.title
     %li
