@@ -7,7 +7,15 @@
       von
       = link_to term_report.submitted_by.title, user_path(term_report.submitted_by)
       abgeschickt.
-  - elsif not term_report.too_old_to_submit?
+  - elsif term_report.too_old_to_submit?
+    .alert.alert-info
+      %strong Inoffizielle Statistik.
+      Das angezeigte Semester ist älter als die Einführung der Statistik-Funktion. Diese Semesterstatistik wurde niemals offiziell abgeschickt. Die angezeigten Daten sind anhand der Plattform-Historie berechnet.
+      .buttons
+        - if can? :recalculate, term_report
+          = button_to term_report_recalculate_path(term_report_id: term_report.id), class: 'btn btn-default recalculate_term_report', method: :post do
+            Neu berechnen
+  - else
     - if not term_report.due?
       .alert.alert-info
         %strong Semesterstatistik noch nicht abgeschickt.
