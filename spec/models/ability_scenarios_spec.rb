@@ -413,6 +413,22 @@ describe Ability do
       specify "sollte die Ämterhistorie bearbeiten können" do
         subject.should be_able_to :index_memberships, @senior_group
       end
+
+      describe "wenn er vorher kein Admin war (Caching-Sache)" do
+        before do
+          subject.can? :update_memberships, @senior_group
+          @aktivitas.assign_admin user
+        end
+        specify "sollte neue Amtsträger eintragen können" do
+          subject.should be_able_to :update_memberships, @senior_group
+        end
+        specify "sollte neuen Ämter anlegen können" do
+          subject.should be_able_to :create_officer_group_for, @aktivitas
+        end
+        specify "sollte die Ämterhistorie bearbeiten können" do
+          subject.should be_able_to :index_memberships, @senior_group
+        end
+      end
     end
   end
 
