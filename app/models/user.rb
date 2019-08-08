@@ -22,6 +22,23 @@ class User
     "#{aktivitaetszahl} #{string_for_death_symbol}".gsub("  ", " ").strip
   end
 
+  def personal_greeting(options = {})
+    if self.wingolfit?
+      bbr = if self.aktiver?
+        "Bundesbruder"
+      else
+        if options[:current_user] && options[:current_user].philister?
+          "Conphilister"
+        else
+          "Philister"
+        end
+      end
+      "Lieber #{bbr} #{self.last_name}"
+    else
+      super
+    end
+  end
+
   # This method returns the bv (Bezirksverband) the user is associated with.
   #
   def bv
