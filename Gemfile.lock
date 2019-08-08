@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 83e0828f941cd5c8d6c8463149ced67ae32e538d
+  revision: c11cbc0ae75dca8f02c74eecfc34704a10ac3292
   branch: master
   specs:
     your_platform (1.0.1)
@@ -262,19 +262,19 @@ GEM
       jquery-rails
       jquery-turbolinks
       rails (>= 3.2)
-    elasticsearch (7.2.1)
-      elasticsearch-api (= 7.2.1)
-      elasticsearch-transport (= 7.2.1)
-    elasticsearch-api (7.2.1)
+    elasticsearch (7.3.0)
+      elasticsearch-api (= 7.3.0)
+      elasticsearch-transport (= 7.3.0)
+    elasticsearch-api (7.3.0)
       multi_json
     elasticsearch-model (6.0.0)
       activesupport (> 3)
       elasticsearch (> 1)
       hashie
-    elasticsearch-transport (7.2.1)
+    elasticsearch-transport (7.3.0)
       faraday
       multi_json
-    email_reply_parser (0.5.9)
+    email_reply_parser (0.5.10)
     email_spec (2.1.1)
       htmlentities (~> 4.3.3)
       launchy (~> 2.1)
@@ -286,7 +286,7 @@ GEM
     exception_notification (4.3.0)
       actionmailer (>= 4.0, < 6)
       activesupport (>= 4.0, < 6)
-    excon (0.65.0)
+    excon (0.66.0)
     execjs (2.7.0)
     extended_email_reply_parser (0.5.1)
       activesupport
@@ -298,7 +298,7 @@ GEM
     factory_girl_rails (4.8.0)
       factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
-    faker (1.9.6)
+    faker (2.1.0)
       i18n (>= 0.7)
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
