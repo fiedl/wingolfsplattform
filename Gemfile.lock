@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 094144f0fbd5f13d1a4fac4ff28808ec4878c506
+  revision: 071a2b15581e057c67ba31a10fad5f0d7ca02112
   branch: master
   specs:
     your_platform (1.0.1)
@@ -268,7 +268,7 @@ GEM
       elasticsearch-transport (= 7.3.0)
     elasticsearch-api (7.3.0)
       multi_json
-    elasticsearch-model (6.1.0)
+    elasticsearch-model (7.0.0)
       activesupport (> 3)
       elasticsearch (> 1)
       hashie
