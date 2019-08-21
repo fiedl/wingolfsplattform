@@ -25,7 +25,7 @@ ExceptionNotification.configure do |config|
   config.add_notifier :ticket_system, {
     :email_prefix            => "[ERROR] ",
     :fallback_sender_address => %{"Plattform-Fehler" <noreply@wingolf.yourplatform.io>},
-    :exception_recipients    => %w{support@yourplatform.io},
+    :exception_recipients    => [BaseMailer.default_params[:from]],
     :sections                => %w(request current_user session environment backtrace)
   }
 
