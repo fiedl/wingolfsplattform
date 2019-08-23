@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: b889366726d3d712b22b60ee704f22726f0392b3
+  revision: 580d269e11d70a0518db9af86bef6cb016676994
   branch: master
   specs:
     your_platform (1.0.1)
@@ -182,7 +182,7 @@ GEM
     auto_html (1.6.4)
       redcarpet (~> 3.1)
       rinku (~> 1.5.0)
-    autoprefixer-rails (9.6.1)
+    autoprefixer-rails (9.6.1.1)
       execjs
     autosize-rails (1.18.17)
       rails (>= 3.1)
@@ -488,12 +488,12 @@ GEM
     rdiscount (2.2.0.1)
     redcarpet (3.5.0)
     redis (3.3.5)
-    redis-actionpack (5.0.2)
-      actionpack (>= 4.0, < 6)
+    redis-actionpack (5.1.0)
+      actionpack (>= 4.0, < 7)
       redis-rack (>= 1, < 3)
       redis-store (>= 1.1.0, < 2)
-    redis-activesupport (5.0.7)
-      activesupport (>= 3, < 6)
+    redis-activesupport (5.2.0)
+      activesupport (>= 3, < 7)
       redis-store (>= 1.3, < 2)
     redis-namespace (1.6.0)
       redis (>= 3.0.4)
@@ -513,7 +513,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
-    reverse_markdown (1.1.0)
+    reverse_markdown (1.2.0)
       nokogiri
     rinku (1.5.1)
     rspec (3.6.0)
