@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: e4a26ead031d6bf5a3021da88e765105d400a13b
+  revision: bddebbfe1bcc014cf7495d28b45f4517c6d2df6d
   branch: master
   specs:
     your_platform (1.0.1)
@@ -298,7 +298,7 @@ GEM
     factory_girl_rails (4.8.0)
       factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
-    faker (2.1.2)
+    faker (2.2.1)
       i18n (>= 0.8)
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
@@ -369,7 +369,7 @@ GEM
     mail_form (1.8.0)
       actionmailer (>= 5.0)
       activemodel (>= 5.0)
-    merit (3.0.2)
+    merit (3.0.3)
       ambry (~> 1.0.0)
     method_source (0.8.2)
     mime-types (2.99.3)
@@ -403,7 +403,7 @@ GEM
     parallel_tests (2.14.3)
       parallel
     pdf-core (0.6.1)
-    phony (2.18.5)
+    phony (2.18.7)
     poltergeist (1.16.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
