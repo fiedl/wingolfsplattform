@@ -9,6 +9,30 @@ volumes:
   neo4j_data: {}
 
 services:
+  #wingolfsplattform:
+  #  build: .
+  #  depends_on:
+  #    - wingolfsplattform_mysql
+  #    - wingolfsplattform_redis
+  #  volumes:
+  #    - "wingolfsplattform_uploads:/app/uploads"
+  #    - "wingolfsplattform_assets:/app/public/assets"
+  #    #- "./services/wingolfsplattform/config/secrets.yml:/app/config/secrets.yml"
+  #  ports:
+  #    - "0.0.0.0:3001:3000"
+  #  environment:
+  #    RAILS_ENV: production
+  #    MYSQL_DATABASE: wingolfsplattform
+  #    MYSQL_USER: wingolfsplattform
+  #    MYSQL_PASSWORD: secret
+  #    MYSQL_HOST: wingolfsplattform_mysql
+  #    REDIS_HOST: wingolfsplattform_redis
+  #    NEO4J_REST_URL: wingolfsplattform_neo4j
+  #  networks:
+  #    - default
+  #    - backend
+  #  command:
+  #    - ./start
 
   mysql:
     image: mysql:5.7

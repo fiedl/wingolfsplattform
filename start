@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "Wingolfsplattform"
+
+bin/rails db:create db:migrate
+bin/rails assets:precompile
+bin/rails your_platform:install:node_modules || echo 'task not found'
+puma
