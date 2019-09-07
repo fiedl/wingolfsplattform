@@ -2,7 +2,12 @@
 
 echo "Wingolfsplattform"
 
+bundle config local.your_platform /app/your_platform
+bundle install
+
+cp /app/wingolfsplattform/config/database.docker.yml /app/wingolfsplattform/config/database.yml
+
 bin/rails db:create db:migrate
-bin/rails assets:precompile
 bin/rails your_platform:install:node_modules || echo 'task not found'
+
 puma

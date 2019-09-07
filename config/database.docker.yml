@@ -1,0 +1,19 @@
+development:
+  adapter: mysql2
+  reconnect: false
+  database: wingolfsplattform_development
+  pool: 25
+  username: root
+  password: secret
+  host: mysql
+  port: 3306
+
+test:
+  adapter: mysql2
+  reconnect: false
+  database: wingolfsplattform_test<%= ENV['TEST_ENV_NUMBER'] %>
+  pool: 5
+  username: root
+  password: secret
+  host: mysql
+  port: 3306
