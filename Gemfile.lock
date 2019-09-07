@@ -383,7 +383,7 @@ GEM
     multi_json (1.13.1)
     multipart-post (2.1.1)
     mustermann (1.0.3)
-    mysql2 (0.4.9)
+    mysql2 (0.5.2)
     neography (1.8.0)
       excon (>= 0.33.0)
       json (>= 1.7.7)
