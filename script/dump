@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+
+# Dump SQL Database into .sql file.
+#
+# Usage
+#   script/dump
+#
+# The database file will be created at `backups/`.
+#
+# How to restore:
+#
+#   mysql -u <db-user> -p <db-name> < backups/dumpfilename.sql
+#
+
+require 'fiedl/log'
+require 'yaml'
+
+log = Fiedl::Log::Log.new
+app_name = "Wingolfsplattform"
+log.head("SQL Dump: #{app_name}")
+
+log.section "Configuration"
+raise 'No RAILS_ENV set.' unless ENV['RAILS_ENV']
+db_config_file = "config/database.yml"
+log.info "Config file: #{db_config_file}"
+log.info "Environment: #{ENV['RAILS_ENV']}"
+
+db_config = YAML.load_file("config/database.yml")[ENV['RAILS_ENV']]
+db_name = db_config['database']
+db_user = db_config['username']
+db_password = db_config['password']
+
+log.filter db_password
+
+log.section "Performing dump"
+
+output_path = "backups/sql_dumps"
+shell "mkdir -p #{output_path}"
+
+timestamp = Time.now.strftime "%Y-%m-%d_%H-%M-%S"
+filetitle = "#{db_name}-#{timestamp}.sql"
+dump_file = "#{output_path}/#{filetitle}"
+
+# shell "sudo -u #{app_user} pg_dump #{db_name} > #{dump_file}"  # postgres
+log.shell "mysqldump -u #{db_user} -p#{db_password} #{db_name} > #{dump_file}"
+
+log.section "Result"
+log.shell "du -h #{dump_file}"
+
