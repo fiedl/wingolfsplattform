@@ -3,7 +3,7 @@ require_dependency YourPlatform::Engine.root.join('app/helpers/logo_helper').to_
 module LogoHelper
 
   def global_logo_url
-    image_url("icon-256x256.png")
+    image_url("farbschild-256.png")
   end
 
 end
