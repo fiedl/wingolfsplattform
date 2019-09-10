@@ -6,6 +6,7 @@
         %li.attribute
           %span.label-wrapper= charge.name
           %span.value-warpper= user_links(charge.members)
-      %li.attribute
-        %span.label-wrapper= @phil_x.name
-        %span.value-warpper= user_links(@phil_x.members)
+      - if @phil_x
+        %li.attribute
+          %span.label-wrapper= @phil_x.name
+          %span.value-warpper= user_links(@phil_x.members)
