@@ -411,6 +411,14 @@ module AbilityDefinitions
     can :use, :find_and_filter
   end
 
+  # During App-Store approval, we must give a dummy user access to our platform.
+  # But he should not be able to access any real data.
+  #
+  def rights_for_dummy_users
+    super
+
+  end
+
 end
 
 class Ability
