@@ -2,7 +2,7 @@ require_dependency YourPlatform::Engine.root.join('app/controllers/group_members
 
 class GroupMembersController
   def new
-    authorize! :create, User
+    authorize! :add_group_member, group
     redirect_to controller: 'aktivmeldungen', action: 'new'
   end
 end

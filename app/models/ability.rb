@@ -103,7 +103,12 @@ module AbilityDefinitions
       # Es ist also verboten, Mitglieder zu Gruppen hinzuzufügen, wenn diese Gruppen
       # noch Statusgruppen unterhalb haben.
       #
-      can :add_member_to, Group do |group|
+      can :add_group_member, Group do |group|
+        # Aktivmeldungen, Formular für Bandaufnahmen, etc.
+        can?(:update, group)
+      end
+      can :add_group_member_manually, Group do |group|
+        # Bestehendes Mitglied händisch hinzufügen
         can?(:update, group) && (not group.descendant_groups.where(type: "StatusGroup").any?)
       end
 
