@@ -1,0 +1,41 @@
+= render partial: 'groups/tabs', locals: {group: group}
+
+%h1.wohnheimsverein= current_title
+%div
+  = wysiwyg_in_place_if can?(:update, @group), @group, :body, toolbar: true, multiline: true, activate: 'manual' do
+    = markup @group.body
+
+  .row
+    .col-md-6
+      %h2= link_to t(:officers), group_officers_path(group)
+      %ul.users_with_avatars
+        - group.offices.each do |office|
+          - office.members.each do |officer|
+            %li
+              = user_with_avatar officer do
+                %strong= office.name
+                %br
+                = user_phone_number(officer)
+    .col-md-6
+      %h2= link_to t(:occupants), group_room_occupants_path(group_id: group.occupants_parent.id)
+      %ul.users_with_avatars
+        - group.rooms.each do |room|
+          - if room.occupant
+            %li
+              = user_with_avatar room.occupant do
+                %strong= room.name
+                %br
+                = user_phone_number(room.occupant)
+
+      - if can? :manage, group
+        = link_to t(:manage_occupants), group_room_occupants_path(group_id: group.occupants_parent.id), class: 'btn btn-outline-secondary'
+    .col-md-6
+      %h2= link_to "Anschrift", group_profile_path(group_id: group.id)
+      %div
+        = group.name
+        %br
+        = simple_format group.postal_address
+    .col-md-6
+      %h2= link_to "Bankverbindung", group_profile_path(group_id: group.id)
+      = simple_format group.bank_account.to_s
+

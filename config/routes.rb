@@ -11,6 +11,10 @@ Rails.application.routes.draw do
     resources :bvs_parent, controller: 'groups_of_groups'
   end
 
+  namespace :groups do
+    resources :wohnheimsvereine
+  end
+
   resources :aktivmeldungen
 
   resources :users do

@@ -23,5 +23,6 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.singular /^(.*)te$/, '\1ter'                      # "Chargierte" => "Chargierter"
   inflect.irregular 'aktivitas', 'aktivitates'
   inflect.irregular 'philisterschaft', 'philisterschaften'
+  inflect.irregular 'wohnheimsverein', 'wohnheimsvereine'
   inflect.uncountable 'wingolf'
 end
