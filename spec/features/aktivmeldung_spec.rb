@@ -26,11 +26,11 @@ feature "Aktivmeldung" do
     scenario "click 'Aktivmeldung' and add a new user" do
       login @local_admin_user
 
-      visit root_path
-      within('.aktivmeldung_eintragen') do
-        click_on first("Aktivmeldung eintragen")
-      end
+      visit group_members_path(@corporation)
+      page.should have_no_content t(:add_member)
 
+      click_on "Aktivitas"
+      click_on :add_member
       page.should have_content "Aktivmeldung eintragen"
 
       within '#user_add_to_corporation_input' do
@@ -76,10 +76,10 @@ feature "Aktivmeldung" do
       click_on "Aktivmeldung bestätigen"
 
       # Jetzt ist man wieder auf der Startseite.
-      # Dort gibt es den Benutzer in der Box der Aktivmeldungen.
+      page.should have_no_content "Kanne"
 
-      page.should have_text 'Aktivmeldungen'
-      click_on User.last.title
+      visit group_members_path(@corporation)
+      click_on User.last.last_name
 
       page.should have_content "Bundesbruder Kanne"
       page.should have_content User.last.title
@@ -135,10 +135,8 @@ feature "Aktivmeldung" do
     scenario "leaving out a non-required field" do
       login @local_admin_user
 
-      visit root_path
-      within('.aktivmeldung_eintragen') do
-        click_on first("Aktivmeldung eintragen")
-      end
+      visit group_members_path(@corporation.aktivitas)
+      click_on :add_member
 
       fill_in I18n.t(:first_name), with: "Bundesbruder"
       fill_in I18n.t(:last_name), with: "Kanne"
@@ -176,10 +174,10 @@ feature "Aktivmeldung" do
       click_on "Aktivmeldung bestätigen"
 
       # Jetzt ist man wieder auf der Startseite.
-      # Dort gibt es den Benutzer in der Box der Aktivmeldungen.
+      page.should have_no_content "Kanne"
 
-      page.should have_text 'Aktivmeldungen'
-      click_on User.last.title
+      visit group_members_path(@corporation)
+      click_on User.last.last_name
 
       page.should have_content "Bundesbruder Kanne"
       page.should have_content User.last.title
@@ -230,10 +228,7 @@ feature "Aktivmeldung" do
     scenario "leaving out the corporation as global admin" do
       login :global_admin
 
-      visit root_path
-      within('.aktivmeldung_eintragen') do
-        click_on first("Aktivmeldung eintragen")
-      end
+      visit new_aktivmeldung_path
 
       fill_in I18n.t(:first_name), with: "Bundesbruder"
       fill_in I18n.t(:last_name), with: "Kanne"
@@ -274,9 +269,7 @@ feature "Aktivmeldung" do
       click_on "Aktivmeldung bestätigen"
 
       # Jetzt ist man wieder auf der Startseite.
-      # Dort gibt es den Benutzer nicht in der Box der Aktivmeldungen, da er nicht als Wingolfit eingetragen wurde.
-      page.should have_text 'Aktivmeldungen'
-      page.should have_no_text User.last.title
+      page.should have_no_content "Kanne"
 
       visit user_path(User.where(last_name: 'Kanne').last)
 
@@ -328,10 +321,7 @@ feature "Aktivmeldung" do
     scenario "leaving out the corporation as local admin" do
       login @local_admin_user
 
-      visit root_path
-      within('.aktivmeldung_eintragen') do
-        click_on first("Aktivmeldung eintragen")
-      end
+      visit new_aktivmeldung_path
 
       fill_in I18n.t(:first_name), with: "Bundesbruder"
       fill_in I18n.t(:last_name), with: "Kanne"
@@ -384,109 +374,107 @@ feature "Aktivmeldung" do
     end
 
     scenario "leaving out the aktivmeldungsdatum" do
-    login @local_admin_user
+      login @local_admin_user
 
-    visit root_path
-    within('.aktivmeldung_eintragen') do
-      click_on first("Aktivmeldung eintragen")
+      visit group_members_path(@corporation.aktivitas)
+      click_on :add_member
+
+      fill_in I18n.t(:first_name), with: "Bundesbruder"
+      fill_in I18n.t(:last_name), with: "Kanne"
+      select "13", from: 'user_date_of_birth_3i' # formtastic day
+      select "November", from: 'user_date_of_birth_2i' # formtastic month
+      select "1986", from: 'user_date_of_birth_1i' # formtastic year
+
+      @aktivmeldungsjahr = Time.now.year - 2
+      select @corporation.title, from: I18n.t(:register_in)
+
+      # Leaving out this field:
+      # select "2", from: 'user_aktivmeldungsdatum_3i' # formtastic day
+      # select "Dezember", from: 'user_aktivmeldungsdatum_2i' # formtastic month
+      # select @aktivmeldungsjahr, from: 'user_aktivmeldungsdatum_1i' # formtastic year
+
+      fill_in I18n.t(:email), with: "bbr.kanne@example.com"
+      fill_in I18n.t(:phone), with: "09131 123 45 56"
+      fill_in I18n.t(:mobile), with: "0161 142 82 20 20 2"
+
+      fill_in :user_study_address_field_first_address_line, with: "Pariser Platz 1"
+      fill_in :user_study_address_field_postal_code, with: "10117"
+      fill_in :user_study_address_field_city, with: "Berlin"
+
+      fill_in :user_home_address_field_first_address_line, with: "44 Rue de Stalingrad"
+      fill_in :user_home_address_field_postal_code, with: "38100"
+      fill_in :user_home_address_field_city, with: "Grenoble"
+      select "FR", from: :user_home_address_field_country_code
+
+      fill_in :user_primary_study_field_label, with: "Bachelor-Studium"
+      fill_in :user_primary_study_field_from, with: "2014"
+      fill_in :user_primary_study_field_university, with: "Humboldt-Universität Berlin"
+      fill_in :user_primary_study_field_subject, with: "Germanistik"
+      fill_in :user_primary_study_field_specialization, with: "Bindestriche"
+
+      check I18n.t(:create_account)
+
+      click_on "Aktivmeldung bestätigen"
+
+      # Jetzt ist man wieder auf der Startseite.
+      page.should have_no_content "Kanne"
+
+      visit group_members_path(@corporation)
+      click_on User.last.last_name
+
+      page.should have_content "Bundesbruder Kanne"
+      page.should have_content User.last.title
+
+      page.should have_content I18n.t(:date_of_birth)
+      page.should have_content "13.11.1986"
+
+      page.should have_content I18n.t(:personal_title)
+      page.should have_content I18n.t(:academic_degree)
+      page.should have_content I18n.t(:cognomen)
+      page.should have_content I18n.t(:klammerung)
+
+      page.should have_content I18n.t(:email)
+      page.should have_content "bbr.kanne@example.com"
+
+      page.should have_content "Heimatanschrift"
+      page.should have_content "44 Rue de Stalingrad\n38100 Grenoble\nFrance"
+
+      page.should have_content "Semesteranschrift"
+      page.should have_content "Pariser Platz 1\n10117 Berlin"
+      page.should have_no_content I18n.t(:work_or_study_address)
+
+      page.should have_content I18n.t(:phone)
+      page.should have_content "09131 123 45 56"
+      page.should have_content I18n.t(:mobile)
+      page.should have_content "0161 142 82 20 20 2"
+      page.should have_content I18n.t(:fax)
+      page.should have_content I18n.t(:homepage)
+
+      page.should have_content I18n.t(:study)
+
+      page.should have_content I18n.t(:professional_category)
+      page.should have_content I18n.t(:occupational_area)
+      page.should have_content I18n.t(:employment_status)
+      page.should have_content I18n.t(:languages)
+
+      page.should have_content I18n.t(:bank_account)
+
+      # Als Aktivmeldungsdatum wird das aktuelle Datum verwendet, wenn kein Datum angegeben ist.
+      within '#corporate_vita' do
+        page.should have_content @corporation.title
+        page.should have_no_content "02.12.#{@aktivmeldungsjahr}"
+        page.should have_content I18n.localize(Date.today.in_time_zone(@local_admin_user.time_zone).to_date)
+      end
+
+      page.should have_content I18n.t(:name_field_wingolfspost)
+      page.should have_content I18n.t(:wbl_abo)
     end
-
-    fill_in I18n.t(:first_name), with: "Bundesbruder"
-    fill_in I18n.t(:last_name), with: "Kanne"
-    select "13", from: 'user_date_of_birth_3i' # formtastic day
-    select "November", from: 'user_date_of_birth_2i' # formtastic month
-    select "1986", from: 'user_date_of_birth_1i' # formtastic year
-
-    @aktivmeldungsjahr = Time.now.year - 2
-    select @corporation.title, from: I18n.t(:register_in)
-
-    # Leaving out this field:
-    # select "2", from: 'user_aktivmeldungsdatum_3i' # formtastic day
-    # select "Dezember", from: 'user_aktivmeldungsdatum_2i' # formtastic month
-    # select @aktivmeldungsjahr, from: 'user_aktivmeldungsdatum_1i' # formtastic year
-
-    fill_in I18n.t(:email), with: "bbr.kanne@example.com"
-    fill_in I18n.t(:phone), with: "09131 123 45 56"
-    fill_in I18n.t(:mobile), with: "0161 142 82 20 20 2"
-
-    fill_in :user_study_address_field_first_address_line, with: "Pariser Platz 1"
-    fill_in :user_study_address_field_postal_code, with: "10117"
-    fill_in :user_study_address_field_city, with: "Berlin"
-
-    fill_in :user_home_address_field_first_address_line, with: "44 Rue de Stalingrad"
-    fill_in :user_home_address_field_postal_code, with: "38100"
-    fill_in :user_home_address_field_city, with: "Grenoble"
-    select "FR", from: :user_home_address_field_country_code
-
-    fill_in :user_primary_study_field_label, with: "Bachelor-Studium"
-    fill_in :user_primary_study_field_from, with: "2014"
-    fill_in :user_primary_study_field_university, with: "Humboldt-Universität Berlin"
-    fill_in :user_primary_study_field_subject, with: "Germanistik"
-    fill_in :user_primary_study_field_specialization, with: "Bindestriche"
-
-    check I18n.t(:create_account)
-
-    click_on "Aktivmeldung bestätigen"
-
-    # Jetzt ist man wieder auf der Startseite.
-    page.should have_text 'Aktivmeldungen'
-    click_on User.last.title
-
-    page.should have_content "Bundesbruder Kanne"
-    page.should have_content User.last.title
-
-    page.should have_content I18n.t(:date_of_birth)
-    page.should have_content "13.11.1986"
-
-    page.should have_content I18n.t(:personal_title)
-    page.should have_content I18n.t(:academic_degree)
-    page.should have_content I18n.t(:cognomen)
-    page.should have_content I18n.t(:klammerung)
-
-    page.should have_content I18n.t(:email)
-    page.should have_content "bbr.kanne@example.com"
-
-    page.should have_content "Heimatanschrift"
-    page.should have_content "44 Rue de Stalingrad\n38100 Grenoble\nFrance"
-
-    page.should have_content "Semesteranschrift"
-    page.should have_content "Pariser Platz 1\n10117 Berlin"
-    page.should have_no_content I18n.t(:work_or_study_address)
-
-    page.should have_content I18n.t(:phone)
-    page.should have_content "09131 123 45 56"
-    page.should have_content I18n.t(:mobile)
-    page.should have_content "0161 142 82 20 20 2"
-    page.should have_content I18n.t(:fax)
-    page.should have_content I18n.t(:homepage)
-
-    page.should have_content I18n.t(:study)
-
-    page.should have_content I18n.t(:professional_category)
-    page.should have_content I18n.t(:occupational_area)
-    page.should have_content I18n.t(:employment_status)
-    page.should have_content I18n.t(:languages)
-
-    page.should have_content I18n.t(:bank_account)
-
-    # Als Aktivmeldungsdatum wird das aktuelle Datum verwendet, wenn kein Datum angegeben ist.
-    within '#corporate_vita' do
-      page.should have_content @corporation.title
-      page.should have_no_content "02.12.#{@aktivmeldungsjahr}"
-      page.should have_content I18n.localize(Date.today.in_time_zone(@local_admin_user.time_zone).to_date)
-    end
-
-    page.should have_content I18n.t(:name_field_wingolfspost)
-    page.should have_content I18n.t(:wbl_abo)
-  end
 
     scenario "adding a user with account" do
       login @local_admin_user
 
-      visit root_path
-      within('.aktivmeldung_eintragen') do
-        click_on first("Aktivmeldung eintragen")
-      end
+      visit group_members_path(@corporation.aktivitas)
+      click_on :add_member
 
       fill_in I18n.t(:first_name), with: "Bundesbruder"
       fill_in I18n.t(:last_name), with: "Kanne"
@@ -523,9 +511,8 @@ feature "Aktivmeldung" do
 
       click_on "Aktivmeldung bestätigen"
 
-      # Wieder auf der Startseite.
-      page.should have_text "Aktivmeldungen"
-      page.should have_text "Philistrationen"
+      # Jetzt ist man wieder auf der Startseite.
+      page.should have_no_content "Kanne"
 
       # Der Benutzer sollte nun einen Account haben.
       User.where(first_name: 'Bundesbruder', last_name: 'Kanne').last.account.should be_present
@@ -542,10 +529,9 @@ feature "Aktivmeldung" do
     p "This line is to prevent travis from hanging up."
     login :admin
 
-    visit root_path
-    within('.aktivmeldung_eintragen') do
-      click_on first("Aktivmeldung eintragen")
-    end
+    visit group_members_path(@corporation.aktivitas)
+    click_on :add_member
+
     fill_in I18n.t(:first_name), with: "Bundesbruder"
     fill_in I18n.t(:last_name), with: "Kanne"
     select "13", from: 'user_date_of_birth_3i' # formtastic day
