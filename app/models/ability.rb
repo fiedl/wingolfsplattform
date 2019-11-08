@@ -215,6 +215,14 @@ module AbilityDefinitions
     #
     super
 
+    # Feature Switches
+    can :use, :term_reports do
+      user.early_access?
+    end
+    can :use, :mailing_lists do
+      user.early_access?
+    end
+
     # For the moment, everybody can view the statistics.
     #
     can :index, :statistics
@@ -376,12 +384,6 @@ module AbilityDefinitions
     cannot :use, :omni_auth
     can :use, :fast_lane
     can :use, :mail_delivery_account_filter
-    can :use, :term_reports do
-      user.early_access?
-    end
-    can :use, :mailing_lists do
-      user.early_access?
-    end
     can :use, :caching
 
     # Jeder Internetbenutzer kann Semesterprogramm-PDFs herunterladen, damit
