@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 5c9398139b5151b280a797df1fd3e2e97b2fcfd2
+  revision: ff6f43225e7939baef35839cccb24ebdb749109c
   branch: master
   specs:
     your_platform (1.0.1)
@@ -262,16 +262,16 @@ GEM
       jquery-rails
       jquery-turbolinks
       rails (>= 3.2)
-    elasticsearch (7.3.0)
-      elasticsearch-api (= 7.3.0)
-      elasticsearch-transport (= 7.3.0)
-    elasticsearch-api (7.3.0)
+    elasticsearch (7.4.0)
+      elasticsearch-api (= 7.4.0)
+      elasticsearch-transport (= 7.4.0)
+    elasticsearch-api (7.4.0)
       multi_json
     elasticsearch-model (7.0.0)
       activesupport (> 3)
       elasticsearch (> 1)
       hashie
-    elasticsearch-transport (7.3.0)
+    elasticsearch-transport (7.4.0)
       faraday
       multi_json
     email_reply_parser (0.5.10)
