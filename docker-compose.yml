@@ -54,7 +54,7 @@ services:
       - redis_data:/var/lib/redis
 
   neo4j:
-    image: neo4j
+    image: neo4j:3.5
     volumes:
       - neo4j_data:/data
     ports:
