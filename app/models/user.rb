@@ -18,6 +18,7 @@ end
 class User
   prepend UserOverrides
   include UserLeibverhältnisse
+  include UserNetenvData
 
   def name_affix
     "#{aktivitaetszahl} #{string_for_death_symbol}".gsub("  ", " ").strip
