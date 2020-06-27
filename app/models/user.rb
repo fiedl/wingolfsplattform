@@ -17,7 +17,7 @@ end
 
 class User
   prepend UserOverrides
-  include UserLeibverhältnisse
+  include UserLeibverhaeltnisse
   include UserNetenvData
 
   def name_affix

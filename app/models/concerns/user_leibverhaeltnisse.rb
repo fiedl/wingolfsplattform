@@ -1,4 +1,4 @@
-concern :UserLeibverhältnisse do
+concern :UserLeibverhaeltnisse do
 
   def leibbursch
     Relationship.related_users(to: self, via: "Leibbursch", opposite: "Leibfux").first
