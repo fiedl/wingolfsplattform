@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: f40a1f5920abdbc5edd6319730eb95fa2e911d68
+  revision: b2862d559790fcfad13d23d7123ddd7288e82fc3
   branch: master
   specs:
     your_platform (1.0.1)
@@ -57,7 +57,7 @@ GIT
       haml (~> 4.0)
       i18n-js (>= 3.0.0.rc8)
       icalendar
-      impressionist
+      impressionist (~> 1.6)
       jquery-atwho-rails (>= 1.1.0)
       jquery-fileupload-rails
       jquery-rails
@@ -333,7 +333,7 @@ GEM
       ice_cube (~> 0.16)
     ice_cube (0.16.3)
     image_processing (0.4.4)
-    impressionist (2.0.0)
+    impressionist (1.6.1)
       nokogiri (~> 1)
     jquery-atwho-rails (1.5.4)
     jquery-fileupload-rails (1.0.0)
