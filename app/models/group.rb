@@ -10,6 +10,11 @@ require_dependency YourPlatform::Engine.root.join( 'app/models/group' ).to_s
 class Group
   include GroupNameConstants
 
+  # See also: `important_offiers`
+  def important_officers_keys
+    [:senior, :fuxmajor, :kneipwart, :phil_x, :kassenwart]
+  end
+
   # Mailing lists
   #
   alias_method :original_mailing_list_sender_filter_settings, :mailing_list_sender_filter_settings
