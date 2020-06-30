@@ -5,9 +5,7 @@ concern :UserLeibverhaeltnisse do
   end
 
   def leibbursch=(leibbursch_user)
-    Relationship.where(name: "Leibbursch", user2: self).first_or_create do |relationship|
-      relationship.user1 = leibbursch_user
-    end
+    Relationship.where(name: "Leibbursch", user2: self).first_or_create.update user1: leibbursch_user
   end
 
   def leibfuxen
