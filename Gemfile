@@ -1,5 +1,5 @@
 # YourPlatform
-gem 'your_platform', git: 'https://github.com/fiedl/your_platform', branch: 'master'
+gem 'your_platform', git: 'https://github.com/fiedl/your_platform', branch: 'tabler'
 
 source 'https://rubygems.org' do
   gem 'rails', '~> 5.0'

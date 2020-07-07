@@ -9,8 +9,8 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: e259a40f807b5a32ac9f4b974b9fae17d312cb35
-  branch: master
+  revision: 9ec7d249abcca9219fc3bbc34b371c2fb1c55fbc
+  branch: tabler
   specs:
     your_platform (1.0.1)
       actionpack (>= 4.2.5.2)

@@ -7,10 +7,6 @@ module ApplicationControllerOverrides
     super + [:wingolf]
   end
 
-  def intranet_layout
-    "strappy"
-  end
-
 end
 
 class ApplicationController
@@ -27,10 +23,6 @@ class ApplicationController
   end
 
   protected
-
-  def default_layout
-    'strappy'
-  end
 
   # def new_relic_params
   #   ::NewRelic::Agent.add_custom_attributes({
