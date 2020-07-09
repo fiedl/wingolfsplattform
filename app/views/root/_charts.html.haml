@@ -1,0 +1,9 @@
+.row.row-deck.row-cards
+  - current_user.corporations.each do |corporation|
+    .col-sm.col-xs-12
+      = render Charts::NumberOfMembers::Corporation.new(group: corporation)
+  - if current_user.bv
+    .col-sm.col-xs-12
+      = render Charts::NumberOfMembers::Group.new(group: current_user.bv)
+  .col-sm.col-xs-12
+    = render Charts::NumberOfMembers::AlleWingolfiten.new(group: Group.alle_wingolfiten)
