@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: d7bd60c12bc7e7d6efd6d221219289e02daf7b42
+  revision: 47647ea1ba9b9b44d5b8f92d776cd5f3b5f99b34
   branch: tabler
   specs:
     your_platform (1.0.1)
@@ -182,7 +182,7 @@ GEM
     auto_html (1.6.4)
       redcarpet (~> 3.1)
       rinku (~> 1.5.0)
-    autoprefixer-rails (9.8.4)
+    autoprefixer-rails (9.8.5)
       execjs
     autosize-rails (1.18.17)
       rails (>= 3.1)
