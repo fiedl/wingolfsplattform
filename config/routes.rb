@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       resources :users do
         get :leibfamilie, to: 'users/leibfamilie#show'
         put :leibfamilie, to: 'users/leibfamilie#update'
+        post 'leibfamilie/leibfuxen', to: 'users/leibfamilie/leibfuxen#create'
       end
     end
   end

@@ -8,7 +8,7 @@ class Api::V1::Users::LeibfamilieController < Api::V1::BaseController
   def show
     authorize! :read, user
 
-    render json: user.leibfamilie.as_json(methods: [:title, :avatar_url])
+    render json: user.leibfamilie.as_json
   end
 
 
@@ -21,6 +21,8 @@ class Api::V1::Users::LeibfamilieController < Api::V1::BaseController
     if params[:leibbursch_id]
       user.leibbursch = User.find params[:leibbursch_id]
     end
+
+    render json: {}, status: :ok
   end
 
 end
