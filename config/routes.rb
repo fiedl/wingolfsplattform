@@ -42,10 +42,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :users do
-        get :leibfamilie, to: 'users/leibfamilie#show'
-        put :leibfamilie, to: 'users/leibfamilie#update'
-      end
+      get 'users/leibfamilie', to: 'users/leibfamilie#show'
+      put 'users/leibfamilie', to: 'users/leibfamilie#update'
+      post 'users/leibfamilie/leibfuxen', to: 'users/leibfamilie/leibfuxen#create'
     end
   end
 
