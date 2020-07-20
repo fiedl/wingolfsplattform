@@ -13,6 +13,14 @@ module UserOverrides
     hash
   end
 
+  def default_avatar_path
+    if wingolfit?
+      "https://github.com/fiedl/wingolfsplattform/raw/master/app/assets/images/avatar_480.png"
+    else
+      super
+    end
+  end
+
 end
 
 class User
@@ -40,6 +48,7 @@ class User
       super
     end
   end
+
 
   # This method returns the bv (Bezirksverband) the user is associated with.
   #

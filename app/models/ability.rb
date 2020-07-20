@@ -414,8 +414,6 @@ module AbilityDefinitions
 
   def rights_for_developers
     super
-
-    can :use, :find_and_filter
   end
 
   # During App-Store approval, we must give a dummy user access to our platform.
