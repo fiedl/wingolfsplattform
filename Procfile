@@ -1,5 +1,6 @@
-sidekiq: bundle exec sidekiq -q default -q mailgate -q mailers -q dag_links -c 10 --environment ${RAILS_ENV:-production} --logfile log/sidekiq.log
-sidekiq-cache-1: bundle exec sidekiq -q cache -c 3 --environment ${RAILS_ENV:-production} --logfile log/sidekiq-cache.log
-sidekiq-slow-1: bundle exec sidekiq -q slow -c 1 --environment ${RAILS_ENV:-production} --logfile log/sidekiq-slow.log
-sidekiq-retry: bundle exec sidekiq -q retry -c 1 --environment ${RAILS_ENV:-production} --logfile log/sidekiq-retry.log
-notifications: bundle exec rake notifications:worker >> log/notifications.log 2>&1
+neo4j: docker-compose up neo4j
+webpack: cd ~/rails/your_platform && bin/webpack-dev-server
+sidekiq: bundle exec sidekiq -q default -q mailgate -q mailers -q dag_links -q cache -q slow
+notifications: bundle exec rake notifications:worker
+web: bundle exec rails server --port 3001
+vue-devtools: PORT=8098 vue-devtools
