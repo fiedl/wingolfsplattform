@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 224629c5eba9017ca0bccd2fb9283e81b3bd3fe4
+  revision: 55e03fb8f8c31fda48938067beaa738219458fa9
   branch: tabler
   specs:
     your_platform (1.0.1)
@@ -186,7 +186,7 @@ GEM
       execjs
     autosize-rails (1.18.17)
       rails (>= 3.1)
-    bcrypt (3.1.13)
+    bcrypt (3.1.15)
     best_in_place (3.1.1)
       actionpack (>= 3.2)
       railties (>= 3.2)

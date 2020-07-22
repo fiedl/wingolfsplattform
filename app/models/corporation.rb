@@ -21,7 +21,15 @@ class Corporation
   end
 
   def chargierte
-    descendant_groups.where(name: ["Chargierte", "Chargen"]).first.try(:members) || []
+    chargen.try(:members) || []
+  end
+
+  def chargen
+    descendant_groups.where(name: ["Chargierte", "Chargen"]).first
+  end
+
+  def email
+    chargen_mailing_list.try(:value) || super
   end
 
   def self.find_all_wingolf_corporations
