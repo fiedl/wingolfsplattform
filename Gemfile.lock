@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 6933823cf0eb5f9af66e1c8d88a6ad3e21a0316e
+  revision: 93e5f9687f59c7f2fe332673ec9c5554227e1e2b
   branch: tabler
   specs:
     your_platform (1.0.1)
@@ -218,7 +218,7 @@ GEM
       mime-types (>= 1.16)
       mimemagic (>= 0.3.0)
     charlock_holmes (0.7.7)
-    chartkick (3.3.1)
+    chartkick (3.3.2)
     childprocess (0.7.1)
       ffi (~> 1.0, >= 1.0.11)
     choice (0.2.0)
