@@ -221,9 +221,6 @@ module AbilityDefinitions
 
     # Eingeloggte Benutzer können lebende Wingolfiten sehen.
     # Den Namen kann man von allen Nutzern sehen.
-    cannot :read, User do |user|
-      not can? :update, user
-    end
     can :read, User, id: User.wingolfiten.alive.pluck(:id)
     can :read_name, User
 
