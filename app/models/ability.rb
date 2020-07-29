@@ -130,6 +130,10 @@ module AbilityDefinitions
         can? :update, group
       end
 
+      can :manage_settings, Group do |group|
+        can? :update, group
+      end
+
       can :destroy, Group do |group|
         group.admins_of_self_and_ancestors.include?(user) and
 
@@ -140,7 +144,7 @@ module AbilityDefinitions
         group.flags.count == 0
       end
 
-      can [:update, :change_first_name, :change_alias, :change_status, :create_account_for], User, id: Role.of(user).administrated_users.map(&:id)
+      can [:read, :update, :change_first_name, :change_alias, :change_status, :create_account_for], User, id: Role.of(user).administrated_users.map(&:id)
       can :manage, UserAccount, user_id: Role.of(user).administrated_users.map(&:id)
       can :update_members, Group do |group|
         can? :update, group
@@ -215,13 +219,13 @@ module AbilityDefinitions
     #
     super
 
-    # Feature Switches
-    can :use, :term_reports do
-      user.early_access?
+    # Eingeloggte Benutzer können lebende Wingolfiten sehen.
+    # Den Namen kann man von allen Nutzern sehen.
+    cannot :read, User do |user|
+      not can? :update, user
     end
-    can :use, :mailing_lists do
-      user.early_access?
-    end
+    can :read, User, id: User.wingolfiten.alive.pluck(:id)
+    can :read_name, User
 
     # For the moment, everybody can view the statistics.
     #

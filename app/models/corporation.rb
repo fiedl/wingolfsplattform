@@ -13,7 +13,11 @@ class Corporation
   end
 
   def hausverein
-    self.child_groups.select{ |child| child.name == "Hausverein" or child.name == "Wohnheimsverein" }.first
+    child_groups.where(type: "Groups::Wohnheimsverein").first
+  end
+
+  def wohnheimsverein
+    hausverein
   end
 
   def verstorbene

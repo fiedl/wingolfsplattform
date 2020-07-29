@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: e9a906a23c7d5b3fa60bd171afe1a732f273caae
+  revision: 9b728827dec7ba2a0dd687feb8b4e4d971032dc9
   branch: tabler
   specs:
     your_platform (1.0.1)
@@ -436,7 +436,7 @@ GEM
       rack (>= 0.4)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
-    rack-mini-profiler (2.0.2)
+    rack-mini-profiler (2.0.3)
       rack (>= 1.2.0)
     rack-protection (2.0.7)
       rack
