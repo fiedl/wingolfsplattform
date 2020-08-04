@@ -59,6 +59,9 @@ module AbilityDefinitions
       can :update, Group do |group|
         group.admins_of_self_and_ancestors.include?(user)
       end
+      can :update, Corporation do |group|
+        group.aktivitas.admins_of_self_and_ancestors.include?(user)
+      end
       can :rename, Group do |group|
         group.admins_of_self_and_ancestors.include?(user) and
 
@@ -195,7 +198,7 @@ module AbilityDefinitions
       # An den Vorort übermitteln dürfen die Statistik nur die Chargierten.
       #
       can :recalculate, TermReport do |term_report|
-        user.in?(term_report.corporation.admins)
+        user.in?(term_report.corporation.admins + term_report.corporation.aktivitas.admins)
       end
 
     end

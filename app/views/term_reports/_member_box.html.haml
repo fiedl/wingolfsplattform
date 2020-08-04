@@ -2,32 +2,46 @@
 - group_name || raise('no group_name given')
 - members ||= term_report.member_entries.where(category: group_name)
 
-%h1.term_report_members
-  = group_name
-  = "(#{members.count})"
-%div
-  %table.members
+.card
+  .card-header
+    %h3
+      = group_name
+      = "(#{members.count})"
+  %table.members.table.card-table.table-vcenter.table-mobile-sm
     - members.each do |member|
-      %tr.first_for_member
-        %td.name
+      %tr
+        %td.w-1
+          = user_avatar member.user
+        %td.w-md-20
+          %strong.name
+            - if can? :read, member.user
+              = link_to "#{member.last_name}, #{member.first_name}", member.user
+            - else
+              = "#{member.last_name}, #{member.first_name}"
+          .date_of_birth
+            - if can? :read, member.user
+              - if member.date_of_birth.present?
+                geb.
+                = localize member.date_of_birth.to_date
+        %td.w-md-10
+          .aktivitaetszahl= member.name_affix
+          .w_nummer= member.w_nummer
+        %td.w-md-15
           - if can? :read, member.user
-            = link_to "#{member.last_name}, #{member.first_name}", member.user
-          - else
-            = "#{member.last_name}, #{member.first_name}"
-        - if can? :read, member.user
-          %td.aktivitaetszahl= member.name_affix
-          %td.study_address.address{rowspan: 2}= member.primary_address.to_s.gsub("\n", "<br />").html_safe
-          %td.phone= member.phone
-          %td.home_address.address{rowspan: 2}= member.secondary_address.to_s.gsub("\n", "<br />").html_safe
-          %td.klammerung= member.klammerung
-      %tr.second_for_member
-        - if can? :read, member.user
-          %td.date_of_birth
-            - if member.date_of_birth
-              geb.
-              = localize member.date_of_birth.to_date
-        %td.w_nummer
-          = member.w_nummer
-        - if can? :read, member.user
-          %td.email= member.email
-          %td.study= member.profession
+            .study_address.address= preserve member.primary_address.to_s.strip
+        %td.w-md-20
+          - if can? :read, member.user
+            .phone= member.phone
+            .email= member.email
+        %td
+          - if can? :read, member.user
+            .klammerung= member.klammerung
+            .study= member.profession
+        %td.w-4
+          - if term_report.draft? && can?(:update, member.user)
+            %vue-auto-align-popup
+              .btn.btn-white.btn-sm.dropdown-toggle{'data-toggle': "dropdown", 'data-display': "static"} Bearbeiten
+              .dropdown-menu.edit_dropdown
+                = link_to "Kontaktdaten", member.user, class: 'dropdown-item'
+                - if can? :change_status, member.user
+                  %vue_change_status_button{button_class: 'dropdown-item', ':user': member.user.to_json, ':corporations': member.user.corporations.select { |c| can? :update, c }.collect { |corporation| corporation.as_json.merge({statuses: corporation.status_groups_with_level.as_json})}.to_json, redirect_to_url: term_report_path(term_report, recalculate: true), ':current_status_ids': member.user.status_group_ids.to_json}

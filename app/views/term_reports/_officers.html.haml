@@ -1,18 +1,17 @@
-%h1 Amtsträger
-%div
-  %table.officers
-    %tr
-      %th Senior:
-      %td= link_to_user_with_phone_number(term_report.senior) if term_report.senior
-    %tr
-      %th Fuxmajor:
-      %td= link_to_user_with_phone_number(term_report.fuxmajor) if term_report.fuxmajor
-    %tr
-      %th Kneipwart:
-      %td= link_to_user_with_phone_number(term_report.kneipwart) if term_report.kneipwart
-    %tr
-      %th Kassenwart:
-      %td= link_to_user_with_phone_number(term_report.kassenwart) if term_report.kassenwart
-    %tr
-      %th Philister-x:
-      %td= link_to_user_with_phone_number(term_report.philister_x) if term_report.philister_x
+.card
+  .card-header
+    %h3= t :officers
+  .card-body
+    - %w(senior fuxmajor kneipwart kassenwart philister_x).each do |office_key|
+      - officer = term_report.send(office_key)
+      .align-items-center.mb-3.row.row-sm
+        .col-auto
+          = user_avatar officer
+        .col
+          .text-body.d-block= link_to officer.title, officer
+          %small.d-block.mt-n1.text-muted= t office_key
+          - if officer.phone && can?(:read, officer)
+            %small.d-block.mt-n1.text-muted= link_to officer.phone, "tel:#{officer.phone.gsub(' ', '')}", class: 'text-muted'
+  - if term_report.draft? && can?(:update, group)
+    .card-footer
+      = link_to "Amtsträger ändern", group_officers_path(group_id: group.id), class: 'btn btn-white btn-sm'

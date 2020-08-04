@@ -1,4 +1,9 @@
-%h1 Semesterprogramm
-%div
-  - if term_report.semester_calendar
-    = render partial: 'semester_calendars/pdf', locals: {semester_calendar: term_report.semester_calendar}
+.card
+  .card-header
+    %h3= t :semester_calendar
+  .card-body
+    - if term_report.semester_calendar
+      = render partial: 'semester_calendars/pdf', locals: {semester_calendar: term_report.semester_calendar}
+  - if term_report.draft? && can?(:update, group)
+    .card-footer
+      = link_to "Semesterprogramm ändern", group_semester_calendar_path(group_id: group.id), class: 'btn btn-white btn-sm'
