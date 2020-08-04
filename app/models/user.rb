@@ -296,8 +296,9 @@ class User
     self.profile_fields.create(label: :employment_status, type: "ProfileFields::ProfessionalCategory")
     self.profile_fields.create(label: :languages, type: "ProfileFields::Competence")
 
-    pf = self.profile_fields.build(label: :bank_account, type: "ProfileFields::BankAccount")
-    pf.becomes(ProfileFields::BankAccount).save
+    pf = self.profile_fields.where(type: "ProfileFields::BankAccount").first_or_create do |pf|
+      pf.label = :bank_account
+    end
 
     pf = self.profile_fields.create(label: :name_field_wingolfspost, type: "ProfileFields::NameSurrounding")
       .becomes(ProfileFields::NameSurrounding)

@@ -12,6 +12,10 @@ class Corporation
     child_groups.where(type: 'Philisterschaft').first
   end
 
+  def burschia
+    sub_group("Burschen")
+  end
+
   def hausverein
     child_groups.where(type: "Groups::Wohnheimsverein").first
   end
