@@ -227,7 +227,7 @@ module AbilityDefinitions
     # Den Namen kann man von allen Nutzern sehen.
     can :read, User, id: User.wingolfiten.alive.pluck(:id)
     can :read, User, ancestor_groups: { id: user.corporations.pluck(:id) }
-    can :read_name, User
+    can [:index, :read_name], User
 
     # For the moment, everybody can view the statistics.
     #
