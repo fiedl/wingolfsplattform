@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 04a5c4d82c5495a2f203cb359f786de0f82c4611
+  revision: cc23f8d27343bbdd36525551435f51fc30911ec2
   branch: tabler
   specs:
     your_platform (1.0.1)
@@ -310,7 +310,7 @@ GEM
     fiedl-log (0.3.0)
       colored
     flamegraph (0.9.5)
-    foreman (0.87.1)
+    foreman (0.87.2)
     formtastic (3.1.5)
       actionpack (>= 3.2.13)
     gemoji (3.0.1)
