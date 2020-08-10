@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: d8e6168234bb7da5453478dbd04cf7f64a8be9c1
+  revision: 86d05f3203431566f2f82eb46213cce1ef89445c
   branch: tabler
   specs:
     your_platform (1.0.1)
@@ -491,7 +491,7 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rdiscount (2.2.0.1)
+    rdiscount (2.2.0.2)
     redcarpet (3.5.0)
     redis (3.3.5)
     redis-actionpack (5.2.0)
