@@ -201,6 +201,10 @@ module AbilityDefinitions
         user.in?(term_report.corporation.admins + term_report.corporation.aktivitas.admins)
       end
 
+      can :update_public_website_publication, Post, ancestor_group_ids: user.administrated_group_ids
+      can :update_public_website_publication, Post, parent_events: { parent_group_ids: user.administrated_group_ids }
+      can :update_public_website_publication, Post, parent_events: { group_id: user.administrated_group_ids }
+
     end
   end
 
