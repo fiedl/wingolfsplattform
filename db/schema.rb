@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190813235620) do
+ActiveRecord::Schema.define(version: 20200730210722) do
 
   create_table "activities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
     t.integer  "trackable_id"
@@ -412,6 +412,7 @@ ActiveRecord::Schema.define(version: 20190813235620) do
     t.string   "message_id"
     t.string   "content_type"
     t.string   "sent_via"
+    t.datetime "published_at"
     t.index ["author_user_id"], name: "posts_author_user_id_fk", using: :btree
     t.index ["group_id"], name: "posts_group_id_fk", using: :btree
   end
