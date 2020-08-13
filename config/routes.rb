@@ -40,6 +40,12 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :pages, path: '' do
+    resources :public_pages, path: '/public', controller: 'pages'
+    resources :public_events_pages, path: '/public/events', controller: 'pages'
+    resources :public_gallery_pages, path: '/public/galleries', controller: 'pages'
+  end
+
   namespace :api do
     namespace :v1 do
       get 'users/leibfamilie', to: 'users/leibfamilie#show'
