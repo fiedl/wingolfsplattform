@@ -69,10 +69,10 @@ Rails.application.configure do
 
   # See: http://stackoverflow.com/a/12609856/2066546
   config.action_mailer.default_options = {
-    from: 'Wingolfsplattform <noreply@wingolf.yourplatform.io>'
+    from: 'Wingolfsplattform <noreply@wingolf.io>'
   }
 
-  config.action_mailer.default_url_options = { host: 'wingolf.yourplatform.io', protocol: 'https' }
+  config.action_mailer.default_url_options = { host: 'wingolf.io', protocol: 'https' }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
