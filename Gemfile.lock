@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: f7406a9de69e7eb7975a6efae06191189fa26a72
+  revision: cda2f65dce34324464ba6919dd8a311ece716c3f
   branch: tabler
   specs:
     your_platform (1.0.1)
@@ -371,7 +371,7 @@ GEM
     mail_form (1.8.0)
       actionmailer (>= 5.0)
       activemodel (>= 5.0)
-    merit (4.0.0)
+    merit (4.0.1)
       ambry (~> 1.0.0)
       zeitwerk
     method_source (0.8.2)
