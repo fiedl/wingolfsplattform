@@ -46,6 +46,10 @@ Rails.application.routes.draw do
     resources :public_gallery_pages, path: '/public/galleries', controller: 'pages'
   end
 
+  namespace :groups do
+    resources :free_groups
+  end
+
   namespace :api do
     namespace :v1 do
       get 'users/leibfamilie', to: 'users/leibfamilie#show'
