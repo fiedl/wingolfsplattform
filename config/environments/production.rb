@@ -100,8 +100,4 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  # Exceptions: Use own app as exception handler.
-  # http://railscasts.com/episodes/53-handling-exceptions-revised
-  config.exceptions_app = self.routes
 end
