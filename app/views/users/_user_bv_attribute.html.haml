@@ -7,4 +7,4 @@
     = link_to user.bv.name, user.bv
     %br
     = "#{I18n.t :since}:"
-    = best_in_place_if can?(:update, user), user, :localized_bv_beitrittsdatum
+    = editable user.bv_membership, :valid_from, type: 'date'

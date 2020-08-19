@@ -90,14 +90,6 @@ class User
     bv_membership.valid_from if bv && bv_membership
   end
 
-  def localized_bv_beitrittsdatum
-    I18n.localize bv_beitrittsdatum.to_date if bv_beitrittsdatum
-  end
-  def localized_bv_beitrittsdatum=(str)
-    self.bv_membership.valid_from = str.to_date.to_datetime
-    self.bv_membership.save
-  end
-
   # Diese Methode gibt den BV zurück, dem der Benutzer aufgrund seiner Postanschrift
   # zugeordnet sein sollte. Der eingetragene BV kann und darf davon abweisen, da er
   # in Sonderfällen auch händisch zugewiesen werden kann.
@@ -539,7 +531,6 @@ class User
     cache :fruehere_aktivitaetszahl
     cache :name_affix
     cache :title
-    cache :localized_bv_beitrittsdatum
     cache :w_nummer
     cache :aktiver?
     cache :philister?
