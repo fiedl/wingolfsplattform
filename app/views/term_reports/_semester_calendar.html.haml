@@ -13,7 +13,7 @@
 
   - if term_report.draft? && can?(:update, group)
     .card-footer
-      = link_to "Semesterprogramm ändern", group_semester_calendar_path(group_id: group.id), class: 'btn btn-white btn-sm'
+      = link_to "Semesterprogramm ändern", current_semester_calendar_path(group_id: group.id), class: 'btn btn-white btn-sm'
   - elsif term_report.semester_calendar
     .card-footer
-      = link_to "Vollständiges Programm anzeigen", group_semester_calendar_path(group_id: group.id), class: 'btn btn-white btn-sm'
+      = link_to "Vollständiges Programm anzeigen", current_semester_calendar_path(group_id: group.id), class: 'btn btn-white btn-sm'
