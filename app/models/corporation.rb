@@ -51,15 +51,7 @@ class Corporation
   end
 
   def self.aktive_verbindungen
-    Corporation.where(id: aktive_verbindungen_ids).order(:name)
-  end
-
-  def self.aktive_verbindungen_ids
-    Rails.cache.fetch ["Corporation", "aktive_verbindungen_ids"] do
-      Corporation.all.select do |corporation|
-        corporation.aktivitas.members.count > 5
-      end
-    end
+    Corporation.joins(:child_groups).where(child_groups_groups: {id: Aktivitas.active})
   end
 
   # Verstorbene und Ausgetretene dürfen nicht als Mitglieder
