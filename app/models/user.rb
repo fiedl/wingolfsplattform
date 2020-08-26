@@ -28,7 +28,7 @@ class User
   include UserLeibverhaeltnisse
   include UserNetenvData
 
-  scope :wingolfiten, -> { includes(:ancestor_groups).where(groups: {id: Group.alle_wingolfiten.id}) }
+  scope :wingolfiten, -> { includes(:groups).where(groups: {id: Group.alle_wingolfiten.id}) }
 
   def name_affix
     "#{aktivitaetszahl} #{string_for_death_symbol}".gsub("  ", " ").strip
