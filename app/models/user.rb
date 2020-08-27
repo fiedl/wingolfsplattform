@@ -332,7 +332,7 @@ class User
   # A user is a wingolfit if he has an aktivitätszahl.
   #
   def wingolfit?
-    philister? || aktiver?
+    Group.alle_wingolfiten.members.include? self
   end
 
   def aktiver?
@@ -341,6 +341,10 @@ class User
 
   def philister?
     Group.alle_philister.members.include? self
+  end
+
+  def self.wingolfiten
+    where id: (joins(:groups).where(groups: {id: Group.alle_wingolfiten}))
   end
 
   def group_names
