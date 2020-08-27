@@ -3,15 +3,15 @@
     %h3= t :officers
   .card-body
     - %w(senior fuxmajor kneipwart kassenwart philister_x).each do |office_key|
-      - officer = term_report.send(office_key)
-      .align-items-center.mb-3.row.row-sm
-        .col-auto
-          = user_avatar officer
-        .col
-          .text-body.d-block= link_to officer.title, officer
-          %small.d-block.mt-n1.text-muted= t office_key
-          - if officer.phone && can?(:read, officer)
-            %small.d-block.mt-n1.text-muted= link_to officer.phone, "tel:#{officer.phone.gsub(' ', '')}", class: 'text-muted'
+      - if officer = term_report.send(office_key)
+        .align-items-center.mb-3.row.row-sm
+          .col-auto
+            = user_avatar officer
+          .col
+            .text-body.d-block= link_to officer.title, officer
+            %small.d-block.mt-n1.text-muted= t office_key
+            - if officer.phone && can?(:read, officer)
+              %small.d-block.mt-n1.text-muted= link_to officer.phone, "tel:#{officer.phone.gsub(' ', '')}", class: 'text-muted'
   - if term_report.draft? && can?(:update, group)
     .card-footer
       = link_to "Amtsträger ändern", group_officers_path(group_id: group.id), class: 'btn btn-white btn-sm'
