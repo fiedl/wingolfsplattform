@@ -332,7 +332,7 @@ class User
   # A user is a wingolfit if he has an aktivitätszahl.
   #
   def wingolfit?
-    Group.alle_wingolfiten.members.include? self
+    self.groups.include? Group.alle_wingolfiten
   end
 
   def aktiver?

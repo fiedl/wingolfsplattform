@@ -204,7 +204,7 @@ class Group
   #
   #
   def self.alle_wingolfiten
-    self.find_or_create_special_group :alle_wingolfiten
+    @alle_wingolfiten ||= self.find_or_create_special_group :alle_wingolfiten
   end
   def self.alle_aktiven
     self.find_or_create_special_group :alle_aktiven
