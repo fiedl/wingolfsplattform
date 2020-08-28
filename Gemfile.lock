@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 503e6b8e77a19a0c513118b7b3de23f92d8f2ee3
+  revision: 4371dff90f495627736fe77491689d7b5835dcfd
   branch: tabler
   specs:
     your_platform (1.0.1)
