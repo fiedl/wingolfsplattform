@@ -19,8 +19,9 @@ cache:
   directories:
     - node_modules
   yarn: true
-dist: trusty
-sudo: true
+os: linux
+dist: bionic
+language: ruby
 addons:
   firefox: latest
   chrome: stable
@@ -28,10 +29,8 @@ addons:
     packages:
       - pwgen
       - libicu-dev
-  code_climate:
-    repo_token: e0efa94b3c7a8a2049f5ff1ded51a21e922bf29845e658de598b01c964c17275
 services:
-  - redis-server
+  - redis
   - neo4j
 before_install:
   - travis_retry gem update --system
@@ -65,4 +64,4 @@ notifications:
       - https://webhooks.gitter.im/e/53f5cd27c87a47426f47
     on_success: always  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
-    on_start: false     # default: false
+    on_start: never     # options: [always|never|change] default: never
