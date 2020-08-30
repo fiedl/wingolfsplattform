@@ -129,6 +129,7 @@ module AbilityDefinitions
         can? :update, group
       end
 
+      can :create, MailingList
       can [:manage_mailing_lists, :manage_mailing_lists_for], Group do |group|
         can? :update, group
       end
