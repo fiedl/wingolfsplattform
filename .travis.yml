@@ -20,7 +20,7 @@ cache:
     - node_modules
   yarn: true
 os: linux
-dist: bionic
+dist: trusty
 language: ruby
 addons:
   firefox: latest
