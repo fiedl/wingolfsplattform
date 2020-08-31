@@ -13,12 +13,22 @@ module UserOverrides
     hash
   end
 
+  def default_avatar_path
+    if wingolfit?
+      "https://github.com/fiedl/wingolfsplattform/raw/master/app/assets/images/avatar_480.png"
+    else
+      super
+    end
+  end
+
 end
 
 class User
   prepend UserOverrides
   include UserLeibverhaeltnisse
   include UserNetenvData
+
+  scope :wingolfiten, -> { joins(:groups).where(groups: {id: Group.alle_wingolfiten.id}) }
 
   def name_affix
     "#{aktivitaetszahl} #{string_for_death_symbol}".gsub("  ", " ").strip
@@ -40,6 +50,7 @@ class User
       super
     end
   end
+
 
   # This method returns the bv (Bezirksverband) the user is associated with.
   #
@@ -77,14 +88,6 @@ class User
 
   def bv_beitrittsdatum
     bv_membership.valid_from if bv && bv_membership
-  end
-
-  def localized_bv_beitrittsdatum
-    I18n.localize bv_beitrittsdatum.to_date if bv_beitrittsdatum
-  end
-  def localized_bv_beitrittsdatum=(str)
-    self.bv_membership.valid_from = str.to_date.to_datetime
-    self.bv_membership.save
   end
 
   # Diese Methode gibt den BV zurück, dem der Benutzer aufgrund seiner Postanschrift
@@ -285,8 +288,9 @@ class User
     self.profile_fields.create(label: :employment_status, type: "ProfileFields::ProfessionalCategory")
     self.profile_fields.create(label: :languages, type: "ProfileFields::Competence")
 
-    pf = self.profile_fields.build(label: :bank_account, type: "ProfileFields::BankAccount")
-    pf.becomes(ProfileFields::BankAccount).save
+    pf = self.profile_fields.where(type: "ProfileFields::BankAccount").first_or_create do |pf|
+      pf.label = :bank_account
+    end
 
     pf = self.profile_fields.create(label: :name_field_wingolfspost, type: "ProfileFields::NameSurrounding")
       .becomes(ProfileFields::NameSurrounding)
@@ -328,7 +332,7 @@ class User
   # A user is a wingolfit if he has an aktivitätszahl.
   #
   def wingolfit?
-    philister? || aktiver?
+    self.groups.include? Group.alle_wingolfiten
   end
 
   def aktiver?
@@ -337,6 +341,10 @@ class User
 
   def philister?
     Group.alle_philister.members.include? self
+  end
+
+  def self.wingolfiten
+    where id: (joins(:groups).where(groups: {id: Group.alle_wingolfiten}))
   end
 
   def group_names
@@ -369,7 +377,7 @@ class User
     self.member_of? wbl_abo_group
   end
   def wingolfsblaetter_abo=(new_abo_status)
-    if new_abo_status == true || new_abo_status == "true"
+    if new_abo_status == true || new_abo_status == "true" || new_abo_status == "1"
 
       # Aufgrund des Reaktivierungs-Bugs muss die Mitgliedschaft gelöscht
       # wreden, sofern sie schon existiert.
@@ -378,7 +386,7 @@ class User
       Membership.with_past.find_by_user_and_group(self, wbl_abo_group).try(:destroy)
 
       wbl_abo_group.assign_user self
-    elsif new_abo_status == false || new_abo_status == "false"
+    elsif new_abo_status == false || new_abo_status == "false" || new_abo_status == "0"
       wbl_abo_group.unassign_user self
     end
   end
@@ -527,7 +535,6 @@ class User
     cache :fruehere_aktivitaetszahl
     cache :name_affix
     cache :title
-    cache :localized_bv_beitrittsdatum
     cache :w_nummer
     cache :aktiver?
     cache :philister?

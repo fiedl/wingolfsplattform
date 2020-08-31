@@ -11,14 +11,5 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
-//= require jquery.turbolinks
-//= require jquery-ui
-//
-//= require jquery.purr
-// TODO    require jquery.ui.datepicker-de
-//= require_boxes
-//= require make-js-more-like-ruby
 //= require your_platform
 //= require_tree .
-//
-//= require turbolinks

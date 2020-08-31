@@ -11,7 +11,7 @@
     .alert.alert-info
       %strong Inoffizielle Statistik.
       Das angezeigte Semester ist älter als die Einführung der Statistik-Funktion. Diese Semesterstatistik wurde niemals offiziell abgeschickt. Die angezeigten Daten sind anhand der Plattform-Historie berechnet.
-      .buttons
+      .buttons.mt-3
         - if can? :recalculate, term_report
           = button_to term_report_recalculate_path(term_report_id: term_report.id), class: 'btn btn-outline-secondary recalculate_term_report', method: :post do
             Neu berechnen
@@ -23,7 +23,7 @@
         Ab dem
         = localize term_report.due_at
         wird Chargierten an dieser Stelle ein Knopf zum Abschicken der Statistik angezeigt.
-        .buttons
+        .buttons.mt-3
           - if can? :recalculate, term_report
             = button_to term_report_recalculate_path(term_report_id: term_report.id), class: 'btn btn-outline-secondary recalculate_term_report', method: :post do
               Neu berechnen
@@ -31,16 +31,18 @@
       .alert.alert-warning
         %strong Semesterstatistik noch nicht abgeschickt!
         Diese Statistik muss von einem Chargierten bis zum
-        = localize term_report.over_due_at
+        = localize term_report.over_due_at if term_report.over_due_at
         an den Vorort geschickt werden.
-        .buttons
+        .buttons.mt-3
           - if can? :recalculate, term_report
             = button_to term_report_recalculate_path(term_report_id: term_report.id), class: 'btn btn-outline-secondary recalculate_term_report', method: :post do
               Neu berechnen
           - if can? :submit, term_report
-            = button_to term_report_submit_path(term_report_id: term_report.id), class: 'btn btn-outline-secondary submit_term_report', method: :post do
+            = button_to term_report_submit_path(term_report_id: term_report.id), class: 'btn btn-primary submit_term_report', method: :post do
               = icon :check
               Verbindlich an den Vorort schicken
-            .submission_author
-              = user_avatar(current_user)
-              = current_user.title
+            .submission_author.mt-2.row.row-sm.align-items-center.col-6.pull-right
+              .col-auto= user_avatar(current_user)
+              .col-auto
+                %div= current_user.title
+                %small.text-muted Signieren als

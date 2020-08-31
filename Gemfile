@@ -11,10 +11,6 @@ source 'https://rubygems.org' do
 
   gem 'puma'
 
-  group :production do
-    gem 'unicorn'
-  end
-
   # Spring speeds up development by keeping your application running in the background.
   group :development do
     gem 'spring'

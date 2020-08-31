@@ -59,6 +59,9 @@ module AbilityDefinitions
       can :update, Group do |group|
         group.admins_of_self_and_ancestors.include?(user)
       end
+      can :update, Corporation do |group|
+        group.aktivitas.admins_of_self_and_ancestors.include?(user)
+      end
       can :rename, Group do |group|
         group.admins_of_self_and_ancestors.include?(user) and
 
@@ -126,7 +129,12 @@ module AbilityDefinitions
         can? :update, group
       end
 
+      can :create, MailingList
       can [:manage_mailing_lists, :manage_mailing_lists_for], Group do |group|
+        can? :update, group
+      end
+
+      can :manage_settings, Group do |group|
         can? :update, group
       end
 
@@ -140,7 +148,7 @@ module AbilityDefinitions
         group.flags.count == 0
       end
 
-      can [:update, :change_first_name, :change_alias, :change_status, :create_account_for], User, id: Role.of(user).administrated_users.map(&:id)
+      can [:read, :update, :change_first_name, :change_alias, :change_status, :create_account_for], User, id: Role.of(user).administrated_users.map(&:id)
       can :manage, UserAccount, user_id: Role.of(user).administrated_users.map(&:id)
       can :update_members, Group do |group|
         can? :update, group
@@ -191,8 +199,9 @@ module AbilityDefinitions
       # An den Vorort übermitteln dürfen die Statistik nur die Chargierten.
       #
       can :recalculate, TermReport do |term_report|
-        user.in?(term_report.corporation.admins)
+        user.in?(term_report.corporation.admins + term_report.corporation.aktivitas.admins)
       end
+
 
     end
   end
@@ -215,13 +224,12 @@ module AbilityDefinitions
     #
     super
 
-    # Feature Switches
-    can :use, :term_reports do
-      user.early_access?
-    end
-    can :use, :mailing_lists do
-      user.early_access?
-    end
+    # Eingeloggte Benutzer können lebende Wingolfiten sehen.
+    # Von der eigenen Verbindung darf man alle sehen, also auch Gäste.
+    # Den Namen kann man von allen Nutzern sehen.
+    can :read, User, id: User.wingolfiten.alive.pluck(:id)
+    can :read, User, groups: { id: user.corporations.collect { |corporation| corporation.child_groups.where(type: ["Aktivitas", "Philisterschaft"]).or(corporation.child_groups.where(name: ["Gäste", "Hausbewohner"])) }.flatten.map(&:id) }
+    can [:index, :read_name], User
 
     # For the moment, everybody can view the statistics.
     #
@@ -382,9 +390,7 @@ module AbilityDefinitions
     # Feature Switches
     cannot :create_comment_for, BlogPost
     cannot :use, :omni_auth
-    can :use, :fast_lane
     can :use, :mail_delivery_account_filter
-    can :use, :caching
 
     # Jeder Internetbenutzer kann Semesterprogramm-PDFs herunterladen, damit
     # die Verbindungen die Möglichkeit haben, die PDFs zu verlinken.
@@ -414,8 +420,6 @@ module AbilityDefinitions
 
   def rights_for_developers
     super
-
-    can :use, :find_and_filter
   end
 
   # During App-Store approval, we must give a dummy user access to our platform.

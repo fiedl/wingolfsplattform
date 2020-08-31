@@ -1,4 +1,20 @@
-%h1 Semesterprogramm
-%div
-  - if term_report.semester_calendar
-    = render partial: 'semester_calendars/pdf', locals: {semester_calendar: term_report.semester_calendar}
+.card
+  .card-header
+    %h3.mb-0= t :semester_calendar
+  .card-body
+    - if semester_calendar = term_report.semester_calendar
+      - if attachment = semester_calendar.attachments.last
+        %a{href: attachment.file_url, target: '_blank'}
+          %img{src: attachment.file.medium.url}
+      - semester_calendar.important_events.each do |event|
+        .mt-2
+          = event_icon
+          = link_to event.title, event
+          .text-muted.small.mt-0= localize event.start_at
+
+  - if term_report.draft? && can?(:update, group)
+    .card-footer
+      = link_to "Semesterprogramm ändern", current_semester_calendar_path(group_id: group.id), class: 'btn btn-white btn-sm'
+  - elsif term_report.semester_calendar
+    .card-footer
+      = link_to "Vollständiges Programm anzeigen", current_semester_calendar_path(group_id: group.id), class: 'btn btn-white btn-sm'

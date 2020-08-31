@@ -1,50 +1,54 @@
-%h1= current_title
-%div
-  %p
-    %table
-      %tr
-        %th{colspan: 2} Mitgliederbewegung
-      %tr
-        %td Aktivmeldungen:
-        %td= term_report.anzahl_aktivmeldungen
-      %tr
-        %td Philistrationen:
-        %td= term_report.anzahl_philistrationen
-      %tr
-        %td Todesfälle
-        %td= term_report.anzahl_todesfaelle
-      %tr
-        %td Austritte Aktive
-        %td= term_report.anzahl_austritte_aktive
-      %tr
-        %td Austritte Philister
-        %td= term_report.anzahl_austritte_philister
-      %tr
-        %th{colspan: 2} Mitglieder
-      %tr
-        %td Alle Aktiven:
-        %td= term_report.anzahl_aller_aktiven
-      %tr
-        %td Erstbandträger der Aktivitas
-        %td= term_report.anzahl_erstbandtraeger_aktivitas
-      %tr
-        %td Fuxen:
-        %td= term_report.anzahl_fuxen
-      %tr
-        %td Aktive Burschen:
-        %td= term_report.anzahl_aktiver_burschen
-      %tr
-        %td Inaktive Burschen loci:
-        %td= term_report.anzahl_inaktiver_burschen_loci
-      %tr
-        %td Inaktive Burschen non loci:
-        %td= term_report.anzahl_inaktiver_burschen_non_loci
-      %tr
-        %td Konkneipanten:
-        %td= term_report.anzahl_konkneipwanten
-      %tr
-        %td Philister:
-        %td= term_report.anzahl_philister
-      %tr
-        %td Erstbandträger der Philisterschaft
-        %td= term_report.anzahl_erstbandtraeger_philisterschaft
+.col-md-3
+  .card
+    .card-header
+      %h3.mb-0 Mitgliederbewegung
+    .table-responsive
+      %table.table.card-table
+        %tr
+          %td Aktivmeldungen:
+          %td= term_report.anzahl_aktivmeldungen
+        %tr
+          %td Philistrationen:
+          %td= term_report.anzahl_philistrationen
+        %tr
+          %td Todesfälle
+          %td= term_report.anzahl_todesfaelle
+        %tr
+          %td Austritte Aktive
+          %td= term_report.anzahl_austritte_aktive
+        %tr
+          %td Austritte Philister
+          %td= term_report.anzahl_austritte_philister
+.col-md-3
+  .card
+    .card-header
+      %h3.mb-0 Mitglieder
+    .table-responsive
+      %table.table.card-table
+        %tr
+          %td Alle Aktiven:
+          %td= term_report.anzahl_aller_aktiven
+        %tr
+          %td Erstbandträger der Aktivitas
+          %td= term_report.anzahl_erstbandtraeger_aktivitas
+        %tr
+          %td Fuxen:
+          %td= term_report.anzahl_fuxen
+        %tr
+          %td Aktive Burschen:
+          %td= term_report.anzahl_aktiver_burschen
+        %tr
+          %td Inaktive Burschen loci:
+          %td= term_report.anzahl_inaktiver_burschen_loci
+        %tr
+          %td Inaktive Burschen non loci:
+          %td= term_report.anzahl_inaktiver_burschen_non_loci
+        %tr
+          %td Konkneipanten:
+          %td= term_report.anzahl_konkneipwanten
+        %tr
+          %td Philister:
+          %td= term_report.anzahl_philister
+        %tr
+          %td Erstbandträger der Philisterschaft
+          %td= term_report.anzahl_erstbandtraeger_philisterschaft

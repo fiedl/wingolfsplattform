@@ -16,13 +16,15 @@ concern :UserLeibverhaeltnisse do
     familie = []
     familie << {description: "", user: self}
     if leibbursch
-      familie << {description: "Leibbursch", user: leibbursch}
+      relationship = Relationship.where(user1: leibbursch, name: "Leibbursch", user2: self).first
+      familie << {description: "Leibbursch", user: leibbursch, relationship: relationship}
       leibbursch.leibfuxen.each do |leibfux|
         familie << {description: "Leibbruder", user: leibfux} if leibfux != self
       end
     end
     leibfuxen.each do |leibfux|
-      familie << {description: "Leibfux", user: leibfux}
+      relationship = Relationship.where(user1: self, name: "Leibbursch", user2: leibfux).first
+      familie << {description: "Leibfux", user: leibfux, relationship: relationship}
     end
     if leibbursch.try(:leibbursch)
       familie << {description: "Leibopa", user: leibbursch.leibbursch}

@@ -17,10 +17,13 @@
 
 ActiveSupport::Inflector.inflections do |inflect|
   inflect.singular /^(.*)en$/i, '\1'                        # "Konkneipanten" => "Konkneipant"
+  inflect.singular /^(.*)innen$/i, '\1in'                   # "Gattinnen" => "Gattin"
   inflect.singular /^(.*)e (.*)en$/i, '\1er \2'             # "Aktive Burschen" => "Aktiver Bursch"
   inflect.singular /^(.*)e (.*)en (.*)$/i, '\1er \2 \3'     # "Inaktive Burschen loci" => "Inaktiver Bursch loci"
   inflect.singular /^(.*)ene$/, '\1ener'                    # "Ausgetretene" => "Ausgetretener"
   inflect.singular /^(.*)te$/, '\1ter'                      # "Chargierte" => "Chargierter"
+  inflect.singular /^(.*)amen$/, '\1ame'                      # "Damen" => "Dame"
+  inflect.singular /^(.*)äste$/, '\1ast'                      # "Keilgäste" => "Keilgast"
   inflect.irregular 'aktivitas', 'aktivitates'
   inflect.irregular 'philisterschaft', 'philisterschaften'
   inflect.irregular 'wohnheimsverein', 'wohnheimsvereine'

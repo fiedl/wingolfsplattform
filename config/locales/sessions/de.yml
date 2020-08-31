@@ -1,5 +1,5 @@
 de:
-  login_name_explanation:   Name, E-Mail-Adresse, Alias, W-Nummer
+  login_name_explanation:   Name, E-Mail-Adresse, Alias oder W-Nummer
 
   this_will_sign_in_through_external_service: "Bei Klick auf einen der obigen Knöpfe wird beim gewählten Dienst nachgefragt, ob Du dort eingeloggt bist, und, wie Deine E-Mail-Adresse lautet. Anhand der E-Mail-Adresse kann die Plattform Dich dann anmelden, ohne dass Du Dein Plattform-Passwort eingeben musst."
   this_will_only_work_for_matching_emails: "Hierfür ist es notwendig, dass die E-Mail-Adresse, die Du beim externen Dienst als Primäradresse angegeben hast, ebenfalls in Deinem Plattform-Profil hinterlegt ist."

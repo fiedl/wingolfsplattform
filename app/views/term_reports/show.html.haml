@@ -1,42 +1,34 @@
-.col-sm-12
-  - if group
-    = render partial: 'groups/tabs', locals: {group: group, active: 'members'}
-
-  .panel
-    .panel-body
-      = render partial: 'chart'
-
-  = box do
-    - content_for(:box_title) { t(:term_report) }
-    - content_for :box_filter do
+.page-header
+  .row.align-itens-center
+    .col-auto.mb-3
+      .page-pretitle
+        = t :term_report
+        = term_report.group.title
+      .page-title
+        = term.title
+    .col-auto.ml-auto
       = render partial: 'select_form'
 
-  = render partial: 'rejected_box'
-  = render partial: 'submission_box'
-  = render partial: 'acception_box'
+.row.row-deck
+  .col-md-6.pb-4
+    %div
+      = render partial: 'rejected_box'
+      = render partial: 'submission_box'
+      = render partial: 'acception_box'
 
-.row
-  .col-sm-6.col-xs-12
-    = render partial: 'some_numbers'
+  .col-md-6
+    = render group.number_of_members_chart
 
-  .col-sm-6.col-xs-12
+  = render partial: 'some_numbers'
+
+  .col-md-3
     = render partial: 'officers'
+  .col-md-3
     = render partial: 'semester_calendar'
 
-  .col-sm-12.col-xs-12
-    = render partial: 'member_box', locals: {group_name: "Hospitanten"} if term_report.hospitanten.any?
-    = render partial: 'member_box', locals: {group_name: "Fuxen"}
-    = render partial: 'member_box', locals: {group_name: "Aktive Burschen"}
-    = render partial: 'member_box', locals: {group_name: "Inaktive Burschen loci"}
-    = render partial: 'member_box', locals: {group_name: "Inaktive Burschen non loci"}
-    = render partial: 'member_box', locals: {group_name: "Konkneipanten"}
-
--#- content_for :explorer_nav do
--#  %h3 Semesterstatistiken
--#  %li= link_to "Übersicht", term_reports_path
--#  %li
--#    Verbindungen
--#    %ul
--#      - Corporation.aktive_verbindungen.each do |corporation|
--#        %li{class: ("active" if corporation.id == group.id)}
--#          = link_to corporation.name, search_term_report_path(group_id: corporation.id, year: term_report.year, term_type: term_report.term.type)
+  .col-sm-12= render partial: 'member_box', locals: {group_name: "Hospitanten"} if term_report.hospitanten.any?
+  .col-sm-12= render partial: 'member_box', locals: {group_name: "Fuxen"}
+  .col-sm-12= render partial: 'member_box', locals: {group_name: "Aktive Burschen"}
+  .col-sm-12= render partial: 'member_box', locals: {group_name: "Inaktive Burschen loci"}
+  .col-sm-12= render partial: 'member_box', locals: {group_name: "Inaktive Burschen non loci"}
+  .col-sm-12= render partial: 'member_box', locals: {group_name: "Konkneipanten"}

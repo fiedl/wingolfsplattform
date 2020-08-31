@@ -12,8 +12,16 @@ class Corporation
     child_groups.where(type: 'Philisterschaft').first
   end
 
+  def burschia
+    sub_group("Burschen")
+  end
+
   def hausverein
-    self.child_groups.select{ |child| child.name == "Hausverein" or child.name == "Wohnheimsverein" }.first
+    child_groups.where(type: "Groups::Wohnheimsverein").first
+  end
+
+  def wohnheimsverein
+    hausverein
   end
 
   def verstorbene
@@ -21,7 +29,15 @@ class Corporation
   end
 
   def chargierte
-    descendant_groups.where(name: ["Chargierte", "Chargen"]).first.try(:members) || []
+    chargen.try(:members) || []
+  end
+
+  def chargen
+    descendant_groups.where(name: ["Chargierte", "Chargen"]).first
+  end
+
+  def email
+    chargen_mailing_list.try(:value) || super
   end
 
   def self.find_all_wingolf_corporations
@@ -35,15 +51,7 @@ class Corporation
   end
 
   def self.aktive_verbindungen
-    Corporation.where(id: aktive_verbindungen_ids).order(:name)
-  end
-
-  def self.aktive_verbindungen_ids
-    Rails.cache.fetch ["Corporation", "aktive_verbindungen_ids"] do
-      Corporation.all.select do |corporation|
-        corporation.aktivitas.members.count > 5
-      end
-    end
+    Corporation.joins(:child_groups).where(child_groups_groups: {id: Aktivitas.active})
   end
 
   # Verstorbene und Ausgetretene dürfen nicht als Mitglieder

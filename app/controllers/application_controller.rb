@@ -7,30 +7,22 @@ module ApplicationControllerOverrides
     super + [:wingolf]
   end
 
-  def intranet_layout
-    "strappy"
-  end
-
 end
 
 class ApplicationController
   prepend ApplicationControllerOverrides
-  include CurrentEarlyAccessRestrictions
+  #include CurrentEarlyAccessRestrictions
 
   # before_action :new_relic_params
   before_action :collect_data_for_exception_notifier
 
-  before_action :prepend_wingolf_layout_view_path
+  #before_action :prepend_wingolf_layout_view_path
 
   def permitted_layouts
     super + ['wingolf', 'wingolf-2017', 'greifenstein']
   end
 
   protected
-
-  def default_layout
-    'strappy'
-  end
 
   # def new_relic_params
   #   ::NewRelic::Agent.add_custom_attributes({
