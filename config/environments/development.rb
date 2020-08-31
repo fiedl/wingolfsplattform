@@ -20,7 +20,7 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_caching = false
-  config.action_mailer.default_url_options = {host: 'beta.wingolf.io', protocol: 'https'}
+  config.action_mailer.default_url_options = {host: 'wingolf.io', protocol: 'https'}
   config.action_mailer.default_options = {from: 'Wingolfsplattform <wingolfsplattform@wingolf.io>'} # See: http://stackoverflow.com/a/12609856/2066546
 
   # Print deprecation notices to the Rails logger.
