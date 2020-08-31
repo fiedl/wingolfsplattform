@@ -40,12 +40,6 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :pages, path: '' do
-    resources :public_pages, path: '/public', controller: 'pages'
-    resources :public_events_pages, path: '/public/events', controller: 'pages'
-    resources :public_gallery_pages, path: '/public/galleries', controller: 'pages'
-  end
-
   namespace :groups do
     resources :free_groups
   end
