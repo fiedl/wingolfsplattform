@@ -1,6 +1,6 @@
 .card
   .card-header
-    %h3= t :semester_calendar
+    %h3.mb-0= t :semester_calendar
   .card-body
     - if semester_calendar = term_report.semester_calendar
       - if attachment = semester_calendar.attachments.last
@@ -8,8 +8,9 @@
           %img{src: attachment.file.medium.url}
       - semester_calendar.important_events.each do |event|
         .mt-2
+          = event_icon
           = link_to event.title, event
-          %small.text-muted.mt-0= localize event.start_at
+          .text-muted.small.mt-0= localize event.start_at
 
   - if term_report.draft? && can?(:update, group)
     .card-footer

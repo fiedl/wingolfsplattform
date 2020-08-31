@@ -1,6 +1,6 @@
 .card
   .card-header
-    %h3= t :officers
+    %h3.mb-0= t :officers
   .card-body
     - %w(senior fuxmajor kneipwart kassenwart philister_x).each do |office_key|
       - if officer = term_report.send(office_key)
