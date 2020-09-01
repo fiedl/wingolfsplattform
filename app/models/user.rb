@@ -15,7 +15,7 @@ module UserOverrides
 
   def default_avatar_path
     if wingolfit?
-      "https://github.com/fiedl/wingolfsplattform/raw/master/app/assets/images/avatar_480.png"
+      "/images/avatar_480.png"
     else
       super
     end
