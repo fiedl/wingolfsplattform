@@ -29,6 +29,7 @@ class User
   include UserNetenvData
 
   scope :wingolfiten, -> { joins(:groups).where(groups: {id: Group.alle_wingolfiten.id}) }
+  scope :regular, -> { wingolfiten.alive }
 
   def name_affix
     "#{aktivitaetszahl} #{string_for_death_symbol}".gsub("  ", " ").strip
