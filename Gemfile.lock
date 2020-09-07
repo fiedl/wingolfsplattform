@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 0730fc8d1f7c9d2016cf27f12cbe07501abc89ac
+  revision: d7f8663c10e617de47d3554d85810191621abf7d
   branch: master
   specs:
     your_platform (1.0.1)
@@ -168,7 +168,7 @@ GEM
     auto_html (1.6.4)
       redcarpet (~> 3.1)
       rinku (~> 1.5.0)
-    bcrypt (3.1.15)
+    bcrypt (3.1.16)
     biggs (0.3.3)
       activerecord (>= 3.0)
     bindex (0.5.0)

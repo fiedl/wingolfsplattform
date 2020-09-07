@@ -392,13 +392,6 @@ module AbilityDefinitions
     cannot :use, :omni_auth
     can :use, :mail_delivery_account_filter
 
-    # Jeder Internetbenutzer kann Semesterprogramm-PDFs herunterladen, damit
-    # die Verbindungen die Möglichkeit haben, die PDFs zu verlinken.
-    #
-    can [:read, :download], Attachment do |attachment|
-      attachment.parent_type == "SemesterCalendar"
-    end
-
     # Jeder Internetbenutzer darf Wingolfshaus-Bilder bzw. Wappen herunterladen,
     # da diese auf den öffentlichen Homepages eingebunden werden.
     #
