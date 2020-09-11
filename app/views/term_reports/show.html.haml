@@ -10,13 +10,13 @@
       = render partial: 'select_form'
 
 .row.row-deck
-  .col-md-6.pb-4
+  .col-md-6.mb-4
     %div
       = render partial: 'rejected_box'
       = render partial: 'submission_box'
       = render partial: 'acception_box'
 
-  .col-md-6
+  .col-md-6.mb-3
     = render group.number_of_members_chart
 
   = render partial: 'some_numbers'
@@ -26,9 +26,10 @@
   .col-md-3
     = render partial: 'semester_calendar'
 
-  .col-sm-12= render partial: 'member_box', locals: {group_name: "Hospitanten"} if term_report.hospitanten.any?
-  .col-sm-12= render partial: 'member_box', locals: {group_name: "Fuxen"}
-  .col-sm-12= render partial: 'member_box', locals: {group_name: "Aktive Burschen"}
-  .col-sm-12= render partial: 'member_box', locals: {group_name: "Inaktive Burschen loci"}
-  .col-sm-12= render partial: 'member_box', locals: {group_name: "Inaktive Burschen non loci"}
-  .col-sm-12= render partial: 'member_box', locals: {group_name: "Konkneipanten"}
+  = cache [term_report, "views/show/member_boxes", current_user] do
+    .col-sm-12= render partial: 'member_box', locals: {group_name: "Hospitanten"} if term_report.hospitanten.any?
+    .col-sm-12= render partial: 'member_box', locals: {group_name: "Fuxen"}
+    .col-sm-12= render partial: 'member_box', locals: {group_name: "Aktive Burschen"}
+    .col-sm-12= render partial: 'member_box', locals: {group_name: "Inaktive Burschen loci"}
+    .col-sm-12= render partial: 'member_box', locals: {group_name: "Inaktive Burschen non loci"}
+    .col-sm-12= render partial: 'member_box', locals: {group_name: "Konkneipanten"}
