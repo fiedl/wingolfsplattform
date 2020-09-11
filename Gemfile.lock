@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: c9df893226b8be12e9a94cda2681669d1cafc5e0
+  revision: 84f3352ede69f78b0633a0e26f5164919eb2a014
   branch: master
   specs:
     your_platform (1.0.1)
@@ -287,7 +287,7 @@ GEM
     geocoder (1.6.3)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    groupdate (5.2.0)
+    groupdate (5.2.1)
       activesupport (>= 5)
     haml (4.0.7)
       tilt
