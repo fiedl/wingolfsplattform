@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 09e312fdb23a2243a30d3d87eae367c836776992
+  revision: ef4fb40dbf5b4533495167bb90ae57ad358d522a
   branch: master
   specs:
     your_platform (1.0.1)
@@ -300,7 +300,7 @@ GEM
     i18n-js (3.7.1)
       i18n (>= 0.6.6)
     iban-tools (1.1.0)
-    icalendar (2.6.1)
+    icalendar (2.7.0)
       ice_cube (~> 0.16)
     ice_cube (0.16.3)
     image_processing (0.4.4)
