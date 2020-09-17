@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 49dd649937dc39c9d60d28866d9c4f8ed6fd90bc
+  revision: bda37b54c7e79e43ef7e196bf3a5226f82cd3764
   branch: master
   specs:
     your_platform (1.0.1)
@@ -177,7 +177,7 @@ GEM
       debug_inspector (>= 0.0.1)
     brakeman (3.7.2)
     builder (3.2.3)
-    c32 (0.2.0)
+    c32 (0.3.0)
     cancancan (1.15.0)
     capybara (2.15.1)
       addressable
@@ -269,7 +269,7 @@ GEM
     factory_girl_rails (4.8.0)
       factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
-    faker (2.13.0)
+    faker (2.14.0)
       i18n (>= 1.6, < 2)
     faraday (1.0.1)
       multipart-post (>= 1.2, < 3)
@@ -394,7 +394,7 @@ GEM
       rack (>= 0.4)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
-    rack-mini-profiler (2.0.4)
+    rack-mini-profiler (2.1.0)
       rack (>= 1.2.0)
     rack-protection (2.0.7)
       rack
