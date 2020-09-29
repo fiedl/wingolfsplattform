@@ -31,6 +31,9 @@ class User
   scope :wingolfiten, -> { joins(:groups).where(groups: {id: Group.alle_wingolfiten.id}) }
   scope :regular, -> { wingolfiten.alive }
 
+  scope :with_w_nummer, -> { joins(:profile_fields).where(profile_fields: {label: "W-Nummer"}) }
+  scope :without_w_nummer, -> { where.not(id: with_w_nummer) }
+
   def name_affix
     "#{aktivitaetszahl} #{string_for_death_symbol}".gsub("  ", " ").strip
   end
@@ -316,6 +319,19 @@ class User
 
   def self.find_by_w_nummer(wnr)
     ProfileField.where(label: "W-Nummer", value: wnr).last.try(:profileable)
+  end
+
+  def assign_w_nummer
+    raise "Die Person #{title} hat bereits eine W-Nummer: #{w_nummer}" if w_nummer
+    self.w_nummer = User.next_w_nummer
+  end
+
+  def self.last_w_nummer
+    ProfileField.where(type: 'ProfileFields::General', label: 'W-Nummer').order(:value).last.value
+  end
+
+  def self.next_w_nummer
+    "W#{last_w_nummer.gsub("W", "").to_i + 1}"
   end
 
 
