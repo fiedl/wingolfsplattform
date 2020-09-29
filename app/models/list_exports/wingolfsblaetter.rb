@@ -13,7 +13,8 @@ module ListExports
         :postal_address_town,
         :postal_address_country,
         :postal_address,
-        :postal_address_postal_code_and_town
+        :postal_address_postal_code_and_town,
+        :w_nummer
       ]
     end
 

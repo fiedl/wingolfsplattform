@@ -8,7 +8,7 @@ module ListExports
     #
     alias_method :original_columns, :columns
     def columns
-      original_columns + [:cached_bv_token]
+      original_columns + [:w_nummer, :cached_bv_token]
     end
 
   end

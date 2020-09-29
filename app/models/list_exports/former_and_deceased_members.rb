@@ -8,7 +8,7 @@ module ListExports
     #
     alias_method :original_columns, :columns
     def columns
-      original_columns + [:last_bv_name, :fruehere_aktivitaetszahl]
+      original_columns + [:last_bv_name, :fruehere_aktivitaetszahl, :w_nummer]
     end
 
   end
