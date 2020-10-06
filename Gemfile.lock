@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: c27664172525dda7c98689a50c92c922f5e6a36f
+  revision: 567ef63f7c3360968630f4037051b5d02b7214c6
   branch: master
   specs:
     your_platform (1.0.1)
@@ -327,7 +327,7 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.6)
       mime-types (>= 1.16, < 4)
-    mail_form (1.8.0)
+    mail_form (1.8.1)
       actionmailer (>= 5.0)
       activemodel (>= 5.0)
     merit (4.0.1)
@@ -535,7 +535,7 @@ GEM
       connection_pool (~> 2.2, >= 2.2.0)
       rack-protection (>= 1.5.0)
       redis (~> 3.2, >= 3.2.1)
-    simple_form (5.0.2)
+    simple_form (5.0.3)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
     sinatra (2.0.7)
