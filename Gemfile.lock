@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: a4005933c4a5b25d8371eee8ec2c89c87ab3a6a1
+  revision: 022e881a6d7e6301bf7e661e36f0567ed69c98f3
   branch: master
   specs:
     your_platform (1.0.1)
@@ -284,7 +284,7 @@ GEM
       actionpack (>= 3.2.13)
     gemoji (3.0.1)
     gender_detector (2.0.0)
-    geocoder (1.6.3)
+    geocoder (1.6.4)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     groupdate (5.2.1)
