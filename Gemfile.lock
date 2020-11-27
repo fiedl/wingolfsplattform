@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: d73f8db4edb6d4a0b7fdc2d5cbaebf3c5c68a5c9
+  revision: 02960fd7fceefa0a1680fa057b20c21f8118e710
   branch: master
   specs:
     your_platform (1.0.1)
@@ -233,16 +233,16 @@ GEM
       rack (>= 1.6)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    elasticsearch (7.9.0)
-      elasticsearch-api (= 7.9.0)
-      elasticsearch-transport (= 7.9.0)
-    elasticsearch-api (7.9.0)
+    elasticsearch (7.10.0)
+      elasticsearch-api (= 7.10.0)
+      elasticsearch-transport (= 7.10.0)
+    elasticsearch-api (7.10.0)
       multi_json
     elasticsearch-model (7.1.1)
       activesupport (> 3)
       elasticsearch (> 1)
       hashie
-    elasticsearch-transport (7.9.0)
+    elasticsearch-transport (7.10.0)
       faraday (~> 1)
       multi_json
     email_reply_parser (0.5.10)
@@ -269,7 +269,7 @@ GEM
     factory_girl_rails (4.8.0)
       factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
-    faker (2.14.0)
+    faker (2.15.1)
       i18n (>= 1.6, < 2)
     faraday (1.1.0)
       multipart-post (>= 1.2, < 3)
