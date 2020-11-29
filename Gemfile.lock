@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 02960fd7fceefa0a1680fa057b20c21f8118e710
+  revision: 4d19620d4855e85abb6e7d20dd950eee30e9a40a
   branch: master
   specs:
     your_platform (1.0.1)
@@ -602,7 +602,7 @@ GEM
     xpath (2.1.0)
       nokogiri (~> 1.3)
     yard (0.9.20)
-    zeitwerk (2.4.1)
+    zeitwerk (2.4.2)
 
 PLATFORMS
   ruby
