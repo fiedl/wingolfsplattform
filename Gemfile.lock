@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 59a3988d1b50972fa0227c00d97a599d3ed7a2e4
+  revision: d103da546b2eda86ea47a73dc54c6ae33846b151
   branch: master
   specs:
     your_platform (1.0.1)
@@ -257,7 +257,7 @@ GEM
     exception_notification (4.4.3)
       actionmailer (>= 4.0, < 7)
       activesupport (>= 4.0, < 7)
-    excon (0.78.0)
+    excon (0.78.1)
     execjs (2.7.0)
     extended_email_reply_parser (0.5.1)
       activesupport
@@ -355,7 +355,7 @@ GEM
       os (>= 0.9.6)
       rake (>= 0.8.7)
       rubyzip (>= 1.0.0)
-    net-ldap (0.16.3)
+    net-ldap (0.17.0)
     netrc (0.11.0)
     nio4r (2.5.2)
     nokogiri (1.10.9)
@@ -367,7 +367,7 @@ GEM
     parallel_tests (2.14.3)
       parallel
     pdf-core (0.6.1)
-    phony (2.18.15)
+    phony (2.18.18)
     poltergeist (1.16.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
