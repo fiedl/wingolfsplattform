@@ -69,7 +69,8 @@ Rails.application.configure do
 
   # See: http://stackoverflow.com/a/12609856/2066546
   config.action_mailer.default_options = {
-    from: 'Wingolfsplattform <noreply@wingolf.io>'
+    from: 'Wingolfsplattform <noreply@wingolf.io>',
+    sender: Rails.application.secrets.smtp_user
   }
 
   config.action_mailer.default_url_options = { host: 'wingolf.io', protocol: 'https' }
