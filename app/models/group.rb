@@ -41,20 +41,20 @@ class Group
     ]
   end
 
-  def export_stammdaten_list
-    ListExports::Stammdaten.from_group(self)
+  def export_stammdaten_list(options)
+    ListExports::Stammdaten.from_group(self, options)
   end
 
-  def export_wingolfsblaetter_list
-    ListExports::Wingolfsblaetter.from_group(self)
+  def export_wingolfsblaetter_list(options)
+    ListExports::Wingolfsblaetter.from_group(self, options)
   end
 
   def list_export_by_preset(preset, options = {})
     case preset.to_s
     when 'stammdaten'
-      self.export_stammdaten_list
+      self.export_stammdaten_list(options)
     when 'wingolfsblaetter'
-      self.export_wingolfsblaetter_list
+      self.export_wingolfsblaetter_list(options)
     else
       super
     end
