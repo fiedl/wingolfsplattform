@@ -8,5 +8,8 @@ class Groups::Wohnheimsverein < Group
     corporation.descendant_groups.where(type: "Groups::Room")
   end
 
+  def kassenwarte
+    officers_groups.flagged(:kassenwart).first.try(:members) || []
+  end
 
 end

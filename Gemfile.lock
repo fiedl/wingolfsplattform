@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/fiedl/your_platform
-  revision: 26da080530f772ec559c5d411c66db754eac4a26
+  revision: 4a2d79053464e0b2c7b17da927a0a61244b90627
   branch: master
   specs:
     your_platform (1.0.1)
@@ -233,16 +233,16 @@ GEM
       rack (>= 1.6)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    elasticsearch (7.10.1)
-      elasticsearch-api (= 7.10.1)
-      elasticsearch-transport (= 7.10.1)
-    elasticsearch-api (7.10.1)
+    elasticsearch (7.11.1)
+      elasticsearch-api (= 7.11.1)
+      elasticsearch-transport (= 7.11.1)
+    elasticsearch-api (7.11.1)
       multi_json
     elasticsearch-model (7.1.1)
       activesupport (> 3)
       elasticsearch (> 1)
       hashie
-    elasticsearch-transport (7.10.1)
+    elasticsearch-transport (7.11.1)
       faraday (~> 1)
       multi_json
     email_reply_parser (0.5.10)
@@ -257,7 +257,7 @@ GEM
     exception_notification (4.4.3)
       actionmailer (>= 4.0, < 7)
       activesupport (>= 4.0, < 7)
-    excon (0.78.1)
+    excon (0.79.0)
     execjs (2.7.0)
     extended_email_reply_parser (0.5.1)
       activesupport
@@ -269,7 +269,7 @@ GEM
     factory_girl_rails (4.8.0)
       factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
-    faker (2.15.1)
+    faker (2.16.0)
       i18n (>= 1.6, < 2)
     faraday (1.3.0)
       faraday-net_http (~> 1.0)
@@ -287,10 +287,10 @@ GEM
       actionpack (>= 3.2.13)
     gemoji (3.0.1)
     gender_detector (2.0.0)
-    geocoder (1.6.4)
+    geocoder (1.6.5)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    groupdate (5.2.1)
+    groupdate (5.2.2)
       activesupport (>= 5)
     haml (4.0.7)
       tilt
@@ -369,7 +369,7 @@ GEM
     parallel_tests (2.14.3)
       parallel
     pdf-core (0.6.1)
-    phony (2.18.18)
+    phony (2.18.19)
     poltergeist (1.16.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -397,7 +397,7 @@ GEM
       rack (>= 0.4)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
-    rack-mini-profiler (2.3.0)
+    rack-mini-profiler (2.3.1)
       rack (>= 1.2.0)
     rack-protection (2.0.7)
       rack
@@ -453,7 +453,7 @@ GEM
     redis-activesupport (5.2.0)
       activesupport (>= 3, < 7)
       redis-store (>= 1.3, < 2)
-    redis-namespace (1.8.0)
+    redis-namespace (1.8.1)
       redis (>= 3.0.4)
     redis-rack (2.1.3)
       rack (>= 2.0.8, < 3)
