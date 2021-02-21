@@ -61,10 +61,10 @@ task :encrypt_export_folders do
     domain = File.basename directory
     encryption_password = `pwgen 48`.strip
     passwords[domain] = encryption_password
-    destination_zip_file = "#{domain}.zip"
-    print "#{destination_zip_file.blue} ..."
-    `cd #{export_path} && zip --encrypt --recurse-paths --password=#{encryption_password} #{destination_zip_file} #{domain}`
-    log.info encryption_password
+    destination_zip_file = "#{domain}.7z"
+    print "#{destination_zip_file.blue} ... "
+    `cd #{export_path} && 7z a #{destination_zip_file} #{domain} -t7z -ms=on -mhe=on -p#{encryption_password}`
+    print encryption_password
     log.success " ok"
   end
 
@@ -73,3 +73,4 @@ task :encrypt_export_folders do
   log.info "Passwort-Sammlung zur Entschlüsselung: #{passwords_file}"
   File.write passwords_file, passwords.to_json
 end
+
