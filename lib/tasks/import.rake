@@ -10,7 +10,7 @@ namespace :import do
       'import:corporations',
       'import:bvs',
       'import:external_corporations',
-      'import:standard_workflows',
+      'import:workflows',
       'import:group_profiles',
       'import:users',
       'cache:users'
