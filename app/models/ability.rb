@@ -391,6 +391,7 @@ module AbilityDefinitions
     cannot :create_comment_for, BlogPost
     cannot :use, :omni_auth
     can :use, :mail_delivery_account_filter
+    can :use, :mitmachen
 
     # Jeder Internetbenutzer darf Wingolfshaus-Bilder bzw. Wappen herunterladen,
     # da diese auf den öffentlichen Homepages eingebunden werden.

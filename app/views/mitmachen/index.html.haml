@@ -1,0 +1,36 @@
+= form_tag mitmachen_path, method: :post do
+  .flex-fill.d-flex.flex-column.justify-content-center.py-4
+    .container-tight.py-6
+      .text-center.mb-4
+        %img{src: logo_url, height: 48}
+      .card.card-md
+        .card-body.text-center.py-4.p-sm-5
+          -# %img.mb-5{src: "https://raw.githubusercontent.com/tabler/tabler/dev/src/static/illustrations/undraw_sign_in_e6hj.svg", height: 128}
+          %h1 Willkommen zur Wingolfsplattform!
+          %p.text-muted Die Wingolfsplattform wird jetzt auf einem Erlanger Server betrieben. Ihr könnt sie kostenlos nutzen. Zur Freischaltung brauchen wir euer Einverständnis zur Datenverarbeitung.
+
+        .hr-text.hr-text-center.hr-text-spaceless Eure Daten
+
+        .card-body
+          .mb-3
+            %label.form-label.required Eure Verbindung / PhV / BV:
+            %input.form-control{name: "verbindung"}
+
+            %label.form-label.mt-4 Euer Datenschlüssel
+            %input.form-control{name: "datenschluessel"}
+
+            %small.text-muted.mt-2
+              Den Datenschlüssel habt ihr per E-Mail am ... bekommen. Durch ihn legitimiert er die Verarbeitung eurer Daten. Das könnt ihr natürlich jederzeit widerrufen. Wenn ihr keinen Datenschlüssel erhalten habt, schreibt uns bitte:
+              = mail_to "mitmachen@wingolf.io"
+
+            %label.form-label.mt-4.required Dein Name
+            %input.form-control{name: "name"}
+
+            %label.form-label.mt-4.required Dein Amt
+            %input.form-control{name: "amt"}
+
+      .row.align-items-center.mt-3
+        .col
+          .btn-list.justify-content-end
+            = link_to "Datenschutz und Impressum", "/impressum", class: "btn btn-link link-secondary"
+            = submit_tag "Weiter", class: 'btn btn-primary'

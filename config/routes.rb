@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
+  resources :mitmachen
+
   resources :groups, path: :aktivitates, as: :aktivitates
   resources :groups, path: :philisterschaften, as: :philisterschaften
   resources :groups, path: :bvs, as: :bvs
