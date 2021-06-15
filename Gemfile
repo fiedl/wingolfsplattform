@@ -75,6 +75,7 @@ source 'https://rubygems.org' do
   gem 'refile', git: 'https://github.com/sobrinho/refile'
   gem 'refile-mini_magick', git: 'https://github.com/refile/refile-mini_magick'
   gem 'rails-settings-cached', '0.7.1'
+  gem 'mimemagic', '~> 0.3.10' # TODO: remove when updating to rails 5.2, https://github.com/rails/rails/issues/41750
 
   # To customly set timeout time we need rack-timeout
   gem 'rack-timeout'
