@@ -1,5 +1,5 @@
 # Start with:
-# docker-compose up
+# docker-compose up rails
 
 version: '3'
 
@@ -9,6 +9,7 @@ volumes:
   neo4j_data: {}
   wingolfsplattform_uploads: {}
   wingolfsplattform_assets: {}
+  wingolfsplattform_tmp: {}
 
 services:
   rails:
@@ -17,12 +18,17 @@ services:
       - mysql
       - redis
       - neo4j
+      - sidekiq
     volumes:
       - .:/app/wingolfsplattform
-      - ../your_platform:/app/your_platform
+      - ./your_platform:/app/your_platform
       - "wingolfsplattform_uploads:/app/wingolfsplattform/uploads"
       - "wingolfsplattform_assets:/app/wingolfsplattform/public/assets"
+      - "wingolfsplattform_tmp:/app/wingolfsplattform/tmp"
       - "./config/secrets.docker.yml:/app/wingolfsplattform/config/secrets.yml"
+      - "./config/database.docker.yml:/app/wingolfsplattform/config/database.yml"
+    expose:
+      - 3000
     ports:
       - "0.0.0.0:3000:3000"
     environment:
@@ -36,6 +42,52 @@ services:
     command:
       - ./start
 
+  console:
+    build: .
+    volumes:
+      - .:/app/wingolfsplattform
+      - ./your_platform:/app/your_platform
+      - "wingolfsplattform_uploads:/app/wingolfsplattform/uploads"
+      - "wingolfsplattform_assets:/app/wingolfsplattform/public/assets"
+      - "wingolfsplattform_tmp:/app/wingolfsplattform/tmp"
+      - "./config/secrets.docker.yml:/app/wingolfsplattform/config/secrets.yml"
+      - "./config/database.docker.yml:/app/wingolfsplattform/config/database.yml"
+    environment:
+      RAILS_ENV: development
+      MYSQL_DATABASE: wingolfsplattform_development
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_HOST: mysql
+      REDIS_HOST: redis
+      NEO4J_REST_URL: http://neo4j:trinity@neo4j:7474
+    depends_on:
+      - mysql
+      - redis
+      - neo4j
+    command: /bin/bash -c "bundle exec rails console"
+
+  tests:
+    build: .
+    volumes:
+      - .:/app/wingolfsplattform
+      - ./your_platform:/app/your_platform
+      - "wingolfsplattform_assets:/app/wingolfsplattform/public/assets"
+      - "./config/secrets.docker.yml:/app/wingolfsplattform/config/secrets.yml"
+      - "./config/database.docker.yml:/app/wingolfsplattform/config/database.yml"
+    environment:
+      RAILS_ENV: test
+      MYSQL_DATABASE: wingolfsplattform_test
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_HOST: mysql
+      REDIS_HOST: redis
+      NEO4J_REST_URL_TEST: http://neo4j:trinity@neo4j:7474
+    depends_on:
+      - mysql_test
+      - redis
+      - neo4j
+    command: /bin/bash -c "bundle exec rake db:create db:migrate && bundle exec rspec spec/models"
+
   mysql:
     image: mysql:5.7
     environment:
@@ -45,8 +97,16 @@ services:
       MYSQL_USER: "wingolfsplattform"
     volumes:
       - "mysql_data:/var/lib/mysql"
-    ports:
-      - 0.0.0.0:3306:3306
+
+  mysql_test:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: "wingolfsplattform_test"
+      MYSQL_PASSWORD: "secret"
+      MYSQL_ROOT_PASSWORD: "secret"
+      MYSQL_USER: "wingolfsplattform"
+    volumes:
+      - "mysql_data:/var/lib/mysql"
 
   redis:
     image: redis
@@ -57,9 +117,29 @@ services:
     image: neo4j:3.5
     volumes:
       - neo4j_data:/data
-    ports:
-      - "0.0.0.0:7474:7474"
-      - "0.0.0.0:7687:7687"
     environment:
       NEO4J_AUTH: "neo4j/trinity"
 
+  sidekiq:
+    build: .
+    volumes:
+      - .:/app/wingolfsplattform
+      - ./your_platform:/app/your_platform
+      - "wingolfsplattform_uploads:/app/wingolfsplattform/uploads"
+      - "wingolfsplattform_assets:/app/wingolfsplattform/public/assets"
+      - "wingolfsplattform_tmp:/app/wingolfsplattform/tmp"
+      - "./config/secrets.docker.yml:/app/wingolfsplattform/config/secrets.yml"
+      - "./config/database.docker.yml:/app/wingolfsplattform/config/database.yml"
+    environment:
+      RAILS_ENV: development
+      MYSQL_DATABASE: wingolfsplattform_development
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_HOST: mysql
+      REDIS_HOST: redis
+      NEO4J_REST_URL: http://neo4j:trinity@neo4j:7474
+    depends_on:
+      - mysql
+      - redis
+      - neo4j
+    command: /bin/bash -c "bundle exec sidekiq -c 10 -q default -q dag_links -q cache -q slow -q retry -q mailers -q mailgate --verbose"

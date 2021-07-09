@@ -16,6 +16,22 @@ Die laufende Seite ist erreichbar unter https://wingolf.io
 
 ### Development
 
+Quick-Start mit Docker:
+
+```
+git clone git@github.com:fiedl/wingolfsplattform.git
+cd wingolfsplattform
+git clone git@github.com:fiedl/your_platform.git
+docker-compose run rails bundle exec rake db:create db:migrate db:seed
+docker-compose up rails
+```
+
+Browser: http://localhost:3000
+
+Konsole: `docker-compose run console`
+
+Tests: `docker-compose run tests`
+
 Als Server-Side-Framework verwenden wir [Ruby on Rails](http://rubyonrails.org/) 5.0.
 
 **[GETTING STARTED](https://github.com/fiedl/wingolfsplattform/wiki/Getting-Started)** -- von der Installation der Entwicklungsumgebung bis zum Durchführen der automatisierten Tests.
