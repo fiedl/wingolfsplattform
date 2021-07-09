@@ -8,6 +8,9 @@ exports
 
 lib/your_platform_private_additions
 
+# local your_platform-engine dev directory
+your_platform
+
 # Ignore bundler config
 /.bundle
 
