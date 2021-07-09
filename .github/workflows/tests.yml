@@ -6,7 +6,9 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
-      - name: Build Docker
-        run: docker-compose build tests
+      - name: Build docker images
+        run: docker-compose build
+      - name: Prepare database
+        run: docker-compose run tests /bin/bash -c "bundle exec rake db:create db:migrate"
       - name: Run tests
         run: docker-compose run tests
