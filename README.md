@@ -1,9 +1,5 @@
 ## Wingolfsplattform
 
-[![Gitter](https://badges.gitter.im/Join_Chat.svg)](https://gitter.im/fiedl/wingolfsplattform?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Build Status on master](https://travis-ci.org/fiedl/wingolfsplattform.png?branch=master "master")](https://travis-ci.org/fiedl/wingolfsplattform)
-[![security](https://hakiri.io/github/fiedl/wingolfsplattform/master.svg)](https://hakiri.io/github/fiedl/wingolfsplattform/master)
-
 Dies ist der Quellcode der entstehenden neuen Plattform des Wingolfsbundes, der sog. **Wingolfsplattform**. Die Plattform soll vier Hauptaufgaben erfüllen: Hilfestellung bei der Verwaltung der Mitglieder des Wingolfs, Netzwerk der Mitglieder, Austausch von Informationen und Dokumenten, Präsentation nach außen.
 
 **Ansprechpartner**:
@@ -58,9 +54,6 @@ Bitte macht euch mit dem [Rails-Security-Guide](http://guides.rubyonrails.org/se
 
 * [Trello Board "AK Internet: Entwicklung"](https://trello.com/board/ak-internet-entwicklung/50006d110ad48e941e8496d2)
 * YourPlatform-Projekt, https://github.com/fiedl/your_platform
-
-
-[![Travis-CI-Server](https://raw.githubusercontent.com/fiedl/wingolfsplattform/master/public/images/supporttravis.png)](http://travis-ci.org)
 
 
 ### Urheber, Mitarbeiter und Lizenz

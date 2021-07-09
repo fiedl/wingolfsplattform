@@ -526,7 +526,6 @@ feature "Aktivmeldung" do
 
   scenario "leaving out a required field when entering aktivmeldung", :js do
     @corporation = create(:wingolf_corporation)
-    p "This line is to prevent travis from hanging up."
     login :admin
 
     visit group_members_path(@corporation.aktivitas)
