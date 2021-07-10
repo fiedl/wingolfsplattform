@@ -90,6 +90,30 @@ services:
       - "mysql_test:mysql"
     command: /bin/bash -c "bundle exec rake db:create db:migrate && bundle exec rspec spec/models"
 
+  guard:
+    build: .
+    volumes:
+      - .:/app/wingolfsplattform
+      - ./your_platform:/app/your_platform
+      - "wingolfsplattform_assets:/app/wingolfsplattform/public/assets"
+      - "./config/secrets.docker.yml:/app/wingolfsplattform/config/secrets.yml"
+      - "./config/database.docker.yml:/app/wingolfsplattform/config/database.yml"
+    environment:
+      RAILS_ENV: test
+      MYSQL_DATABASE: wingolfsplattform_test
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_HOST: mysql
+      REDIS_HOST: redis
+      NEO4J_REST_URL_TEST: http://neo4j:trinity@neo4j:7474
+    depends_on:
+      - mysql_test
+      - redis
+      - neo4j
+    links:
+      - "mysql_test:mysql"
+    command: /bin/bash -c "bundle exec rake db:create db:migrate && bundle exec guard"
+
   mysql:
     image: mysql:5.7
     environment:

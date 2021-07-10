@@ -48,6 +48,11 @@ Tests vollständig durchlaufen lassen:
 docker-compose run tests
 ```
 
+Während der Entwicklung kannst Du auch [guard](https://github.com/guard/guard) laufen lassen. Dieses Tool lässt, wenn Du Code-Dateien veränderst, immer die passenden Tests laufen.
+
+```bash
+docker-compose run guard
+```
 
 ### Security
 

@@ -56,6 +56,8 @@ source 'https://rubygems.org' do
     gem 'database_cleaner'
     gem 'email_spec'
     gem 'timecop'
+    gem 'guard'
+    gem 'guard-rspec'
   end
 
   # JavaScript Runtime
