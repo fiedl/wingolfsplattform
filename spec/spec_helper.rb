@@ -140,11 +140,7 @@ end
 #
 # See: https://github.com/jnicklas/capybara#asynchronous-javascript-ajax-and-friends
 #
-Capybara.default_max_wait_time = if ENV['CI'] == 'travis'
-  120 # travis is much slower and might take longer to process stuff
-else
-  30
-end
+Capybara.default_max_wait_time = 30
 
 # Background Jobs:
 # Perform all background jobs immediately.

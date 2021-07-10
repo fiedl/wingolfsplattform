@@ -86,6 +86,8 @@ services:
       - mysql_test
       - redis
       - neo4j
+    links:
+      - "mysql_test:mysql"
     command: /bin/bash -c "bundle exec rake db:create db:migrate && bundle exec rspec spec/models"
 
   mysql:

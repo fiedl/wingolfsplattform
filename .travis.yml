@@ -1,9 +1,0 @@
-os: linux
-dist: trusty
-services:
-  - docker
-install:
-  - docker-compose build tests
-  - docker-compose run tests bundle exec rake db:create db:migrate
-script:
-  - docker-compose run tests
