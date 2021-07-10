@@ -1,45 +1,60 @@
-## Wingolfsplattform
+# Wingolfsplattform
 
-Dies ist der Quellcode der entstehenden neuen Plattform des Wingolfsbundes, der sog. **Wingolfsplattform**. Die Plattform soll vier Hauptaufgaben erfüllen: Hilfestellung bei der Verwaltung der Mitglieder des Wingolfs, Netzwerk der Mitglieder, Austausch von Informationen und Dokumenten, Präsentation nach außen.
+Dies ist der Quellcode der Mitgliederplattform des Erlanger Wingolfs. Sie erfüllt fünf Hauptaufgaben: Hilfestellung bei der Verwaltung der Mitglieder, Netzwerk der Mitglieder, Austausch von Informationen und Dokumenten, Bereitstellung verlässlicher Kommunikationskanäle und Präsentation nach außen.
 
-**Ansprechpartner**:
-Sebastian Fiedlschuster  E 06  (B-xx)
+## Mitarbeit
 
+Die Wingolfsplattform ist ein Produkt vieler ehrenamtlicher Mitwirkender. Wenn Du Interesse hast, das Projekt bei der Konzeption, als Entwickler, Designer, Tester oder auch finanziell zu unterstützen, melde Dich einfach!
 
-### Production
+## Installation der Entwicklungsumgebung
 
-Die laufende Seite ist erreichbar unter https://wingolf.io
+Die Wingolfsplattform basiert serverseitig auf [Ruby on Rails](http://rubyonrails.org/), clientseitig auf [Vue.js](https://vuejs.org).
 
-### Development
+Auf einer Entwicklungsmaschine mit [Docker](https://www.docker.com) installierst Du die Entwicklungsversion der Wingolfsplattform wie folgt:
 
-Quick-Start mit Docker:
-
-```
+```bash
 git clone git@github.com:fiedl/wingolfsplattform.git
 cd wingolfsplattform
 git clone git@github.com:fiedl/your_platform.git
+docker-compose build
+```
+
+Falls Du die Umgebung alternativ lieber großteils ohne Docker installieren möchtest, guck Dir am Besten unseren alten [Getting-Started-Guide](https://github.com/fiedl/wingolfsplattform/wiki/Getting-Started) an.
+
+### Web-Oberfläche
+
+Starte die Web-Oberfläche mit
+
+```bash
 docker-compose run rails bundle exec rake db:create db:migrate db:seed
 docker-compose up rails
 ```
 
-Browser: http://localhost:3000
+und rufe danach http://localhost:3000 auf.
 
-Konsole: `docker-compose run console`
+### Konsole
 
-Tests: `docker-compose run tests`
+Mit der Rails-Konsole kannst Du auch ohne Web-Oberfläche auf alles zugreifen:
 
-Als Server-Side-Framework verwenden wir [Ruby on Rails](http://rubyonrails.org/) 5.0.
+```bash
+docker-compose run console
+```
 
-**[GETTING STARTED](https://github.com/fiedl/wingolfsplattform/wiki/Getting-Started)** -- von der Installation der Entwicklungsumgebung bis zum Durchführen der automatisierten Tests.
+### Tests
+
+Tests vollständig durchlaufen lassen:
+
+```bash
+docker-compose run tests
+```
+
+
+### Security
 
 Bitte macht euch mit dem [Rails-Security-Guide](http://guides.rubyonrails.org/security.html) vertraut. Kontrolliert euren Code bitte außerdem mit [`brakeman`](https://github.com/presidentbeef/brakeman).
 
-### Code-Dokumentation
 
-* [Code-Dokumentation auf rubydoc.info](http://rubydoc.info/github/fiedl/wingolfsplattform/master/frames)
-* Lokal kann die Dokumentation mit dem Kommando `yardoc` erzeugt werden.
-
-### Screencasts
+## Screencasts
 
 * [Plattform-Podcast, Ep. #1](https://plattformpodcast.com/1)
 * [Was kann die Plattform?](https://youtu.be/xAiQo1wOq5Y)
@@ -50,15 +65,15 @@ Bitte macht euch mit dem [Rails-Security-Guide](http://guides.rubyonrails.org/se
 * [Wie erstelle ich eine Amtsträger-Obergruppe?](https://youtu.be/AjROKOdXA8M)
 * Weitere Screencasts: https://plattformpodcast.com
 
-### Weiterführende Informationen
+## Weiterführende Informationen
 
 * [Trello Board "AK Internet: Entwicklung"](https://trello.com/board/ak-internet-entwicklung/50006d110ad48e941e8496d2)
 * YourPlatform-Projekt, https://github.com/fiedl/your_platform
 
 
-### Urheber, Mitarbeiter und Lizenz
+## Urheber, Mitarbeiter und Lizenz
 
-Copyright (c) 2012-2020, Sebastian Fiedlschuster
+Copyright (c) 2012-2021, Sebastian Fiedlschuster
 
 Mitarbeiter: Jörg Reichardt, Manuel Zerpies, Joachim Back, Willi Helwig, Falk Schimweg, Felix Plapper
 
