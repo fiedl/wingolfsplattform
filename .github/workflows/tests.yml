@@ -9,7 +9,7 @@ jobs:
       - name: Build docker images
         run: docker-compose build
       - name: Start docker containers
-        run: docker-compose up -d mysql_test redis neo4j
+        run: docker-compose up -d mysql_test redis neo4j && sleep 10
       - name: Prepare database
         run: docker-compose run tests /bin/bash -c "bundle exec rake db:create db:migrate"
       - name: Run tests
