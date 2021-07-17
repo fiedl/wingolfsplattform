@@ -58,6 +58,22 @@ docker-compose run guard
 
 Bitte macht euch mit dem [Rails-Security-Guide](http://guides.rubyonrails.org/security.html) vertraut. Kontrolliert euren Code bitte außerdem mit [`brakeman`](https://github.com/presidentbeef/brakeman).
 
+### Datenbank
+
+Datenbank in eine SQL-Datei exportieren:
+
+```bash
+docker-compose run rails bundle exec ruby script/dump
+```
+
+Dies erzeugt eine SQL-Datei mit Zeitstempel im Verzeichnis `backups/sql_dumps`.
+
+SQL-Datei importieren:
+
+```bash
+docker-compose run rails bash -c "mysql -h mysql -u root --password=secret -D wingolfsplattform_development" < /path/to/sql/file.sql
+```
+
 
 ## Screencasts
 
