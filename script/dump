@@ -29,6 +29,7 @@ db_config = YAML.load_file("config/database.yml")[ENV['RAILS_ENV']]
 db_name = db_config['database']
 db_user = db_config['username']
 db_password = db_config['password']
+db_host = db_config['host'] || 'localhost'
 
 log.filter db_password
 
@@ -42,7 +43,7 @@ filetitle = "#{db_name}-#{timestamp}.sql"
 dump_file = "#{output_path}/#{filetitle}"
 
 # shell "sudo -u #{app_user} pg_dump #{db_name} > #{dump_file}"  # postgres
-log.shell "mysqldump -u #{db_user} -p#{db_password} #{db_name} > #{dump_file}"
+log.shell "mysqldump -h #{db_host} -u #{db_user} -p#{db_password} #{db_name} > #{dump_file}"
 
 log.section "Result"
 log.shell "du -h #{dump_file}"
