@@ -43,7 +43,9 @@ filetitle = "#{db_name}-#{timestamp}.sql"
 dump_file = "#{output_path}/#{filetitle}"
 
 # shell "sudo -u #{app_user} pg_dump #{db_name} > #{dump_file}"  # postgres
-log.shell "mysqldump -h #{db_host} -u #{db_user} -p#{db_password} #{db_name} > #{dump_file}"
+# Access denied; you need (at least one of) the PROCESS privilege(s) for this operation
+# => https://dba.stackexchange.com/q/271981/189428
+log.shell "mysqldump --no-tablespaces -h #{db_host} -u #{db_user} -p#{db_password} #{db_name} > #{dump_file}"
 
 log.section "Result"
 log.shell "du -h #{dump_file}"
