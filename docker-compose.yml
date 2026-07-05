@@ -5,6 +5,7 @@ version: '3'
 
 volumes:
   mysql_data: {}
+  mysql_test_data: {}
   redis_data: {}
   neo4j_data: {}
   wingolfsplattform_uploads: {}
@@ -123,6 +124,7 @@ services:
       MYSQL_USER: "wingolfsplattform"
     volumes:
       - "mysql_data:/var/lib/mysql"
+    command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
 
   mysql_test:
     image: mysql:5.7
@@ -132,7 +134,10 @@ services:
       MYSQL_ROOT_PASSWORD: "secret"
       MYSQL_USER: "wingolfsplattform"
     volumes:
-      - "mysql_data:/var/lib/mysql"
+      # A separate volume: mysql and mysql_test may run at the same time,
+      # and two mysqld processes on one datadir corrupt it.
+      - "mysql_test_data:/var/lib/mysql"
+    command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
 
   redis:
     image: redis
@@ -145,6 +150,11 @@ services:
       - neo4j_data:/data
     environment:
       NEO4J_AUTH: "neo4j/trinity"
+      # The parallelized test suite queries neo4j from many processes at
+      # once; the default 512M heap collapses under that load.
+      NEO4J_dbms_memory_heap_initial__size: "2G"
+      NEO4J_dbms_memory_heap_max__size: "2G"
+      NEO4J_dbms_memory_pagecache_size: "1G"
 
   sidekiq:
     build: .
