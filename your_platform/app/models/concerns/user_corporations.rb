@@ -22,18 +22,24 @@ concern :UserCorporations do
     Corporation.find corporation_id if corporation_id
   end
 
-  # Returns the name of the Corporation the user is associated with.
+  # Implicit corporation creation by name, disabled for now:
+  # We have implemented this for a scenario where the corporation
+  # represents the company of a contact. We might re-use this later,
+  # but do not need it in wingolf now — corporations (Verbindungen)
+  # are never created on the fly there.
   #
-  def corporation_name
-    corporation.try(:name)
-  end
-
-  # Sets the name of the Corporation the user is associated with.
-  # If no matching corporation exists, the corporation is created.
-  # The user is added as member to this corporation.
+  # # Returns the name of the Corporation the user is associated with.
+  # #
+  # def corporation_name
+  #   corporation.try(:name)
+  # end
   #
-  def corporation_name=(new_corporation_name)
-    Corporation.find_or_create_by(name: new_corporation_name).assign_user self
-  end
+  # # Sets the name of the Corporation the user is associated with.
+  # # If no matching corporation exists, the corporation is created.
+  # # The user is added as member to this corporation.
+  # #
+  # def corporation_name=(new_corporation_name)
+  #   Corporation.find_or_create_by(name: new_corporation_name).assign_user self
+  # end
 
 end

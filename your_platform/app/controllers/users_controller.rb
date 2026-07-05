@@ -126,7 +126,7 @@ class UsersController < ApplicationController
         permitted_keys += [:email, :date_of_birth, :localized_date_of_birth, :bio] if can? :update, @user
 
         permitted_keys += [:last_name, :name] if can? :change_last_name, @user
-        permitted_keys += [:corporation_name] if can? :manage, @user
+        # permitted_keys += [:corporation_name] if can? :manage, @user  # implicit corporation creation is disabled, see UserCorporations
         permitted_keys += [:create_account, :female, :add_to_corporation] if can? :manage, @user
         permitted_keys += [:hidden] if can? :change_hidden, @user
         permitted_keys += [:notification_policy] if can? :update, @user

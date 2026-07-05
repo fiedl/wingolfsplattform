@@ -241,8 +241,11 @@ class User < ApplicationRecord
   end
 
   def address_label
+    # try: `corporation_name` is part of the disabled implicit-corporation
+    # feature (see UserCorporations). Address labels have always received
+    # nil here in wingolf.
     AddressLabel.new(self.name, self.postal_address_field_or_first_address_field,
-      self.name_surrounding_profile_field, self.personal_title, self.corporation_name)
+      self.name_surrounding_profile_field, self.personal_title, self.try(:corporation_name))
   end
 
 
