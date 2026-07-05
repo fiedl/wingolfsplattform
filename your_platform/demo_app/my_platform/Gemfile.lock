@@ -331,7 +331,9 @@ GEM
       zeitwerk
     method_source (0.8.2)
     mime-types (2.99.3)
-    mimemagic (0.3.5)
+    mimemagic (0.4.3)
+      nokogiri (~> 1)
+      rake
     mini_magick (4.9.4)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
