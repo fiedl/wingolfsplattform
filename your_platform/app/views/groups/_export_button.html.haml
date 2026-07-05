@@ -1,0 +1,140 @@
+- if can? :export_member_list, group
+  %div.btn-group.group_export.dropdown
+    %a.btn.btn-white.dropdown-toggle(data-toggle="dropdown" href="#")
+      = icon 'list-alt'
+      = t :download_list
+    .dropdown-menu.dropdown-menu-right.list_export
+
+      .info
+        .alert.alert-warning
+          = fa_icon 'info-circle'
+          - if can? :read, :exports_log
+            = link_to t(:the_export_will_be_logged), activities_exports_path
+          - else
+            = t :the_export_will_be_logged
+
+      %h6.dropdown-header=t :pdf_files
+      - trigger_class = (params[:trigger_export] == 'pdf') ? 'auto_trigger' : ''
+      .export_address_labels{data: {modal_body: render(partial: 'groups/address_labels_modal')}}
+        = link_to group_address_labels_path(group, :format => :pdf, pdf_type: 'zweckform'), :class => "address_labels_export_button #{trigger_class} dropdown-item" do
+          = icon :th
+          =t :address_labels
+          (Zweckform 3475)
+      .export_address_labels{data: {modal_body: render(partial: 'groups/address_labels_modal')}}
+        = link_to group_address_labels_path(group, :format => :pdf, pdf_type: 'zweckform', filter: 'without_email'), :class => "address_labels_export_button #{trigger_class} dropdown-item" do
+          = icon :th
+          Etiketten (Zweckform 3475) für Mitglieder ohne E-Mail-Adresse
+      .export_address_labels{data: {modal_body: render(partial: 'groups/address_labels_modal')}}
+        = link_to group_address_labels_path(group, :format => :pdf, pdf_type: 'zweckform', filter: 'with_local_postal_mail_subscription'), :class => "address_labels_export_button #{trigger_class} dropdown-item" do
+          = icon :th
+          Etiketten (Zweckform 3475)
+          = t :for_users_with_local_postal_mail_subscription
+      - if current_locale.to_s == 'de'
+        .indent
+          %a.dropdown-item{href: "https://amzn.to/2gPzBmu"}
+            = fa_icon :amazon
+            Passende Zweckform-3475-Etiketten 70x36 online bestellen
+      .export_address_labels{data: {modal_body: render(partial: 'groups/address_labels_modal')}}
+        = link_to group_address_labels_path(group, :format => :pdf, pdf_type: 'dpag'), :class => "address_labels_export_button dropdown-item" do
+          = icon :th
+          =t :address_labels
+          (DPAG 70x37)
+      - if current_locale.to_s == 'de'
+        .indent
+          %a.dropdown-item{href: "https://amzn.to/2gQ80BX"}
+            = fa_icon :amazon
+            Passende Zweckform-3474-Etiketten 70x37 online bestellen
+
+      %h6.dropdown-header= "#{I18n.t(:excel_tables)} (XLS)"
+      = link_to group_list_export_path(group_id: group.id, :format => :xls, :list => :name_list), class: 'dropdown-item' do
+        = excel_icon
+        = t :name_list
+
+      = link_to group_list_export_path(group_id: group.id, :format => :xls, :list => :birthday_list), class: 'dropdown-item' do
+        = excel_icon
+        = t :birthday_list
+
+      = link_to group_list_export_path(group_id: group.id, :format => :xls, :list => :special_birthdays), class: 'dropdown-item' do
+        = excel_icon
+        = t :special_birthdays
+
+      = link_to group_list_export_path(group_id: group.id, :format => :xls, :list => :address_list), class: 'dropdown-item' do
+        = excel_icon
+        = t :address_list
+
+      = link_to group_list_export_path(group_id: group.id, :format => :xls, :list => :phone_list), class: 'dropdown-item' do
+        = excel_icon
+        = t :phone_list
+      = link_to group_list_export_path(group_id: group.id, :format => :xls, :list => :member_development), class: 'dropdown-item' do
+        = excel_icon
+        = t :member_development
+      - if can? :export_stammdaten_for, group
+        = link_to group_list_export_path(group_id: group.id, :format => :xls, :list => :stammdaten), class: 'dropdown-item' do
+          = excel_icon
+          = t :stammdaten
+      - if can? :export, :wingolfsblaetter_export_format
+        = link_to group_list_export_path(group_id: group.id, :format => :xls, :list => :wingolfsblaetter), class: 'dropdown-item' do
+          = excel_icon
+          = t :wingolfsblaetter
+
+      %h6.dropdown-header= "#{I18n.t(:tables)} (CSV, UTF-8)"
+      = link_to group_list_export_path(group_id: group.id, :format => :csv, :list => :name_list), class: 'dropdown-item' do
+        = csv_icon
+        = t :name_list
+      = link_to group_list_export_path(group_id: group.id, :format => :csv, :list => :birthday_list), class: 'dropdown-item' do
+        = csv_icon
+        = t :birthday_list
+      = link_to group_list_export_path(group_id: group.id, :format => :csv, :list => :special_birthdays), class: 'dropdown-item' do
+        = csv_icon
+        = t :special_birthdays
+      = link_to group_list_export_path(group_id: group.id, :format => :csv, :list => :address_list), class: 'dropdown-item' do
+        = csv_icon
+        = t :address_list
+      = link_to group_list_export_path(group_id: group.id, :format => :csv, :list => :dpag_internetmarken), class: 'dropdown-item' do
+        = csv_icon
+        = t :address_list_for_dpag_internetmarke
+        %small (ISO 8859-1)
+      .indent
+        = link_to group_list_export_path(group_id: group.id, :format => :csv, :list => :dpag_internetmarken_in_germany), class: 'dropdown-item' do
+          = csv_icon
+          nur Inland (DE)
+      .indent
+        = link_to group_list_export_path(group_id: group.id, :format => :csv, :list => :dpag_internetmarken_not_in_germany), class: 'dropdown-item' do
+          = csv_icon
+          nur Ausland
+      .indent
+        %a.export_list_answers.dropdown-item{href: 'https://www.deutschepost.de/de/i/internetmarke-porto-drucken/haeufige-fragen.html'}
+          = awesome_icon 'question-circle'
+          Hilfe zur DPAG-Internetmarke
+      = link_to group_list_export_path(group_id: group.id, :format => :csv, :list => :phone_list), class: 'dropdown-item' do
+        = csv_icon
+        = t :phone_list
+      = link_to group_list_export_path(group_id: group.id, :format => :csv, :list => :email_list), class: 'dropdown-item' do
+        = csv_icon
+        = t :email_list
+      - group.mailing_lists.each do |mailing_list|
+        .indent
+          = link_to "mailto:#{mailing_list.value}", class: 'dropdown-item' do
+            = icon :envelope
+            = "#{t(:mailing_list)}: #{mailing_list.value}"
+      - if can? :create_post_for, group
+        .indent
+          = link_to group_posts_path(group), class: 'dropdown-item' do
+            = icon :envelope
+            = t :write_new_post_to_str, str: group.name
+      - if can? :manage, group
+        .indent
+          = link_to group_mailing_lists_path(group), class: 'dropdown-item' do
+            = icon :envelope
+            = t :install_mailing_list
+        = link_to group_list_export_path(group_id: group.id, :format => :csv, :list => :member_development), class: 'dropdown-item' do
+          = csv_icon
+          = t :member_development
+      - if can? :export_stammdaten_for, group
+        = link_to group_list_export_path(group_id: group.id, :format => :csv, :list => :stammdaten), class: 'dropdown-item' do
+          = csv_icon
+          = t :stammdaten
+      - if can? :export, :wingolfsblaetter_export_format
+        = link_to group_list_export_path(group_id: group.id, :format => :csv, :list => :wingolfsblaetter), class: 'dropdown-item' do
+          = csv_icon
+          = t :wingolfsblaetter

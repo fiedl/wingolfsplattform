@@ -1,0 +1,12 @@
+- if current_user.notifications.count > 0
+  %li#notifications_menu{class: "backendBarItem dropdown notifications"}
+    = link_to notifications_path, class: 'dropdown-toggle', data: {toggle: 'dropdown'} do
+      = t(:notifications)
+      - if current_user.notifications.unread.count > 0
+        %span.badge= current_user.notifications.unread.count
+        %b.caret
+    - if current_user.notifications.unread.count > 0    
+      %ul.dropdown-menu
+        %li.read_all= link_to t(:mark_all_notifications_as_read), read_all_notifications_path, remote: true, method: 'patch'
+        - current_user.notifications.unread.includes(:author, :reference).order('created_at desc').each do |notification|
+          %li= render partial: 'notifications/notification', object: notification

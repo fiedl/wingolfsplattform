@@ -1,0 +1,15 @@
+- # Locals:
+- post || raise(ActionController::ParameterMissing, 'no post given.')
+- hide_images ||= false
+
+- attachments = post.attachments.to_a
+- attachments.select! { |attachment| not attachment.image? } if hide_images
+
+- if attachments.count > 0
+  %div.post-attachments
+    %strong= t(:attachments)
+    %ol.post_attachments
+      - attachments.each do |attachment|
+        %li
+          = awesome_icon(:paperclip)
+          = link_to attachment.filename, attachment.file_url, target: '_blank'

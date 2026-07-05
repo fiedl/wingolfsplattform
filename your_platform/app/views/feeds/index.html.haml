@@ -1,0 +1,25 @@
+.jumbotron
+  %h2= t :rss_subscription
+  %p= t :subscribe_our_website_in_rss_with_your_favorite_rss_reader_to_stay_up_to_date
+  %p= rss_button(rss_default_url, title: t(:subscribe_via_rss))
+
+%h3.rss_feeds= t :other_rss_feeds
+%div
+  %table
+    %tr
+      %th= t :default_feed
+      %td= rss_button  feed_path(id: 'default', format: "rss", token: current_user.try(:token))
+    -#- if current_user
+    -#  %tr
+    -#    %th= t :personal_feed
+    -#    %td= rss_button  feed_path(id: 'personal', format: "rss", token: current_user.token)
+    -#%tr
+    -#  %th= t :public_feed
+    -#  %td= rss_button  feed_path(id: 'public', format: "rss")
+    %tr
+      %th= t :categories
+      %td
+    - @feeds.each do |feed|
+      %tr
+        %td= link_to feed.title, feed
+        %td= rss_button polymorphic_path(feed, format: "rss")

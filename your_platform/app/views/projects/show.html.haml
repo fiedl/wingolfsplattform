@@ -1,0 +1,18 @@
+= render partial: 'projects/tabs', locals: {active: 'info'}
+
+%h1.project
+  -#%span{style: 'font-weight: normal'}= "#{t(:my_projects)} / "
+  = editable @project, :title, editable: can?(:update, @project)
+%div.project
+  %p
+    %strong=t :created_at
+    =l @project.created_at
+  %p
+    %strong=t :updated_at
+    =l @project.updated_at
+  %p
+    %strong=t :description
+    = editable @project, :description, type: :textarea, editable: can?(:update, @project)
+  %p
+    %strong=t :group
+    = link_to @project.group.title, @project.group

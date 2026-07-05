@@ -1,0 +1,143 @@
+.page-header
+  .row.align-itens-center
+    .col-auto
+      .page-pretitle= "Willkommen, #{current_user.first_name}!"
+      .page-title Start
+
+- Rack::MiniProfiler.step "root/charts" do
+  = render partial: 'root/charts'
+
+.row.row-deck.row-cards.mt-3
+  - Rack::MiniProfiler.step "root/events" do
+    .col-lg-7
+      .card
+        .card-header
+          %h4.card-title= t :events
+        - if events.any?
+          .table-responsive
+            %table.table.card-table.table-vcenter
+              %tbody
+                - events.each do |event|
+                  %tr
+                    %td.w-1= avatar event
+                    %td= link_to event.title, event
+                    %td.text-muted
+                      = event_icon
+                      = localize event.start_at
+                    %td= event.group.name
+        - if events.none?
+          .card-body
+            .text-center.text-muted
+              Derzeit sind keine anstehenden Veranstaltungen eingetragen.
+            - if semester_calendar.present? && can?(:update, semester_calendar)
+              .text-center
+                = link_to "Semesterprogramm bearbeiten", semester_calendar
+        - if semester_calendar.present?
+          .card-footer
+            = link_to "Semesterprogramm", semester_calendar, class: 'btn btn-white btn-sm'
+
+  - Rack::MiniProfiler.step "root/birthdays" do
+    = cache :tabler_birthday_box_v4, expires_in: Time.now.end_of_day - Time.current do
+      .col-lg-5
+        .card
+          .card-header
+            %h4.card-title= t :birthdays
+          .card-body
+            .row.mb-n3
+              - birthday_users.each do |user|
+                .col-12.col-md-6.row.mb-3.align-items-center.filterable
+                  %a.col-auto
+                    %span.avatar{style: "background-image: url(#{user.avatar_path})"}
+                  .col
+                    = link_to user.title, user, class: "text-body d-block"
+                    - if user.date_of_birth.present?
+                      %small.d-block.text-muted.text-truncate.mt-n1= localize user.date_of_birth
+                      %small.d-block.text-muted.text-truncate.mt-n1= t :n_years, n: (Date.today < user.birthday_this_year ? user.next_age : user.age)
+
+
+.row.row-cards
+  - Rack::MiniProfiler.step "root/posts" do
+    .col-lg-7
+      .card
+        - if can? :create, Post
+          .card-header
+            - Rack::MiniProfiler.step "root/vue_create_post_form" do
+              = vue_create_post_form sent_via: post_draft_via_key, initial_post: drafted_post, suggested_groups: current_user.groups.includes(:flags).regular, show_send_via_email_toggle: true
+        - if posts.none?
+          .card-body
+            .text-center.text-muted
+              Im letzten Jahr hat niemand aus Deinen Gruppen etwas gepostet.
+            .text-center
+              = link_to "Sei der erste", new_post_path
+        - elsif posts.any?
+          - Rack::MiniProfiler.step "root/vue_posts posts" do
+            = vue_posts posts, sent_via: post_draft_via_key
+        .card-footer
+          = link_to "Mehr Posts anzeigen", posts_path, class: 'btn btn-white btn-sm'
+
+  .col-lg-5
+    - Rack::MiniProfiler.step "root/documents" do
+      .card
+        .card-header
+          %h4.card-title= t :documents
+        .table-responsive
+          %table.table.card-table.table-vcenter
+            %tbody
+              - documents.each do |document|
+                %tr
+                  %td.w-5
+                    .thumb
+                      = link_to document do
+                        = image_tag document.thumb_path
+                  %td= link_to document.title, document
+                  %td.text-nowrap.text-muted
+                    = event_icon
+                    = localize document.created_at.to_date
+                  %td.text-nowrap
+                    - if document.scope.kind_of? Group
+                      = folder_icon # group_icon would be more accurate, but having both icons in one list looks cluttered.
+                      = link_to document.scope.title, group_documents_path(group_id: document.scope.id)
+                    - elsif document.scope.kind_of? Page
+                      = folder_icon
+                      = link_to document.scope.title, page_documents_path(page_id: document.scope.id)
+        .card-footer
+          = link_to "Mehr Dokumente anzeigen", documents_path, class: 'btn btn-white btn-sm'
+          - if can? :create, Document
+            = link_to "Dokumente hochladen", new_document_path, class: 'btn btn-white btn-sm'
+
+    - if show_histograms
+      - Rack::MiniProfiler.step "root/histograms" do
+        .card
+          .card-header
+            %h3.mb-0
+              Altersverteilung im Wingolf
+              %a{'data-toggle': "tooltip", 'data-placement': "bottom", title: "Im Moment sind noch nicht alle Philister wieder in die Plattform importiert. Deswegen sieht die Altersverteilung nicht wie erwartet aus."}= info_icon
+          .card-body
+            %vue_age_histogram_chart{':ages': histogram_ages.to_json, title: ""}
+
+        .card
+          .card-header
+            %h3.mb-0
+              Statusverteilung im Wingolf
+          .card-body
+            %vue_status_pie_chart{':statuses': histogram_statuses.to_json, title: ""}
+
+    - Rack::MiniProfiler.step "root/corporation_cards" do
+      - for group in corporations
+        = cache [group, "root/corporation_card"], expires_in: 1.day do
+          = render partial: 'corporations/corporation_card', locals: {group: group}
+
+    - Rack::MiniProfiler.step "root/platform_news" do
+      - if platform_news_group
+        .card
+          .card-header
+            %h3.mb-0 Plattform-Updates
+          - if can? :create_post, platform_news_group
+            .card-header
+              = vue_create_post_form sent_via: platform_news_sent_via_key, initial_post: platform_news_draft, parent_group: platform_news_group, show_publish_on_website_toggle: true
+          = vue_posts platform_news_posts, sent_via: platform_news_sent_via_key
+          .card-footer
+            - if platform_news_group.public_home_page
+              = link_to "Mehr Updates anzeigen", platform_news_group.public_home_page, class: 'btn btn-white btn-sm'
+            - elsif can? :index_posts, platform_news_group
+              = link_to "Mehr Updates anzeigen", posts_path(group_id: platform_news_group.id), class: 'btn btn-white btn-sm'

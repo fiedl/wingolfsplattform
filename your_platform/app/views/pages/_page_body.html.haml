@@ -1,0 +1,12 @@
+.page_body.page_content{data: {upload_url: attachments_path(parent_id: page.id, parent_type: 'Page')}}
+
+  = editable page, :content, editable: can?(:update, page), type: 'wysiwyg'
+
+  - # We need another upload form for the image-drop into the
+  - # wysiwyg field to work.
+  - #
+  - if can? :update, page
+    = form_for page.attachments.build, html: {class: 'hidden new_wysiwyg_image_upload'} do |f|
+      = f.hidden_field :parent_id
+      = f.hidden_field :parent_type
+      = f.file_field :file, name: "attachment[file]"

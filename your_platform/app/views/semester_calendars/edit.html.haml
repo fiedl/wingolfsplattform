@@ -1,0 +1,14 @@
+- @hide_vertical_nav = true  # in order to have more space for editing
+
+= render partial: 'groups/tabs', locals: {active: 'events'}
+
+%h1
+  = current_title
+  .save.tool
+    %a{href: '#', class: 'btn btn-primary save_semester_calendar_button'}= t :save
+%div.semester_calendar
+  .semester
+    = term.to_s
+
+  .edit_table
+    = render partial: 'semester_calendars/edit_table', locals: {semester_calendar: semester_calendar}

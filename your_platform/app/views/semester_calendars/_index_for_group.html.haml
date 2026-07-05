@@ -1,0 +1,42 @@
+.page-header
+  .row.align-itens-center
+    .col-auto
+      .page-pretitle= group.title
+      .page-title Semesterprogramme
+    .col-auto.ml-auto
+      = link_to current_semester_calendar_path(group_id: current_user.primary_corporation), class: 'btn btn-primary' do
+        = plus_icon
+        Semesterprogramm eintragen
+
+
+.card
+  .table-responsive
+    %table.table.card-table.table-vcenter
+      %thead
+        %tr
+          %th.w-1
+          %th Semester
+          %th iCal
+          %th PDF
+          %th Veranstaltungen
+          %th Commers am
+          %th Stand
+      %tbody
+        - for semester_calendar in semester_calendars
+          %tr
+            %td= group_avatar semester_calendar.group
+            %td
+              %strong= link_to semester_calendar.term.title
+            %td
+              = link_to group_events_url(group_id: semester_calendar.group.id, public: true, format: 'ics', protocol: 'webcal', token: current_user.try(:account).try(:auth_token)) do
+                = calendar_icon
+            %td
+              - if semester_calendar.attachments.any?
+                = link_to semester_calendar.attachments.last.file_url do
+                  = document_icon
+            %td= semester_calendar.events.count
+            %td
+              - if semester_calendar.commers
+                = link_to semester_calendar.commers do
+                  = localize semester_calendar.commers.start_at.to_date
+            %td= localize semester_calendar.updated_at.to_date

@@ -1,0 +1,11 @@
+.row.row-sm.align-items-center.mb-3
+  .col-auto
+    %strong= link_to image_tag(attachment.thumb_path), attachment.file.url
+  .col
+    = link_to attachment.title, attachment.file.url
+    - if attachment.description.present?
+      .text-muted.mb-3= attachment.description
+    - if attachment.author
+      %small.text-muted
+        Autor:
+        = link_to attachment.author.title, attachment.author, class: 'text-muted'

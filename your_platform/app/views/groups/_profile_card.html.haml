@@ -1,0 +1,11 @@
+.card.card-profile
+  = vue_editable_image src: group.avatar_background_path, editable: can?(:update, group), image_class: 'card-header', update_url: group_path(group), attribute_name: "group[avatar_background]"
+  .card-body.text-center
+    = vue_editable_image src: group.avatar_path, image_class: "card-profile-img", editable: can?(:update, group), update_url: group_path(group), attribute_name: 'group[avatar]', icon: "fa fa-group fa-2x", tools_alignment: 'center'
+    %h3.mb-3
+      = editable group, :name, editable: can?(:rename, group)
+
+    - unless block_given?
+      = editable group, :body, editable: can?(:update, group), type: 'wysiwyg'
+
+  = yield

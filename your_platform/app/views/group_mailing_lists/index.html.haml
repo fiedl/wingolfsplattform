@@ -1,0 +1,42 @@
+.page-header
+  .row.align-itens-center
+    .col-auto
+      .page-title= current_title
+
+.row
+  .col-md-4
+    = render layout: 'groups/profile_card', locals: {group: group} do
+      .card-body
+        .text-center
+          %div
+            %span= group_icon
+            = link_to group_members_path(group_id: group.id) do
+              = group.members.count
+              Mitglieder
+          .mt-3
+            %span= comments_icon
+            = link_to group_posts_path(group_id: group.id) do
+              = group.posts.count
+              Nachrichten
+      .card-footer
+        = link_to "Profil", group_path(group), class: 'btn btn-white btn-sm'
+        = link_to "Nachricht schreiben", new_post_path(group_id: group.id), class: 'btn btn-white btn-sm'
+
+  .col-md-8
+    .card
+      .card-header
+        %h3.mb-0
+          Verteiler-Adressen für die Gruppe
+          = group.name
+      .card-body
+        %vue-edit-box
+          = editable_profile_fields profileable: group, types: ["ProfileFields::MailingListEmail"], profile_fields: mailing_lists, new_profile_fields: [{label: "E-Mail-Verteiler", type: "ProfileFields::MailingListEmail"}]
+
+    .card
+      .card-header
+        %h3.mb-0
+          Wer darf an diese Verteiler schreiben?
+      .card-body
+        = form_for group do |f|
+          = f.select :sender_policy, group.mailing_list_sender_filter_settings.collect { |setting| [t(setting, scope: 'sender_filter_long'), setting] }, {}, {class: 'form-select', data: {remote: true, url: group_path(group), method: 'put'}}
+

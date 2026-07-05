@@ -1,0 +1,28 @@
+- search ||= false
+- session ||= false
+
+#horizontal_nav
+  - if show_resource_nav?
+    = render partial: 'layouts/resource_nav'
+  - else
+    = horizontal_nav_ul do
+      - horizontal_nav.link_objects.each do |object|
+        - if object.kind_of? Hash
+          %li.horizontal-nav-link.nav-link
+            = link_to object[:title], (object[:path] || object.except(:title)), class: 'nav-link'
+        - else
+          - if !object.respond_to?(:visible_to?) || object.visible_to?(current_user, preview_as: params[:preview_as])
+            %li.horizontal-nav-link.nav-link{class: horizontal_nav_li_css_class(object), data: {short: ((object.internal_token || object.token) if object.respond_to?(:token))}}
+              = link_to_navable (object.nav_title), object, class: 'nav-link'
+      - if search
+        %li.horizontal-nav-search-link
+          %a= search_icon
+      - if session && current_user
+        %li.horizontal-nav-session-dropdown
+          %a.dropdown-toggle.current_user_dropdown{'data-toggle' => 'dropdown', :href => '#'}
+            = render 'layouts/session_bar_avatar'
+            %b.caret
+          = render partial: 'layouts/current_user_dropdown'
+    - if search
+      #horizontal_nav_search
+        = render partial: 'shared/search_box'

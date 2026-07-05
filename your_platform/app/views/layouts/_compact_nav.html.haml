@@ -1,0 +1,25 @@
+%nav#compact-nav-bar.navbar.navbar-default.navbar-fixed-top
+  .container
+    #logo.navbar-header
+      = link_to root_path do
+        = image_tag 'logo.png'
+    #compact-nav-search
+      = form_tag compact_nav_search_path, :method => 'get', :class => "navbar-form navbar-search navbar-left compact-nav-search-form", role: 'search' do
+        .form-group
+          - if @navable
+            - essential_breadcrumb_objects.each do |obj|
+              = render partial: 'shared/compact_nav_button', locals: {obj: obj}
+          = search_field_tag :query, "", :class => "search-query form-control compact-nav-search-input", :placeholder => I18n.t(:find), :autocomplete => 'off', :autofocus => 'autofocus'
+    %ul#user-menu.nav.navbar-nav.navbar-right
+      %li.last.dropdown
+        %a.dropdown-toggle{'data-toggle' => 'dropdown', :href => '#'}
+          = render 'layouts/session_bar_avatar'
+          %b.caret
+        %ul.dropdown-menu{role: 'menu'}
+          %li.nav-header= current_user.title
+          %li= link_to t(:my_profile), user_path(current_user)
+          %li= link_to t(:change_avatar), user_path(current_user, trigger_change_avatar: true)
+          %li= link_to t(:change_password), change_password_path
+          %li= link_to t(:settings), user_settings_path(current_user)
+          %li= link_to t(:logout), destroy_user_account_session_url, method: :delete
+        

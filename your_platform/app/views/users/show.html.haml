@@ -1,0 +1,125 @@
+.row
+  .col-lg-4
+    .card.card-profile
+      = vue_editable_image src: user.avatar_background_path, editable: can?(:update, user), image_class: 'card-header', update_url: user_path(user), attribute_name: "user[avatar_background]"
+      .card-body.text-center
+        = vue_editable_image src: user.avatar_path, image_class: "card-profile-img", editable: can?(:update, user), update_url: user_path(user), attribute_name: 'user[avatar]', tools_alignment: 'center'
+        %h3.mb-3.user
+          = editable user, :first_name, editable: can?(:change_first_name, user)
+          = editable user, :last_name, editable: can?(:change_last_name, user)
+          = user.name_affix
+        = render partial: 'users/dead_badge', locals: { user: user }
+        .row
+          - ([user.find_or_create_date_of_birth_profile_field] + user.profile.section(:general).fields).reverse.each do |profile_field|
+            .col-lg-6.col-md-4.mb-3
+              %vue-profile-field{':initial-profile-field': profile_field.as_json.merge({editable: can?(:update, profile_field), label_editable: false}).to_json}
+
+    .card
+      .card-body
+        %h3 Verwaltung
+        - if can? :manage, user
+          %span.tool.profile_fields_index
+            = link_to t(:profile_fields), profile_fields_path(user_id: user.id), class: 'btn btn-white'
+        - if can? :manage, user
+          = link_to "Gruppen-Mitgliedschaften", user_memberships_path(user_id: user.id), class: 'btn btn-white'
+        - if can? :renew_cache, user
+          %span.tool.renew_cache= renew_cache_button(user)
+
+
+  .col-lg-8
+    .card
+      .card-body
+        #contact_information
+          %vue-edit-box
+            %h2= t :contact_information
+            .row.obscure-in-demo
+              .col-md-4
+                = editable_profile_fields profileable: user, types: ["ProfileFields::Address"], new_profile_fields: [{label: "Semesteranschrift", type: "ProfileFields::Address"}, {label: "Heimatanschrift", type: "ProfileFields::Address"}, {label: "Adresse", type: "ProfileFields::Address"}]
+              .col-md-4
+                = editable_profile_fields profileable: user, types: ["ProfileFields::Phone"], new_profile_fields: [{label: "Telefon", type: "ProfileFields::Phone"}, {label: "Mobil", type: "ProfileFields::Phone"}, {label: "Privat", type: "ProfileFields::Phone"}, {label: "Dienstlich", type: "ProfileFields::Phone"}, {label: "Fax", type: "ProfileFields::Phone"}]
+              .col-md-4
+                = editable_profile_fields profileable: user, types: ["ProfileFields::Email", "ProfileFields::Homepage"], new_profile_fields: [{label: "E-Mail", type: "ProfileFields::Email"}, {label: "Website", type: "ProfileFields::Homepage"}]
+
+    - if user.corporations.count > 0 or can? :update, user
+      .card
+        .card-body
+          %vue-edit-box
+            #corporate_vita
+              %h2= t :corporate_vita
+              .float-md-right.mb-3= render partial: 'users/workflow_triggers'
+              = render partial: 'users/corporate_vita', locals: {user: user}
+        - if current_user.admin_of_anything? && current_user.corporations.select { |corporation| can? :update, corporation }.any?
+          .card-footer
+            = link_to "Bandaufnahme eintragen", new_aktivmeldung_path(new_member_type: "Bandaufnahme", new_member_id: user.id), class: "btn btn-white btn-sm"
+
+
+
+    - if user.profile_fields.where(type: "ProfileFields::About").any? || can?(:update, user)
+      .card
+        .card-body
+          #about
+            %vue-edit-box
+              %h2= t :about
+              = editable_profile_fields profileable: user, types: ["ProfileFields::About"], new_profile_fields: [{label: "Über mich", type: "ProfileFields::About"}, {label: "Ich suche", type: "ProfileFields::About"}, {label: "Ich biete", type: "ProfileFields::About"}]
+
+    - if user.profile_fields.where(type: "ProfileFields::Study").any? || can?(:update, user)
+      .card
+        .card-body
+          #study
+            %vue-edit-box
+              %h2= t :study
+              = editable_profile_fields profileable: user, types: ["ProfileFields::Study"], new_profile_fields: [{label: "Studium", type: "ProfileFields::Study"}, {label: "Bachelor-Studium", type: "ProfileFields::Study"}, {label: "Master-Studium", type: "ProfileFields::Study"}, {label: "Auslandsstudium", type: "ProfileFields::Study"}, {label: "Promotion", type: "ProfileFields::Study"}]
+
+    - if user.profile_fields.where(type: ["ProfileFields::Employment", "ProfileFields::ProfessionalCategory", "ProfileFields::Competence"]).any? || can?(:update, user)
+      .card
+        .card-body
+          #career
+            %vue-edit-box
+              %h2= t :career_information
+              = editable_profile_fields profileable: user, types: ["ProfileFields::Employment", "ProfileFields::ProfessionalCategory", "ProfileFields::Competence"], new_profile_fields: [{label: "Beschäftigung", type: "ProfileFields::Employment"}, {label: "Betätigungsfeld", type: "ProfileFields::Employment"}, {label: "Kompetenz", type: "ProfileFields::Competence"}, {label: "Sprache", type: "ProfileFields::Competence"}, {label: "Fertigkeit", type: "ProfileFields::Competence"}]
+
+    - if user.profile_fields.where(type: "ProfileFields::Organization").any? || can?(:update, user)
+      .card
+        .card-body
+          #organizations
+            %vue-edit-box
+              %h2= t :organizations
+              = editable_profile_fields profileable: user, types: ["ProfileFields::Organization"], new_profile_fields: [{label: "Organisation", type: "ProfileFields::Organization"}]
+
+    - if user.profile_fields.where(type: "ProfileFields::BankAccount").any? || can?(:update, user)
+      - if can? :read_bank_account, user
+        .card
+          .card-body
+            #bank
+              %vue-edit-box
+                %h2= t :bank_account_information
+                .obscure-in-demo= editable_profile_fields profileable: user, types: ["ProfileFields::BankAccount"], new_profile_fields: [{label: "Bankverbindung", type: "ProfileFields::BankAccount"}]
+
+    .card
+      .card-body
+        #groups
+          %h2= t :groups
+          = render partial: 'users/groups', object: user, as: :user
+
+    - if (user.leibfamilie.count > 1) || user.wingolfit? # The count is 1 if there is only the user himself.
+      .card
+        .card-body
+          %vue-edit-box
+            %h2 Leibfamilie
+            %vue-leibfamilie{':initial-leibfamilie': user.leibfamilie.to_json, ':user': user.to_json, ':editable': can?(:update, user).to_json, trash_icon: trash_icon}
+
+    = render partial: 'users/communication_box', locals: {user: @user}
+
+    - if can? :update, @user
+      .card
+        .card-body
+          %vue-edit-box
+            %h2= t :access_information
+            - if @user.has_account?
+              = render @user.account
+            - else
+              %p= t :user_has_no_account
+              - if can? :create_account_for, @user
+                %vue-show-in-edit-mode
+                  = link_to t(:create_account), user_account_path(@user), :method => :post, :class => "btn btn-success"
+                  %p= t 'formtastic.hints.create_account'

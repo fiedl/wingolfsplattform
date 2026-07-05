@@ -1,0 +1,60 @@
+- profileable = issue.reference.profileable if issue.reference.kind_of? ProfileField
+- profileable = issue.reference.user if issue.reference.kind_of? Membership
+- profileable ||= issue.reference
+
+%h1
+  = profileable.title
+  .label.label-warning.scanning_issue=t :scanning_issue
+  .label.label-success.thanks_for_fixing_issue=t :thanks
+%div
+  .col-sm-6
+    .context_container
+      %p
+        = link_to profileable.title, profileable
+        - if profileable.phone_field.try(:value).present?
+          %br
+          = "#{profileable.phone_field.label}: #{profileable.phone_field.value}"
+    - if issue.author
+      .author-container
+        %p
+          %strong= "#{t(:reported_by)}:"
+          = link_to issue.author.title, issue.author
+          - if issue.author.phone_field.try(:value).present?
+            %br
+            = "#{issue.author.phone_field.label}: #{issue.author.phone_field.value}"
+          %br
+          = localize issue.created_at
+
+    .description-container
+      - if issue.resolved_at
+        %p
+          %strong= "#{t(:issue_resolved_at)}:"
+          = localize(issue.resolved_at)
+      - else
+        %p
+          %strong= t(issue.title)
+      = simple_format t(issue.description, default: issue.description)
+    - if issue.reference.respond_to?(:original_value) && (issue.reference.value != issue.reference.original_value || issue.reference.kind_of?(ProfileFields::Address))
+      .original_value_container
+        %strong=t :original_value
+        %p= simple_format issue.reference.original_value
+  .col-sm-6
+    - if issue.author && issue.resolved_at.nil?
+      .destroy-container
+        = button_to t(:i_have_resolved_the_issue), issue_path(issue), method: 'delete', remote: true, class: 'btn btn-warning pull-right'
+
+    .reference_container
+      - if issue.reference.kind_of? ProfileField
+        = render partial: 'profile_fields/profile_field_value', locals: {profile_field: issue.reference}
+      - if issue.reference.kind_of? Membership
+        - membership = issue.reference
+        %p
+          = "#{t(:group)}:"
+          = link_to membership.group.name, membership.group
+        %p
+          = "#{t(:valid_from)}:"
+          = best_in_place membership, :valid_from_localized_date
+        %p
+          = "#{t(:valid_to)}:"
+          = best_in_place membership, :valid_to_localized_date
+

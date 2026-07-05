@@ -1,0 +1,133 @@
+%h1.page_settings
+  = current_title
+  .back_to_page.tool= link_to t(:back_to_the_page), polymorphic_path(@page), class: 'btn btn-outline-secondary'
+%div
+  %table.settings
+    %tr.page_title
+      %th= t :page_title
+      %td= best_in_place @page, :title
+    %tr.page_type
+      %th= t :page_type
+      %td= best_in_place @page, :type, as: :select, collection: Page.types.collect { |type| type.try(:name) }.collect { |type| [type, type] }
+    %tr.page_domain
+      %th= t :domain
+      %td.domain= best_in_place_if can?(:change_domain, @page), @page, :domain
+    %tr.page_author
+      %th= t :page_author
+      %td= user_best_in_place @page, :author_title
+    %tr.page_locale
+      %th= t :locale
+      %td= best_in_place @page, :locale, as: :select, collection: ([["", nil]] + I18n.available_locales.collect { |locale| [locale.to_s, locale.to_s] })
+    %tr.redirect_page_to
+      %th= t :redirect_page_to
+      %td= best_in_place @page, :redirect_to
+    %tr.published_at
+      %th= t :published_at
+      %td= best_in_place @page, :localized_published_at
+    %tr.created_at
+      %th= t :created_at
+      %td= localize @page.created_at
+    %tr.updated_at
+      %th= t :updated_at
+      %td= localize @page.updated_at
+
+  = render partial: 'shared/nav_node_settings', locals: {navable: @page}
+
+- if @page.kind_of?(Pages::HomePage)
+  %h1.home_page_settings= t :home_page_settings
+  %div= render partial: 'page_settings/home_page_settings', locals: {home_page: @page}
+
+- if @page.kind_of?(Pages::HomePage) || @page.kind_of?(Blog)
+  %h1.logo_settings= t :logo_settings
+  %div= link_to settings_icon + " " + t(:logo_settings_for_str, str: @page.domain || @page.title), page_logos_path(@page), class: 'btn btn-outline-secondary'
+
+%h1= t :rights
+%div
+  %table.settings
+    %tr.anyone_can_create_blog_posts
+      %th Blog
+      %td
+        = setting_check_box @page, :anyone_can_create_blog_posts
+
+%h1.boxes_on_this_page= t :boxes_on_this_page
+%div
+  = t :select_boxes_to_display_on_the_page_str, str: @page.title
+
+  %table.settings
+    %tr.locations_map
+      %th= t :locations_map
+      %td
+        %p= setting_check_box @page, :show_group_map, t(:show_locations_map)
+        %p
+          = t :locations_map_group
+          = group_select_in_place @page, :page, :group_map_parent_group_id
+        %p
+          = t :group_map_sub_title
+          = setting_in_place @page, :group_map_sub_title
+    %tr.events
+      %th= t :events
+      %td
+        .show_events= setting_check_box @page, :show_events
+    %tr.officers
+      %th= t :officers
+      %td
+        %p= setting_check_box @page, :show_officers
+        %p
+          %strong= t :show_officers_of_group
+          = group_select_in_place @page, :page, :show_officers_for_group_id
+          %p.hidden_help= t :for_empty_field_show_page_officers
+        %p
+          = t :show_only_the_first_n_offices
+          = setting_in_place @page, :show_only_the_first_n_offices
+    %tr.embedded_pages
+      %th= t :embedded_pages
+      %td
+        %p.hidden_help= t :embedded_pages_help_text
+        - @page.child_pages.each do |embedded_page|
+          %p= ajax_check_box embedded_page, :embedded, embedded_page.title
+    %tr.teaser_boxes
+      %th= t :teaser_boxes
+      %td
+        %p.hidden_help= t :teaser_boxes_help_text
+        - @page.child_pages.each do |teaser_page|
+          %p= ajax_check_box teaser_page, :show_as_teaser_box, teaser_page.title
+
+= box class: 'events', title: t(:events) do
+  .show_events_for_group_id
+    = t :show_events_for_group
+    = group_select_in_place @page, :page, :show_events_for_group_id
+  .global_website= setting_check_box @page, :show_only_events_published_on_global_website
+  .local_website= setting_check_box @page, :show_only_events_published_on_local_website
+  .events_limit
+    = t :events_limit
+    = setting_in_place @page, :events_limit
+
+- if can? :use, :permalinks
+  %h1.permalinks= t :permalinks
+  %div
+    = render partial: 'permalinks/edit_permalinks_list', locals: {reference: @page}
+
+%h1.teaser_image= t :teaser_image
+%div
+  %table.settings
+    %tr.teaser_image_url
+      %th= t :teaser_image_url
+      %td
+        #select_teaser_image
+          = best_in_place @page, :teaser_image_url
+          - @page.possible_teaser_image_urls.each do |image_url|
+            = image_tag image_url
+
+= render partial: 'officers/officers_box', locals: {structureable: @page}
+
+%h1.danger_zone= t :danger_zone_tm
+%div
+  %p= t :a_new_page_can_be_destroyed_within_ten_minutes
+  %p= destroy_page_button @page, t(:destroy_page_permanently)
+  %p
+    = archived_label @page
+    - if @page.archived?
+      = archive_button @page, t(:unarchive_page)
+    - else
+      = archive_button @page, t(:archive_page)
+

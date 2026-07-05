@@ -1,0 +1,69 @@
+= render partial: 'groups/tabs', locals: {active: 'settings'}
+
+%h1= @title
+%div
+  %ul.attributes
+    %li.attribute
+      %span.label-wrapper
+        .profile_field_label=t :name
+      %span.value-wrapper= best_in_place_if can?(:rename, @group), @group, :name
+    %li.attribute
+      %span.label-wrapper
+        .profile_field_label=t :extensive_name
+      %span.value-wrapper= best_in_place_if can?(:rename, @group), @group, :extensive_name
+    %li.attribute
+      %span.label-wrapper
+        .profile_field_label=t :token
+      %span.value-wrapper
+        = best_in_place_if can?(:change_token, @group), @group, :token
+        - if @group.kind_of?(Corporation)
+          %p
+            %small= t(:corporation_token_explanation)
+    %li.attribute
+      %span.label-wrapper
+        .profile_field_label=t :internal_token
+      %span.value-wrapper
+        = best_in_place_if can?(:change_internal_token, @group), @group, :internal_token
+        %p
+          %small= t(:internal_group_token_explanation)
+    %li.attribute
+      %span.label-wrapper
+        .profile_field_label=t :group_type
+      %span.value-wrapper= I18n.t(@group.type.try(:underscore) || :group, default: @group.type)
+
+%h1=t :communication
+%div
+  %h2 Absender-Filter
+  %p= "Wer darf an die Gruppe '#{@group.title}' Nachrichten schreiben?"
+  %p= best_in_place @group, :mailing_list_sender_filter, as: :select, collection: Hash[@group.mailing_list_sender_filter_settings.collect { |setting| [setting, I18n.t("sender_filter.#{setting}")] }]
+  
+  - if current_user.beta_tester?
+    %h2=t :mailing_lists
+    %p
+      = link_to group_mailing_lists_path(@group), class: 'btn btn-outline-secondary' do
+        = icon :envelope
+        = t(:manage_mailing_lists)
+      = beta_badge
+
+%h1=t :welcome_message
+%div
+  = best_in_place_if can?(:update, @group), @group, :welcome_message, as: :textarea, inner_class: 'form-control autosize'
+  %p
+    .show_only_in_edit_mode= render partial: 'shared/markdown_help'
+  %hr
+  %p=t :welcome_message_explanation
+  %p
+    = button_to(group_test_welcome_message_path(@group), method: :post, remote: true, class: 'btn btn-outline-secondary test-welcome-message-button') do
+      = icon :envelope
+      Zum Testen an meine eigene Adresse schicken.
+
+-# %h1 Gruppen-Beitritt
+-# %div
+-#   %p Das funktioniert noch nicht:
+-#   %p
+-#     %select
+-#       %option Jeder darf selbstständig beitreten
+-#       %option Nur Administratoren dürfen Mitglieder hinzufügen
+-#       %option Niemand darf Mitglieder hinzufügen (vom System verwaltetete Gruppe)
+-#   %p
+-#     = link_to t(:manage_members), group_path(@group) + "#members", class: 'btn btn-outline-secondary'

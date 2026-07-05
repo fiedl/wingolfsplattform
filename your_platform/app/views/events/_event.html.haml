@@ -1,0 +1,25 @@
+- embedded ||= false
+
+= box classes: ['event', ('embedded' if embedded)] do
+
+  - content_for :box_title do
+    - if (@event && current_navable == @event) || embedded
+      = best_in_place_if can?(:update, event), event, :name
+    - else
+      = link_to event.title, event
+
+  - content_for :box_tools do
+    %a.btn.btn-outline-secondary#ics_export.has_tooltip{href: event_path(id: event.id, format: 'ics'), title: 'Dieses Ereignis als ICS-Datei (iCal) herunterladen, um es in einer Kalender-Anwendung zu öffnen.', data: {placement: 'top'}}
+      = icon :calendar
+      Kalender-Export
+
+  - content_for :box_body do
+    = render partial: 'events/event_details', locals: {event: event}
+
+.col-sm-12.col-xs-12.resizable_col
+  = render partial: 'events/pictures', locals: {event: event}
+
+.col-sm-12.col-xs-12.resizable_col
+  = box title: t(:location), class: 'event_location_map' do
+    .event_location= event.location
+    = google_map event.location

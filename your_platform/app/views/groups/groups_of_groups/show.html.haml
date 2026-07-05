@@ -1,0 +1,19 @@
+.page-header
+  .row.align-itens-center
+    .col-auto
+      .page-title= group.name
+    .col-auto.ml-auto
+      .d-flex
+        %a.btn.btn-white.dropdown-toggle{'data-toggle': "dropdown"}
+          = csv_icon
+          Liste herunterladen
+        .dropdown-menu
+          = link_to groups_group_of_groups_path(group, format: 'xls'), class: 'dropdown-item' do
+            = xls_icon
+            = t(:excel_list)
+          = link_to groups_group_of_groups_path(group, format: 'csv'), class: 'dropdown-item' do
+            = csv_icon
+            = t(:csv_list)
+
+%div
+  = render group
