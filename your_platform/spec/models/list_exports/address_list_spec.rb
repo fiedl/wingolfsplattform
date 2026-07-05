@@ -31,7 +31,10 @@ describe ListExports::AddressList do
     subject { list_export.headers }
     it { should include 'Nachname' }
     it { should include 'Vorname' }
-    it(pending: 'https://github.com/fiedl/wingolfsplattform/issues/110') { should include 'Namenszusatz' }
+    it do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/110'
+      should include 'Namenszusatz'
+    end
     it { should include 'Postanschrift mit Name' }
     it { should include 'Postanschrift' }
     it { should include 'Letzte Änderung der Postanschrift am' }
@@ -54,7 +57,10 @@ describe ListExports::AddressList do
     subject { list_export.to_csv }
     it { should include 'Nachname' }
     it { should include 'Vorname' }
-    it(pending: 'https://github.com/fiedl/wingolfsplattform/issues/110') { should include 'Namenszusatz' }
+    it do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/110'
+      should include 'Namenszusatz'
+    end
     it { should include 'Postanschrift mit Name' }
     it { should include 'Postanschrift' }
     it { should include 'Letzte Änderung der Postanschrift am' }
@@ -74,7 +80,10 @@ describe ListExports::AddressList do
     it { should include @user.last_name }
     it { should include @user.first_name }
     it { should include @user_title_without_name }
-    it(pending: 'https://github.com/fiedl/wingolfsplattform/issues/110') { should include "\"Herrn\nDr. #{@user.name} M.Sc.\n#{@corporation.name}\nPariser Platz 1\n10117 Berlin\"" }
+    it do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/110'
+      should include "\"Herrn\nDr. #{@user.name} M.Sc.\n#{@corporation.name}\nPariser Platz 1\n10117 Berlin\""
+    end
     it { should include "\"#{@user.postal_address}\"" }
     it { should include "20.06.2014" }
     it { should include "Pariser Platz 1" }

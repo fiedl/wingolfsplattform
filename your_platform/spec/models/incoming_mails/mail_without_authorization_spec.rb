@@ -27,7 +27,10 @@ describe IncomingMails::MailWithoutAuthorization do
       @group = developers_group
     end
 
-    it(pending: 'https://github.com/fiedl/wingolfsplattform/issues/109') { should be_kind_of Array }
+    it do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/109'
+      should be_kind_of Array
+    end
 
     describe "when the sender is in the database" do
       describe "when the user has an account" do
