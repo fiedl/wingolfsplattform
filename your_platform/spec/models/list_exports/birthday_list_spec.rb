@@ -19,7 +19,7 @@ describe ListExports::BirthdayList do
   
   describe "#headers" do
     subject { @list_export.headers }
-    specify { subject.join(";").should == "Nachname;Vorname;Namenszusatz;Geburtsdatum;Nächster Geburtstag;Geburtstag" }
+    specify(pending: 'https://github.com/fiedl/wingolfsplattform/issues/110') { subject.join(";").should == "Nachname;Vorname;Namenszusatz;Geburtsdatum;Nächster Geburtstag;Geburtstag" }
   end
   
   describe "#to_csv" do

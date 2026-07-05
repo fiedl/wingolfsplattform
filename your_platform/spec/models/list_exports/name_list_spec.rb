@@ -22,12 +22,12 @@ describe ListExports::NameList do
 
   describe "#headers" do
     subject { @list_export.headers }
-    it { should include 'Nachname', 'Vorname', 'Namenszusatz', 'Persönlicher Titel', 'Akademischer Grad', "Mitglied in 'MyGroup' seit" }
+    it(pending: 'https://github.com/fiedl/wingolfsplattform/issues/110') { should include 'Nachname', 'Vorname', 'Namenszusatz', 'Persönlicher Titel', 'Akademischer Grad', "Mitglied in 'MyGroup' seit" }
   end
 
   describe "#to_csv" do
     subject { @list_export.to_csv }
-    it { should include "Nachname;Vorname;Namenszusatz;Persönlicher Titel;Akademischer Grad;Mitglied in 'MyGroup' seit" }
+    it(pending: 'https://github.com/fiedl/wingolfsplattform/issues/110') { should include "Nachname;Vorname;Namenszusatz;Persönlicher Titel;Akademischer Grad;Mitglied in 'MyGroup' seit" }
     it { should include "#{@user.last_name};#{@user.first_name};#{@user_title_without_name};Dr.;Dr. rer. nat.;#{I18n.l(Date.today)}" }
   end
   

@@ -12,7 +12,7 @@ describe ListExport do
     @user_title_without_name = '""' if @user_title_without_name.blank? # to match the csv format
   end
 
-  describe "#phone_list: " do
+  describe "#phone_list: ", pending: 'https://github.com/fiedl/wingolfsplattform/issues/110' do
     before do
       @phone_field = @user.profile_fields.create(label: 'Phone', type: 'ProfileFields::Phone', value: '123456').becomes(ProfileFields::Phone)
       @fax_field = @user.profile_fields.create(label: 'Fax', type: 'ProfileFields::Phone', value: '123457').becomes(ProfileFields::Phone)
@@ -35,7 +35,7 @@ describe ListExport do
     end
   end
 
-  describe "member_development: " do
+  describe "member_development: ", pending: 'https://github.com/fiedl/wingolfsplattform/issues/110' do
     before do
       @user.direct_memberships.destroy_all
       @corporation = create :corporation_with_status_groups

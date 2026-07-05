@@ -12,7 +12,7 @@ describe Issue do
     it { should_not include @resolved_issue }
   end
   
-  describe ".scan" do
+  describe ".scan", pending: 'https://github.com/fiedl/wingolfsplattform/issues/111' do
     describe "()" do
       subject { Issue.scan }
       describe "when a bad address is present" do

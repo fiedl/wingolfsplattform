@@ -22,12 +22,12 @@ describe ListExports::EmailList do
     @list_export = ListExports::EmailList.from_group(@group)
   end
 
-  describe "#headers" do
+  describe "#headers", pending: 'https://github.com/fiedl/wingolfsplattform/issues/110' do
     subject { @list_export.headers }
     it { should include 'Nachname', 'Vorname', 'Namenszusatz', 'Beschriftung', 'E-Mail-Adresse', 'Mitglied seit' }
   end
 
-  describe "#to_csv" do
+  describe "#to_csv", pending: 'https://github.com/fiedl/wingolfsplattform/issues/110' do
     subject { @list_export.to_csv }
     it { should ==
       "Nachname;Vorname;Namenszusatz;Beschriftung;E-Mail-Adresse;Mitglied seit\n" +

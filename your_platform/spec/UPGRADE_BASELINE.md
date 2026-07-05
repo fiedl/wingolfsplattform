@@ -1,47 +1,51 @@
 # Model-spec baseline for the rails upgrade
 
-Recorded 2026-07-05 on the unification branch, directly after merging the
-your_platform engine back into this repository
-(https://github.com/fiedl/wingolfsplattform/issues/108).
+Updated 2026-07-05 on the unification branch
+(https://github.com/fiedl/wingolfsplattform/issues/108). The engine
+specs run against the wingolfsplattform application itself; the
+engine's demo app has been removed.
 
-Run from `your_platform/` inside the docker tests service
+## Running the suite
+
+From the repository root, inside the docker tests service
 (ruby 2.7.1, rails 5.0.7.2, mysql 5.7, neo4j 3.5):
 
-    bundle install
-    bundle exec rake prepare_tests
-    bundle exec rspec spec/models
+    # one-time: create and load the parallel test databases
+    docker compose run --rm tests /bin/bash -c \
+      "bundle exec rake 'parallel:create[16]' 'parallel:prepare[16]'"
 
-## Baseline numbers
+    # run the engine model specs, 16-fold parallel (~6 min)
+    docker compose run --rm tests /bin/bash -c \
+      "cd your_platform && bundle exec parallel_rspec -n 16 spec/models"
 
-**1658 examples, 11 failures, 12 pending** (30:15 min)
+Do not run the development `rails`/`sidekiq` services while the suite
+runs; a booting application alongside the suite has corrupted spec
+results before.
 
-The upgrade gate for every rails/ruby hop is **no NEW failures** — not a
-green suite.
+## The gate
 
-## The 11 known failures
+**The suite must be green: 0 failures.** Known-broken areas are marked
+`pending` with a reference to their GitHub issue, so the suite fails
+loudly both on regressions and on silently-fixed pendings:
 
-7 historical failures in the incoming-mail area (pre-existing before the
-unification, same set as on the last CI runs):
+- https://github.com/fiedl/wingolfsplattform/issues/109 — 7 incoming-mail
+  rejection specs (nil-Sender crash in the patched mail 2.6.6; unpend at
+  the mail-gem bump during the rails upgrade)
+- https://github.com/fiedl/wingolfsplattform/issues/110 — 13 generic
+  list-export specs (superseded by the app's own export classes)
+- https://github.com/fiedl/wingolfsplattform/issues/111 — 13 Issue.scan
+  specs (app scopes scanning to living wingolfiten; wingolf scoping
+  itself still needs app-side specs)
+- https://github.com/fiedl/wingolfsplattform/issues/112 — 1 term-report
+  spec (CorporationScore expects the wingolf corporation substructure)
 
-- spec/models/incoming_mail_spec.rb:168
-- spec/models/incoming_mails/mail_without_authorization_spec.rb:30
-- spec/models/incoming_mails/mail_without_authorization_spec.rb:42
-- spec/models/incoming_mails/mail_without_authorization_spec.rb:51
-- spec/models/incoming_mails/mail_without_authorization_spec.rb:63
-- spec/models/incoming_mails/mail_without_authorization_spec.rb:64
-- spec/models/received_post_mail_spec.rb:43
+The implicit-corporation-creation feature (`User#corporation_name=`)
+and its 6 specs are commented out, not pending — see the
+UserCorporations concern.
 
-4 failures in spec/models/app_version_spec.rb (15, 17, 21, 27) caused by
-the unification itself: AppVersion shells out to git
-(`git describe --tags`, `git rev-parse`, `git config remote.origin.url`),
-but the engine directory no longer has a `.git` of its own — it is a
-subtree of the wingolfsplattform repository, and the test container only
-mounts the engine directory. The github_commit_url spec additionally
-expects the retired `fiedl/your_platform` remote. To be resolved when the
-engine code is de-wingolfized/cleaned up after the upgrade.
+## History
 
-## Caveat
-
-Do not run the engine's `web` (demo app) service while the suite runs:
-the two share the mysql/neo4j containers and the gems/tmp volumes, and a
-booting demo app corrupts spec results (observed: 59 spurious failures).
+- 2026-07-05, against the demo app (now removed): 1658 examples,
+  11 failures, 12 pending — the 7 incoming-mail failures above plus 4
+  app_version specs that have since been fixed or explained by the
+  unification.

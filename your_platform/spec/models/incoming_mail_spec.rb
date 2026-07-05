@@ -163,7 +163,7 @@ describe IncomingMail do
 
     it { should be_kind_of Array }
 
-    describe "when the group exists" do
+    describe "when the group exists", pending: 'https://github.com/fiedl/wingolfsplattform/issues/109' do
       before { developers_group }
       it { should be_kind_of Array }
     end
