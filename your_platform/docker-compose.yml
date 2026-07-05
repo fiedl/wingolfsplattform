@@ -162,8 +162,10 @@ services:
     volumes:
       - your_platform_neo4j_data:/data
     ports:
-      - "0.0.0.0:7474:7474"
-      - "0.0.0.0:7687:7687"
+      # High host ports: the default neo4j ports may be taken by other
+      # services on the development host.
+      - "0.0.0.0:17474:7474"
+      - "0.0.0.0:17687:7687"
     environment:
       NEO4J_AUTH: "neo4j/trinity"
     networks:
