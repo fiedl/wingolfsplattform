@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Shared CI setup. Source this from CI scripts (bin/rspec_ci) or run it
+# standalone to build the test images:
+#
+#     bin/setup_ci
+#
+# Several CI jobs may run concurrently on the same machine. Each job gets
+# its own docker compose project, derived from the github-actions runner
+# name, so their containers, networks and volumes do not collide.
+
+export CI="${CI:-github}"
+
+echo_blue()  { set +x; printf "\033[1;34m%s\033[0m\n" "$1"; set -x; }
+echo_red()   { set +x; printf "\033[1;31m%s\033[0m\n" "$1"; set -x; }
+echo_green() { set +x; printf "\033[1;32m%s\033[0m\n" "$1"; set -x; }
+
+section() {
+  set +x
+  echo ""
+  echo_blue "$1"
+  set -x
+}
+
+clean_up() {
+  section "clean up"
+  $DOCKER_COMPOSE down --remove-orphans
+}
+
+failed() {
+  echo_red "Failed."
+  clean_up
+  exit 1
+}
+
+# Enable printing of commands as they are executed.
+set -x
+
+section "define docker compose scope for parallel jobs"
+if [ -z "$COMPOSE_PROJECT_NAME" ]; then
+  if [ -n "$RUNNER_NAME" ]; then
+    # Compose project names must be lowercase alphanumeric with dashes.
+    export COMPOSE_PROJECT_NAME="$(echo "$RUNNER_NAME" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9\n' '-')"
+    echo "Setting COMPOSE_PROJECT_NAME from RUNNER_NAME: $COMPOSE_PROJECT_NAME"
+  else
+    export COMPOSE_PROJECT_NAME="ci-$(LC_ALL=C tr -dc a-z0-9 </dev/urandom | head -c 13; echo '')"
+    echo "RUNNER_NAME is not set. Generated random COMPOSE_PROJECT_NAME: $COMPOSE_PROJECT_NAME"
+  fi
+fi
+
+# The explicit --file makes sure a local docker-compose.override.yml can
+# never leak into CI runs.
+export DOCKER_COMPOSE="docker compose --file docker-compose.yml --project-name=$COMPOSE_PROJECT_NAME"
+export DOCKER_COMPOSE_RUN="$DOCKER_COMPOSE run --rm"
+
+section "docker compose build"
+$DOCKER_COMPOSE build tests || failed

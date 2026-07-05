@@ -153,6 +153,11 @@ Sidekiq::Testing.inline!
 
 RSpec.configure do |config|
 
+  # Remember the status of each example, so that CI can rerun just the
+  # failed ones. One file per parallel test process.
+  #
+  config.example_status_persistence_file_path = "tmp/rspec/examples#{ENV['TEST_ENV_NUMBER']}.txt"
+
   # Inclusion of helper methods.
   # ......................................................................................
   #

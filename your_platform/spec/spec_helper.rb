@@ -173,6 +173,11 @@ RSpec.configure do |config|
   #
   config.infer_spec_type_from_file_location!
 
+  # Remember the status of each example, so that CI can rerun just the
+  # failed ones. One file per parallel test process.
+  #
+  config.example_status_persistence_file_path = "tmp/rspec/examples#{ENV['TEST_ENV_NUMBER']}.txt"
+
   # Enables both, the new `expect` and the old `should` syntax.
   # https://www.relishapp.com/rspec/rspec-expectations/docs/syntax-configuration
   #
