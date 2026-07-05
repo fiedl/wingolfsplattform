@@ -24,15 +24,15 @@ describe AppVersion do
     end
     describe ".github_commit_url" do
       subject { AppVersion.github_commit_url }
-      it { should == "https://github.com/fiedl/your_platform/commit/#{AppVersion.commit_id}" }
+      it { should == "https://github.com/fiedl/wingolfsplattform/commit/#{AppVersion.commit_id}" }
     end
     describe ".changelog_url" do
       subject { AppVersion.changelog_url }
-      it { should = "https://github.com/fiedl/your_platform/commits/#{AppVersion.branch}" }
+      it { should == "https://github.com/fiedl/wingolfsplattform/commits/#{AppVersion.branch}" }
     end
     describe ".app_name" do
       subject { AppVersion.app_name }
-      it { should == "MyPlatform" }
+      it { should == "Wingolfsplattform" }
     end
   end
 end
