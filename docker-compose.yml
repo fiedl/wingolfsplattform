@@ -83,13 +83,22 @@ services:
       MYSQL_HOST: mysql
       REDIS_HOST: redis
       NEO4J_REST_URL_TEST: http://neo4j:trinity@neo4j:7474
+      CHROME_URL: http://chrome:4444
     depends_on:
       - mysql_test
       - redis
       - neo4j
+      - chrome
     links:
       - "mysql_test:mysql"
     command: /bin/bash -c "bundle exec rake db:create db:migrate && bundle exec rspec spec/models"
+
+  chrome:
+    image: selenium/standalone-chromium:4.27.0
+    shm_size: 2gb
+    environment:
+      SE_NODE_MAX_SESSIONS: 4
+      SE_NODE_SESSION_TIMEOUT: 600
 
   guard:
     build: .

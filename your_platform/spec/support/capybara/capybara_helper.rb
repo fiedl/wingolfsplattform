@@ -18,21 +18,20 @@ module CapybaraHelper
   end
 
   def check(label_text, options = {})
-    find(:checkbox, t(label_text, default: label_text), options).set(true) if poltergeist?
     super(t(label_text, default: label_text), options)
   end
 
   def uncheck(label_text, options = {})
-    find(:checkbox, t(label_text, default: label_text), options).set(false) if poltergeist?
     super(t(label_text, default: label_text), options)
   end
 
   def selenium?
-    Capybara.current_driver.in? [:selenium, :selenium_with_long_timeout]
+    Capybara.current_driver.in? [:selenium, :selenium_with_long_timeout, :headless_chrome]
   end
 
   def poltergeist?
-    Capybara.current_driver == :poltergeist
+    # The poltergeist driver is gone; feature specs run in chrome now.
+    false
   end
 
   def give_it_some_time_to_finish_the_test_before_wiping_the_database

@@ -50,10 +50,11 @@ source 'https://rubygems.org' do
     gem 'parallel_tests'
     gem 'rspec-instafail'
     gem 'rspec-retry'
-    gem 'capybara'
-    gem 'selenium-webdriver'
-    gem 'poltergeist'
-    gem 'factory_girl_rails'
+    gem 'capybara', '~> 3.0'
+    gem 'selenium-webdriver', '~> 4.0'
+    # Pin: factory_bot 6.3+ requires ruby 3, but the old bundler ignores
+    # the gem's required_ruby_version.
+    gem 'factory_bot_rails', '~> 6.2.0'
     gem 'database_cleaner'
     gem 'email_spec'
     gem 'timecop'
@@ -97,10 +98,5 @@ source 'https://rubygems.org' do
   gem 'rails-erd', require: false, group: :development
 
 end
-
-source 'https://rails-assets.org'
-#source 'https://rails-assets.org' do
-#  gem 'rails-assets-tether', '>= 1.1.0'
-#end
 
 ruby '2.7.1'

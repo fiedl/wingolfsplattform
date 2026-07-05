@@ -1,9 +1,9 @@
-FactoryGirl.define do
+FactoryBot.define do
 
   factory :page do
     
     sequence( :title ) { |n| "Page #{n}" }
-    content "This is some <strong>example content</strong>."
+    content { "This is some <strong>example content</strong>." }
 
   end
 

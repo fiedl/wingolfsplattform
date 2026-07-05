@@ -46,9 +46,9 @@ end
 describe "Page (DagLinkNode)" do
 
   def setup_pages
-    @page = FactoryGirl.create( :page )
-    @parent = FactoryGirl.create( :page )
-    @grandfather = FactoryGirl.create( :page )
+    @page = FactoryBot.create( :page )
+    @parent = FactoryBot.create( :page )
+    @grandfather = FactoryBot.create( :page )
     @page.parent_pages << @parent
     @parent.parent_pages << @grandfather
   end
