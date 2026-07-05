@@ -8,9 +8,25 @@ GIT
       activerecord (>= 4.0.0)
 
 GIT
-  remote: https://github.com/fiedl/your_platform
-  revision: 2c5e50064f41c9653f1de57b5cdef059467eac9b
-  branch: master
+  remote: https://github.com/refile/refile-mini_magick
+  revision: 27b6c6c7affcc302a59068b8b3f458cb147c2fa6
+  specs:
+    refile-mini_magick (0.2.0)
+      image_processing (>= 0.4.1, < 1.0)
+      mini_magick (>= 4.3.5)
+      refile (~> 0.5)
+
+GIT
+  remote: https://github.com/sobrinho/refile
+  revision: e943b10721ede830e1a986db591080e992aefbd4
+  specs:
+    refile (0.6.2)
+      mime-types
+      rest-client (~> 1.8)
+      sinatra (>= 2.0.0, <= 3.0.0)
+
+PATH
+  remote: your_platform
   specs:
     your_platform (1.0.1)
       actionpack (>= 4.2.5.2)
@@ -96,24 +112,6 @@ GIT
       vcardigan
       wannabe_bool
       yard (>= 0.9.20)
-
-GIT
-  remote: https://github.com/refile/refile-mini_magick
-  revision: 27b6c6c7affcc302a59068b8b3f458cb147c2fa6
-  specs:
-    refile-mini_magick (0.2.0)
-      image_processing (>= 0.4.1, < 1.0)
-      mini_magick (>= 4.3.5)
-      refile (~> 0.5)
-
-GIT
-  remote: https://github.com/sobrinho/refile
-  revision: e943b10721ede830e1a986db591080e992aefbd4
-  specs:
-    refile (0.6.2)
-      mime-types
-      rest-client (~> 1.8)
-      sinatra (>= 2.0.0, <= 3.0.0)
 
 GEM
   remote: https://rails-assets.org/
