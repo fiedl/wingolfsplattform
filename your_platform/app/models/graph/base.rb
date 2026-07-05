@@ -156,6 +156,10 @@ class Graph::Base
       p "Excon::Error::Socket: end of file reached (EOFError). Retrying."
       counter += 1
       if counter < 100
+        # Back off briefly: when many parallel test processes hammer the
+        # neo4j http connector, immediate retries just extend the burst
+        # that caused the connection drop.
+        sleep 0.05 * counter
         retry
       else
         raise "Giving up on neo4j connection."
