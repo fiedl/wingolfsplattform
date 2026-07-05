@@ -49,6 +49,7 @@ source 'https://rubygems.org' do
     gem 'rspec-its'
     gem 'parallel_tests'
     gem 'rspec-instafail'
+    gem 'rspec-retry'
     gem 'capybara'
     gem 'selenium-webdriver'
     gem 'poltergeist'

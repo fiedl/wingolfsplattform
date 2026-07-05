@@ -41,7 +41,7 @@ require 'rubygems'
 # Required Application Environment
 # ----------------------------------------------------------------------------------------
 ENV['RAILS_ENV'] = 'test'
-require File.expand_path('../../demo_app/my_platform/config/environment', __FILE__)
+require File.expand_path('../../../config/environment', __FILE__)
 
 # Does not work :(
 # # Stop if the database is not migrated.
@@ -74,7 +74,7 @@ require 'rspec/retry'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join('../../spec/support/**/*.rb')].each {|f| require f}
+Dir[File.expand_path('../support/**/*.rb', __FILE__)].sort.each {|f| require f}
 
 
 # Factories, Stubs and Mocks
