@@ -1,6 +1,13 @@
 name: tests
 on: [push]
 
+# A new push supersedes the running jobs of the same branch. Without
+# this, stacked runs pile up compose stacks (mysql, neo4j, chrome per
+# job) on the runner host until it starves.
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   CI: github
 
