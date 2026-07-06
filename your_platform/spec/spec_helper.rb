@@ -18,18 +18,12 @@
 #                   integration tests.
 #                   https://github.com/jnicklas/capybara
 #
-# PhantomJS         Simulated browser for running integration tests headless,
-#                   including the execution of JavaScript and AJAX requests.
-#                   http://phantomjs.org/
-#
-# poltergeist       Driver to use PhantomJS with Capybara.
-#                   https://github.com/jonleighton/poltergeist
-#
 # Selenium          http://www.seleniumhq.org
-# Chrome-Headless   https://robots.thoughtbot.com/headless-feature-specs-with-chrome
+# Chrome-Headless   Feature specs run in a headless chrome, either remote
+#                   (dockerized, CHROME_URL) or local.
 #
-# FactoryGirls      Library to provide test data objects.
-#                   https://github.com/thoughtbot/factory_girl
+# FactoryBot        Library to provide test data objects.
+#                   https://github.com/thoughtbot/factory_bot
 #
 
 # Required Basic Libraries
@@ -83,9 +77,9 @@ Dir[File.expand_path('../support/**/*.rb', __FILE__)].sort.each {|f| require f}
 # Mock objects are simplified objects ("stub") that are used rather than the
 # real, more complex objects, e.g. in order to increase performance.
 #
-# Rather than `rspec-mocks` fixtures, we use FactoryGirl instead.
+# Rather than `rspec-mocks` fixtures, we use FactoryBot instead.
 #
-FactoryGirl.definition_file_paths = %w(spec/factories)
+FactoryBot.definition_file_paths = %w(spec/factories)
 
 # In order to not hit the geocoding API, we use stub data for geocoding.
 #
@@ -95,49 +89,38 @@ Geocoder.configure( lookup: :test )
 # Capybara & Poltergeist  Configuration
 # ----------------------------------------------------------------------------------------
 
-if ENV['SELENIUM']
-  Capybara.register_driver :selenium_with_long_timeout do |app|
-    client = Selenium::WebDriver::Remote::Http::Default.new
-    client.read_timeout = 360
-    client.open_timeout = 360
-    Capybara::Selenium::Driver.new(app, http_client: client)
+require 'selenium/webdriver'
+
+# Capybara 3 defaults to puma as its test server, which is not bundled.
+Capybara.server = :webrick
+
+# Feature specs run against a browser in a separate docker container
+# (CHROME_URL), so the app under test must be reachable from there:
+# bind to the container's address instead of localhost, one port per
+# parallel test process.
+Capybara.server_host = ENV.fetch("CAPYBARA_SERVER_HOST") { IPSocket.getaddress(Socket.gethostname) }
+Capybara.server_port = ENV.fetch("CAPYBARA_SERVER_PORT", 33123).to_i + ENV['TEST_ENV_NUMBER'].to_i
+Capybara.app_host = "http://#{Capybara.server_host}:#{Capybara.server_port}"
+
+Capybara.register_driver :headless_chrome do |app|
+  options = Selenium::WebDriver::Chrome::Options.new
+  options.add_argument('--lang=de-DE')
+  options.add_argument('--no-sandbox')
+  options.add_argument('--disable-gpu')
+  options.add_argument('--disable-dev-shm-usage')
+  options.add_argument('--window-size=1280,1024')
+  options.add_preference(:prefs, { intl: { accept_languages: "de-DE,de" } })
+  client = Selenium::WebDriver::Remote::Http::Default.new
+  client.read_timeout = 360
+  client.open_timeout = 60
+  if ENV['CHROME_URL'].present?
+    Capybara::Selenium::Driver.new(app, browser: :remote, url: ENV['CHROME_URL'], options: options, http_client: client)
+  else
+    options.add_argument('--headless')
+    Capybara::Selenium::Driver.new(app, browser: :chrome, options: options, http_client: client)
   end
-  Capybara.javascript_driver = :selenium_with_long_timeout
 end
-unless ENV['SELENIUM']
-  require 'capybara/poltergeist'
-  Capybara.register_driver :poltergeist do |app|
-    # The `inspector: true` argument gives you the possibility to stop the execution
-    # of the tests using `page.driver.debug` in your spec code. This will open an
-    # inspector in the browser that allows you to see the current DOM structure and
-    # other information useful for debugging tests.
-    #
-    Capybara::Poltergeist::Driver.new(app, {
-      port: 51674 + ENV['TEST_ENV_NUMBER'].to_i,
-      inspector: true,
-      js_errors: (not ENV['NO_JS_ERRORS'].present?),
-      timeout: 120
-    })
-  end
-  Capybara.javascript_driver = :poltergeist
-end
-if ENV['USE_CHROMEDRIVER']
-  require 'selenium/webdriver'
-  # https://robots.thoughtbot.com/headless-feature-specs-with-chrome
-  Capybara.register_driver :chrome do |app|
-    Capybara::Selenium::Driver.new(app, browser: :chrome)
-  end
-  Capybara.register_driver :headless_chrome do |app|
-    capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-      chromeOptions: {args: %w(headless disable-gpu)}
-    )
-    Capybara::Selenium::Driver.new(app,
-      browser: :chrome,
-      desired_capabilities: capabilities
-    )
-  end
-  Capybara.javascript_driver = :headless_chrome
-end
+Capybara.javascript_driver = :headless_chrome
 
 
 # Set the time that Capybara should wait for ajax requests to be finished.
@@ -173,6 +156,11 @@ RSpec.configure do |config|
   #
   config.infer_spec_type_from_file_location!
 
+  # Remember the status of each example, so that CI can rerun just the
+  # failed ones. One file per parallel test process.
+  #
+  config.example_status_persistence_file_path = "tmp/rspec/examples#{ENV['TEST_ENV_NUMBER']}.txt"
+
   # Enables both, the new `expect` and the old `should` syntax.
   # https://www.relishapp.com/rspec/rspec-expectations/docs/syntax-configuration
   #
@@ -190,7 +178,7 @@ RSpec.configure do |config|
   # in the specs.
   #
   config.include RSpec::Matchers
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
   config.include EmailSpec::Helpers
   config.include EmailSpec::Matchers
 
@@ -355,9 +343,9 @@ RSpec.configure do |config|
     # Emulate Application Settings
     Setting.support_email = "support@example.com"
 
-    # There are some actions FactoryGirl needs to perform on every run.
+    # There are some actions FactoryBot needs to perform on every run.
     #
-    FactoryGirl.reload
+    FactoryBot.reload
     # Dir[Rails.root.join('../../spec/support/**/*.rb')].each {|f| require f}
 
   end

@@ -25,7 +25,10 @@ Rails.application.configure do
 
   # Caching.
   config.action_controller.perform_caching = true  # default: false
-  config.cache_store = :redis_store, 'redis://localhost:6379/0/', { expires_in: 90.minutes, namespace: 'test_cache' }
+  # The cache store is configured centrally in the engine's
+  # config/initializers/cache.rb (redis via REDIS_HOST, namespaced per
+  # environment and per parallel test process). Anything set here would
+  # be overridden there.
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false

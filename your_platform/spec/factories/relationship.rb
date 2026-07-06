@@ -1,11 +1,11 @@
-FactoryGirl.define do
+FactoryBot.define do
 
   # relationship
   #
   factory :relationship do
 
     association :who, factory: :user
-    is "Brother"
+    is { "Brother" }
     association :of, factory: :user
 
   end

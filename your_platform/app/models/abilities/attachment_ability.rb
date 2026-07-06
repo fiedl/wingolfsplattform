@@ -30,8 +30,22 @@ class Abilities::AttachmentAbility < Abilities::BaseAbility
       attachment.parent.kind_of?(Post) and parent_ability_can?(:read, attachment.parent)
     end
 
+    # Page attachments can be read if the page can be read. This rule got
+    # lost when the attachment rules were extracted from the ability
+    # monolith in 2020 (8465e61d) -- the local-officer rules below also
+    # depend on it, since they require the attachment to be readable.
+    can [:read, :download], Attachment do |attachment|
+      attachment.parent.kind_of?(Page) and parent_ability_can?(:read, attachment.parent)
+    end
+
     if not read_only_mode?
-      can [:update, :destroy], Attachment, author_user_id: user.id
+      # Authors keep control over their attachments only as long as they
+      # can still read them: whoever leaves a group loses access to its
+      # documents, including self-authored ones (e.g. Protokolle).
+      can [:update, :destroy], Attachment do |attachment|
+        attachment.author_user_id == user.id and
+          (parent_ability_can?(:read, attachment) or parent_ability_can?(:read, attachment.parent))
+      end
 
       # If a user is contact person of an event, he can provide pages and
       # attachment for this event.

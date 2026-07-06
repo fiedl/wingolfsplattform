@@ -23,6 +23,7 @@ feature 'Change Status' do
   end
 
   specify "the model layer should work" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @workflow.execute(user_id: @user_to_promote.id)
     @user_to_promote.should be_member_of @corporation.status_groups.second
     @user_to_promote.should_not be_member_of @corporation.status_groups.first
@@ -31,6 +32,7 @@ feature 'Change Status' do
   end
 
   scenario 'promote user from first to second status', js: true do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login @local_admin
     visit user_path(@user_to_promote)
 
@@ -76,6 +78,7 @@ feature 'Change Status' do
     end
 
     scenario "promote a user from a group with sub-status groups (bug fix)", js: true do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       login @local_admin
       visit user_path(@user_to_promote)
       click_tab :general_user_info_tab

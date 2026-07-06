@@ -1,11 +1,11 @@
-FactoryGirl.define do
+FactoryBot.define do
 
   # regular user
   #
   factory :user do
 
     sequence( :last_name ) { |n| "Doe#{n}" }
-    first_name "John"
+    first_name { "John" }
 
     sequence( :alias ) { |n| "j.doe#{n}" }
     sequence( :email ) { |n| "j.doe#{n}@example.com" }
@@ -102,7 +102,7 @@ FactoryGirl.define do
 
     factory :local_admin do
       transient do
-        of nil  # syntax: create(:local_admin, of: @group)
+        of { nil }  # syntax: create(:local_admin, of: @group)
       end
       after :create do |admin, evaluator|
         raise 'Please set object to administrate, e.g.:  create :local_admin, of: @group' unless evaluator.of.respond_to?(:admins)

@@ -26,7 +26,7 @@ describe Group do
 
   describe "(BVs) " do
     before do
-      # in this context, this should be a group, but FactoryGirl returns a Bv-type object.
+      # in this context, this should be a group, but FactoryBot returns a Bv-type object.
       @bv_group = create :bv
       @bvs_parent_group = @bv_group.parent_groups.first
       @group = create( :group )

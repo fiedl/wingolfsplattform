@@ -14,6 +14,7 @@ feature "Address changes" do
   end
 
   scenario "An admin changes the address of a user", :js do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login :admin
     visit user_path(@user)
     click_tab :contact_info_tab

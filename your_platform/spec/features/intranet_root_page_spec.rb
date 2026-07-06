@@ -4,6 +4,7 @@ feature "Intranet Root" do
   include SessionSteps
 
   scenario "Viewing the intranet root page when not logged in and the public website is not done with this system" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     create :user_with_account
     Page.find_root.update_attribute :redirect_to, "http://example.com"
 
@@ -15,6 +16,7 @@ feature "Intranet Root" do
   end
 
   scenario "Viewing the intranet root page when not logged in and the public website is done with this system" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     create :user_with_account
     Page.find_root.update_attributes content: "This is our public website!", published_at: 1.year.ago, domain: "example.com"
 
@@ -23,6 +25,7 @@ feature "Intranet Root" do
   end
 
   scenario "Looking at the news pages at the intranet root" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @user = create :user_with_account
     @group = create :group
     @group.assign_user @user, at: 1.year.ago

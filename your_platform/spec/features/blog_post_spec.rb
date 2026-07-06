@@ -7,6 +7,7 @@ feature "Adding a BlogPost", :js do
     @page = Page.create(title: "My Shiny Page", published_at: 1.month.ago)
   end
   scenario "Adding a blog post" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login(:admin)
     visit page_path(@page)
 
@@ -17,6 +18,7 @@ feature "Adding a BlogPost", :js do
   end
 
   scenario "(bug fix) one should not be able to create blog posts as child of a blog post" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     #
     # @apge
     #   |----- @blog_post

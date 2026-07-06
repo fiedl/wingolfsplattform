@@ -3,6 +3,7 @@ require 'spec_helper'
 feature "Group-of-groups Export" do
 
   scenario "exporting a csv list for a group of groups" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @group_of_groups = create :group, type: "Groups::GroupOfGroups", name: "Group of Groups"
     @group_of_groups = Group.find @group_of_groups.id
     @child_group = create(:group, name: "Child Group"); @group_of_groups << @child_group

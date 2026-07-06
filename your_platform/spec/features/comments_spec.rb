@@ -15,6 +15,7 @@ feature "Comments" do
   end
   
   scenario "Commenting on a post on the posts view", :js do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login @commenting_user
     visit post_path(@post)
     

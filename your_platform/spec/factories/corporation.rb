@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
 
   factory :corporation do
     sequence(:token) { |n| ( "A".."Z" ).to_a[ n ] }

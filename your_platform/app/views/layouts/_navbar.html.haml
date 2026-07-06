@@ -38,20 +38,24 @@
               %li
                 = link_to corporations_path, class: "dropdown-item #{'active' if controller_name == 'corporations'}" do
                   Verbindungen
-              %li
-                = link_to groups_group_of_groups_path(Groups::PhvsParent.first), class: "dropdown-item #{'active' if current_navable == Groups::PhvsParent.first}" do
-                  Philistervereine
-              %li
-                = link_to groups_group_of_groups_path(Group.bvs_parent), class: "dropdown-item #{'active' if current_navable == Group.bvs_parent}" do
-                  Bezirksverbände
+              - if (phvs_parent = Groups::PhvsParent.first)
+                %li
+                  = link_to groups_group_of_groups_path(phvs_parent), class: "dropdown-item #{'active' if current_navable == phvs_parent}" do
+                    Philistervereine
+              - if (bvs_parent = Group.bvs_parent)
+                %li
+                  = link_to groups_group_of_groups_path(bvs_parent), class: "dropdown-item #{'active' if current_navable == bvs_parent}" do
+                    Bezirksverbände
               .dropdown-divider
-              %li
-                = link_to group_officers_path(group_id: (g = Group.where(name: "Alle Bundesamtsträger").first).id), class: "dropdown-item #{'active' if current_navable == g}" do
-                  Bundesamtsträger
+              - if (bundesamtstraeger = Group.where(name: "Alle Bundesamtsträger").first)
+                %li
+                  = link_to group_officers_path(group_id: bundesamtstraeger.id), class: "dropdown-item #{'active' if current_navable == bundesamtstraeger}" do
+                    Bundesamtsträger
               %li
                 = link_to "Vorort", vorort_path, class: "dropdown-item #{'active' if controller_name == 'vororte'}"
-              %li
-                = link_to "Geschäftsstelle", Page.where(title: "Geschäftsstelle").first, class: "dropdown-item #{'active' if current_navable == Page.where(title: "Geschäftsstelle").first}"
+              - if (geschaeftsstelle = Page.where(title: "Geschäftsstelle").first)
+                %li
+                  = link_to "Geschäftsstelle", geschaeftsstelle, class: "dropdown-item #{'active' if current_navable == geschaeftsstelle}"
               .dropdown-divider
               %li
                 = link_to websites_path, class: "dropdown-item #{'active' if controller_name == 'websites'}" do
@@ -82,12 +86,16 @@
                     = corporation.name
               .dropdown-divider
               %li
-                = link_to "Alle Wingolfiten", group_members_path(Group.alle_wingolfiten), class: 'dropdown-item'
-                = link_to "Alle Aktiven", group_members_path(Group.alle_aktiven), class: 'dropdown-item'
-                = link_to "Alle Philister", group_members_path(Group.alle_philister), class: 'dropdown-item'
+                - if (alle_wingolfiten = Group.alle_wingolfiten)
+                  = link_to "Alle Wingolfiten", group_members_path(alle_wingolfiten), class: 'dropdown-item'
+                - if (alle_aktiven = Group.alle_aktiven)
+                  = link_to "Alle Aktiven", group_members_path(alle_aktiven), class: 'dropdown-item'
+                - if (alle_philister = Group.alle_philister)
+                  = link_to "Alle Philister", group_members_path(alle_philister), class: 'dropdown-item'
               .dropdown-divider
-              %li
-                = link_to "Semesterstatistik", term_report_path(current_user.primary_corporation.term_reports.last), class: "dropdown-item #{'active' if controller_name == 'term_reports'}"
+              - if (term_report = current_user.primary_corporation.try(:term_reports).try(:last))
+                %li
+                  = link_to "Semesterstatistik", term_report_path(term_report), class: "dropdown-item #{'active' if controller_name == 'term_reports'}"
           %li.nav-item.dropdown{class: ('active' if current_tab == :events)}
             %a.nav-link.dropdown-toggle{'data-toggle': "dropdown", href: "#"}
               %span.nav-link-icon.d-md-none.d-lg-inline-block
@@ -164,9 +172,10 @@
               %li
                 = link_to "Meine Gruppen", user_groups_path(user_id: current_user.id), class: "dropdown-item #{'active' if (controller_name == 'groups') && (action_name == 'index') && (params[:user_id].to_i == current_user.id)}"
               - %w(Biermusiker Juristen).each do |group_name|
-                %li
-                  = link_to group_members_path(g = Group.where(name: group_name).first), class: "dropdown-item #{'active' if current_navable == g}" do
-                    = group_name
+                - if (g = Group.where(name: group_name).first)
+                  %li
+                    = link_to group_members_path(g), class: "dropdown-item #{'active' if current_navable == g}" do
+                      = group_name
               .dropdown-divider
               %li
                 = link_to gesuche_und_angebote_path, class: "dropdown-item #{'active' if controller_name == 'gesuche_und_angebote'}" do

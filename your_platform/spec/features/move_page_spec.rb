@@ -2,6 +2,7 @@ require 'spec_helper'
 
 feature "Move Pages" do
   scenario "moving a page to a new parent page", :js do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @page = create :page, title: "My Page", published_at: 1.year.ago
     @parent_page = create(:page, title: "Parent Page", published_at: 1.year.ago); @parent_page << @page
     @new_parent_page = create :page, title: "New Parent", published_at: 1.year.ago

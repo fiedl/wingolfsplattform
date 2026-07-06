@@ -233,9 +233,8 @@ describe User do
       end
       describe "when the user terminated his membership" do
         before do
-          @former_members = @corporation.child_groups.create
-          @former_members.add_flag :former_members_parent
-          @membership.promote_to @former_members, at: 2.minutes.ago
+          # The wingolf corporation already has its former-members group.
+          @membership.promote_to @corporation.sub_group("Ehemalige"), at: 2.minutes.ago
         end
         it { should == false }
       end

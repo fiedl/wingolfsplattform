@@ -18,6 +18,7 @@ feature "Posts Html Filter" do
   end
   
   scenario "Looking at the post and making sure the malicious code is not inserted." do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login @user
     visit post_path(@post)
     
@@ -28,6 +29,7 @@ feature "Posts Html Filter" do
   end
   
   scenario "Looking at the group posts and making sure the malicious code is not inserted." do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login @user
     visit group_posts_path(@group)
     

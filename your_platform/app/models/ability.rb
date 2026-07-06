@@ -309,8 +309,15 @@ class Ability
     if not read_only_mode?
       can [:create_event, :create_event_for], Group
       can :create, Event
-      can [:update, :destroy, :invite_to], Event do |event|
+      can [:update, :invite_to], Event do |event|
         event.contact_people.include? user
+      end
+
+      # Contact people can undo the creation of an event only briefly.
+      # Later on, the event is likely in members' calendars already; a
+      # cancellation should be noted in the title instead.
+      can :destroy, Event do |event|
+        event.contact_people.include?(user) and event.created_at > 10.minutes.ago
       end
     end
   end

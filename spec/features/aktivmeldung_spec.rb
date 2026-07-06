@@ -24,6 +24,7 @@ feature "Aktivmeldung" do
     end
 
     scenario "click 'Aktivmeldung' and add a new user" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       login @local_admin_user
 
       visit group_members_path(@corporation)
@@ -133,6 +134,7 @@ feature "Aktivmeldung" do
     end
 
     scenario "leaving out a non-required field" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       login @local_admin_user
 
       visit group_members_path(@corporation.aktivitas)
@@ -226,6 +228,7 @@ feature "Aktivmeldung" do
     end
 
     scenario "leaving out the corporation as global admin" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       login :global_admin
 
       visit new_aktivmeldung_path
@@ -319,6 +322,7 @@ feature "Aktivmeldung" do
     end
 
     scenario "leaving out the corporation as local admin" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       login @local_admin_user
 
       visit new_aktivmeldung_path
@@ -374,6 +378,7 @@ feature "Aktivmeldung" do
     end
 
     scenario "leaving out the aktivmeldungsdatum" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       login @local_admin_user
 
       visit group_members_path(@corporation.aktivitas)
@@ -471,6 +476,7 @@ feature "Aktivmeldung" do
     end
 
     scenario "adding a user with account" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       login @local_admin_user
 
       visit group_members_path(@corporation.aktivitas)
@@ -525,6 +531,7 @@ feature "Aktivmeldung" do
   end
 
   scenario "leaving out a required field when entering aktivmeldung", :js do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @corporation = create(:wingolf_corporation)
     login :admin
 

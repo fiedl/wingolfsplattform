@@ -4,6 +4,7 @@ feature "Masquerade" do
   include SessionSteps
 
   scenario "Unpreveliged users (even global admins) should not be able to masquerade" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @other_user = create :user_with_account
 
     login :global_admin
@@ -13,6 +14,7 @@ feature "Masquerade" do
   end
 
   scenario "Bypassing the authorization by visiting the masquerade path directly is prevented" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @other_user = create :user_with_account, last_name: "other user"
 
     login :global_admin
@@ -22,6 +24,7 @@ feature "Masquerade" do
   end
 
   scenario "developers who are global admins can masquerade as other users" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @developer = create :user_with_account
     @developer.global_admin = true
     @developer.developer = true

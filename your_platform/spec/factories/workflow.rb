@@ -1,10 +1,10 @@
-FactoryGirl.define do
+FactoryBot.define do
 
   # workflow step
   # 
   factory :step, :class => WorkflowKit::Step do
     
-    brick_name "TestBrick"
+    brick_name { "TestBrick" }
     sequence( :sequence_index ) { |n| n }
 
   end
@@ -15,9 +15,9 @@ FactoryGirl.define do
   factory :workflow do
 
     sequence( :name ) { |n| "Workflow #{n}" }
-    description "This is the description of the workflow."
+    description { "This is the description of the workflow." }
     
-    FactoryGirl.create_list( :step, 3 )
+    FactoryBot.create_list( :step, 3 )
 
   end
 
@@ -27,8 +27,8 @@ FactoryGirl.define do
   factory :promotion_workflow, :class => Workflow do 
     
     transient do
-      remove_from_group_id 0
-      add_to_group_id 0
+      remove_from_group_id { 0 }
+      add_to_group_id { 0 }
     end
 
     sequence( :name ) { |n| "Promotion Workflow #{n}" }

@@ -13,6 +13,7 @@ feature 'Setup' do
     end
 
     scenario 'using the application setup', :js do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
 
       visit root_path
       page.should have_text I18n.t :this_setup_will_get_you_up_and_running

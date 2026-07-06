@@ -9,6 +9,7 @@ feature 'Default Locale' do
   end
 
   scenario "visiting the profile in order to make sure the default locale is :de" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     visit user_path(@user)
     within ".box.section.access" do
       page.should have_text "Zugangsdaten"

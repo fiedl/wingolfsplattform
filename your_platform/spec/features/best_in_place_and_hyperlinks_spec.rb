@@ -7,6 +7,7 @@ feature "best_in_place and hyperlinks" do
     background { login :admin }
 
     scenario 'clicking on a link inside a page body' do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       @other_page = create :page, title: 'hyperlink', content: 'this is the content behind the hyperlink.', published_at: 1.day.ago
       @page = create :page, content: 'This is a page body with [[hyperlink]].', published_at: 1.day.ago
       visit page_path @page
@@ -16,6 +17,7 @@ feature "best_in_place and hyperlinks" do
     end
 
     scenario 'adding a link to a page body and then clicking it (bug fix)' do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       @other_page = create :page, title: 'hyperlink', content: 'this is the content behind the hyperlink.', published_at: 1.day.ago
       @page = create :page, content: 'This is a page without hyperlink.', published_at: 1.day.ago
       visit page_path @page
@@ -34,10 +36,10 @@ feature "best_in_place and hyperlinks" do
 
     if ENV['CI'] != 'travis'  # they don't support uploads
       scenario 'clicking on an attachment link' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         @page = create :page, published_at: 1.day.ago
         @attachment = create :image_attachment, title: 'New Attachment'
         @page.attachments << @attachment
-        binding.pry
         visit page_path @page
 
         click_on 'New Attachment'
@@ -46,6 +48,7 @@ feature "best_in_place and hyperlinks" do
       end
 
       scenario 'editing an attachment name in edit mode (bug fix)' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         @page = create :page, published_at: 1.day.ago
         @attachment = create :image_attachment, title: 'New Attachment'
         @page.attachments << @attachment

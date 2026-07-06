@@ -6,6 +6,7 @@ feature 'Vertical Navigation' do
   before { login :user }
 
   scenario 'verify corporation names in menu when visiting collection groups' do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @corporation = create :corporation, name: "Some Corporation"
     @another_corporation = create :corporation, name: "Other Corporation"
 

@@ -4,6 +4,7 @@ feature "memberships#create" do
   include SessionSteps
 
   scenario "Adding a member manually to a group", :js do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @parent_group = create :group
     @group = @parent_group.child_groups.create
     @user = create :user

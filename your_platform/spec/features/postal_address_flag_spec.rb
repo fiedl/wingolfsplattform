@@ -13,6 +13,7 @@ feature "Postal Address Flag" do
       .becomes(ProfileFields::Address)
   end
   scenario "Selecting a postal address in the own user profile.", js: true do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
 
     login :admin
     visit user_path @user

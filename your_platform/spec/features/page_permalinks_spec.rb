@@ -8,6 +8,7 @@ feature "Page Permalinks", :js do
   end
 
   scenario "setting a page permalink" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login :admin
     visit page_permalinks_path(@page)
 

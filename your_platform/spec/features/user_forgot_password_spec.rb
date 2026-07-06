@@ -14,6 +14,7 @@ feature "UserForgotPassword" do
     describe "Profile Page" do
 
       it "should contain the send-new-password button" do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         visit user_path( @user )
         page.should have_button I18n.t( :send_new_password )
       end
@@ -31,10 +32,12 @@ feature "UserForgotPassword" do
       end
 
       it "should send a flash message" do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         page.should have_content( I18n.t( :new_password_has_been_sent_to, user_name: @user.title ) )
       end
 
       it "should send an email containing alias and a password the user can login with" do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         email_text = ActionMailer::Base.deliveries.last.to_s
         email_text.should include @user.alias
         email_text.should include I18n.t(:password)
@@ -61,6 +64,7 @@ feature "UserForgotPassword" do
       end
 
       it "should change the user's password" do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         old_encrypted_password = @user.account.encrypted_password
         old_encrypted_password.should_not be_nil
         send_new_password

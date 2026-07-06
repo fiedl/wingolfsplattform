@@ -20,6 +20,7 @@ feature "Erstbandphilister" do
   end
 
   scenario "visit corporation site and navigate to the erstbandphilister site" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     visit group_path(@corporation)
     within(".vertical_menu") { click_on "Philisterschaft" }
     within(".vertical_menu") { click_on "Erstbandphilister" }

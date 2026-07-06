@@ -1,0 +1,125 @@
+#!/bin/bash
+
+# Run a slice of the test suite the way CI does, with automatic retry of
+# failed examples (guards against infrastructure flakiness; genuinely
+# broken specs stay red):
+#
+#     bin/rspec_ci app spec/models spec/mailers
+#     bin/rspec_ci engine spec/models
+#     bin/rspec_ci engine spec/features/[a-m]*
+#
+# The `app` mode runs the wingolfsplattform specs (spec/), the `engine`
+# mode runs the your_platform specs (your_platform/spec/), parallelized
+# with one database per process.
+
+source bin/setup_ci
+
+MODE="$1"
+shift
+SPECS="$@"
+
+if [ -z "$SPECS" ] || { [ "$MODE" != "app" ] && [ "$MODE" != "engine" ]; }; then
+  echo "Usage: bin/rspec_ci <app|engine> <specs or spec folders>"
+  exit 1
+fi
+
+PARALLEL_PROCESSES="${PARALLEL_TEST_PROCESSORS:-8}"
+
+# Pry sessions from a stray `binding.pry` would silently eat the suite's
+# runtime; pry honors DISABLE_PRY.
+RUN="$DOCKER_COMPOSE_RUN -e DISABLE_PRY=1 tests"
+
+WAIT_FOR_MYSQL='until mysqladmin ping -h "$MYSQL_HOST" -u root -p"$MYSQL_PASSWORD" --silent 2>/dev/null; do echo "Waiting for mysql ..."; sleep 2; done'
+
+# A killed CI job can leave a database without environment metadata
+# behind; rails then refuses to touch it. Heal before preparing.
+HEAL="(bundle exec rails db:environment:set RAILS_ENV=test 2>/dev/null || true)"
+
+# Drop first: an aborted earlier run can leave a half-loaded database
+# behind, and schema:load cannot DROP tables past foreign keys.
+DROP="(bundle exec rails db:drop 2>/dev/null || true)"
+
+if [ "$MODE" = "app" ]; then
+  SPEC_DIR="."
+  PREPARE="$HEAL && $DROP && bundle exec rails db:create db:schema:load"
+  RSPEC_CMD="bundle exec rspec $SPECS"
+  RERUN_PREFIX=""
+else
+  SPEC_DIR="your_platform"
+  # One database per parallel process, each schema-loaded explicitly:
+  # rails' db:test:prepare (which parallel:prepare shells out to) refuses
+  # to initialize an empty numbered database ("pending migrations").
+  PER_PROCESS_DBS="for i in \$(seq 2 $PARALLEL_PROCESSES); do ( export TEST_ENV_NUMBER=\$i; bundle exec rails db:drop 2>/dev/null; bundle exec rails db:create db:schema:load ) & done; wait"
+  PREPARE="$HEAL && $DROP && bundle exec rails db:create db:schema:load && $PER_PROCESS_DBS"
+  RSPEC_CMD="cd your_platform && bundle exec parallel_rspec -n $PARALLEL_PROCESSES $SPECS"
+  RERUN_PREFIX="cd your_platform && "
+fi
+
+# The asset pipeline resolves stylesheets from node_modules, and some
+# model specs touch it too — install the javascript modules always.
+PREPARE="$PREPARE && (bundle exec rails your_platform:install:node_modules || echo 'task not found')"
+
+# Feature specs drive the app through a real browser and additionally
+# need compiled assets. The assets volume persists per compose project,
+# so this is incremental after the first run.
+case "$SPECS" in
+  *features*) PREPARE="$PREPARE && bundle exec rails assets:precompile" ;;
+esac
+
+section "prepare retry files"
+mkdir -p "$SPEC_DIR/tmp/rspec" 2>/dev/null
+rm -f "$SPEC_DIR"/tmp/rspec/examples*.txt 2>/dev/null
+# The container writes these as root, so clean up in the container too.
+$RUN bash -c "mkdir -p $SPEC_DIR/tmp/rspec && rm -f $SPEC_DIR/tmp/rspec/examples*.txt" || failed
+
+section "prepare database"
+$RUN bash -c "$WAIT_FOR_MYSQL && $PREPARE" || failed
+
+section "initial run"
+$RUN bash -c "$RSPEC_CMD"
+exit_code=$?
+
+failed_specs() {
+  # Restrict to the requested spec paths: leftover persistence entries
+  # from other runs on the same checkout must not sneak into the rerun.
+  local prefixes
+  prefixes=$(for s in $SPECS; do printf '^\\./%s|' "${s%%\[*}"; done)
+  awk -F'|' '$2 ~ /failed/ { gsub(/ /, "", $1); print $1 }' "$SPEC_DIR"/tmp/rspec/examples*.txt 2>/dev/null \
+    | grep -E "${prefixes%|}" | sort -u | tr '\n' ' '
+}
+
+if [ $exit_code -eq 0 ]; then
+  echo_green "All specs passed!"
+  clean_up
+  exit 0
+fi
+
+# Rerun failed examples serially, up to three times. The example ids come
+# from rspec's example-status persistence files (one per parallel process).
+for attempt in 1 2 3; do
+  section "rerun failed specs (attempt $attempt)"
+
+  FAILED_SPECS="$(failed_specs)"
+  if [[ -z "${FAILED_SPECS// }" ]]; then
+    echo_red "No failed specs recorded, but exit code was $exit_code."
+    break
+  fi
+  echo_blue "Rerun previously failed specs: $FAILED_SPECS"
+
+  rm -f "$SPEC_DIR"/tmp/rspec/examples*.txt
+
+  $RUN bash -c "$WAIT_FOR_MYSQL && ${RERUN_PREFIX}bundle exec rspec $FAILED_SPECS"
+  exit_code=$?
+
+  if [ $exit_code -eq 0 ]; then
+    echo_green "Rerun successful - all previously failed specs now pass."
+    break
+  fi
+done
+
+clean_up
+
+if [ $exit_code -ne 0 ]; then
+  echo_red "Some specs still failing: $(failed_specs)"
+fi
+exit $exit_code

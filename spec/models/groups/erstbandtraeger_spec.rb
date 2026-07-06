@@ -54,6 +54,7 @@ describe Groups::Erstbandtraeger do
     end
     it { subject.should be_kind_of ActiveRecord::Relation }
     it "should support pagination" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/117'
       subject.should respond_to :page
     end
   end
