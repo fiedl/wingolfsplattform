@@ -5,7 +5,10 @@ class RenewCacheJob < ApplicationJob
   queue_as :cache
 
   def serialize
-    arguments.last[:time] = arguments.last[:time].to_i if arguments.last && arguments.last[:time]
+    # Keep sub-second precision: with whole seconds, cache entries
+    # written in the same second as the change compare as "not older"
+    # and wrongly survive the renewal.
+    arguments.last[:time] = arguments.last[:time].to_f if arguments.last && arguments.last[:time]
     super
   end
 
