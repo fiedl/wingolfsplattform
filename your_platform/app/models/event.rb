@@ -39,7 +39,10 @@ class Event < ApplicationRecord
 
   def to_param
     if start_at
-      "#{id} #{name} #{start_at.year}-#{start_at.month}-#{start_at.day}".parameterize
+      # The date in the url must not depend on the requesting user's
+      # time zone; otherwise the same event would have different urls.
+      date = start_at.in_time_zone(User.default_timezone)
+      "#{id} #{name} #{date.year}-#{date.month}-#{date.day}".parameterize
     else
       "#{id} #{name}".parameterize
     end
