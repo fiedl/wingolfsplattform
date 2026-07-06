@@ -49,15 +49,24 @@ für die Engine. Beide laufen gegen dieselbe Anwendung und verwenden
 dieselbe Spec-Konfiguration (`spec/spec_helper.rb`), sodass sie in einem
 Aufruf kombiniert werden können.
 
-Der einfachste Weg ist der CI-Wrapper. Er baut bei Bedarf das Docker-Image,
-legt die Test-Datenbanken an (eine pro Parallel-Prozess), installiert für
-Feature-Specs die Javascript-Module und Assets und wiederholt fehlgeschlagene
-Beispiele bis zu dreimal:
+Für die Entwicklung gibt es `bin/rspec`. Das Skript startet sich selbst
+im Docker-Container neu (`bin/docker_wrapper`), bereitet die Umgebung vor
+(Javascript-Module, Test-Datenbank; höchstens einmal täglich, siehe
+`bin/setup.rb`) und reicht die Argumente an rspec durch:
+
+```bash
+bin/rspec spec/models/user_spec.rb
+bin/rspec spec/models your_platform/spec/models
+bin/rspec your_platform/spec/features/events_spec.rb
+```
+
+Die CI verwendet stattdessen `bin/rspec_ci`. Dieser Wrapper baut bei Bedarf
+das Docker-Image, legt die Test-Datenbanken an (eine pro Parallel-Prozess)
+und wiederholt fehlgeschlagene Beispiele bis zu dreimal:
 
 ```bash
 bin/rspec_ci spec/models your_platform/spec/models   # alle Model-Specs
 bin/rspec_ci your_platform/spec/features             # Engine-Feature-Specs (Browser)
-bin/rspec_ci spec/models/user_spec.rb                # einzelne Dateien gehen auch
 ```
 
 Die Parallelität steuert `PARALLEL_TEST_PROCESSORS` (Standard: 8; bei
