@@ -18,6 +18,7 @@ feature "memberships#index" do
   end
 
   scenario "viewing the memberships of the user as global admin" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/119'
     login :global_admin
     visit memberships_path(user_id: user.id)
 

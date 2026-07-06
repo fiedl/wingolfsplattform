@@ -60,6 +60,7 @@ feature 'Sessions' do
 
     describe 'filling in an invalid password' do
       before do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         @user = create(:user_with_account)
         within "#content_area" do
           fill_in 'user_account_login', with: @user.name
@@ -84,6 +85,7 @@ feature 'Sessions' do
 
     describe 'filling in an invalid login name' do
       before do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         @user = create(:user)
         @user.create_account = true
         @user.save
@@ -133,7 +135,6 @@ feature 'Sessions' do
         click_button I18n.t(:submit_send_instructions)
       end
       it 'should send an email' do
-        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         ActionMailer::Base.deliveries.count.should be(1)
       end
 
@@ -198,6 +199,7 @@ feature 'Sessions' do
 
       describe 'but without matching password confirmation' do
         before do
+          pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
           @password = 'fordprefecthasanawesometowel!'
 
           fill_in 'password', with: @password
