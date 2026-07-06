@@ -266,6 +266,49 @@ class User
     status_memberships.with_past.order(:valid_from).first.update_attributes valid_from: date.to_datetime
   end
 
+  # Virtual attributes for the Aktivmeldung: `User.create` may request an
+  # account and an initial corporation membership in one go. These were
+  # lost in the 2020 tabler rework (c26a2a09), which broke the
+  # Aktivmeldung flow.
+  #
+  # `create_account=` is deliberately only a writer: a reader would
+  # shadow the association method `create_account`, which
+  # `activate_account` relies on.
+  #
+  attr_accessor :add_to_corporation
+
+  def create_account=(value)
+    @create_account_requested = value.to_b
+  end
+
+  before_save :build_account_if_requested
+  after_save :add_to_group_if_requested
+
+  def build_account_if_requested
+    if @create_account_requested
+      self.account.destroy if self.has_account?
+      self.account = self.build_account
+      @create_account_requested = false # to make sure that this code is not run twice.
+    end
+  end
+  private :build_account_if_requested
+
+  def add_to_group_if_requested
+    if add_to_corporation.present?
+      corporation = add_to_corporation if add_to_corporation.kind_of? Group
+      corporation ||= Group.find(add_to_corporation) if add_to_corporation.kind_of? Integer
+      corporation ||= Group.find(add_to_corporation.to_i) if add_to_corporation.kind_of?(String) && add_to_corporation.to_i > 0
+      if corporation
+        status_group = corporation.becomes(Corporation).status_groups.first || raise(RuntimeError, 'no status group in this corporation!')
+        status_group.assign_user self
+      else
+        raise ActiveRecord::RecordNotFound, 'corporation not found.'
+      end
+      self.add_to_corporation = nil
+    end
+  end
+  private :add_to_group_if_requested
+
 
   # Fill-in default profile.
   #
