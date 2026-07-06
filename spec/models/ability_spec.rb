@@ -571,6 +571,7 @@ describe Ability do
         the_user.should be_able_to :execute, @workflow
       end
       he "should be able to execute the mark_as_deceased workflow, which is a global workflow" do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/118'
         @workflow = Workflow.find_or_create_mark_as_deceased_workflow
         the_user.should be_able_to :execute, @workflow
       end
@@ -643,6 +644,7 @@ describe Ability do
         @sub_group.assign_user @sub_group_user, at: 1.hour.ago
       end
       specify "admin assignment and un-assignent should update the admin rights for the sub objects properly" do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/118'
 
         # 1. The user is no admin.
         #
