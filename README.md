@@ -15,9 +15,11 @@ Auf einer Entwicklungsmaschine mit [Docker](https://www.docker.com) installierst
 ```bash
 git clone git@github.com:fiedl/wingolfsplattform.git
 cd wingolfsplattform
-git clone git@github.com:fiedl/your_platform.git
-docker-compose build
+docker compose build
 ```
+
+Die frühere your_platform-Engine ist seit 2026 Teil dieses Repositories
+(Verzeichnis `your_platform/`) und muss nicht mehr separat geklont werden.
 
 Falls Du die Umgebung alternativ lieber großteils ohne Docker installieren möchtest, guck Dir am Besten unseren alten [Getting-Started-Guide](https://github.com/fiedl/wingolfsplattform/wiki/Getting-Started) an.
 
@@ -42,16 +44,44 @@ docker-compose run console
 
 ### Tests
 
-Tests vollständig durchlaufen lassen:
+Es gibt zwei Spec-Bäume — `spec/` für die App und `your_platform/spec/`
+für die Engine. Beide laufen gegen dieselbe Anwendung und verwenden
+dieselbe Spec-Konfiguration (`spec/spec_helper.rb`), sodass sie in einem
+Aufruf kombiniert werden können.
+
+Der einfachste Weg ist der CI-Wrapper. Er baut bei Bedarf das Docker-Image,
+legt die Test-Datenbanken an (eine pro Parallel-Prozess), installiert für
+Feature-Specs die Javascript-Module und Assets und wiederholt fehlgeschlagene
+Beispiele bis zu dreimal:
 
 ```bash
-docker-compose run tests
+bin/rspec_ci spec/models your_platform/spec/models   # alle Model-Specs
+bin/rspec_ci your_platform/spec/features             # Engine-Feature-Specs (Browser)
+bin/rspec_ci spec/models/user_spec.rb                # einzelne Dateien gehen auch
 ```
+
+Die Parallelität steuert `PARALLEL_TEST_PROCESSORS` (Standard: 8; bei
+Feature-Specs 4, passend zu den Browser-Sessions des Chrome-Containers).
+
+Manuell, ohne Wrapper:
+
+```bash
+docker compose run --rm tests bash -c "bundle exec rails db:create db:schema:load"
+docker compose run --rm tests bash -c "bundle exec rspec spec/models your_platform/spec/models"
+```
+
+Auch `cd your_platform && rspec spec/models` funktioniert weiterhin — der
+dortige `spec_helper` ist ein Verweis auf den gemeinsamen.
+
+Die CI (`.github/workflows/tests.yml`) führt auf selbst-gehosteten Runnern
+dieselben `bin/rspec_ci`-Aufrufe als Job-Matrix aus. Bekannte, noch offene
+Baustellen sind als `pending` mit Verweis auf ihr GitHub-Issue markiert;
+die Suite muss grün sein ("no new failures" genügt nicht).
 
 Während der Entwicklung kannst Du auch [guard](https://github.com/guard/guard) laufen lassen. Dieses Tool lässt, wenn Du Code-Dateien veränderst, immer die passenden Tests laufen.
 
 ```bash
-docker-compose run guard
+docker compose run guard
 ```
 
 ### Security

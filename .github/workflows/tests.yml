@@ -25,15 +25,15 @@ jobs:
       matrix:
         include:
           - name: engine models
-            command: bin/rspec_ci engine spec/models
+            command: bin/rspec_ci your_platform/spec/models
           - name: engine features a-l
-            command: bin/rspec_ci engine spec/features/[a-l]*
+            command: bin/rspec_ci your_platform/spec/features/[a-l]*
           - name: engine features m-z
-            command: bin/rspec_ci engine spec/features/[m-z]*
+            command: bin/rspec_ci your_platform/spec/features/[m-z]*
           - name: app models
-            command: bin/rspec_ci app spec/models
+            command: bin/rspec_ci spec/models
           - name: app features
-            command: bin/rspec_ci app spec/features
+            command: bin/rspec_ci spec/features
     name: ${{ matrix.name }}
     steps:
       - name: Directory permissions

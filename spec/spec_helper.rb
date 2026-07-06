@@ -37,7 +37,10 @@ require 'rubygems'
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 
-# Stop if the database is not migrated.
+# Stop if the database is not migrated. The migration path is relative
+# by default; anchor it so the check also works when the specs are
+# started from the engine directory (your_platform/).
+ActiveRecord::Migrator.migrations_paths = [Rails.root.join('db/migrate').to_s]
 ActiveRecord::Migration.check_pending!
 
 
@@ -60,6 +63,7 @@ require 'nokogiri'
 require 'selenium/webdriver'
 require 'rspec/expectations'
 require 'sidekiq/testing'
+require 'rspec/retry'
 
 
 # Required Support Files (that help you testing)
@@ -81,7 +85,7 @@ Dir[YourPlatform::Engine.root.join('spec/support/**/*.rb')].each {|f| require f}
 # Rather than `rspec-mocks` fixtures, we use FactoryBot instead.
 #
 FactoryBot.definition_file_paths = [
-  'spec/factories',
+  Rails.root.join('spec/factories'),
   YourPlatform::Engine.root.join('spec/factories')
 ]
 
@@ -148,7 +152,7 @@ RSpec.configure do |config|
   # Remember the status of each example, so that CI can rerun just the
   # failed ones. One file per parallel test process.
   #
-  config.example_status_persistence_file_path = "tmp/rspec/examples#{ENV['TEST_ENV_NUMBER']}.txt"
+  config.example_status_persistence_file_path = Rails.root.join("tmp/rspec/examples#{ENV['TEST_ENV_NUMBER']}.txt").to_s
 
   # Inclusion of helper methods.
   # ......................................................................................
@@ -169,6 +173,11 @@ RSpec.configure do |config|
   # This can be used for caching, validity range, etc.
   #
   config.include TimeTravel
+
+  # Factories for workflow bricks and access to the last sent email.
+  config.include WorkflowKit::Factory
+  config.include LastEmail
+  config.include TimeMatchers
 
   # rspec-rails 3 will no longer automatically infer an example group's
   # spec type from the file location. You can explicitly opt-in to this
@@ -215,6 +224,7 @@ RSpec.configure do |config|
 
   # Include Capybara helpers:
   config.include SessionSteps, type: :feature
+  config.include HomePageSpecHelper, type: :feature
   config.include CapybaraHelper, type: :feature
   config.include WysiwygSpecHelper, type: :feature
   config.include TabSpecHelper, type: :feature
@@ -262,11 +272,15 @@ RSpec.configure do |config|
   end
 
   config.before(:suite) do
+    DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean
     Graph::Base.clean :yes_i_am_sure if Graph::Base.configured?
   end
 
   config.before(:each) do
+
+    # Finish all time travels of previous examples.
+    Timecop.return
 
     # This distinction reduces the run time of the test suite by over a factor of 4:
     # From 40 to a couple of minutes, since the truncation method, which is slower,
@@ -365,6 +379,21 @@ RSpec.configure do |config|
   # rspec-rails.
   #
   config.infer_base_class_for_anonymous_controllers = false
+
+  # Examples tagged with :retry are retried, e.g. against browser timing
+  # flakiness. The retry callback resets database, graph and browser
+  # state, so the retry starts from a clean slate.
+  #
+  config.verbose_retry = false
+  config.around :each, :retry do |example|
+    example.run_with_retry retry: 3, retry_wait: 10
+  end
+  config.retry_callback = proc do |example|
+    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.clean
+    Graph::Base.clean :yes_i_am_sure if Graph::Base.configured?
+    Capybara.reset! if example.metadata[:js]
+  end
 
 end
 
