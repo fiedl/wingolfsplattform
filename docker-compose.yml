@@ -69,6 +69,10 @@ services:
 
   tests:
     build: .
+    # A fixed image name: CI jobs run in per-runner compose projects, and
+    # without it every project would build its own identically-named-but-
+    # separate image instead of reusing the one the build job created.
+    image: wingolfsplattform-tests
     volumes:
       - .:/app/wingolfsplattform
       - ./your_platform:/app/your_platform
@@ -133,7 +137,7 @@ services:
       MYSQL_USER: "wingolfsplattform"
     volumes:
       - "mysql_data:/var/lib/mysql"
-    command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
+    command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --innodb-use-native-aio=0"
 
   mysql_test:
     image: mysql:5.7
@@ -146,7 +150,7 @@ services:
       # A separate volume: mysql and mysql_test may run at the same time,
       # and two mysqld processes on one datadir corrupt it.
       - "mysql_test_data:/var/lib/mysql"
-    command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
+    command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --innodb-use-native-aio=0"
 
   redis:
     image: redis
