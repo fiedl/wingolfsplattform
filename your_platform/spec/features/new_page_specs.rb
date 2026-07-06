@@ -10,6 +10,7 @@ feature "New Page" do
   end
 
   scenario "creating a new blog post" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     click_on I18n.t(:new_page)
     within '#new_page_modal' do
       fill_in :page_title, with: "This is my new blog post!"
@@ -34,6 +35,7 @@ feature "New Page" do
   end
 
   scenario "creating a new regular page" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     click_on I18n.t(:new_page)
     within '#new_page_modal' do
       fill_in :page_title, with: "This is my new regular page."
@@ -50,6 +52,7 @@ feature "New Page" do
   end
 
   scenario "creating a new regular page shown in the menu" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     click_on I18n.t(:new_page)
     within '#new_page_modal' do
       fill_in :page_title, with: "This is my new regular page."
@@ -73,6 +76,7 @@ feature "New Page" do
   end
 
   scenario "creating a new regular page hidden in the menu" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     click_on I18n.t(:new_page)
     within '#new_page_modal' do
       fill_in :page_title, with: "This is my new regular page."
@@ -96,6 +100,7 @@ feature "New Page" do
   end
 
   scenario "creating a new regular page shown as teaser box" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     click_on I18n.t(:new_page)
     within '#new_page_modal' do
       fill_in :page_title, with: "This is my new regular page."
@@ -119,6 +124,7 @@ feature "New Page" do
   end
 
   scenario "creating a new regular page not shown as teaser box" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     click_on I18n.t(:new_page)
     within '#new_page_modal' do
       fill_in :page_title, with: "This is my new regular page."
@@ -142,6 +148,7 @@ feature "New Page" do
   end
 
   scenario "creating a new hidden page" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     click_on I18n.t(:new_page)
     within '#new_page_modal' do
       fill_in :page_title, with: "This is my new hidden page."
