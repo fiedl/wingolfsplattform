@@ -14,8 +14,9 @@ Rails.application.configure do
 
   # Enable/disable caching. By default caching is disabled.
   config.action_controller.perform_caching = true
-  # REDIS_HOST: in the dockerized setup, redis runs in its own container.
-  config.cache_store = :redis_store, "redis://#{ENV['REDIS_HOST'] || 'localhost'}:6379/0/", { expires_in: 1.day, namespace: 'development_cache' }
+  # The cache store is configured centrally in the engine's
+  # config/initializers/cache.rb (redis via REDIS_HOST). Anything set
+  # here would be overridden there.
 
   # Mailing
   config.action_mailer.delivery_method = :letter_opener

@@ -25,11 +25,10 @@ Rails.application.configure do
 
   # Caching.
   config.action_controller.perform_caching = true  # default: false
-  # The test suite runs without a cache — as it always effectively did:
-  # the previous redis cache store pointed at localhost, which never
-  # resolved inside the test containers, and the specs encode cache-less
-  # behavior. Testing with a real cache is a separate project.
-  config.cache_store = :null_store
+  # The cache store is configured centrally in the engine's
+  # config/initializers/cache.rb (redis via REDIS_HOST, namespaced per
+  # environment and per parallel test process). Anything set here would
+  # be overridden there.
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
