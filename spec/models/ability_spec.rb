@@ -79,13 +79,16 @@ describe Ability do
     he "should be able to read anything (exceptions are below)" do
       @page = create(:page)
       @group = create(:group)
+      # Only living wingolfiten are readable in this app.
       @other_user = create(:user)
+      Group.alle_wingolfiten.assign_user @other_user
       the_user.should be_able_to :read, @page
       the_user.should be_able_to :read, @group
-      the_user.should be_able_to :read, @other_user
+      the_user.should be_able_to :read, @other_user.reload
     end
     he "should be able to download anything" do
-      @attachment = Attachment.new
+      @page = create(:page)
+      @attachment = @page.attachments.create description: "An attachment of a page everyone can read."
       the_user.should be_able_to :download, @attachment
     end
     he "should not be able to read the bank account information of other users" do
