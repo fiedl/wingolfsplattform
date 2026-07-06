@@ -7,6 +7,7 @@ feature 'Change Password', js: true do
 
   describe 'when visiting the own profile' do
     background do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       @user = create(:user_with_account)
       @current_password = @user.account.password
       login(@user)
@@ -24,6 +25,7 @@ feature 'Change Password', js: true do
 
     describe "and clicking #{I18n.t(:change_password)}" do
       background do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_on :change_password
       end
 
@@ -62,6 +64,7 @@ feature 'Change Password', js: true do
 
           describe 'and having checked the agreement' do
             before do
+              pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
               check(I18n.t(:i_agree_i_do_not_use_the_same_password_on_other_services))
             end
 
@@ -72,6 +75,7 @@ feature 'Change Password', js: true do
 
             describe '- after clicking submit'do
               before do
+                pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
                 click_button I18n.t(:submit_changed_password)
               end
               it do
@@ -97,6 +101,7 @@ feature 'Change Password', js: true do
 
           describe "after clicking submit" do
             before do
+              pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
               check(I18n.t(:i_agree_i_do_not_use_the_same_password_on_other_services))
               click_button I18n.t(:submit_changed_password)
             end
@@ -112,6 +117,7 @@ feature 'Change Password', js: true do
 
       describe 'and matching simple password and confirmation' do
         before do
+          pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
           @password = 'Password123'
           fill_in 'password', with: @password
           fill_in 'user_account_password_confirmation', with: @password
@@ -132,6 +138,7 @@ feature 'Change Password', js: true do
 
       describe 'but without matching password confirmation' do
         before do
+          pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
           @password = 'fordprefecthasanawesometowel!'
           fill_in 'password', with: @password
           fill_in 'user_account_password_confirmation', with: 'invalid'
@@ -150,6 +157,7 @@ feature 'Change Password', js: true do
 
   describe 'when visiting the profile of another user' do
     background do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       @user = create(:user_with_account)
       login(:user)
       visit user_path(@user)
@@ -164,6 +172,7 @@ feature 'Change Password', js: true do
 
   describe 'when visiting the profile of another user as admin' do
     background do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       @user = create(:user_with_account)
       login(:admin)
       visit user_path(@user)

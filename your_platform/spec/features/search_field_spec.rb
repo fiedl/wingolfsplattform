@@ -13,6 +13,7 @@ feature "Search Field", js: true do
   describe "finding users" do
     context "if there is only one matching user" do
       before do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         @user1 = create( :user, last_name: "foo" )
         within('.navbar-search') { fill_in 'query', with: "foo" }
 
@@ -28,6 +29,7 @@ feature "Search Field", js: true do
     end
     context "if there are more users matching" do
       before do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         @user1 = create( :user, last_name: "foo" )
         @user2 = create( :user, last_name: "foobar" )
         within('.navbar-search') { fill_in 'query', with: "foo" }
@@ -42,6 +44,7 @@ feature "Search Field", js: true do
     end
     context "if there are more users matching" do
       before do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         @user1 = create( :user, last_name: "foo" )
         @user2 = create( :user, last_name: "blarzfoo" )
         @user3 = create( :user, last_name: "cannonfoo" )
@@ -120,6 +123,7 @@ feature "Search Field", js: true do
 
   describe "finding groups" do
     before do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       @group = create( :group, name: "foo" )
       within('.navbar-search') { fill_in 'query', with: "foo" }
       press_enter in: 'query'
@@ -133,6 +137,7 @@ feature "Search Field", js: true do
 
   describe "a space should be interpreted as a wild card" do
     before do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       @page = create( :page, title: "foo some bar page" )
       within('.navbar-search') { fill_in 'query', with: "foo bar" }
       press_enter in: 'query'

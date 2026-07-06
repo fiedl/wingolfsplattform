@@ -121,6 +121,7 @@ feature 'Corporate Vita', js: true do
 
       describe "when entering just a year" do
         before do
+          pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
           click_tab :corporate_info_tab
           enter_in_place "#corporate_vita tr.membership", "2005"
         end

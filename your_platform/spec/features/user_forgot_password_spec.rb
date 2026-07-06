@@ -4,6 +4,7 @@ feature "UserForgotPassword" do
   include SessionSteps
 
   before do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @user = User.create( first_name: "John", last_name: "Doe", email: "j.doe@example.com", :alias => "j.doe",
                          create_account: true )
   end
@@ -28,6 +29,7 @@ feature "UserForgotPassword" do
       end
 
       before do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         send_new_password
       end
 

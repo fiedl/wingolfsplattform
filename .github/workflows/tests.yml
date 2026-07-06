@@ -1,16 +1,44 @@
 name: tests
 on: [push]
+
+env:
+  CI: github
+
 jobs:
-  model-specs:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: [self-hosted, Linux]
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      - name: Build docker images
-        run: docker-compose build
-      - name: Start docker containers
-        run: docker-compose up -d mysql_test redis neo4j && sleep 10
-      - name: Prepare database
-        run: docker-compose run tests /bin/bash -c "bundle exec rake db:create db:migrate"
-      - name: Run tests
-        run: docker-compose run tests
+      # Containers write root-owned files (assets, tmp) into the workspace;
+      # reclaim it so checkout can clean up.
+      - name: Directory permissions
+        run: docker run --rm -v .:/app alpine sh -c "chown -R $(id -u):$(id -g) /app && chmod -R 777 /app"
+        continue-on-error: true
+      - uses: actions/checkout@v4
+      - name: Build test images
+        run: bin/setup_ci
+
+  specs:
+    runs-on: [self-hosted, Linux]
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: engine models
+            command: bin/rspec_ci engine spec/models
+          - name: engine features a-l
+            command: bin/rspec_ci engine spec/features/[a-l]*
+          - name: engine features m-z
+            command: bin/rspec_ci engine spec/features/[m-z]*
+          - name: app models
+            command: bin/rspec_ci app spec/models
+          - name: app features
+            command: bin/rspec_ci app spec/features
+    name: ${{ matrix.name }}
+    steps:
+      - name: Directory permissions
+        run: docker run --rm -v .:/app alpine sh -c "chown -R $(id -u):$(id -g) /app && chmod -R 777 /app"
+        continue-on-error: true
+      - uses: actions/checkout@v4
+      - name: Run specs
+        run: ${{ matrix.command }}
