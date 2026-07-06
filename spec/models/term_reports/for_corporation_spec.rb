@@ -70,7 +70,6 @@ describe TermReports::ForCorporation do
     subject { @term_report.fill_info }
 
     it "should fill in the statistical info correctly" do
-      pending 'https://github.com/fiedl/wingolfsplattform/issues/118'
       subject
       @term_report.anzahl_aktivmeldungen.should == [@hospitant].count
       @term_report.anzahl_aller_aktiven.should == [@hospitant, @krassfux, @brandfux, @aktiver_bursch, @inaktiver_bursch_loci, @inaktiver_bursch_nun_loci, @konkneipant].count

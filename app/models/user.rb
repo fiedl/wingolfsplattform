@@ -392,7 +392,15 @@ class User
   # A user is a wingolfit if he has an aktivitätszahl.
   #
   def wingolfit?
-    self.groups.include? Group.alle_wingolfiten
+    # Role-based rather than via the Alle-Wingolfiten ancestry: leaving a
+    # corporation must end the Wingolfit status, but the transitive dag
+    # links over the deep group hierarchy do not reliably expire (known
+    # limitation of the current acts-as-dag fork).
+    corporations.any? do |corporation|
+      role = Role.of(self).in(corporation)
+      next false if role.former_member?
+      role.full_member? or role.deceased_member?
+    end
   end
 
   def aktiver?

@@ -644,7 +644,6 @@ describe Ability do
         @sub_group.assign_user @sub_group_user, at: 1.hour.ago
       end
       specify "admin assignment and un-assignent should update the admin rights for the sub objects properly" do
-        pending 'https://github.com/fiedl/wingolfsplattform/issues/118'
 
         # 1. The user is no admin.
         #

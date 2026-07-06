@@ -43,7 +43,8 @@ class Abilities::AttachmentAbility < Abilities::BaseAbility
       # can still read them: whoever leaves a group loses access to its
       # documents, including self-authored ones (e.g. Protokolle).
       can [:update, :destroy], Attachment do |attachment|
-        attachment.author_user_id == user.id and parent_ability_can?(:read, attachment)
+        attachment.author_user_id == user.id and
+          (parent_ability_can?(:read, attachment) or parent_ability_can?(:read, attachment.parent))
       end
 
       # If a user is contact person of an event, he can provide pages and
