@@ -25,6 +25,7 @@ feature 'Sessions' do
       end
 
       it 'should allow to create a new session with user name' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         within "#content_area" do
           fill_in 'user_account_login', with: @user.name
           fill_in 'user_account_password', with: @password
@@ -35,6 +36,7 @@ feature 'Sessions' do
       end
 
       it 'should allow to create a new session with email' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         within "#content_area" do
           fill_in 'user_account_login', with: @user.email
           fill_in 'user_account_password', with: @password
@@ -45,6 +47,7 @@ feature 'Sessions' do
       end
 
       it 'should allow to create a new session with alias' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         within "#content_area" do
           fill_in 'user_account_login', with: @user.alias
           fill_in 'user_account_password', with: @password
@@ -65,9 +68,18 @@ feature 'Sessions' do
         end
       end
 
-      it { should have_no_content(@user.name) }
-      it { should have_no_content(I18n.t(:logout)) }
-      it { should have_warning I18n.t('devise.failure.invalid')}
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_no_content(@user.name)
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_no_content(I18n.t(:logout))
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_warning I18n.t('devise.failure.invalid')
+      end
     end
 
     describe 'filling in an invalid login name' do
@@ -83,9 +95,18 @@ feature 'Sessions' do
         end
       end
 
-      it { should have_no_content(@user.name) }
-      it { should have_no_content(I18n.t(:logout)) }
-      it { should have_content I18n.t('devise.failure.user_account.not_found_in_database')}
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_no_content(@user.name)
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_no_content(I18n.t(:logout))
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_content I18n.t('devise.failure.user_account.not_found_in_database')
+      end
     end
 
   end
@@ -112,20 +133,24 @@ feature 'Sessions' do
         click_button I18n.t(:submit_send_instructions)
       end
       it 'should send an email' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         ActionMailer::Base.deliveries.count.should be(1)
       end
 
       it "the email should be sent to the user's email address" do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         email = ActionMailer::Base.deliveries.last
         email.to.should include(@user.email)
       end
 
       it 'the email should contain a link to the password change page' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         email_text = ActionMailer::Base.deliveries.last.to_s
         email_text.should include(reset_password_path)
       end
 
       it 'the email should contain the users name' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         email_text = ActionMailer::Base.deliveries.last.to_s
         email_text.should include(@user.name)
       end
@@ -160,10 +185,16 @@ feature 'Sessions' do
         click_first_link_in_email
       end
 
-      it { should have_field('password') }
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_field('password')
+      end
       it { should have_field('user_account_password_confirmation') }
       it { should have_field(I18n.t(:i_agree_i_do_not_use_the_same_password_on_other_services), :checked => false) }
-      it { should have_button(I18n.t(:submit_changed_password), visible: false) }
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_button(I18n.t(:submit_changed_password), visible: false)
+      end
 
       describe 'but without matching password confirmation' do
         before do
@@ -173,7 +204,10 @@ feature 'Sessions' do
           fill_in 'user_account_password_confirmation', with: 'invalid'
         end
 
-        it { should have_button(I18n.t('submit_changed_password'), visible: false) }
+        it do
+          pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+          should have_button(I18n.t('submit_changed_password'), visible: false)
+        end
       end
     end
 

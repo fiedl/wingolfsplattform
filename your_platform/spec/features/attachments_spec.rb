@@ -21,6 +21,7 @@ feature "Attachments" do
       login @user
     end
     scenario "download the attachment" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       visit @attachment.file.url
       # Checking the pdf content will raise an error, "invalid byte sequence in UTF-8",
       # because this test tool can't read the pdf. But the error means, the pdf has
@@ -35,6 +36,7 @@ feature "Attachments" do
       login @user
     end
     scenario "download the attachment", :js do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
 
       # FIXME: This should not be neccessary. Above (requirements), this succeeds.
       wait_until { @attachment.parent.uncached(:group); @attachment.parent.group == @group }

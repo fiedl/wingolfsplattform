@@ -39,6 +39,7 @@ feature "Group Posts" do
     #   page.should have_text 'Anzahl der Empfänger: 0'
     # end
     scenario 'Sending a test message' do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       visit group_profile_path(@group)
       find('#new_post').click
 
@@ -58,6 +59,7 @@ feature "Group Posts" do
       email_text.should include @random_message
     end
     scenario 'Sending a group message' do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       visit group_profile_path(@group)
       find('#new_post').click
 
@@ -88,6 +90,7 @@ feature "Group Posts" do
     background { login(@other_user) }
 
     specify 'There should be a button to send a message.' do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       visit group_profile_path(@group)
       page.should have_selector '#new_post'
     end

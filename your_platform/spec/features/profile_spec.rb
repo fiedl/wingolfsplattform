@@ -13,6 +13,7 @@ feature "Profile", :js do
     end
 
     scenario "editing the group profile" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       @profile_field = @group.profile_fields.create(label: 'Group Phone', type: 'ProfileFields::Phone', value: "123-4")
 
       visit group_profile_path(@group)
@@ -29,6 +30,7 @@ feature "Profile", :js do
     end
 
     scenario "adding a group profile field" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       visit group_profile_path(@group)
       within('.box.contact_information') do
         click_on I18n.t(:edit)

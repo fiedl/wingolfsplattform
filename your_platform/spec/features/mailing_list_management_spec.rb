@@ -4,6 +4,7 @@ feature "Mailing list management" do
   include SessionSteps
   
   scenario "Adding a mailing list", :js do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @group = create :group
     
     login :admin

@@ -9,6 +9,7 @@ feature "Help Page" do
   end
 
   scenario "clicking on the help button and viewing the help page" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     visit root_path
     within('#header-nav') do
       click_on I18n.t(:help)

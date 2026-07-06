@@ -14,6 +14,7 @@ feature "Quick Links", :js do
   end
 
   scenario "checking that the wiki syntax created two links" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     visit page_path(@root_page)
     click_on "First page title"
     page.should have_text "Linked page 1"

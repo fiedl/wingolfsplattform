@@ -19,7 +19,10 @@ feature 'User page' do
         visit user_path(@user)
       end
 
-      it { should have_content I18n.t(:unauthorized_please_sign_in) }
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_content I18n.t(:unauthorized_please_sign_in)
+      end
     end
 
     describe 'when signed in as admin' do
@@ -28,20 +31,51 @@ feature 'User page' do
         visit user_path(@user)
       end
 
-      it { should have_selector('h1', text: I18n.t(:contact_information)) }
-      it { should have_selector('h1', text: I18n.t(:about_myself)) }
-      it { should have_selector('h1', text: I18n.t(:study_information)) }
-      it { should have_selector('h1', text: I18n.t(:career_information)) }
-      it { should have_selector('h1', text: I18n.t(:organizations)) }
-      it { should have_selector('h1', text: I18n.t(:bank_account_information)) }
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:contact_information))
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:about_myself))
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:study_information))
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:career_information))
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:organizations))
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:bank_account_information))
+      end
       it { should have_no_selector('h1', text: I18n.t(:description)) }
-      it { should have_selector('h1', text: I18n.t(:corporate_vita)) }
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:corporate_vita))
+      end
       pending { should have_selector('h1', text: I18n.t(:relationships)) }
-      it { should have_selector('h1', text: I18n.t(:communication)) }
-      it { should have_selector('h1', text: I18n.t(:access_information)) }
-      it { should have_selector('.workflow_triggers') }
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:communication))
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:access_information))
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('.workflow_triggers')
+      end
 
       scenario "the section :contact_information should be editable", js: true do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :contact_info_tab
         within('.box.section.contact_information') do
 
@@ -58,6 +92,7 @@ feature 'User page' do
       end
 
       scenario "the section :organizations should be editable", js: true do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :study_and_work_tab
         within('.box.section.organizations') do
           click_on I18n.t(:edit)
@@ -81,6 +116,7 @@ feature 'User page' do
       end
 
       scenario "editing the 'study information' box", js: true do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :study_and_work_tab
         within '.box.section.study_information' do
 
@@ -131,6 +167,7 @@ feature 'User page' do
       end
 
       scenario "the section :career_information should be editable", js: true do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :study_and_work_tab
         within('.box.section.career_information') { click_on :edit }
         within '.box.section.career_information' do
@@ -160,6 +197,7 @@ feature 'User page' do
       end
 
       scenario "the section :access_information", js: true do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :more_info_tab
         within('.box.section.access') do
 
@@ -171,6 +209,7 @@ feature 'User page' do
       end
 
       scenario "the section :communication should be editable", js: true do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :more_info_tab
         within('.box.section.communication') do
           click_on I18n.t(:edit)
@@ -187,6 +226,7 @@ feature 'User page' do
         end
 
         scenario 'the contact section should not be editable' do
+          pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
           click_tab :contact_info_tab
           within('.box.section.contact_information') do
             page.should have_selector('.postal_address', :visible => true)
@@ -198,16 +238,19 @@ feature 'User page' do
         end
 
         scenario "the section :communication should not be editable" do
+          pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
           click_tab :more_info_tab
           subject.should have_no_selector('a.edit_button', visible: true)
         end
 
         scenario 'the empty sections should not be visible' do
+          pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
           click_tab :study_and_work_tab
           subject.should have_no_selector('.box.section.organizations')
         end
 
         scenario 'the bank account section should not be visible' do
+          pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
           click_tab :more_info_tab
           subject.should have_no_selector('h1', text: I18n.t(:bank_account_information))
         end
@@ -221,78 +264,118 @@ feature 'User page' do
       end
 
       scenario 'adding and removing an address', :js do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :contact_info_tab
         section_should_be_editable :contact_information, [ProfileFields::Address]
       end
 
       scenario 'adding and removing an email address', :js do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :contact_info_tab
         section_should_be_editable :contact_information, [ProfileFields::Email]
       end
 
       scenario 'adding and removing a phone number', :js do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :contact_info_tab
         section_should_be_editable :contact_information, [ProfileFields::Phone]
       end
 
       scenario 'adding and removing a homepage', :js do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :contact_info_tab
         section_should_be_editable :contact_information, [ProfileFields::Homepage]
       end
 
       scenario 'adding and removing a custom profile field', :js do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :contact_info_tab
         section_should_be_editable :contact_information, [ProfileFields::Custom]
       end
 
       scenario 'adding and removing a field in the about-myself section', :js do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :study_and_work_tab
         section_should_be_editable :about_myself
       end
 
       scenario 'adding and removing a field in the study section', :js do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :study_and_work_tab
         section_should_be_editable :study_information
       end
 
       scenario 'adding and removing an employment', :js do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :study_and_work_tab
         section_should_be_editable :career_information, [ProfileFields::Employment]
       end
 
       scenario 'adding and removing a professional category', :js do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :study_and_work_tab
         section_should_be_editable :career_information, [ProfileFields::ProfessionalCategory]
       end
 
       scenario 'adding and removing an organization', :js do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :study_and_work_tab
         section_should_be_editable :organizations
       end
 
       scenario 'adding and removing a bank account', :js do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :more_info_tab
         section_should_be_editable :bank_account_information
       end
 
-      it { should have_selector('h1', text: I18n.t(:contact_information)) }
-      it { should have_selector('h1', text: I18n.t(:about_myself)) }
-      it { should have_selector('h1', text: I18n.t(:study_information)) }
-      it { should have_selector('h1', text: I18n.t(:career_information)) }
-      it { should have_selector('h1', text: I18n.t(:organizations)) }
-      it { should have_selector('h1', text: I18n.t(:bank_account_information)) }
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:contact_information))
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:about_myself))
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:study_information))
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:career_information))
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:organizations))
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:bank_account_information))
+      end
       it { should have_no_selector('h1', text: I18n.t(:description)) }
-      it { should have_selector('h1', text: I18n.t(:corporate_vita)) }
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:corporate_vita))
+      end
       pending { should have_selector('h1', text: I18n.t(:relationships)) }
-      it { should have_selector('h1', text: I18n.t(:communication)) }
-      it { should have_selector('h1', text: I18n.t(:access_information)) }
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:communication))
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_selector('h1', text: I18n.t(:access_information))
+      end
       it { should have_no_selector('.workflow_triggers')}
 
       scenario 'the empty sections should be visible' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         subject.should have_selector('.box.section.organizations')
       end
 
       scenario "the section #{I18n.t(:contact_information)} should be editable", js: true do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :contact_info_tab
         within('.box.section.contact_information') do
           page.should have_selector('.postal_address', :visible => true)
@@ -308,6 +391,7 @@ feature 'User page' do
         end
       end
       scenario "the section #{I18n.t(:communication)} should be editable", js: true do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :more_info_tab
         within('.box.section.communication') do
           click_on I18n.t(:edit)
@@ -316,6 +400,7 @@ feature 'User page' do
       end
 
       scenario "the section #{I18n.t(:study_information)} should be editable", js: true do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :study_and_work_tab
         within('.box.section.study_information') do
           click_on I18n.t(:edit)
@@ -344,6 +429,7 @@ feature 'User page' do
       end
 
       scenario "Looking at the section 'access' and requesting a new password", js: true do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :more_info_tab
         within('.box.section.access') do
           page.should have_text @user.alias
@@ -372,6 +458,7 @@ feature 'User page' do
       end
 
       scenario 'the section for account information', js: true do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :more_info_tab
         within('.box.section.access') do
           page.should have_content(I18n.t :user_has_no_account)

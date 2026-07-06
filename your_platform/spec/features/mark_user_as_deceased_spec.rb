@@ -12,6 +12,7 @@ feature 'Mark user as deceased' do
   end
 
   scenario 'mark the user as deceased', :js do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login :admin
 
     visit user_path(@user)

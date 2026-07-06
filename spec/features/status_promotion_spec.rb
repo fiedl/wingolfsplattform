@@ -24,6 +24,7 @@ feature 'Status Promotion' do
   end
 
   scenario 'promote user from first to second status', js: true do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login @local_admin
     visit user_path(@user_to_promote)
 

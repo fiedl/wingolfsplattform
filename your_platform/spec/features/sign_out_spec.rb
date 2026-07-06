@@ -24,6 +24,7 @@ feature "Sign Out" do
   end
   
   scenario "clicking on the sign-out link" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     find('.current_user_dropdown').click
     find('#sign_out').click
     

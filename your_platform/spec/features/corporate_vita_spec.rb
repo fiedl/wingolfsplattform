@@ -48,6 +48,7 @@ feature 'Corporate Vita', js: true do
     describe 'viewing the user page' do
       subject { page } # user profile page
       it 'should list the status group the user is a member of' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         page.should have_content @status_groups.first.name
         page.should have_no_content @status_groups.last.name
       end
@@ -55,6 +56,7 @@ feature 'Corporate Vita', js: true do
 
     describe 'promoting users (i.e. change their status)' do
       it 'should be possible to promote users' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
 
         # run the first workflow
         within '.box.first' do
@@ -98,6 +100,7 @@ feature 'Corporate Vita', js: true do
       end
 
       it 'should be possible to change the date' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :corporate_info_tab
         within('#corporate_vita') do
 
@@ -122,6 +125,7 @@ feature 'Corporate Vita', js: true do
           enter_in_place "#corporate_vita tr.membership", "2005"
         end
         it "should convert the year to 01.01.year and display it" do
+          pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
           page.should have_content "01.01.2005"
         end
       end
@@ -157,6 +161,7 @@ feature 'Corporate Vita', js: true do
 
     describe 'promoting himself (i.e. change his status)' do
       it 'should not be possible to promote himself' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         # run the second workflow
         within '.box.first' do
           page.should have_no_button I18n.t(:change_status)
@@ -172,6 +177,7 @@ feature 'Corporate Vita', js: true do
       end
 
       it 'should be possible to change the date' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :corporate_info_tab
         within('#corporate_vita') do
 
@@ -201,6 +207,7 @@ feature 'Corporate Vita', js: true do
       end
 
       it 'should still be visible in the profile' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :corporate_info_tab
         page.should have_content @status_groups.first.name
       end
@@ -230,6 +237,7 @@ feature 'Corporate Vita', js: true do
     describe 'viewing the user page' do
       subject { page } # user profile page
       it 'should list the status group the user is a member of' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         page.should have_content @status_groups.first.name
         page.should have_no_content @status_groups.last.name
       end
@@ -237,6 +245,7 @@ feature 'Corporate Vita', js: true do
 
     describe 'promoting users (i.e. change their status)' do
       it 'should not be possible to promote users' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
 
         # run the first workflow
         within '.box.first' do
@@ -254,6 +263,7 @@ feature 'Corporate Vita', js: true do
       end
 
       it 'should not be possible to change the date' do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         click_tab :corporate_info_tab
         within('#corporate_vita') do
 

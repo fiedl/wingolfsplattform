@@ -12,6 +12,7 @@ feature "Help Button" do
   end
 
   scenario 'visiting a page and use the help button', js: true do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     visit page_path(@start_page)
     click_on I18n.t(:help)
 

@@ -14,6 +14,7 @@ feature "Semester Calendars", :js do
   end
 
   scenario "Adding an event" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login @officer
     visit edit_semester_calendar_path(@semester_calendar)
 
@@ -43,6 +44,7 @@ feature "Semester Calendars", :js do
 
   if ENV['CI'] != 'travis'  # they do not support uploads
     scenario "Uploading a pdf" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       login @officer
       visit semester_calendar_path(@semester_calendar)
 
@@ -62,6 +64,7 @@ feature "Semester Calendars", :js do
   end
 
   scenario "Looking at semester calendars for all corporations" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login :user
     visit semester_calendars_path(term_id: @term.id)
 

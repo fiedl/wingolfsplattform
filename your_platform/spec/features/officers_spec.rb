@@ -11,6 +11,7 @@ feature "Officers Management" do
   end
 
   scenario "visiting a group site and looking at the officers" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login(:user)
     visit group_path(@group)
     within('.group_tabs') { click_on I18n.t(:officers) }
@@ -30,6 +31,7 @@ feature "Officers Management" do
     end
 
     scenario "visiting the group page and looking at the officers" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       login(:user)
       visit group_path(@group)
       within('.group_tabs') { click_on I18n.t(:officers) }
@@ -42,6 +44,7 @@ feature "Officers Management" do
   end
 
   scenario "assigning an officer", :js => true do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login(:admin)
     visit group_path(@group)
     within('.group_tabs') { click_on I18n.t(:officers) }

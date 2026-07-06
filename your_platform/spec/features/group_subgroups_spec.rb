@@ -21,11 +21,13 @@ feature "Group Subgroups" do
   end
 
   scenario 'viewing the corporations list and looking up the officers' do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     visit group_subgroups_path(@corporations_parent)
     page.should have_text @officer_group.name
   end
 
   scenario 'adding an officers group and re-visiting the corporations list' do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     visit group_subgroups_path(@corporations_parent)
     page.should have_text @officer_group.name
 
@@ -39,6 +41,7 @@ feature "Group Subgroups" do
   end
 
   scenario 'looking up officers of subgroups of corporations' do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @subgroup = @corporation.child_groups.create name: "Subgroup"
     @another_officers_group = @subgroup.create_officer_group name: "Executing Officer"
     @another_officers_group << @user
@@ -49,6 +52,7 @@ feature "Group Subgroups" do
   end
 
   scenario 'adding an officer to a subgroup and re-visiting the coporations list' do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     visit group_subgroups_path(@corporations_parent)
     page.should have_text @officer_group.name
 

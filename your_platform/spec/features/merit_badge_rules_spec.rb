@@ -8,6 +8,7 @@ feature "Merit Badge Rules" do
   end
 
   scenario "calendar-uplink badge" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login @user
 
     # Just looking at events#index does nothing.

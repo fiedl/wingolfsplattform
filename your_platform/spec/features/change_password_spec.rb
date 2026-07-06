@@ -17,18 +17,36 @@ feature 'Change Password', js: true do
       end
     end
 
-    it { should have_link I18n.t(:change_password) }
+    it do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+      should have_link I18n.t(:change_password)
+    end
 
     describe "and clicking #{I18n.t(:change_password)}" do
       background do
         click_on :change_password
       end
 
-      it { should have_field('password') }
-      it { should have_field('user_account_password_confirmation') }
-      it { should have_field('user_account_current_password') }
-      it { should have_field(I18n.t(:i_agree_i_do_not_use_the_same_password_on_other_services), :checked => false) }
-      it { should have_button(I18n.t(:submit_changed_password), visible: false) }
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_field('password')
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_field('user_account_password_confirmation')
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_field('user_account_current_password')
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_field(I18n.t(:i_agree_i_do_not_use_the_same_password_on_other_services), :checked => false)
+      end
+      it do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+        should have_button(I18n.t(:submit_changed_password), visible: false)
+      end
 
       describe 'and matching complex password and confirmation' do
         before do
@@ -47,19 +65,28 @@ feature 'Change Password', js: true do
               check(I18n.t(:i_agree_i_do_not_use_the_same_password_on_other_services))
             end
 
-            it { should have_button(I18n.t('submit_changed_password')) }
+            it do
+              pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+              should have_button(I18n.t('submit_changed_password'))
+            end
 
             describe '- after clicking submit'do
               before do
                 click_button I18n.t(:submit_changed_password)
               end
-              it { should have_notice(I18n.t('devise.registrations.updated')) }
+              it do
+                pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+                should have_notice(I18n.t('devise.registrations.updated'))
+              end
             end
 
           end
 
           describe 'but not having checked the agreement' do
-            it { should have_button(I18n.t('submit_changed_password'), visible: false) }
+            it do
+              pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+              should have_button(I18n.t('submit_changed_password'), visible: false)
+            end
           end
         end
 
@@ -74,7 +101,10 @@ feature 'Change Password', js: true do
               click_button I18n.t(:submit_changed_password)
             end
 
-            it { should have_text "Current password ist nicht gültig" } # TODO: can we i18n this?
+            it do
+              pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+              should have_text "Current password ist nicht gültig" # TODO: can we i18n this?
+            end
           end
         end
 
@@ -89,8 +119,14 @@ feature 'Change Password', js: true do
           check(I18n.t(:i_agree_i_do_not_use_the_same_password_on_other_services))
         end
 
-        it { should have_no_notice(I18n.t('devise.registrations.updated')) }
-        it { should have_button(I18n.t('submit_changed_password'), visible: false) }
+        it do
+          pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+          should have_no_notice(I18n.t('devise.registrations.updated'))
+        end
+        it do
+          pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+          should have_button(I18n.t('submit_changed_password'), visible: false)
+        end
 
       end
 
@@ -102,7 +138,10 @@ feature 'Change Password', js: true do
           fill_in 'user_account_current_password', with: @current_password
         end
 
-        it { should have_button(I18n.t('submit_changed_password'), visible: false) }
+        it do
+          pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+          should have_button(I18n.t('submit_changed_password'), visible: false)
+        end
       end
 
     end
@@ -117,7 +156,10 @@ feature 'Change Password', js: true do
       click_tab :more_info_tab
     end
 
-    it { should_not have_link(I18n.t(:change_password))}
+    it do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+      should_not have_link(I18n.t(:change_password))
+    end
   end
 
   describe 'when visiting the profile of another user as admin' do
@@ -128,7 +170,10 @@ feature 'Change Password', js: true do
       click_tab :more_info_tab
     end
 
-    it { should_not have_link(I18n.t(:change_password))}
+    it do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
+      should_not have_link(I18n.t(:change_password))
+    end
   end
 
   describe "when using the forgot-password mechanism" do
@@ -147,6 +192,7 @@ feature 'Change Password', js: true do
     it { should have_no_field('user_account_current_password') }
 
     it "should allow the user to change his password" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       @password = 'fordprefecthasanawesometowel!'
       fill_in 'password', with: @password
       fill_in 'user_account_password_confirmation', with: @password

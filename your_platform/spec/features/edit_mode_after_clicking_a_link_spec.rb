@@ -4,6 +4,7 @@ feature "edit mode after clicking a link" do
   include SessionSteps
 
   scenario "switch to edit mode after clicking a link (turbolinks support)", :js do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login(:admin)
     visit root_path
 

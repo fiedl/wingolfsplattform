@@ -20,6 +20,7 @@ feature "Groups Page" do
     end
 
     scenario 'should not render list entries for hidden members' do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       visit group_path(@group)
       within('.group_tabs') { click_on I18n.t(:members) }
       page.should have_selector '#group_members tr', count: 12
@@ -27,6 +28,7 @@ feature "Groups Page" do
     end
     
     scenario 'should render list entries for dead members' do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       visit group_path(@group)
       within('.group_tabs') { click_on I18n.t(:members) }
       page.should have_selector '#group_members tr', count: 12

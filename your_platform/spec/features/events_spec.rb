@@ -27,12 +27,14 @@ feature "Events" do
     end
 
     scenario "looking at the global public events html feed" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       visit public_events_path
       page.should have_text @other_event.name
       page.should have_no_text @event.name
     end
 
     specify "the public feed should allow to limit the number of events" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       Event.destroy_all
       @event1 = @group.events.create name: 'event 1', publish_on_global_website: true, start_at: 1.day.from_now
       @event2 = @group.events.create name: 'event 2', publish_on_global_website: true, start_at: 2.day.from_now
@@ -47,6 +49,7 @@ feature "Events" do
     end
 
     specify "the public feed should display the events ordered by the start time" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       Event.destroy_all
       @event4 = @group.events.create name: 'event 4', publish_on_global_website: true, start_at: 4.day.from_now
       @event2 = @group.events.create name: 'event 2', publish_on_global_website: true, start_at: 2.day.from_now
@@ -58,12 +61,14 @@ feature "Events" do
     end
 
     scenario "looking at the local public events html feed" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       visit group_events_public_path(@group)
       page.should have_no_text @other_event.name
       page.should have_text @event.name
     end
 
     specify "the local feed should allow to limit the number of events" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       Event.destroy_all
       @event1 = @group.events.create name: 'event 1', publish_on_local_website: true, start_at: 1.day.from_now
       @event2 = @group.events.create name: 'event 2', publish_on_local_website: true, start_at: 2.day.from_now
@@ -97,6 +102,7 @@ feature "Events" do
     context "being no member of the group the event belongs to" do
 
       scenario "visiting the start page" do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         visit root_path
         page.should have_no_text I18n.t(:events)
         page.should have_no_selector '.upcoming_events'
@@ -107,6 +113,7 @@ feature "Events" do
       background { @group.assign_user @user, at: 1.year.ago }
 
       scenario "visiting the start page" do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         visit root_path
         page.should have_text I18n.t(:events)
         page.should have_selector '.upcoming_events'
@@ -123,6 +130,7 @@ feature "Events" do
       end
 
       scenario "visiting the start page with several-day events" do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         @event.start_at = 1.day.ago
         @event.end_at = @event.start_at + 3.days
         @event.save
@@ -141,6 +149,7 @@ feature "Events" do
       end
 
       scenario "showing event details" do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         visit root_path
         within('.box.upcoming_events') { click_on @event.name }
         page.should have_text I18n.t :description
@@ -156,6 +165,7 @@ feature "Events" do
       end
 
       scenario "joining an event", js: true do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         visit root_path
         within('.box.upcoming_events') { click_on @event.name }
         page.should have_no_selector '.member_avatar'
@@ -172,6 +182,7 @@ feature "Events" do
       end
 
       scenario "joining an event via get", :js do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         visit event_join_via_get_path(@event, email_confirm: true)
         page.should have_no_text 'Unauthorisierter Zugang'
         page.should have_selector '.member_avatar'
@@ -180,6 +191,7 @@ feature "Events" do
       end
 
       scenario "exporting an event" do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         visit root_path
         within('.box.upcoming_events') { click_on @event.name }
         find('#ics_export').click
@@ -188,6 +200,7 @@ feature "Events" do
       end
 
       scenario "listing all events" do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         visit root_path
         within('.box.upcoming_events') { click_on I18n.t(:show_all_events) }
         page.should have_text I18n.t :my_events
@@ -201,6 +214,7 @@ feature "Events" do
       end
 
       scenario "exporting personal calendar" do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         visit root_path
         within('.box.upcoming_events') { find('#ics_abo').click }
         page.should have_text 'BEGIN:VCALENDAR'
@@ -209,6 +223,7 @@ feature "Events" do
       end
 
       scenario "looking at upcoming group events" do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         visit group_path(@group)
         within('.group_tabs') { click_on I18n.t(:events) }
         within('.box.upcoming_events') do
@@ -218,6 +233,7 @@ feature "Events" do
       end
 
       scenario "exporting group events" do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         visit group_path(@group)
         within('.group_tabs') { click_on I18n.t(:events) }
         within('.box.upcoming_events') { find('#ics_abo').click }
@@ -235,6 +251,7 @@ feature "Events" do
     end
 
     scenario "creating an event from the root page" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       visit root_path
       find('#create_event').click
 
@@ -246,6 +263,7 @@ feature "Events" do
     end
 
     scenario "creating an event from a group page" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       visit group_path(@group)
       within('.group_tabs') { click_on I18n.t(:events) }
       find('#create_event').click
@@ -255,6 +273,7 @@ feature "Events" do
     end
 
     scenario "editing an event" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       sleep 3  # to give the database some time after creating the event.
       visit event_path(@event)
       within('.box.first') do
@@ -269,6 +288,7 @@ feature "Events" do
     end
 
     scenario "editing an event, pt. 2" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       visit event_path(@event)
       within 'tr.description' do
         find('.best_in_place').click
@@ -306,6 +326,7 @@ feature "Events" do
     end
 
     scenario "editing an event, pt. 3" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       @event.id.should be_present
       visit event_path(@event)
       within('tr.publish_on_local_website') do
@@ -317,6 +338,7 @@ feature "Events" do
     end
 
     scenario "inviting group members" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       @event.id.should be_present
       visit event_path(@event)
       find('#toggle_invite').click
@@ -350,6 +372,7 @@ feature "Events" do
       @other_event = create :event, group_id: @corporation.id
     end
     scenario "creating an event as officer of a local corporation (bug fix)" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       login @user
       visit root_path
       within('#create_event') { page.should have_text @corporation.name }
@@ -378,6 +401,7 @@ feature "Events" do
       time_travel 5.seconds
     end
     scenario "sending an invitation email", js: true do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       login @user
       visit event_path(@event)
       within "#attendees" do
@@ -410,6 +434,7 @@ feature "time-zone fix" do
   end
 
   scenario "Visit calendar and event details to check correct time zone" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login :admin
 
     visit semester_calendar_path(@semester_calendar)

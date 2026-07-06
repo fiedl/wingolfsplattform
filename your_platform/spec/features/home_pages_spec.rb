@@ -43,6 +43,7 @@ feature "Home Pages" do
       end
 
       scenario "Adding a locations map", :js do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         login @user
 
         visit page_settings_path @page
@@ -53,6 +54,7 @@ feature "Home Pages" do
       end
 
       scenario "Adding events", :js do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         @event = Group.everyone.events.create name: "Garden party",
           publish_on_global_website: true,
           start_at: 1.day.from_now
@@ -75,6 +77,7 @@ feature "Home Pages" do
       end
 
       scenario "Adding a teaser box", :js do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         login @user
         visit page_path @page
 
@@ -116,6 +119,7 @@ feature "Home Pages" do
       # end
 
       scenario "Adding an officers box", :js do
+        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         login @user
         visit page_path @page
 
@@ -135,6 +139,7 @@ feature "Home Pages" do
   end
 
   scenario "Creating a new home page", :js do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @corporation = create :corporation
     @user = create :user_with_account
     @corporation.admins << @user

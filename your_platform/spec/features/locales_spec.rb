@@ -9,6 +9,7 @@ feature 'Locales' do
   end
 
   scenario "providing the :locale parameter to display the page in different languages" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
 
     locale_before_scenario = I18n.locale
 

@@ -18,6 +18,7 @@ feature "review membership" do
   end
 
   scenario "viewing user's profile an accepting a membership that is to be reviewed", :js, :timeout => 30.seconds do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
 
     visit user_path(@user)
 

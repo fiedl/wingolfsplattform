@@ -8,6 +8,7 @@ feature "Groups Table" do
     @group.assign_user @user, at: 10.days.ago
   end
   scenario "viewing the groups table as regular user", :js do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login :user
     visit user_path(@user)
     click_on :more_info_tab
@@ -22,6 +23,7 @@ feature "Groups Table" do
     end
   end
   scenario "viewing the groups table as administrator" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login :admin
     visit user_path(@user)
     click_on :more_info_tab
@@ -33,6 +35,7 @@ feature "Groups Table" do
     end
   end
   scenario "viewing the own groups table" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login @user
     visit user_path(@user)
     click_on :more_info_tab

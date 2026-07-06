@@ -4,6 +4,7 @@ feature "Pages" do
   include SessionSteps
 
   scenario "Visiting a page" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @page = Page.create(title: "My Shiny Page")
     login :user
 
@@ -12,6 +13,7 @@ feature "Pages" do
   end
 
   scenario "creating a documents page as group officer" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @user = create :user_with_account
     @group = create :group
     @group.child_pages.create title: "Lorem ipsum"

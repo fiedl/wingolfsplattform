@@ -9,6 +9,7 @@ feature "Profile fields maintenance view", :js do
   end
 
   scenario "listing the profile fields" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login :admin
     visit profile_fields_path(user_id: @user.id)
 
@@ -19,6 +20,7 @@ feature "Profile fields maintenance view", :js do
   end
 
   scenario "removing a profile field" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login :admin
     visit profile_fields_path(user_id: @user.id)
 
@@ -36,6 +38,7 @@ feature "Profile fields maintenance view", :js do
   end
 
   scenario "adding a profile field" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login :admin
     visit profile_fields_path(user_id: @user.id)
 

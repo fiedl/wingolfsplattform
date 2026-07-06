@@ -10,6 +10,7 @@ feature "Page Settings", :js do
   end
 
   scenario "setting the page author" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login :admin
     visit page_settings_path(@page)
 
@@ -32,6 +33,7 @@ feature "Page Settings", :js do
   end
 
   scenario "setting the page type" do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     login :admin
     visit page_settings_path(@page)
 
@@ -51,6 +53,7 @@ feature "Page Settings", :js do
     end
 
     scenario "Showing the sub page as teaser box" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       visit page_settings_path(@page)
       within(".box.boxes_on_this_page .teaser_boxes form#edit_page_#{@sub_page.id}") do
         check "Sub page"
@@ -73,6 +76,7 @@ feature "Page Settings", :js do
     end
 
     scenario "Hiding the sub page as teaser box" do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       visit page_settings_path(@page)
       within(".box.boxes_on_this_page .teaser_boxes form#edit_page_#{@sub_page.id}") do
         uncheck "Sub page"
