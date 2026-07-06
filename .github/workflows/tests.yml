@@ -40,5 +40,9 @@ jobs:
         run: docker run --rm -v .:/app alpine sh -c "chown -R $(id -u):$(id -g) /app && chmod -R 777 /app"
         continue-on-error: true
       - uses: actions/checkout@v4
+        with:
+          # AppVersion reads `git describe`; the default shallow clone
+          # carries no tags, which fails the app_version specs.
+          fetch-depth: 0
       - name: Run specs
         run: ${{ matrix.command }}
