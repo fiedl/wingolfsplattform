@@ -203,14 +203,18 @@ class Group
   #                                      |------------- Alle BV-_Administratoren
   #
   #
+  # No memoization here: the test suite truncates the database between
+  # examples, and a memoized group object would keep a stale id.
   def self.alle_wingolfiten
-    @alle_wingolfiten ||= self.find_or_create_special_group :alle_wingolfiten
+    self.find_or_create_special_group :alle_wingolfiten
   end
   def self.alle_aktiven
-    self.find_or_create_special_group :alle_aktiven
+    # Nested under Alle Wingolfiten, as documented in the hierarchy
+    # above — membership in an Aktivitas makes a user a Wingolfit.
+    alle_wingolfiten.find_or_create_special_group :alle_aktiven
   end
   def self.alle_philister
-    self.find_or_create_special_group :alle_philister
+    alle_wingolfiten.find_or_create_special_group :alle_philister
   end
   def self.alle_verstorbenen_wingolfiten
     self.find_or_create_by name: "Alle Verstorbenen Wingolfiten"
