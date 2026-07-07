@@ -156,7 +156,7 @@ namespace :activate do
   end
   
   def find_random_user_applicable_for_new_account
-    find_all_applicable_users.order('RAND()').limit(1).first
+    random_user_from find_all_applicable_users
   end
   
   def find_all_applicable_users
@@ -166,11 +166,16 @@ namespace :activate do
   end
   
   def find_random_user
-    User.order('RAND()').limit(1).first
+    random_user_from User
   end
-  
+
   def find_random_user_without_account
-    find_all_users_without_account.order('RAND()').limit(1).first
+    random_user_from find_all_users_without_account
+  end
+
+  def random_user_from(users)
+    count = users.count
+    users.offset(rand(count)).first if count > 0
   end
   
   def find_all_users_without_account
