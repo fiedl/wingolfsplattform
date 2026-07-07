@@ -59,19 +59,26 @@ Umgebung; das Repository enthält keine Produktionsgeheimnisse.
 Starte die Web-Oberfläche mit
 
 ```bash
-docker-compose run rails bundle exec rake db:create db:migrate db:seed
-docker-compose up rails
+bin/dev
 ```
 
-und rufe danach http://localhost:3000 auf.
+und rufe danach http://localhost:3000 auf. Das Skript startet sich
+selbst im Docker-Container neu, bereitet beim ersten Lauf die Umgebung
+vor (Javascript-Module, Datenbank — siehe `bin/setup.rb`), startet den
+webpack-dev-server für das Entwicklungs-Javascript (Port 9000) und den
+Rails-Server. Alternativ: `docker compose up web`.
 
 ### Konsole
 
 Mit der Rails-Konsole kannst Du auch ohne Web-Oberfläche auf alles zugreifen:
 
 ```bash
-docker-compose run console
+bin/rails console
 ```
+
+Alle `bin/`-Wrapper funktionieren sowohl vom Host als auch im Container:
+Auf dem Host starten sie sich selbst über `bin/docker_wrapper.rb` im
+passenden Compose-Service neu.
 
 ### Tests
 
@@ -81,8 +88,8 @@ dieselbe Spec-Konfiguration (`spec/spec_helper.rb`), sodass sie in einem
 Aufruf kombiniert werden können.
 
 Für die Entwicklung gibt es `bin/rspec`. Das Skript startet sich selbst
-im Docker-Container neu (`bin/docker_wrapper`), bereitet die Umgebung vor
-(Javascript-Module, Test-Datenbank; höchstens einmal täglich, siehe
+im Docker-Container neu (`bin/docker_wrapper.rb`), bereitet die Umgebung
+vor (Javascript-Module, Test-Datenbank; höchstens einmal täglich, siehe
 `bin/setup.rb`) und reicht die Argumente an rspec durch:
 
 ```bash
@@ -133,7 +140,7 @@ Bitte macht euch mit dem [Rails-Security-Guide](http://guides.rubyonrails.org/se
 Datenbank in eine SQL-Datei exportieren:
 
 ```bash
-docker-compose run rails bundle exec ruby script/dump
+docker compose run --rm web bundle exec ruby script/dump
 ```
 
 Dies erzeugt eine SQL-Datei mit Zeitstempel im Verzeichnis `backups/sql_dumps`.
@@ -141,7 +148,7 @@ Dies erzeugt eine SQL-Datei mit Zeitstempel im Verzeichnis `backups/sql_dumps`.
 SQL-Datei importieren:
 
 ```bash
-docker-compose run rails bash -c "mysql -h mysql -u root --password=secret -D wingolfsplattform_development" < /path/to/sql/file.sql
+docker compose run --rm -T web bash -c "mysql -h mysql -u root --password=secret -D wingolfsplattform_development" < /path/to/sql/file.sql
 ```
 
 
