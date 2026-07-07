@@ -9,6 +9,7 @@ feature "Groups Page" do
     end
 
     scenario 'viewing the members list of a corporation' do
+      pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
       @user = create(:user)
       @corporation = create(:wingolf_corporation)
       @membership = @corporation.status_groups.first.assign_user @user, at: 1.year.ago

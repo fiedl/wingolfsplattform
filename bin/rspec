@@ -1,8 +1,35 @@
-#!/usr/bin/env ruby
-begin
-  load File.expand_path('../spring', __FILE__)
-rescue LoadError => e
-  raise unless e.message.include?('spring')
-end
-require 'bundler/setup'
-load Gem.bin_path('rspec-core', 'rspec')
+#!/bin/bash
+
+# Run specs during development, dockerized:
+#
+#     bin/rspec spec/models/user_spec.rb
+#     bin/rspec spec/models your_platform/spec/models
+#     bin/rspec your_platform/spec/features/events_spec.rb
+#
+# The script re-runs itself in the tests container, prepares the
+# environment (javascript modules, test database — at most once per
+# day, see bin/setup.rb) and hands the arguments to rspec. CI uses
+# bin/rspec_ci instead, which parallelizes and retries.
+
+source bin/docker_wrapper
+ensure_inside_docker tests "$@"
+
+until mysqladmin ping -h "$MYSQL_HOST" -u root -p"$MYSQL_PASSWORD" --silent 2>/dev/null; do
+  echo "Waiting for mysql ..."
+  sleep 2
+done
+
+ruby bin/setup.rb || exit 1
+
+# Feature specs drive the app through a real browser and need compiled
+# assets. The assets live in a docker volume, so this is incremental
+# after the first run.
+case "$*" in
+  ""|*features*)
+    echo "\$ bundle exec rails assets:precompile"
+    bundle exec rails assets:precompile || exit 1
+    ;;
+esac
+
+echo "\$ bundle exec rspec $*"
+exec bundle exec rspec "$@"

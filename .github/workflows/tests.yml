@@ -1,16 +1,65 @@
 name: tests
 on: [push]
+
+# A new push supersedes the running jobs of the same branch. Without
+# this, stacked runs pile up compose stacks (mysql, neo4j, chrome per
+# job) on the runner host until it starves.
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: github
+
 jobs:
-  model-specs:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: [self-hosted, Linux]
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      - name: Build docker images
-        run: docker-compose build
-      - name: Start docker containers
-        run: docker-compose up -d mysql_test redis neo4j && sleep 10
-      - name: Prepare database
-        run: docker-compose run tests /bin/bash -c "bundle exec rake db:create db:migrate"
-      - name: Run tests
-        run: docker-compose run tests
+      # A cancelled job never reaches its clean-up: its containers keep
+      # running and keep writing root-owned files into the workspace.
+      # Stop them first. The project name mirrors bin/setup_ci.
+      - name: Stop leftover containers
+        run: docker compose --project-name "$(echo "$RUNNER_NAME" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9\n' '-')" down --remove-orphans
+        continue-on-error: true
+      # Containers write root-owned files (assets, tmp) into the workspace;
+      # reclaim it so checkout can clean up.
+      - name: Directory permissions
+        run: docker run --rm -v .:/app alpine sh -c "chown -R $(id -u):$(id -g) /app && chmod -R 777 /app"
+        continue-on-error: true
+      - uses: actions/checkout@v4
+      - name: Build test images
+        run: bin/setup_ci
+
+  specs:
+    runs-on: [self-hosted, Linux]
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: engine models
+            command: bin/rspec_ci your_platform/spec/models
+          - name: engine features a-l
+            command: bin/rspec_ci your_platform/spec/features/[a-l]*
+          - name: engine features m-z
+            command: bin/rspec_ci your_platform/spec/features/[m-z]*
+          - name: app models
+            command: bin/rspec_ci spec/models
+          - name: app features
+            command: bin/rspec_ci spec/features
+    name: ${{ matrix.name }}
+    steps:
+      # See the build job: stop containers a cancelled job left behind.
+      - name: Stop leftover containers
+        run: docker compose --project-name "$(echo "$RUNNER_NAME" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9\n' '-')" down --remove-orphans
+        continue-on-error: true
+      - name: Directory permissions
+        run: docker run --rm -v .:/app alpine sh -c "chown -R $(id -u):$(id -g) /app && chmod -R 777 /app"
+        continue-on-error: true
+      - uses: actions/checkout@v4
+        with:
+          # AppVersion reads `git describe`; the default shallow clone
+          # carries no tags, which fails the app_version specs.
+          fetch-depth: 0
+      - name: Run specs
+        run: ${{ matrix.command }}

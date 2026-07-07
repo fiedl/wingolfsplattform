@@ -1,0 +1,8 @@
+- if can? :use, :tags
+  .tagcloud.clearfix.bottommargin
+    = render partial: 'tags/tag_list', locals: {taggable: blog_post}
+    - if can? :update, blog_post
+      %a.edit_tag_cloud{href: '#'}
+        = edit_icon
+        = t :edit_tags
+  .clear

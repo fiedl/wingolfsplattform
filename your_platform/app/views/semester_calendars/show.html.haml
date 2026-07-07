@@ -1,0 +1,76 @@
+.page-header
+  .row.align-itens-center
+    .col
+      .page-pretitle= corporation.title
+      .page-title
+        Semesterprogramm
+        = term.title
+    .col-auto.ml-auto
+      .d-flex
+        .calendar_feed_button
+          - if current_user
+            .btn.btn-white.dropdown-toggle{'data-toggle': "dropdown"}
+              = calendar_icon
+              Kalender-Feed
+            .dropdown-menu.dropdown-menu-right
+              .dropdown-header
+                = corporation.title
+              = link_to group_events_url(group_id: group.id, format: 'ics', protocol: 'webcal', token: current_user.account.auth_token), class: 'dropdown-item' do
+                = calendar_icon
+                Alle Veranstaltungen
+              - if current_user.member_of? group
+                = link_to events_url(format: 'ics', protocol: 'webcal', token: current_user.account.auth_token), class: 'dropdown-item' do
+                  = calendar_icon
+                  Nur die Veranstaltungen, die mich betreffen
+              = link_to group_events_url(group_id: group.id, public: true, format: 'ics', protocol: 'webcal', token: current_user.account.auth_token), class: 'dropdown-item' do
+                = calendar_icon
+                Nur die Veranstaltungne von der Website
+          - elsif not current_user
+            = link_to group_events_url(group_id: group.id, public: true, format: 'ics', protocol: 'webcal'), class: 'btn btn-white' do
+              = calendar_icon
+              Kalender-Feed
+
+          -#= render partial: 'semester_calendars/calendar_feed_box'  # --> TODO: move into dropdown
+
+.row
+  .col-md-8
+    .card
+      = form_tag group_search_semester_calendar_path(group_id: group.id), method: 'get', class: 'card-header semester' do
+        = select_tag :year, options_for_select((1980..(Time.zone.now.year+5)).collect { |year| [year, year] }, term.year), class: 'form-select'
+        = select_tag :term_type, options_for_select([[t(:summer_term), "Terms::Summer"], [t(:winter_term), "Terms::Winter"]], term.type), class: 'form-select'
+        = submit_tag "OK", class: 'btn btn-primary'
+        - if can? :index, SemesterCalendar and can? :read, group
+          = link_to "Überblick", semester_calendars_path(group_id: corporation.id), class: 'btn btn-white ml-2', title: "Alle Semesterprogramme von #{corporation.title}"
+
+      = vue_semester_calendar_events semester_calendar: semester_calendar
+
+  .col-md-4
+    = render partial: 'groups/profile_card', locals: {group: corporation}
+
+    - if semester_calendar.attachments.any? || can?(:update, semester_calendar)
+      %vue_semester_calendar_attachment_card{':semester_calendar': semester_calendar.to_json, ':term': term.as_json(methods: [:title]).to_json, ':initial_attachment': semester_calendar.attachments.last.to_json, ':editable': can?(:update, semester_calendar).to_json}
+
+    .card.offices
+      .card-header
+        %h3.mb-0
+          Chargierte im
+          = term.title
+      .card-body
+        .row
+          - for office_key in %w(senior fuxmajor kneipwart)
+            - if semester_calendar.respond_to?(office_key)
+              - if officer = semester_calendar.send(office_key)
+                .col-12.col-sm-6.col-md-12.row.row-sm.mb-3.align-items-center
+                  .col-auto
+                    = user_avatar(officer)
+                  .col
+                    .text-body.d-block= link_to officer.title, officer
+                    %small.d-block.mt-n1.text-muted= translate office_key
+                    - if officer.phone
+                      %small.d-block.mt-n1.text-muted= link_to officer.phone, "tel:#{officer.phone.gsub(' ', '')}", class: 'text-muted'
+      - if semester_calendar.current? && semester_calendar.officer_group(:senior) && can?(:update_memberships, semester_calendar.officer_group(:senior))
+        .card-footer
+          .change_officers
+            = link_to "Amtsträger ändern", group_officers_path(group_id: semester_calendar.group.id), class: 'btn btn-white btn-sm'
+
+

@@ -1,0 +1,26 @@
+%h1= current_title
+%div
+  .term
+    = "#{t(:term)}: "
+    = term.title
+
+  %table.datatable.corporation_score
+    %thead
+      %tr
+        %th{rowspan: 2}= t :rank
+        %th{rowspan: 2}= t :corporation
+        %th{colspan: CorporationScore.score_columns.count - 1}= t :score_for
+        %th{rowspan: 2}= t CorporationScore.score_columns.last
+      %tr
+        - CorporationScore.score_columns[0...-1].each do |column|
+          %th= t column
+    %tbody
+      - corporation_scores.each_with_index do |corporation_score, index|
+        %tr{class: [('mine' if corporation_score.title.in?(current_user.current_corporations.map(&:name))), ("winner" if index < 4)].join(" ")}
+          %td= "#{index + 1}."
+          %td= corporation_score.title
+          - CorporationScore.score_columns[0...-1].each do |column|
+            %td.stars
+              - corporation_score.send(column).to_i.times do
+                = fa_icon 'star'
+          %td= corporation_score.send CorporationScore.score_columns.last

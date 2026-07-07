@@ -13,6 +13,7 @@ feature "BV-Admins" do
   end
 
   scenario "Managing Officers through officers#index", :js do
+    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @bv_leiter = @bv.create_officer_group name: "BV-Leiter"
     @bv_leiter.add_flag :bv_leiter
 

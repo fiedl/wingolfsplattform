@@ -1,0 +1,30 @@
+- # This switcher allows for global officers and above to simulate
+- # how the page would look like for regular users and lesser
+- # roles.
+
+- if show_role_preview_menu?
+  - active_or_not = (current_role_view != current_role.to_s) ? 'active' : ''
+
+  %li{class: "backendBarItem dropdown #{active_or_not} role-preview-switcher"}
+    = link_to "?preview_as=#{current_role.to_s}", class: 'dropdown-toggle', data: {toggle: 'dropdown'} do
+      = t current_role_view
+      - if Issue.by_admin(current_user).count > 0
+        .badge= Issue.by_admin(current_user).count
+      %b.caret
+
+    - unless params[:preview_not_possible]
+      %ul.dropdown-menu
+        - if can? :index, Issue
+          %li.nav-header
+            = t :tasks
+            - if can? :create, Issue
+              = link_to new_issue_path, id: 'new_issue_button_in_dropdown' do
+                = icon :plus
+          %li.issues_task{class: current_issues.count == 0 ? 'good' : 'bad'}
+            = link_to "#{current_issues.count} #{t(:administrative_issues)}", issues_path
+        %li.nav-header
+          = t :preview_as
+        - current_role.allowed_preview_roles.each do |preview_role|
+          - active_or_not = (preview_role == current_role_view) ? 'active' : ''
+          %li{class: active_or_not}
+            = link_to t(preview_role), "?preview_as=#{preview_role}"

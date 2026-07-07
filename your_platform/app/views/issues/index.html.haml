@@ -1,0 +1,9 @@
+%h1.issues= "#{current_title} (#{@issues.count})"
+%div
+  %a#rescan.btn.btn-outline-secondary.right{href: "?rescan=#{current_role_view == 'global_admin' ? 'all' : 'mine'}"}
+    = icon('refresh')
+    = t(:rescan)
+
+- @issues.each do |issue|
+  - if issue.reference.kind_of?(ProfileField) or issue.reference.kind_of?(Membership)
+    = render partial: 'issues/issue', locals: {issue: issue}

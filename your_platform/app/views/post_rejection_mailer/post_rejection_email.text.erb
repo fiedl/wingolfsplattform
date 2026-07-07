@@ -1,0 +1,16 @@
+<%= t :your_email_message %>
+
+    <%= @subject %>
+
+<%= t :to_the_recipient %>
+
+    <%= @recipient_name %>
+
+<%= t :has_been_rejected %>.
+
+<% if @reason %>
+<%= t :reason %>: <%= @reason %>
+<% end %>
+
+<%= t :if_you_need_help_reply_to_contact_our_support_team %>
+

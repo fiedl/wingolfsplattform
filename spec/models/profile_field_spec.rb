@@ -16,7 +16,6 @@ describe ProfileFields::Address do
   before do
     @address_field = ProfileFields::Address.create( label: "Address of the Brandenburg Gate",
                                                         value: "Pariser Platz 1\n 10117 Berlin" )
-    @address_field.convert_to_format_with_separate_fields
 
     create( :bv_group, name: "BV 00" ) # just to have another one in the database
     @bv = create( :bv_group, name: "BV 01", token: "BV 01" )
@@ -44,15 +43,10 @@ describe ProfileFields::Address do
     @corporation = create :wingolf_corporation
     @corporation.philisterschaft.assign_user @user, at: 1.year.ago
     @address_field = @user.profile_fields.create type: 'ProfileFields::Address', label: 'Address', value: '44 Rue de Stalingrad, Grenoble, Frankreich'
-    @address_field.convert_to_format_with_separate_fields
-    @country_code_field = @address_field.find_child_by_key(:country_code)
-    @city_field = @address_field.find_child_by_key(:city)
-    @postal_code_field = @address_field.find_child_by_key(:postal_code)
     @user.bv.should_not == @bv
 
-    @country_code_field.value = 'DE'; @country_code_field.save
-    @city_field.value = 'Berlin'; @city_field.save
-    @postal_code_field.value = '10117'; @postal_code_field.save
+    @address_field.value = "Pariser Platz 1\n 10117 Berlin"
+    @address_field.save
     @user.reload.bv.should == @bv
   end
 

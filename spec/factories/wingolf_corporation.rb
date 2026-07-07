@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
 
   factory :wingolf_corporation, :class => "Corporation" do
 

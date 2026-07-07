@@ -1,0 +1,33 @@
+- #locals:
+- active ||= 'posts'
+- @group = group if defined?(group) and not @group
+
+- unless show_resource_nav?
+
+  %ul.nav.nav-pills.group.group_tabs.tabs
+    - if @group.group_of_groups?
+      %li.nav-item
+        %a.nav-link{href: group_subgroups_path(@group), class: (active == 'subgroups' ? 'active' : '')}= @group.name
+    - unless @group.group_of_groups?
+      - # One can see the posts tab under one of these conditions:
+      - # - The user can read all posts of this group.
+      - # - The user can see this particular post (due to an invitation) and, therefore, the posts controller is currently used.
+      - if can?(:index_posts, @group) or params[:controller] == 'posts'
+        %li.nav-item
+          %a.nav-link{href: group_posts_path(@group), class: (active == 'posts' ? 'active' : '')} Nachrichten
+      %li.nav-item
+        %a.nav-link{href: group_profile_path(@group), class: (active == 'profile' ? 'active' : '')} Kontakt & Profil
+    %li.nav-item
+      - if @group.use_semester_calendars? && can?(:use, :semester_calendars)
+        %a.nav-link{href: group_search_semester_calendar_path(@group), class: (active == 'events' ? 'active' : '')}= t :semester_calendar
+      - else
+        %a.nav-link{href: group_events_path(@group), class: (active == 'events' ? 'active' : '')}= t :events
+    - unless @group.group_of_groups?
+      %li.nav-item
+        %a.nav-link{href: group_members_path(@group), class: (active == 'members' ? 'active' : '')} Mitglieder
+    - unless @group.kind_of?(OfficerGroup)
+      %li.nav-item
+        %a.nav-link{href: group_officers_path(@group), class: (active == 'officers' ? 'active' : '')} Amtsträger
+    - if can? :update, @group
+      %li.nav-item
+        %a.nav-link{href: group_settings_path(@group), class: (active == 'settings' ? 'active' : '')}=t :settings

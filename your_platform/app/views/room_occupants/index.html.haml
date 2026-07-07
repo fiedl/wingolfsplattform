@@ -1,0 +1,23 @@
+%h1= t :rooms
+%div
+  %table.datatable
+    %thead
+      %tr
+        %th= t :room
+        %th= t :rent
+        %th= t :occupant
+        %th
+        %th= t :since
+    %tbody
+      - rooms.each do |room|
+        %tr
+          %td= best_in_place_if can?(:manage, room), room, :name
+          %td
+            = best_in_place_if can?(:manage, room), room, :rent
+            EUR
+          %td= link_to_user_with_avatar room.occupant if room.occupant
+          %td
+            - if can? :manage, room
+              = link_to edit_icon, new_group_room_occupancy_path(group_id: room.id), class: 'btn btn-outline-secondary btn-sm', title: t(:change_occupant)
+              = link_to history_icon, group_room_occupancies_path(group_id: room.id), class: 'btn btn-outline-secondary btn-sm', title: t(:view_occupancy_history)
+          %td= localize room.occupant_since.try(:to_date) if room.occupant

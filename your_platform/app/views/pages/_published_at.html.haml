@@ -1,0 +1,6 @@
+- if page.published_at
+  = localize(page.published_at)
+- else
+  %span.unpublished_draft= t :unpublished_draft
+  - if can? :publish, page
+    %span.publish= link_to "(#{t(:publish)})", page_publications_path(page_id: page.id), method: :post, remote: true, class: 'publish_draft', title: t(:publish_page_which_is_draft_now)

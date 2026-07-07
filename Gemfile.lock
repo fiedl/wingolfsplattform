@@ -8,9 +8,25 @@ GIT
       activerecord (>= 4.0.0)
 
 GIT
-  remote: https://github.com/fiedl/your_platform
-  revision: 2c5e50064f41c9653f1de57b5cdef059467eac9b
-  branch: master
+  remote: https://github.com/refile/refile-mini_magick
+  revision: 27b6c6c7affcc302a59068b8b3f458cb147c2fa6
+  specs:
+    refile-mini_magick (0.2.0)
+      image_processing (>= 0.4.1, < 1.0)
+      mini_magick (>= 4.3.5)
+      refile (~> 0.5)
+
+GIT
+  remote: https://github.com/sobrinho/refile
+  revision: e943b10721ede830e1a986db591080e992aefbd4
+  specs:
+    refile (0.6.2)
+      mime-types
+      rest-client (~> 1.8)
+      sinatra (>= 2.0.0, <= 3.0.0)
+
+PATH
+  remote: your_platform
   specs:
     your_platform (1.0.1)
       actionpack (>= 4.2.5.2)
@@ -97,26 +113,7 @@ GIT
       wannabe_bool
       yard (>= 0.9.20)
 
-GIT
-  remote: https://github.com/refile/refile-mini_magick
-  revision: 27b6c6c7affcc302a59068b8b3f458cb147c2fa6
-  specs:
-    refile-mini_magick (0.2.0)
-      image_processing (>= 0.4.1, < 1.0)
-      mini_magick (>= 4.3.5)
-      refile (~> 0.5)
-
-GIT
-  remote: https://github.com/sobrinho/refile
-  revision: e943b10721ede830e1a986db591080e992aefbd4
-  specs:
-    refile (0.6.2)
-      mime-types
-      rest-client (~> 1.8)
-      sinatra (>= 2.0.0, <= 3.0.0)
-
 GEM
-  remote: https://rails-assets.org/
   remote: https://rubygems.org/
   specs:
     actioncable (5.0.7.2)
@@ -179,13 +176,15 @@ GEM
     builder (3.2.3)
     c32 (0.3.0)
     cancancan (1.15.0)
-    capybara (2.15.1)
+    capybara (3.39.2)
       addressable
+      matrix
       mini_mime (>= 0.1.3)
-      nokogiri (>= 1.3.3)
-      rack (>= 1.0.0)
-      rack-test (>= 0.5.4)
-      xpath (~> 2.0)
+      nokogiri (~> 1.8)
+      rack (>= 1.6.0)
+      rack-test (>= 0.6.3)
+      regexp_parser (>= 1.5, < 3.0)
+      xpath (~> 3.2)
     carrierwave (0.11.2)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -194,10 +193,7 @@ GEM
       mimemagic (>= 0.3.0)
     charlock_holmes (0.7.7)
     chartkick (3.4.2)
-    childprocess (0.7.1)
-      ffi (~> 1.0, >= 1.0.11)
     choice (0.2.0)
-    cliver (0.3.2)
     coderay (1.1.3)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
@@ -264,11 +260,11 @@ GEM
       charlock_holmes
       email_reply_parser (~> 0.5.9)
       mail
-    factory_girl (4.8.0)
-      activesupport (>= 3.0.0)
-    factory_girl_rails (4.8.0)
-      factory_girl (~> 4.8.0)
-      railties (>= 3.0.0)
+    factory_bot (6.2.1)
+      activesupport (>= 5.0.0)
+    factory_bot_rails (6.2.0)
+      factory_bot (~> 6.2.0)
+      railties (>= 5.0.0)
     faker (2.16.0)
       i18n (>= 1.6, < 2)
     faraday (1.3.0)
@@ -352,6 +348,7 @@ GEM
     mail_form (1.8.1)
       actionmailer (>= 5.0)
       activemodel (>= 5.0)
+    matrix (0.4.3)
     merit (4.0.1)
       ambry (~> 1.0.0)
       zeitwerk
@@ -361,7 +358,7 @@ GEM
       nokogiri (~> 1)
       rake
     mini_magick (4.9.5)
-    mini_mime (0.1.4)
+    mini_mime (1.1.5)
     mini_portile2 (2.5.3)
     mini_racer (0.2.6)
       libv8 (>= 6.9.411)
@@ -396,10 +393,6 @@ GEM
       parallel
     pdf-core (0.6.1)
     phony (2.18.19)
-    poltergeist (1.16.0)
-      capybara (~> 2.1)
-      cliver (~> 0.3.1)
-      websocket-driver (>= 0.2.0)
     prawn (2.0.2)
       pdf-core (~> 0.6.0)
       ttfunk (~> 1.4.0)
@@ -490,6 +483,7 @@ GEM
       redis-store (>= 1.2, < 2)
     redis-store (1.6.0)
       redis (>= 2.2, < 5)
+    regexp_parser (2.12.0)
     responders (2.4.1)
       actionpack (>= 4.2.0, < 6.0)
       railties (>= 4.2.0, < 6.0)
@@ -499,6 +493,7 @@ GEM
       netrc (~> 0.7)
     reverse_markdown (2.0.0)
       nokogiri
+    rexml (3.4.4)
     rinku (1.5.1)
     rspec (3.6.0)
       rspec-core (~> 3.6.0)
@@ -527,6 +522,8 @@ GEM
       rspec-expectations (~> 3.6.0)
       rspec-mocks (~> 3.6.0)
       rspec-support (~> 3.6.0)
+    rspec-retry (0.6.2)
+      rspec-core (> 3.3)
     rspec-support (3.6.0)
     ruby-graphviz (1.2.3)
     ruby-ole (1.2.12.2)
@@ -553,9 +550,10 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    selenium-webdriver (3.5.1)
-      childprocess (~> 0.5)
-      rubyzip (~> 1.0)
+    selenium-webdriver (4.9.0)
+      rexml (~> 3.2, >= 3.2.5)
+      rubyzip (>= 1.2.2, < 3.0)
+      websocket (~> 1.0)
     sepa_king (0.12.0)
       activemodel (>= 3.1)
       iban-tools
@@ -625,11 +623,12 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
+    websocket (1.2.11)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
-    xpath (2.1.0)
-      nokogiri (~> 1.3)
+    xpath (3.2.0)
+      nokogiri (~> 1.8)
     yard (0.9.20)
     zeitwerk (2.4.2)
 
@@ -640,13 +639,13 @@ DEPENDENCIES
   acts-as-dag!
   binding_of_caller!
   brakeman (>= 2.3.1)!
-  capybara!
+  capybara (~> 3.0)!
   coffee-rails (>= 4.0.0)!
   colored!
   database_cleaner!
   email_spec!
   execjs!
-  factory_girl_rails!
+  factory_bot_rails (~> 6.2.0)!
   flamegraph!
   guard!
   guard-rspec!
@@ -658,7 +657,6 @@ DEPENDENCIES
   mysql2!
   nokogiri (>= 1.7.1)!
   parallel_tests!
-  poltergeist!
   pry!
   pry-remote!
   puma!
@@ -673,9 +671,10 @@ DEPENDENCIES
   rspec-instafail!
   rspec-its!
   rspec-rails!
+  rspec-retry!
   rubyzip (>= 1.2.1)!
   sass-rails!
-  selenium-webdriver!
+  selenium-webdriver (~> 4.0)!
   spring!
   spring-commands-rspec!
   stackprof!

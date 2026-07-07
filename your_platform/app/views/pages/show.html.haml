@@ -1,0 +1,15 @@
+.row
+  .col-md-8
+    .card
+      - if page.image || can?(:update, page)
+        = vue_editable_image page.image, editable: can?(:update, page), image_class: 'card-header', update_url: polymorphic_path(page), attribute_name: "pages_public_page[image]", style: 'min-height: 200px'
+      .card-body
+        %vue-edit-box
+          = editable page, :content, type: 'wysiwyg', class: 'form-control'
+
+  - if page.attachments.any?
+    .col-md-4
+      .card
+        .card-header Dateien
+        .card-body
+          = render attachments

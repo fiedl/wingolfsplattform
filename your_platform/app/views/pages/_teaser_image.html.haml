@@ -1,0 +1,17 @@
+- if page.teaser_youtube_url
+  = you_tube page.teaser_youtube_url
+- elsif page.teaser_video_url
+  = video_tag page.teaser_video_url, controls: true, class: 'video'
+- else
+  #inline-pictures.teaser_image{data: {page_url: url_for(page)}}
+    = galleria theme: 'classic' do
+
+      - page.teaser_images.each do |image|
+        - if image.kind_of? Attachment
+          = render partial: 'attachments/picture', locals: { attachment: image }
+        - if image.kind_of? String
+          = image_tag image
+
+    .picture-info
+      .picture-title
+        - # Will be filled from app/assets/javascripts/your_platform/gallery.js.coffee if a gallery is used for this teaser image.

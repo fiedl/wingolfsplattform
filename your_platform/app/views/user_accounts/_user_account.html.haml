@@ -1,0 +1,31 @@
+%dl.user_account
+  %dt= t :you_may_login_with_alias_name_or_email
+  %dd
+    %dl
+      %span.alias
+        %dt= t :alias
+        %dd= editable @user, :alias, editable: can?(:change_alias, @user)
+      %span.name
+        %dt= t :name
+        %dd= @user.name
+      %span.email
+        %dt= t :email
+        %dd= @user.email
+
+%vue-show-in-edit-mode
+  %dl
+    - if can? :update, @user
+      %dt= t :platform_access
+      %dd= t :the_user_account_has_been_created_at_str1_and_updated_at_str2, str1: localize(@user.account.created_at), str2: localize(@user.account.updated_at)
+      %dt
+        = t('password') + ':'
+      - if @user == current_user
+        %dd.change_password
+          %p= link_to t(:change_password), edit_registration_path, :class => 'btn btn-success'
+      - if can? :manage, @user.account
+        %dd.request_new_password
+          %p= button_to t(:send_new_password), forgot_password_user_path(@user.id), method: :put, :class => 'btn btn-success'
+        %dt= t :lock_platform_access
+        %dd.lock_account
+          = button_to t(:lock_user_account), user_account_path(@user), :method => :delete, :class => 'btn btn-danger'
+          %p= t(:this_locks_platform_access_for_str_no_data_will_be_lost, str: link_to(@user.title, @user)).html_safe

@@ -1,0 +1,42 @@
+- if @blog
+  - if (@blog.content.to_s.length > 5) || can?(:update, @blog)
+    .widget
+      = best_in_place_if can?(:update, @blog), @blog, :content, as: :textarea, sanitize: false
+
+- if @blog_posts
+  .widget
+    %h4= t :images
+    = render partial: 'blogs/image_collection'
+
+- if @tags && @tags.any? && can?(:use, :tags)
+  .widget
+    %h4= t :tags
+    .tagcloud
+      - @tags.each do |tag|
+        = link_to_tag tag
+
+- if @blog.kind_of?(Blog)
+  .widget
+    %h4= t :subscribe
+    - if can? :subscribe_to, @blog
+      -#= t :subscribe_str_via_email, str: @blog.title
+      %p= render partial: 'blog_subscriptions/form', object: @blog, as: :blog
+    - if can? :manage, @blog
+      %p
+        = link_to group_members_path(@blog.subscriber_group) do
+          = "#{@blog.subscribers.count} #{t(:subscribers)}"
+
+    .feeds.noborder.clearfix
+      %span{title: t(:rss_feed)}= rss_button(rss_url("default"))
+      %span{title: t(:podcast_feed)}= rss_button(rss_url("podcast"))
+
+  - if can? :create_suggestion_for, @blog
+    .widget
+      %h4= t :suggest_something
+      - if Setting.discourse_suggestions_url.present?
+        %p= link_to t(:suggest_something_in_community), Setting.discourse_suggestions_url, class: 'btn btn-success'
+      %p
+        = t(:or_colon) if Setting.discourse_suggestions_url.present?
+        %a.show_suggestion_form{href: '#'}= t :suggest_something_privately
+      %p
+        .suggestion_form.hidden= render partial: 'contact_messages/form'

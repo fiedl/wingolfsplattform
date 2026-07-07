@@ -1,0 +1,21 @@
+- # locals:
+- # page
+- teaser ||= false
+
+%ul.meta
+  %li.published_at.page_published_at
+    = icon :calendar
+    = render partial: 'pages/published_at', locals: {page: page}
+  - if (not teaser) && page.contributors.any?
+    %li.author.page_author
+      = icon :user
+      - page.contributors.each do |user|
+        = link_to(user.title, user_blog_posts_path(user_id: user.id))
+  - if (not teaser) && @navable != page and not @navable.in?(page.parents) and page.parents.first
+    %li.page_parent
+      = folder_icon
+      = link_to page.parents.first.title, page.parents.first
+  - if (page.tags.any? || can?(:update, page)) && can?(:use, :tags)
+    %li.tags.page_tags
+      = icon :tag
+      = render partial: 'tags/tag_list', object: page, as: :taggable

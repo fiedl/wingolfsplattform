@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
 
   factory :bv, aliases: [:bv_group] do
     sequence( :token ) { |n| "BV#{n}" }

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body style="font-family: Helvetica; line-height: 150%">
+
+    <% if logo_url %>
+      <%= link_to root_url do %>
+        <%= image_tag logo_url, align: 'right', style: 'max-height: 3em' %>
+      <% end %><br />
+    <% end %>
+
+    <h2><%= link_to @subject, @post_url %></h2>
+
+    <%= @body %>
+
+    <p>
+      <hr style="height:1px;border:none;color:#333;background-color:#333;" />
+      <p><small>
+        <%= link_to "Post auf der Plattform kommentieren", @post_url %>
+      </small></p>
+    </p>
+
+  </body>
+</html>

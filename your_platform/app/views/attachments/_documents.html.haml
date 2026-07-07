@@ -1,0 +1,14 @@
+-# locals:
+-#  - attachments
+-#  - parent
+
+- attachments = attachments.sort_by { |attachment| attachment.created_at }.reverse
+- show_drop_field ||= false
+
+%table.attachments.documents
+  - attachments.each do |attachment|
+    = render attachment
+
+- if show_drop_field && can?(:create_attachment_for, parent)
+  .hidden-print.show_only_in_edit_mode
+    = render partial: 'attachments/drop_field', locals: {type: :pdf, parent: parent}

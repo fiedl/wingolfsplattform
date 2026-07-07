@@ -1,0 +1,6 @@
+- # Locals:
+- attachment || raise(ActionController::ParameterMissing, 'no attachment given')
+
+= afterglow_video(attachment)
+
+= render partial: 'attachments/description', locals: {attachment: attachment}
