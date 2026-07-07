@@ -27,7 +27,12 @@ module DockerWrapper
 
     command ||= "bin/#{File.basename($0)}"
 
-    dockerized_command = "docker compose run --rm #{'--service-ports' if service_ports} #{container} bin/bundle_exec #{command} #{ARGV.join(' ')}"
+    # Escaping keeps argument boundaries intact, e.g. for
+    # bin/rails runner "puts Rails.env".
+    require 'shellwords'
+    arguments = ARGV.map { |argument| Shellwords.escape(argument) }.join(' ')
+
+    dockerized_command = "docker compose run --rm #{'--service-ports' if service_ports} #{container} bin/bundle_exec #{command} #{arguments}"
     print "$ #{dockerized_command}\n"
 
     exec(dockerized_command)
