@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env ruby
 
 # Run specs during development, dockerized:
 #
@@ -9,27 +9,20 @@
 # The script re-runs itself in the tests container, prepares the
 # environment (javascript modules, test database — at most once per
 # day, see bin/setup.rb) and hands the arguments to rspec. CI uses
-# bin/rspec_ci instead, which parallelizes and retries.
+# bin/rspec_ci instead, which retries failed examples.
 
-source bin/docker_wrapper
-ensure_inside_docker tests "$@"
+require_relative "docker_wrapper"
+DockerWrapper.ensure_inside_docker! container: "tests", service_ports: true
 
-until mysqladmin ping -h "$MYSQL_HOST" -u root -p"$MYSQL_PASSWORD" --silent 2>/dev/null; do
-  echo "Waiting for mysql ..."
-  sleep 2
-done
-
-ruby bin/setup.rb || exit 1
+require_relative "setup.rb"
 
 # Feature specs drive the app through a real browser and need compiled
 # assets. The assets live in a docker volume, so this is incremental
 # after the first run.
-case "$*" in
-  ""|*features*)
-    echo "\$ bundle exec rails assets:precompile"
-    bundle exec rails assets:precompile || exit 1
-    ;;
-esac
+if ARGV.empty? || ARGV.join(' ').include?('features')
+  shell "bundle exec rails assets:precompile"
+end
 
-echo "\$ bundle exec rspec $*"
-exec bundle exec rspec "$@"
+command = "bundle exec rspec #{ARGV.join(' ')}"
+log.prompt command
+exec(command)
