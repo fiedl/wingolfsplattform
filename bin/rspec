@@ -14,8 +14,8 @@
 source bin/docker_wrapper
 ensure_inside_docker tests "$@"
 
-until mysqladmin ping -h "$MYSQL_HOST" -u root -p"$MYSQL_PASSWORD" --silent 2>/dev/null; do
-  echo "Waiting for mysql ..."
+until pg_isready -h "$POSTGRES_HOST" -q 2>/dev/null; do
+  echo "Waiting for postgres ..."
   sleep 2
 done
 

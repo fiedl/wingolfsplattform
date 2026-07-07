@@ -4,8 +4,9 @@
 version: '3'
 
 volumes:
+  postgres_data: {}
+  postgres_test_data: {}
   mysql_data: {}
-  mysql_test_data: {}
   redis_data: {}
   neo4j_data: {}
   wingolfsplattform_uploads: {}
@@ -16,7 +17,7 @@ services:
   rails:
     build: .
     depends_on:
-      - mysql
+      - postgres
       - redis
       - neo4j
       - sidekiq
@@ -34,10 +35,8 @@ services:
       - "0.0.0.0:3000:3000"
     environment:
       RAILS_ENV: development
-      MYSQL_DATABASE: wingolfsplattform_development
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_HOST: mysql
+      POSTGRES_HOST: postgres
+      POSTGRES_PASSWORD: secret
       REDIS_HOST: redis
       NEO4J_REST_URL: http://neo4j:trinity@neo4j:7474
     command:
@@ -55,14 +54,12 @@ services:
       - "./config/database.docker.yml:/app/wingolfsplattform/config/database.yml"
     environment:
       RAILS_ENV: development
-      MYSQL_DATABASE: wingolfsplattform_development
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_HOST: mysql
+      POSTGRES_HOST: postgres
+      POSTGRES_PASSWORD: secret
       REDIS_HOST: redis
       NEO4J_REST_URL: http://neo4j:trinity@neo4j:7474
     depends_on:
-      - mysql
+      - postgres
       - redis
       - neo4j
     command: /bin/bash -c "bundle exec rails console"
@@ -81,21 +78,19 @@ services:
       - "./config/database.docker.yml:/app/wingolfsplattform/config/database.yml"
     environment:
       RAILS_ENV: test
-      MYSQL_DATABASE: wingolfsplattform_test
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_HOST: mysql
+      POSTGRES_HOST: postgres
+      POSTGRES_PASSWORD: secret
       REDIS_HOST: redis
       NEO4J_REST_URL_TEST: http://neo4j:trinity@neo4j:7474
       CHROME_URL: http://chrome:4444
     depends_on:
-      - mysql_test
+      - postgres_test
       - redis
       - neo4j
       - chrome
     links:
-      - "mysql_test:mysql"
-    command: /bin/bash -c "bundle exec rake db:create db:migrate && bundle exec rspec spec/models"
+      - "postgres_test:postgres"
+    command: /bin/bash -c "bundle exec rake db:create db:schema:load && bundle exec rspec spec/models"
 
   chrome:
     image: selenium/standalone-chromium:4.27.0
@@ -114,20 +109,43 @@ services:
       - "./config/database.docker.yml:/app/wingolfsplattform/config/database.yml"
     environment:
       RAILS_ENV: test
-      MYSQL_DATABASE: wingolfsplattform_test
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_HOST: mysql
+      POSTGRES_HOST: postgres
+      POSTGRES_PASSWORD: secret
       REDIS_HOST: redis
       NEO4J_REST_URL_TEST: http://neo4j:trinity@neo4j:7474
     depends_on:
-      - mysql_test
+      - postgres_test
       - redis
       - neo4j
     links:
-      - "mysql_test:mysql"
-    command: /bin/bash -c "bundle exec rake db:create db:migrate && bundle exec guard"
+      - "postgres_test:postgres"
+    command: /bin/bash -c "bundle exec rake db:create db:schema:load && bundle exec guard"
 
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: "wingolfsplattform_development"
+      POSTGRES_PASSWORD: "secret"
+      # ICU with German rules gives umlaut-aware ordering, comparable
+      # to mysql's utf8_unicode_ci, without generating OS locales.
+      POSTGRES_INITDB_ARGS: "--locale-provider=icu --icu-locale=de-DE --locale=C.UTF-8"
+    volumes:
+      - "postgres_data:/var/lib/postgresql/data"
+
+  postgres_test:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: "wingolfsplattform_test"
+      POSTGRES_PASSWORD: "secret"
+      POSTGRES_INITDB_ARGS: "--locale-provider=icu --icu-locale=de-DE --locale=C.UTF-8"
+    volumes:
+      # A separate volume: postgres and postgres_test may run at the
+      # same time, and two servers on one datadir corrupt it.
+      - "postgres_test_data:/var/lib/postgresql/data"
+
+  # The mysql service stays until the production cutover to postgres
+  # is through: the pgloader rehearsal restores a production dump here
+  # and copies it into the postgres service.
   mysql:
     image: mysql:5.7
     environment:
@@ -137,19 +155,6 @@ services:
       MYSQL_USER: "wingolfsplattform"
     volumes:
       - "mysql_data:/var/lib/mysql"
-    command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --innodb-use-native-aio=0"
-
-  mysql_test:
-    image: mysql:5.7
-    environment:
-      MYSQL_DATABASE: "wingolfsplattform_test"
-      MYSQL_PASSWORD: "secret"
-      MYSQL_ROOT_PASSWORD: "secret"
-      MYSQL_USER: "wingolfsplattform"
-    volumes:
-      # A separate volume: mysql and mysql_test may run at the same time,
-      # and two mysqld processes on one datadir corrupt it.
-      - "mysql_test_data:/var/lib/mysql"
     command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --innodb-use-native-aio=0"
 
   redis:
@@ -181,14 +186,12 @@ services:
       - "./config/database.docker.yml:/app/wingolfsplattform/config/database.yml"
     environment:
       RAILS_ENV: development
-      MYSQL_DATABASE: wingolfsplattform_development
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_HOST: mysql
+      POSTGRES_HOST: postgres
+      POSTGRES_PASSWORD: secret
       REDIS_HOST: redis
       NEO4J_REST_URL: http://neo4j:trinity@neo4j:7474
     depends_on:
-      - mysql
+      - postgres
       - redis
       - neo4j
     command: /bin/bash -c "bundle exec sidekiq -c 10 -q default -q dag_links -q cache -q slow -q retry -q mailers -q mailgate --verbose"
