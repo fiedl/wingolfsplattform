@@ -23,6 +23,37 @@ Die frühere your_platform-Engine ist seit 2026 Teil dieses Repositories
 
 Falls Du die Umgebung alternativ lieber großteils ohne Docker installieren möchtest, guck Dir am Besten unseren alten [Getting-Started-Guide](https://github.com/fiedl/wingolfsplattform/wiki/Getting-Started) an.
 
+### Umgebungsvariablen
+
+Die Datenbank- und Secrets-Konfiguration (`config/database.yml`,
+`config/secrets.yml`) ist eingecheckt und liest die Umgebung. Für die
+dockerisierte Entwicklung funktionieren die Standardwerte ohne weiteres
+Zutun. Zum Übersteuern legst Du eine `.env`-Datei im Projektverzeichnis
+an, die docker compose automatisch lädt und die nicht eingecheckt wird:
+
+```dotenv
+# .env — Beispiel; alle Einträge sind optional
+RAILS_ENV=development
+RAILS_PORT=3000
+
+# Datenbank (Standard: das dockerisierte MySQL aus docker-compose.yml)
+#DB_HOST=mysql
+#DB_PORT=3306
+#DB_NAME=wingolfsplattform_development
+#DB_USERNAME=root
+#DB_PASSWORD=secret
+
+# Secrets (Standard: bekannte Entwicklungs-Dummywerte)
+#SECRET_KEY_BASE=
+#SECRET_TOKEN=
+#SMTP_USER=wingolfsplattform@wingolf.io
+#SMTP_PASSWORD=
+#SSO_SECRET=
+```
+
+In production kommen sämtliche echten Werte ausschließlich aus der
+Umgebung; das Repository enthält keine Produktionsgeheimnisse.
+
 ### Web-Oberfläche
 
 Starte die Web-Oberfläche mit
