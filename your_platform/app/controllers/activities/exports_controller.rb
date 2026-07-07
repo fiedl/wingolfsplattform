@@ -2,7 +2,7 @@ class Activities::ExportsController < ApplicationController
 
   def index
     authorize! :read, :exports_log
-    @activities = PublicActivity::Activity.where('`key` like ?', "Export%").limit(1000)
+    @activities = PublicActivity::Activity.where('activities.key LIKE ?', "Export%").limit(1000)
 
     set_current_title t(:exports_log)
     set_current_access :admin
