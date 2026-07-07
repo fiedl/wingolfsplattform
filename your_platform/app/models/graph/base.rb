@@ -1,12 +1,22 @@
 class Graph::Base
 
+  # Configure the rest interface in an initializer.
+  #
+  #     # config/initializers/neo4j.rb
+  #     Rails.configuration.x.neo4j_rest_url = "http://neo4j:swordfish@localhost:7474"
+  #
+  # The connection is thread-local: the underlying excon http connection
+  # is not thread-safe, and sharing it between threads (e.g. the spec
+  # thread and the capybara app server) corrupts its state, which
+  # surfaces as Excon::Error::Socket wrapping EOFError or TypeError.
+  # https://github.com/fiedl/wingolfsplattform/issues/122
+  #
   def self.neo
-    # Configure the rest interface in an initializer.
-    #
-    #     # config/initializers/neo4j.rb
-    #     Rails.configuration.x.neo4j_rest_url = "http://neo4j:swordfish@localhost:7474"
-    #
-    @neo ||= (Neography::Rest.new(Rails.configuration.x.neo4j_rest_url) if configured?)
+    Thread.current[:neography_rest] ||= (Neography::Rest.new(Rails.configuration.x.neo4j_rest_url) if configured?)
+  end
+
+  def self.reset_connection
+    Thread.current[:neography_rest] = nil
   end
 
   def self.configured?
@@ -163,6 +173,9 @@ class Graph::Base
     rescue Excon::Error::Socket => error
       counter += 1
       p "Neo4j connection failed (#{error.message}). Retry #{counter}/#{MAX_CONNECTION_RETRIES}."
+      # The failed http connection may be in a corrupted state;
+      # retry on a fresh one.
+      reset_connection
       if counter < MAX_CONNECTION_RETRIES
         sleep 0.1 * counter
         retry
