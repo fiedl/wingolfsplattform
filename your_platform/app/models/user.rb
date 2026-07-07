@@ -18,7 +18,7 @@ class User < ApplicationRecord
   before_validation         :strip_first_and_last_name
 
   before_validation         :change_alias_if_already_taken
-  validates_uniqueness_of   :alias, :if => Proc.new { |user| user.account and user.alias.present? }
+  validates_uniqueness_of   :alias, case_sensitive: false, :if => Proc.new { |user| user.account and user.alias.present? }
   validates_format_of       :email, :with => Devise::email_regexp, :if => Proc.new { |user| user.email.present? }, judge: :ignore
 
   has_one                   :account, class_name: "UserAccount", autosave: true, inverse_of: :user, dependent: :destroy
@@ -585,7 +585,7 @@ class User < ApplicationRecord
   # notice: case insensitive
   #
   def self.find_all_by_email( email ) # TODO: Test this; # TODO: optimize using where
-    email_fields = ProfileField.where( type: "ProfileFields::Email", value: email )
+    email_fields = ProfileField.where( type: "ProfileFields::Email" ).where( 'LOWER(value) = LOWER(?)', email )
     matching_users = email_fields
       .select{ |ef| ef.profileable_type == "User" }
       .collect { |ef| ef.profileable }

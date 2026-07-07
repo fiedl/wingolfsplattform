@@ -108,7 +108,7 @@ concern :UserName do
     # notice: case insensitive
     #
     def find_all_by_name(name) # TODO: Test this
-      self.where("CONCAT(first_name, ' ', last_name) = ?", name)
+      self.where("LOWER(CONCAT(first_name, ' ', last_name)) = LOWER(?)", name)
     end
 
   end
