@@ -15,6 +15,12 @@ jobs:
   build:
     runs-on: [self-hosted, Linux]
     steps:
+      # A cancelled job never reaches its clean-up: its containers keep
+      # running and keep writing root-owned files into the workspace.
+      # Stop them first. The project name mirrors bin/setup_ci.
+      - name: Stop leftover containers
+        run: docker compose --project-name "$(echo "$RUNNER_NAME" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9\n' '-')" down --remove-orphans
+        continue-on-error: true
       # Containers write root-owned files (assets, tmp) into the workspace;
       # reclaim it so checkout can clean up.
       - name: Directory permissions
@@ -43,6 +49,10 @@ jobs:
             command: bin/rspec_ci spec/features
     name: ${{ matrix.name }}
     steps:
+      # See the build job: stop containers a cancelled job left behind.
+      - name: Stop leftover containers
+        run: docker compose --project-name "$(echo "$RUNNER_NAME" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9\n' '-')" down --remove-orphans
+        continue-on-error: true
       - name: Directory permissions
         run: docker run --rm -v .:/app alpine sh -c "chown -R $(id -u):$(id -g) /app && chmod -R 777 /app"
         continue-on-error: true
