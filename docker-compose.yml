@@ -1,7 +1,11 @@
-# Start with:
-# docker-compose up rails
-
-version: '3'
+# Development and test stack. Start the web interface with:
+#
+#     docker compose up web
+#
+# The bin/ wrappers (bin/rails, bin/rspec, bin/dev, ...) run themselves
+# in these services via bin/docker_wrapper.rb, so they can be called
+# directly from the host. Values like RAILS_PORT can be overridden
+# through a .env file — see the README section on environment variables.
 
 volumes:
   mysql_data: {}
@@ -11,91 +15,119 @@ volumes:
   wingolfsplattform_uploads: {}
   wingolfsplattform_assets: {}
   wingolfsplattform_tmp: {}
+  # Gems installed by bin/bundle_exec survive the container.
+  bundle_cache: {}
+  # Javascript modules stay out of the host checkout (yarn runs as root
+  # in the container and would litter it with root-owned files).
+  node_modules_cache: {}
 
 services:
+
+  # Base service the app services extend; not started on its own.
   rails:
-    build: .
-    depends_on:
-      - mysql
-      - redis
-      - neo4j
-      - sidekiq
+    build:
+      context: .
+      target: development
     volumes:
-      - .:/app/wingolfsplattform
-      - ./your_platform:/app/your_platform
-      - "wingolfsplattform_uploads:/app/wingolfsplattform/uploads"
-      - "wingolfsplattform_assets:/app/wingolfsplattform/public/assets"
-      - "wingolfsplattform_tmp:/app/wingolfsplattform/tmp"
-      - "./config/secrets.docker.yml:/app/wingolfsplattform/config/secrets.yml"
-      - "./config/database.docker.yml:/app/wingolfsplattform/config/database.yml"
-    expose:
-      - 3000
-    ports:
-      - "0.0.0.0:3000:3000"
+      - .:/rails
+      - "bundle_cache:/usr/local/bundle"
+      - "node_modules_cache:/rails/your_platform/node_modules"
+      - "wingolfsplattform_assets:/rails/public/assets"
     environment:
-      RAILS_ENV: development
-      MYSQL_DATABASE: wingolfsplattform_development
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_HOST: mysql
+      RAILS_ENV: "${RAILS_ENV:-development}"
+      RAILS_PORT: "${RAILS_PORT:-3000}"
+      DB_HOST: mysql
+      DB_USERNAME: root
+      DB_PASSWORD: secret
       REDIS_HOST: redis
       NEO4J_REST_URL: http://neo4j:trinity@neo4j:7474
-    command:
-      - ./start
+      WAIT_HOSTS: "mysql:3306, redis:6379, neo4j:7474"
+    tty: true
+    stdin_open: true
+
+  web:
+    extends:
+      service: rails
+    volumes:
+      - "wingolfsplattform_uploads:/rails/uploads"
+      # tmp in a volume keeps root-owned pid/cache files out of the host
+      # checkout. The tests service leaves tmp on the host instead —
+      # bin/rspec_ci reads the rspec example statuses from there.
+      - "wingolfsplattform_tmp:/rails/tmp"
+    ports:
+      - "0.0.0.0:${RAILS_PORT:-3000}:${RAILS_PORT:-3000}"
+      # webpack-dev-server, serving the vue packs in development (the
+      # layouts load them from localhost:9000, started by bin/dev).
+      - "9000:9000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      neo4j:
+        condition: service_started
+      sidekiq:
+        condition: service_started
+    command: bash -c "/wait && bin/bundle_exec bin/server"
 
   console:
-    build: .
+    extends:
+      service: rails
     volumes:
-      - .:/app/wingolfsplattform
-      - ./your_platform:/app/your_platform
-      - "wingolfsplattform_uploads:/app/wingolfsplattform/uploads"
-      - "wingolfsplattform_assets:/app/wingolfsplattform/public/assets"
-      - "wingolfsplattform_tmp:/app/wingolfsplattform/tmp"
-      - "./config/secrets.docker.yml:/app/wingolfsplattform/config/secrets.yml"
-      - "./config/database.docker.yml:/app/wingolfsplattform/config/database.yml"
-    environment:
-      RAILS_ENV: development
-      MYSQL_DATABASE: wingolfsplattform_development
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_HOST: mysql
-      REDIS_HOST: redis
-      NEO4J_REST_URL: http://neo4j:trinity@neo4j:7474
+      - "wingolfsplattform_uploads:/rails/uploads"
+      - "wingolfsplattform_tmp:/rails/tmp"
     depends_on:
-      - mysql
-      - redis
-      - neo4j
-    command: /bin/bash -c "bundle exec rails console"
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      neo4j:
+        condition: service_started
+    command: bash -c "/wait && bin/bundle_exec rails console"
+
+  sidekiq:
+    extends:
+      service: rails
+    volumes:
+      - "wingolfsplattform_uploads:/rails/uploads"
+      - "wingolfsplattform_tmp:/rails/tmp"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      neo4j:
+        condition: service_started
+    command: bash -c "/wait && bin/bundle_exec bin/sidekiq"
 
   tests:
-    build: .
+    extends:
+      service: rails
     # A fixed image name: CI jobs run in per-runner compose projects, and
     # without it every project would build its own identically-named-but-
     # separate image instead of reusing the one the build job created.
     image: wingolfsplattform-tests
-    volumes:
-      - .:/app/wingolfsplattform
-      - ./your_platform:/app/your_platform
-      - "wingolfsplattform_assets:/app/wingolfsplattform/public/assets"
-      - "./config/secrets.docker.yml:/app/wingolfsplattform/config/secrets.yml"
-      - "./config/database.docker.yml:/app/wingolfsplattform/config/database.yml"
     environment:
       RAILS_ENV: test
-      MYSQL_DATABASE: wingolfsplattform_test
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_HOST: mysql
-      REDIS_HOST: redis
+      DB_HOST: mysql_test
       NEO4J_REST_URL_TEST: http://neo4j:trinity@neo4j:7474
       CHROME_URL: http://chrome:4444
+      WAIT_HOSTS: "mysql_test:3306, redis:6379, neo4j:7474"
     depends_on:
-      - mysql_test
-      - redis
-      - neo4j
-      - chrome
-    links:
-      - "mysql_test:mysql"
-    command: /bin/bash -c "bundle exec rake db:create db:migrate && bundle exec rspec spec/models"
+      mysql_test:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      neo4j:
+        condition: service_started
+      chrome:
+        condition: service_started
+    command: bash -c "/wait && bin/bundle_exec rspec spec/models"
+
+  guard:
+    extends:
+      service: tests
+    command: bash -c "/wait && bin/bundle_exec bash -c 'bundle exec rails db:create db:migrate && bundle exec guard'"
 
   chrome:
     image: selenium/standalone-chromium:4.27.0
@@ -104,58 +136,47 @@ services:
       SE_NODE_MAX_SESSIONS: 4
       SE_NODE_SESSION_TIMEOUT: 600
 
-  guard:
-    build: .
-    volumes:
-      - .:/app/wingolfsplattform
-      - ./your_platform:/app/your_platform
-      - "wingolfsplattform_assets:/app/wingolfsplattform/public/assets"
-      - "./config/secrets.docker.yml:/app/wingolfsplattform/config/secrets.yml"
-      - "./config/database.docker.yml:/app/wingolfsplattform/config/database.yml"
-    environment:
-      RAILS_ENV: test
-      MYSQL_DATABASE: wingolfsplattform_test
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_HOST: mysql
-      REDIS_HOST: redis
-      NEO4J_REST_URL_TEST: http://neo4j:trinity@neo4j:7474
-    depends_on:
-      - mysql_test
-      - redis
-      - neo4j
-    links:
-      - "mysql_test:mysql"
-    command: /bin/bash -c "bundle exec rake db:create db:migrate && bundle exec guard"
-
   mysql:
     image: mysql:5.7
     environment:
       MYSQL_DATABASE: "wingolfsplattform_development"
-      MYSQL_PASSWORD: "secret"
       MYSQL_ROOT_PASSWORD: "secret"
-      MYSQL_USER: "wingolfsplattform"
     volumes:
       - "mysql_data:/var/lib/mysql"
     command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --innodb-use-native-aio=0"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -psecret --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
 
   mysql_test:
     image: mysql:5.7
     environment:
       MYSQL_DATABASE: "wingolfsplattform_test"
-      MYSQL_PASSWORD: "secret"
       MYSQL_ROOT_PASSWORD: "secret"
-      MYSQL_USER: "wingolfsplattform"
     volumes:
       # A separate volume: mysql and mysql_test may run at the same time,
       # and two mysqld processes on one datadir corrupt it.
       - "mysql_test_data:/var/lib/mysql"
     command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --innodb-use-native-aio=0"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -psecret --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
 
   redis:
     image: redis
     volumes:
-      - redis_data:/var/lib/redis
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   neo4j:
     image: neo4j:3.5
@@ -168,27 +189,3 @@ services:
       NEO4J_dbms_memory_heap_initial__size: "2G"
       NEO4J_dbms_memory_heap_max__size: "2G"
       NEO4J_dbms_memory_pagecache_size: "1G"
-
-  sidekiq:
-    build: .
-    volumes:
-      - .:/app/wingolfsplattform
-      - ./your_platform:/app/your_platform
-      - "wingolfsplattform_uploads:/app/wingolfsplattform/uploads"
-      - "wingolfsplattform_assets:/app/wingolfsplattform/public/assets"
-      - "wingolfsplattform_tmp:/app/wingolfsplattform/tmp"
-      - "./config/secrets.docker.yml:/app/wingolfsplattform/config/secrets.yml"
-      - "./config/database.docker.yml:/app/wingolfsplattform/config/database.yml"
-    environment:
-      RAILS_ENV: development
-      MYSQL_DATABASE: wingolfsplattform_development
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_HOST: mysql
-      REDIS_HOST: redis
-      NEO4J_REST_URL: http://neo4j:trinity@neo4j:7474
-    depends_on:
-      - mysql
-      - redis
-      - neo4j
-    command: /bin/bash -c "bundle exec sidekiq -c 10 -q default -q dag_links -q cache -q slow -q retry -q mailers -q mailgate --verbose"

@@ -27,7 +27,9 @@ fi
 # runtime; pry honors DISABLE_PRY.
 RUN="$DOCKER_COMPOSE_RUN -e DISABLE_PRY=1 tests"
 
-WAIT_FOR_MYSQL='until mysqladmin ping -h "$MYSQL_HOST" -u root -p"$MYSQL_PASSWORD" --silent 2>/dev/null; do echo "Waiting for mysql ..."; sleep 2; done'
+# /wait (see Dockerfile) blocks until the WAIT_HOSTS of the tests
+# service accept connections.
+WAIT_FOR_MYSQL='/wait'
 
 # A killed CI job can leave a database without environment metadata
 # behind; rails then refuses to touch it. Heal before preparing.
