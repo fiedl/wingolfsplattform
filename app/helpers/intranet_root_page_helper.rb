@@ -1,7 +1,7 @@
 module IntranetRootPageHelper
 
   def anzahl_der_gruppenaufnahmen_dieses_jahr(name_der_subgruppe, aktive_oder_philister, corporation = nil)
-     users = (corporation.try(:descendant_groups) || Group).where("name like ?", name_der_subgruppe).map(&:memberships_this_year).flatten.map(&:user).uniq
+     users = (corporation.try(:descendant_groups) || Group).where("name ILIKE ?", name_der_subgruppe).map(&:memberships_this_year).flatten.map(&:user).uniq
      if aktive_oder_philister == :philister
        users.select! { |user| user.ancestor_groups.include? Group.alle_philister }
      elsif aktive_oder_philister == :aktive

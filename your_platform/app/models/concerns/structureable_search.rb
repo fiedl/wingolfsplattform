@@ -10,7 +10,7 @@ concern :StructureableSearch do
       search_attribute = options[:search_attribute] || :name
       query_words = query.split(" ")
 
-      base_class.where(((["(#{search_attribute.to_s} LIKE ?)"] * query_words.count).join(" OR ")), *(query_words.collect { |word| "%#{word}%" })).select do |object|
+      base_class.where(((["(#{search_attribute.to_s} ILIKE ?)"] * query_words.count).join(" OR ")), *(query_words.collect { |word| "%#{word}%" })).select do |object|
         if count > limit
           false
         else

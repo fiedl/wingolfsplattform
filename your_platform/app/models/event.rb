@@ -7,9 +7,9 @@ class Event < ApplicationRecord
   has_many :attachments, as: :parent, dependent: :destroy
 
   scope :important, -> { where(publish_on_global_website: true) }
-  scope :commers, -> { where("name like ? or name like ?", "%commers%", "%kommers%") }
-  scope :wartburgfest, -> { where("name like ?", "%wartburgfest%") }
-  scope :wingolfsseminar, -> { where("name like ?", "%wingolfsseminar%") }
+  scope :commers, -> { where("name ILIKE ? or name ILIKE ?", "%commers%", "%kommers%") }
+  scope :wartburgfest, -> { where("name ILIKE ?", "%wartburgfest%") }
+  scope :wingolfsseminar, -> { where("name ILIKE ?", "%wingolfsseminar%") }
   scope :bundesconvent, -> { where_like name: ["Chargiertenconvent", "Vertreterconvent"] }
 
 

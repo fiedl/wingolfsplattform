@@ -93,8 +93,8 @@ concern :UserName do
     # This method returns the first user matching the given title.
     #
     def find_by_title(title)
-      ids = self.where("(? LIKE CONCAT('%', first_name, ' ', last_name, '%')) OR (? LIKE CONCAT('%', last_name, '%'))", title, title).pluck(:id)
-      ids += ProfileField.where(type: "ProfileFields::General", label: "display_name").where("value LIKE ?", "%" + title + "%").collect { |profile_field| profile_field.profileable_id if profile_field.profileable_type == "User" } - [nil]
+      ids = self.where("(? ILIKE CONCAT('%', first_name, ' ', last_name, '%')) OR (? ILIKE CONCAT('%', last_name, '%'))", title, title).pluck(:id)
+      ids += ProfileField.where(type: "ProfileFields::General", label: "display_name").where("value ILIKE ?", "%" + title + "%").collect { |profile_field| profile_field.profileable_id if profile_field.profileable_type == "User" } - [nil]
       self.where(id: ids.uniq).select do |user|
         user.title == title
       end.first

@@ -6,7 +6,7 @@ class Bv < Group
 
     bv_tokens = BvMapping
       .where(plz: plz)
-      .where('town LIKE ?', "#{town}%")  # z.B. für "Freiburg" in "Freiburg im Breisgau". Vor der Stadt darf aber nichts kommen: Sonst bekommt man Probleme mit "Neuendorf b. Elmshorn", das sonst auch für "Elmshorn" gehalten werden kann.
+      .where('town ILIKE ?', "#{town}%")  # z.B. für "Freiburg" in "Freiburg im Breisgau". Vor der Stadt darf aber nichts kommen: Sonst bekommt man Probleme mit "Neuendorf b. Elmshorn", das sonst auch für "Elmshorn" gehalten werden kann.
       .pluck(:bv_name).uniq
     #binding.pry if bv_tokens.count > 1
     raise("Der Wohnort '#{plz} #{town}' kann nicht eindeutig einem BV zugeordnet werden.") if bv_tokens.count > 1

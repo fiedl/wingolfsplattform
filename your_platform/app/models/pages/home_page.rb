@@ -24,7 +24,7 @@ class Pages::HomePage < Page
   def group_id
     return nil if self.root?
     return nil if domain.blank?
-    profileable = ProfileFields::Homepage.where('value LIKE ?', "%#{domain}%").first.try(:profileable)
+    profileable = ProfileFields::Homepage.where('value ILIKE ?', "%#{domain}%").first.try(:profileable)
     profileable.kind_of?(Group) ? profileable.id : nil
   end
 

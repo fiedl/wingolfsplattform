@@ -48,20 +48,20 @@ class CompactNavSearchController < ApplicationController
 
   def find_object
     @object = base.descendant_groups.find_by token: query if base.respond_to? :descendant_groups
-    @object ||= NavNode.where('url_component like ?', like_query).limit(1).first.try(:navable) if not params[:search_base].present?  # for example "erlangen/" -- as entry point for navigation
-    @object ||= base.descendant_groups.where('name like ?', like_query).limit(1).first if base.respond_to? :descendant_groups
-    @object ||= base.descendant_pages.where('title like ?', like_query).limit(1).first if base.respond_to? :descendant_pages
-    @object ||= base.descendant_users.where('last_name like ?', like_query).limit(1).first if base.respond_to? :descendant_users
-    @object ||= base.descendant_events.where('name like ?', like_query).limit(1).first if base.respond_to? :descendant_events
+    @object ||= NavNode.where('url_component ILIKE ?', like_query).limit(1).first.try(:navable) if not params[:search_base].present?  # for example "erlangen/" -- as entry point for navigation
+    @object ||= base.descendant_groups.where('name ILIKE ?', like_query).limit(1).first if base.respond_to? :descendant_groups
+    @object ||= base.descendant_pages.where('title ILIKE ?', like_query).limit(1).first if base.respond_to? :descendant_pages
+    @object ||= base.descendant_users.where('last_name ILIKE ?', like_query).limit(1).first if base.respond_to? :descendant_users
+    @object ||= base.descendant_events.where('name ILIKE ?', like_query).limit(1).first if base.respond_to? :descendant_events
     return @object
   end
 
   def find_objects
     @objects = []
-    @objects += base.descendant_groups.where('name like ?', like_query) if base.respond_to? :descendant_groups
-    @objects += base.descendant_pages.where('title like ?', like_query) if base.respond_to? :descendant_pages
-    @objects += base.descendant_users.where('last_name like ?', like_query) if base.respond_to? :descendant_users
-    @objects += base.descendant_events.where('name like ?', like_query) if base.respond_to? :descendant_events
+    @objects += base.descendant_groups.where('name ILIKE ?', like_query) if base.respond_to? :descendant_groups
+    @objects += base.descendant_pages.where('title ILIKE ?', like_query) if base.respond_to? :descendant_pages
+    @objects += base.descendant_users.where('last_name ILIKE ?', like_query) if base.respond_to? :descendant_users
+    @objects += base.descendant_events.where('name ILIKE ?', like_query) if base.respond_to? :descendant_events
 
     return @objects
   end
