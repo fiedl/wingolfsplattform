@@ -61,16 +61,16 @@ bin/rspec your_platform/spec/features/events_spec.rb
 ```
 
 Die CI verwendet stattdessen `bin/rspec_ci`. Dieser Wrapper baut bei Bedarf
-das Docker-Image, legt die Test-Datenbanken an (eine pro Parallel-Prozess)
-und wiederholt fehlgeschlagene Beispiele bis zu dreimal:
+das Docker-Image, legt die Test-Datenbank an und wiederholt fehlgeschlagene
+Beispiele bis zu dreimal:
 
 ```bash
 bin/rspec_ci spec/models your_platform/spec/models   # alle Model-Specs
 bin/rspec_ci your_platform/spec/features             # Engine-Feature-Specs (Browser)
 ```
 
-Die Parallelität steuert `PARALLEL_TEST_PROCESSORS` (Standard: 8; bei
-Feature-Specs 4, passend zu den Browser-Sessions des Chrome-Containers).
+Die Specs laufen dabei seriell; Parallelität entsteht durch die Aufteilung
+der CI-Matrix auf mehrere Runner.
 
 Manuell, ohne Wrapper:
 
