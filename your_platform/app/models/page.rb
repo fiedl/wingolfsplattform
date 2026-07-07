@@ -192,10 +192,8 @@ class Page < ApplicationRecord
     descendant_pages.where(type: "BlogPost").order_by_published_at
   end
   def self.order_by_published_at
-    # The minus makes unpublished top.
-    # https://stackoverflow.com/a/14595507/2066546
-    # TODO: Change this when migrating to postgres.
-    self.order("-published_at ASC")
+    # Unpublished (published_at IS NULL) first, then newest first.
+    self.order(Arel.sql("(published_at IS NOT NULL) ASC, published_at DESC"))
   end
 
   # Finder and Creator Methods
