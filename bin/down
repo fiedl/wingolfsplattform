@@ -16,9 +16,10 @@ if [ -f docker_compose_project_names ]; then
   rm -f docker_compose_project_names 2>/dev/null || true
 fi
 
-# Clean up with project name derived from runner name
+# Clean up with project name derived from runner name (the same
+# derivation as in bin/setup_ci)
 if [ -n "$RUNNER_NAME" ]; then
-  PROJECT_NAME=$(echo "$RUNNER_NAME" | tr '[:upper:]' '[:lower:]')
+  PROJECT_NAME=$(echo "$RUNNER_NAME" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9\n' '-')
   echo "Cleaning up project from RUNNER_NAME: $PROJECT_NAME"
   docker compose --file docker-compose.yml --project-name "$PROJECT_NAME" down --remove-orphans 2>/dev/null || true
 fi
