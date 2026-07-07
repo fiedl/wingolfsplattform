@@ -1,0 +1,46 @@
+-- Copies the data of a mysql database into the postgres database,
+-- for the mysql-to-postgres migration (rehearsal and production
+-- cutover). https://github.com/fiedl/wingolfsplattform/issues/123
+--
+-- The target schema is created by rails beforehand
+-- (`rails db:schema:load`), so pgloader copies data only:
+--
+--   1. rails db:create db:schema:load  # against the postgres service
+--   2. docker run --rm --network <compose network> \
+--        -v $PWD:/load ghcr.io/dimitri/pgloader:latest \
+--        pgloader /load/script/pgloader.load
+--   3. rails postgres:migration:counts  # diff against mysql counts
+--
+-- The pgloader summary table must report 0 errors.
+--
+-- Copy this file, fill in host names and passwords, do not commit
+-- the copy.
+
+LOAD DATABASE
+     FROM mysql://root:PASSWORD@mysql:3306/wingolfsplattform_development
+     INTO postgresql://postgres:PASSWORD@postgres:5432/wingolfsplattform_development
+
+-- data only: rails already created tables and indexes.
+-- truncate: clears rows that db:schema:load left behind
+--   (schema_migrations, ar_internal_metadata) before copying the
+--   mysql versions of those tables.
+-- disable triggers: the schema has foreign keys, and pgloader does
+--   not order tables topologically.
+-- reset sequences: sets each id sequence past the copied max(id).
+WITH data only,
+     truncate,
+     disable triggers,
+     reset sequences,
+     workers = 4, concurrency = 1,
+     prefetch rows = 10000
+
+-- datetime to timestamp (not pgloader's default timestamptz): rails
+--   columns are timestamp without time zone; keeps values verbatim.
+-- zero-dates-to-null: mysql allows 0000-00-00, postgres does not.
+-- tinyint-to-boolean: mysql stores rails booleans as tinyint(1).
+CAST type datetime to timestamp using zero-dates-to-null,
+     type date to date using zero-dates-to-null,
+     type tinyint to boolean using tinyint-to-boolean
+
+ALTER SCHEMA 'wingolfsplattform_development' RENAME TO 'public'
+;
