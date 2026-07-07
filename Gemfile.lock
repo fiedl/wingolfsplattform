@@ -366,7 +366,6 @@ GEM
     multi_json (1.15.0)
     multipart-post (2.1.1)
     mustermann (1.0.3)
-    mysql2 (0.5.2)
     naturally (2.2.1)
     nenv (0.3.0)
     neography (1.8.0)
@@ -392,6 +391,7 @@ GEM
     parallel_tests (2.14.3)
       parallel
     pdf-core (0.6.1)
+    pg (1.1.4)
     phony (2.18.19)
     prawn (2.0.2)
       pdf-core (~> 0.6.0)
@@ -654,9 +654,9 @@ DEPENDENCIES
   letter_opener_web!
   mimemagic (~> 0.3.10)!
   mini_racer!
-  mysql2!
   nokogiri (>= 1.7.1)!
   parallel_tests!
+  pg (~> 1.1.4)!
   pry!
   pry-remote!
   puma!

@@ -12,6 +12,10 @@ RUN aptitude install -y postgresql-client
 
 # Install requirements for ruby gems.
 RUN aptitude install -y libssl-dev g++ libxml2 libxslt-dev libreadline-dev libicu-dev imagemagick libmagick-dev
+# The pg gem builds against libpq. Buster ships the v11 client tools,
+# which work against the postgres 17 server for psql and pg_isready;
+# pg_dump runs inside the postgres container instead (see script/dump).
+RUN aptitude install -y libpq-dev
 RUN aptitude install -y rsync
 RUN aptitude install -y default-mysql-client
 RUN aptitude install -y pwgen
