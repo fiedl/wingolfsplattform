@@ -148,21 +148,26 @@ class Graph::Base
     end
   end
 
+  # A dropped http connection is normal when the neo4j connector is
+  # busy; a short retry bridges it. The budget must stay small: every
+  # graph query runs through here, so a generous budget turns a dead
+  # neo4j into an apparent hang instead of a visible failure.
+  # https://github.com/fiedl/wingolfsplattform/issues/122
+  #
+  MAX_CONNECTION_RETRIES = 5
+
   def self.retry_on_end_of_file_error
     counter = 0
     begin
       yield
-    rescue Excon::Error::Socket
-      p "Excon::Error::Socket: end of file reached (EOFError). Retrying."
+    rescue Excon::Error::Socket => error
       counter += 1
-      if counter < 100
-        # Back off briefly: when many parallel test processes hammer the
-        # neo4j http connector, immediate retries just extend the burst
-        # that caused the connection drop.
-        sleep 0.05 * counter
+      p "Neo4j connection failed (#{error.message}). Retry #{counter}/#{MAX_CONNECTION_RETRIES}."
+      if counter < MAX_CONNECTION_RETRIES
+        sleep 0.1 * counter
         retry
       else
-        raise "Giving up on neo4j connection."
+        raise "Giving up on neo4j connection after #{MAX_CONNECTION_RETRIES} retries: #{error.message}"
       end
     end
   end
