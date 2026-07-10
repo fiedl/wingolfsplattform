@@ -1,20 +1,17 @@
 name: tests
 on: [push, pull_request]
 
-# A new push supersedes the running jobs of the same branch, and the
-# push and pull_request events of the same branch share one group, so
-# a pull request does not double-run the suite. Without this, stacked
-# runs pile up compose stacks (mysql, neo4j, chrome per job) on the
-# runner host until it starves.
-concurrency:
-  group: tests-${{ github.event.pull_request.head.ref || github.ref_name }}
-  cancel-in-progress: true
+# Started suites always run to completion - nothing cancels them; add
+# runners when they queue. To keep a pull request from an in-repo
+# branch from double-running the suite, the pull_request event only
+# runs for forks, which never trigger the push event.
 
 env:
   CI: github
 
 jobs:
   build:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: [self-hosted, Linux]
     steps:
       # A cancelled job never reaches its clean-up: its containers keep
