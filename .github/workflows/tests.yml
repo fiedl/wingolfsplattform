@@ -1,11 +1,13 @@
 name: tests
-on: [push]
+on: [push, pull_request]
 
-# A new push supersedes the running jobs of the same branch. Without
-# this, stacked runs pile up compose stacks (mysql, neo4j, chrome per
-# job) on the runner host until it starves.
+# A new push supersedes the running jobs of the same branch, and the
+# push and pull_request events of the same branch share one group, so
+# a pull request does not double-run the suite. Without this, stacked
+# runs pile up compose stacks (mysql, neo4j, chrome per job) on the
+# runner host until it starves.
 concurrency:
-  group: tests-${{ github.ref }}
+  group: tests-${{ github.event.pull_request.head.ref || github.ref_name }}
   cancel-in-progress: true
 
 env:
