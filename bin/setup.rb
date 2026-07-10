@@ -1,8 +1,10 @@
 #!/usr/bin/env ruby
 
-# Prepares the environment for development scripts like bin/rspec.
-# This script runs inside the tests container (see bin/docker_wrapper);
-# it is skipped if it already ran within the last 24 hours.
+# Prepares the environment for development scripts like bin/rspec and
+# bin/dev. It is skipped if it already ran within the last 24 hours.
+
+require_relative "docker_wrapper"
+DockerWrapper.ensure_inside_docker!
 
 require 'fiedl/log'
 
@@ -15,6 +17,10 @@ log.section "Preparing Environment"
 
 log.info "RAILS_ENV: #{ENV['RAILS_ENV'] || 'development'}"
 log.info ""
+
+# The database container may still be starting up; /wait (see Dockerfile)
+# blocks until the hosts in WAIT_HOSTS accept connections.
+system "/wait" if File.exist?("/wait")
 
 LOCK_FILE = "tmp/setup_last_run_#{ENV['RAILS_ENV']}"
 if !File.exist?(LOCK_FILE) || ((Time.now - File.mtime(LOCK_FILE)) > 86400)

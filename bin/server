@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+# Server entry point for the docker services (see docker-compose.yml):
+# in development it delegates to bin/dev, which also starts the
+# webpack-dev-server; otherwise it prepares the environment and runs
+# the rails server directly.
+
+Dir.chdir File.expand_path("../..", __FILE__) do
+  if (ENV["RAILS_ENV"] || "development") == "development"
+    exec "bin/dev"
+  else
+    system "ruby bin/setup.rb" or abort "bin/setup.rb failed"
+    port = ENV["RAILS_PORT"] || ENV["PORT"] || "3000"
+    exec "bundle exec rails server -b 0.0.0.0 -p #{port}"
+  end
+end

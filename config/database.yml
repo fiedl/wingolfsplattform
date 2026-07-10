@@ -1,0 +1,35 @@
+# Everything runs dockerized: the hosts default to the compose service
+# names (the tests service points DB_HOST at postgres_test, see
+# docker-compose.yml). Every value can be overridden through the
+# environment — see the README section on environment variables.
+
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: <%= ENV.fetch("DB_NAME", "wingolfsplattform_development") %>
+  pool: 25
+  username: <%= ENV.fetch("DB_USERNAME", "postgres") %>
+  password: <%= ENV.fetch("DB_PASSWORD", "secret") %>
+  host: <%= ENV.fetch("DB_HOST", "postgres") %>
+  port: <%= ENV.fetch("DB_PORT", 5432) %>
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: wingolfsplattform_test<%= ENV['TEST_ENV_NUMBER'] %>
+  pool: 5
+  username: <%= ENV.fetch("DB_USERNAME", "postgres") %>
+  password: <%= ENV.fetch("DB_PASSWORD", "secret") %>
+  host: <%= ENV.fetch("DB_HOST", "postgres") %>
+  port: <%= ENV.fetch("DB_PORT", 5432) %>
+
+# Production provides real credentials through the environment only.
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: <%= ENV.fetch("DB_NAME", "wingolfsplattform_production") %>
+  pool: 25
+  username: <%= ENV["DB_USERNAME"] %>
+  password: <%= ENV["DB_PASSWORD"] %>
+  host: <%= ENV["DB_HOST"] %>
+  port: <%= ENV.fetch("DB_PORT", 5432) %>

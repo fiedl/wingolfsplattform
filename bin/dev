@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+# Development server, dockerized:
+#
+#     bin/dev
+#
+# Prepares the environment (see bin/setup.rb), starts the
+# webpack-dev-server that serves the vue packs in development
+# (the layouts load them from http://localhost:9000, see
+# your_platform/app/views/layouts/bootstrap.html.haml), and runs the
+# rails server in the foreground.
+
+require_relative "docker_wrapper"
+DockerWrapper.ensure_inside_docker! container: "web", service_ports: true
+
+require_relative "setup.rb"
+
+log.section "Starting webpack-dev-server in the background"
+log.prompt "webpack-dev-server --config config/webpack.config.js (log/webpack-dev-server.log)"
+webpack_log = File.expand_path("../log/webpack-dev-server.log", __dir__)
+spawn "node_modules/.bin/webpack-dev-server --config config/webpack.config.js",
+  chdir: File.expand_path("../your_platform", __dir__),
+  out: webpack_log, err: webpack_log
+
+log.section "Starting Rails Server in the Foreground"
+require 'fileutils'
+FileUtils.rm_f "tmp/pids/server.pid"
+command = "bundle exec rails server -b 0.0.0.0 -p #{ENV['RAILS_PORT'] || 3000}"
+log.prompt command
+exec(command)

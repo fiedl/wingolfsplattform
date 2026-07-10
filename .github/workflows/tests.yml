@@ -1,11 +1,13 @@
 name: tests
-on: [push]
+on: [push, pull_request]
 
-# A new push supersedes the running jobs of the same branch. Without
-# this, stacked runs pile up compose stacks (mysql, neo4j, chrome per
-# job) on the runner host until it starves.
+# A new push supersedes the running jobs of the same branch, and the
+# push and pull_request events of the same branch share one group, so
+# a pull request does not double-run the suite. Without this, stacked
+# runs pile up compose stacks (mysql, neo4j, chrome per job) on the
+# runner host until it starves.
 concurrency:
-  group: tests-${{ github.ref }}
+  group: tests-${{ github.event.pull_request.head.ref || github.ref_name }}
   cancel-in-progress: true
 
 env:
@@ -17,9 +19,10 @@ jobs:
     steps:
       # A cancelled job never reaches its clean-up: its containers keep
       # running and keep writing root-owned files into the workspace.
-      # Stop them first. The project name mirrors bin/setup_ci.
+      # Stop them first (bin/down from the previous checkout knows all
+      # project-name variants).
       - name: Stop leftover containers
-        run: docker compose --project-name "$(echo "$RUNNER_NAME" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9\n' '-')" down --remove-orphans
+        run: bin/down
         continue-on-error: true
       # Containers write root-owned files (assets, tmp) into the workspace;
       # reclaim it so checkout can clean up.
@@ -51,7 +54,7 @@ jobs:
     steps:
       # See the build job: stop containers a cancelled job left behind.
       - name: Stop leftover containers
-        run: docker compose --project-name "$(echo "$RUNNER_NAME" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9\n' '-')" down --remove-orphans
+        run: bin/down
         continue-on-error: true
       - name: Directory permissions
         run: docker run --rm -v .:/app alpine sh -c "chown -R $(id -u):$(id -g) /app && chmod -R 777 /app"
