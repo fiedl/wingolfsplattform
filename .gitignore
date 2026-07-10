@@ -28,13 +28,10 @@ coverage
 *~
 \#*#
 
-# Ignore database configuration
-config/database.yml
-#config/database*.yml
+# config/database.yml and config/secrets.yml are checked in and read
+# the environment; local values go into .env, which stays private.
+.env
 config/database
-
-# Ignore secret password and key file.
-config/secrets.yml
 
 # Ignore uploads folder content folder
 public/uploads/*

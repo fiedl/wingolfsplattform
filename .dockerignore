@@ -6,3 +6,12 @@ import
 uploads
 backups
 data
+coverage
+node_modules
+your_platform/node_modules
+your_platform/tmp
+your_platform/uploads
+your_platform.local-copy-2021
+public/assets
+*.sql
+.env

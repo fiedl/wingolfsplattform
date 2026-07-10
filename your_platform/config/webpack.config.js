@@ -14,6 +14,11 @@ module.exports = {
   },
   devServer: {
     port: 9000,
+    // The dev-server runs in the web container (started by bin/dev) and
+    // is reached from the host browser through the published port 9000,
+    // see docker-compose.yml.
+    host: '0.0.0.0',
+    disableHostCheck: true,
     headers: { 'Access-Control-Allow-Origin': '*' }
   },
   module: {

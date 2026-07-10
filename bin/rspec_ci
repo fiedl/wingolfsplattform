@@ -27,7 +27,13 @@ fi
 # runtime; pry honors DISABLE_PRY.
 RUN="$DOCKER_COMPOSE_RUN -e DISABLE_PRY=1 tests"
 
-WAIT_FOR_MYSQL='until mysqladmin ping -h "$MYSQL_HOST" -u root -p"$MYSQL_PASSWORD" --silent 2>/dev/null; do echo "Waiting for mysql ..."; sleep 2; done'
+# /wait (see Dockerfile) blocks until the WAIT_HOSTS of the tests
+# service accept connections.
+WAIT_FOR_MYSQL='/wait'
+
+# The image no longer bakes the gems in; they live in the per-project
+# bundle_cache volume and must be installed on its first use.
+BUNDLE="(bundle check || bundle install)"
 
 # A killed CI job can leave a database without environment metadata
 # behind; rails then refuses to touch it. Heal before preparing.
@@ -37,7 +43,7 @@ HEAL="(bundle exec rails db:environment:set RAILS_ENV=test 2>/dev/null || true)"
 # behind, and schema:load cannot DROP tables past foreign keys.
 DROP="(bundle exec rails db:drop 2>/dev/null || true)"
 
-PREPARE="$HEAL && $DROP && bundle exec rails db:create db:schema:load"
+PREPARE="$BUNDLE && $HEAL && $DROP && bundle exec rails db:create db:schema:load"
 
 # The asset pipeline resolves stylesheets from node_modules, and some
 # model specs touch it too — install the javascript modules always.

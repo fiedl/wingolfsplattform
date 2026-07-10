@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
-APP_PATH = File.expand_path('../config/application', __dir__)
-require_relative '../config/boot'
-require 'rails/commands'
+
+require_relative "docker_wrapper"
+DockerWrapper.ensure_inside_docker! container: "web" unless ENV['DOCKER_BUILD']
+
+APP_PATH = File.expand_path("../config/application", __dir__)
+require_relative "../config/boot"
+require "rails/commands"

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Stop and remove this project's compose containers, resiliently:
+# handles parallel CI runs (per-runner project names, see bin/setup_ci)
+# and missing files gracefully. Never prunes — other compose projects
+# share this docker host.
+
+# Clean up project names from file if it exists
+if [ -f docker_compose_project_names ]; then
+  while IFS= read -r line; do
+    if [ -n "$line" ]; then
+      echo "Cleaning up project: $line"
+      docker compose --file docker-compose.yml --project-name "$line" down --remove-orphans 2>/dev/null || true
+    fi
+  done < docker_compose_project_names
+  rm -f docker_compose_project_names 2>/dev/null || true
+fi
+
+# Clean up with project name derived from runner name (the same
+# derivation as in bin/setup_ci)
+if [ -n "$RUNNER_NAME" ]; then
+  PROJECT_NAME=$(echo "$RUNNER_NAME" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9\n' '-')
+  echo "Cleaning up project from RUNNER_NAME: $PROJECT_NAME"
+  docker compose --file docker-compose.yml --project-name "$PROJECT_NAME" down --remove-orphans 2>/dev/null || true
+fi
+
+# Clean up using COMPOSE_PROJECT_NAME if set
+if [ -n "$COMPOSE_PROJECT_NAME" ]; then
+  echo "Cleaning up project: $COMPOSE_PROJECT_NAME"
+  docker compose --file docker-compose.yml --project-name "$COMPOSE_PROJECT_NAME" down --remove-orphans 2>/dev/null || true
+fi
+
+# Clean up with explicit docker-compose.yml (default project name)
+docker compose --file docker-compose.yml down --remove-orphans 2>/dev/null || true
+
+echo "Cleanup complete"
