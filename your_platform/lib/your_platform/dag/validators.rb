@@ -1,3 +1,6 @@
+# Vendored from acts-as-dag. Corresponding upstream file:
+# https://github.com/resgraph/acts-as-dag/blob/master/lib/dag/validators.rb
+#
 module Dag
 
     #Validations on model instance creation. Ensures no duplicate links, no cycles, and correct count and direct attributes
