@@ -52,7 +52,7 @@ module UserMixins::Memberships
     #
     def groups
       direct_group_ids = direct_memberships.pluck(:ancestor_id)
-      Dag::MemberGroupsProxy.new self, Group.where(id: direct_group_ids +
+      Dag::MemberGroupsProxy.new user: self, groups: Group.where(id: direct_group_ids +
         Dag::Traversal.ancestor_ids(of_type: 'Group', of_ids: direct_group_ids,
           type: 'Group'))
     end

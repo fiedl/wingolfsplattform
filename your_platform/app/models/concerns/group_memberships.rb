@@ -167,7 +167,7 @@ concern :GroupMemberships do
     # the subtree groups.
     #
     def members
-      Dag::MembersProxy.new self, User.where(id: memberships.select(:descendant_id))
+      Dag::MembersProxy.new group: self, members: User.where(id: memberships.select(:descendant_id))
     end
 
     def member_ids
