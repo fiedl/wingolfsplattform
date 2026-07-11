@@ -1,8 +1,10 @@
-# Read-write view on the members of a group: reading reaches the users
-# of the whole subtree; `<<` and `destroy` operate on the direct
-# membership, like the former has_many :through association did.
+# A collection proxy over the members of a group, in the sense of
+# ActiveRecord's CollectionProxy: it enumerates like the relation it
+# wraps -- the users of the whole subtree -- and `<<` and `destroy`
+# write through to the direct membership, like the former
+# has_many :through association did. Returned by `group.members`.
 #
-class Dag::MemberUsers < SimpleDelegator
+class Dag::MembersProxy < SimpleDelegator
 
   def initialize(group, relation)
     @group = group
