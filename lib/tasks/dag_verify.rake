@@ -1,0 +1,50 @@
+# Verifies on a real database -- typically a production dump -- that the
+# recursive CTE walk reaches the same nodes as the materialized closure
+# rows, before the closure maintenance is removed:
+# https://github.com/fiedl/wingolfsplattform/issues/129
+#
+#     rails dag:verify_cte_parity
+#     SAMPLE=500 rails dag:verify_cte_parity
+#
+# Differences are either closure corruption (run DagLink.repair, then
+# re-verify) or, for membership validity, the documented gap limitation
+# of the materialized indirect memberships.
+#
+namespace :dag do
+  task verify_cte_parity: :environment do
+    sample_size = (ENV['SAMPLE'] || 200).to_i
+    mismatches = []
+    checks = 0
+
+    node_classes = [Group, User, Page, Event, Project, Post, Workflow]
+    node_classes.each do |node_class|
+      scope = node_class.all
+      nodes = scope.count > sample_size ? scope.order(Arel.sql('random()')).limit(sample_size) : scope
+      nodes.each do |node|
+        %w(groups users pages events projects posts workflows).each do |table|
+          [:descendant, :ancestor].each do |direction|
+            cte_method = "cte_#{direction}_#{table}"
+            next unless node.respond_to?(cte_method)
+            closure_ids = node.send("#{direction}_#{table}").pluck(:id).uniq.sort
+            cte_ids = node.send(cte_method).pluck(:id).uniq.sort
+            checks += 1
+            unless closure_ids == cte_ids
+              mismatches << "#{node.class}##{node.id} #{cte_method}: " +
+                "closure-only #{(closure_ids - cte_ids).inspect}, cte-only #{(cte_ids - closure_ids).inspect}"
+            end
+          end
+        end
+        print '.'
+      end
+    end
+
+    puts "\n#{checks} comparisons."
+    if mismatches.any?
+      puts "#{mismatches.count} MISMATCHES:"
+      mismatches.each { |m| puts "  #{m}" }
+      exit 1
+    else
+      puts "No mismatches. The CTE walk agrees with the closure."
+    end
+  end
+end
