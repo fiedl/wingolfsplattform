@@ -1,3 +1,6 @@
+# Vendored from acts-as-dag. Corresponding upstream file:
+# https://github.com/resgraph/acts-as-dag/blob/master/lib/dag/validators.rb
+#
 module Dag
 
   # Validations on link creation. Ensures no duplicate edges and no

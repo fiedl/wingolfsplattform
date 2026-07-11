@@ -1,3 +1,6 @@
+# Vendored from acts-as-dag. Corresponding upstream file:
+# https://github.com/resgraph/acts-as-dag/blob/master/lib/dag/edges.rb
+#
 module Dag
   module Edges
 

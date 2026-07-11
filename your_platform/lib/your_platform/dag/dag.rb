@@ -1,3 +1,6 @@
+# Vendored from acts-as-dag. Corresponding upstream file:
+# https://github.com/resgraph/acts-as-dag/blob/master/lib/dag/dag.rb
+#
 module Dag
 
   #Sets up a model to act as dag links for models specified under the :for option
