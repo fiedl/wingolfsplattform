@@ -195,9 +195,9 @@ module Dag
         self.class_eval do
           define_method "#{prefix}cte_ancestor_#{table_name}" do
             klass = class_name.constantize
-            klass.where("#{klass.table_name}.id IN (#{Dag::Query.sql(
-              start_type: self.class.base_class.name, start_ids: [id],
-              direction: :ancestor, target_type: klass.base_class.name)})")
+            klass.where("#{klass.table_name}.id IN (#{Dag::Traversal.ancestor_ids_sql(
+              of_type: self.class.base_class.name, of_ids: [id],
+              type: klass.base_class.name)})")
           end
         end
       end
@@ -257,9 +257,9 @@ module Dag
         self.class_eval do
           define_method "#{prefix}cte_descendant_#{table_name}" do
             klass = class_name.constantize
-            klass.where("#{klass.table_name}.id IN (#{Dag::Query.sql(
-              start_type: self.class.base_class.name, start_ids: [id],
-              direction: :descendant, target_type: klass.base_class.name)})")
+            klass.where("#{klass.table_name}.id IN (#{Dag::Traversal.descendant_ids_sql(
+              of_type: self.class.base_class.name, of_ids: [id],
+              type: klass.base_class.name)})")
           end
         end
       end

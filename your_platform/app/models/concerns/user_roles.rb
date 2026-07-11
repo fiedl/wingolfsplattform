@@ -207,7 +207,7 @@ concern :UserRoles do
       .collect { |officer_group| officer_group.scope rescue nil }
       .select { |scope| scope.kind_of?(Page) }
       .collect(&:id)
-    sub_page_ids = DagLink.descendant_ids_via_direct_links('Page', scope_page_ids) -
+    sub_page_ids = DagLink.descendant_ids_through_same_type('Page', scope_page_ids) -
       (Page.find_intranet_root.try(:descendant_page_ids) || [])
     (scope_page_ids + sub_page_ids).uniq
   end
