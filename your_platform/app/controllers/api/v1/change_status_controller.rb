@@ -16,7 +16,6 @@ class Api::V1::ChangeStatusController < Api::V1::BaseController
 
     new_membership.user.delete_cache
     new_membership.group.delete_cache
-    new_membership.recalculate_indirect_validity_ranges
 
     unless user.wingolfit?
       terminate_user_account

@@ -25,7 +25,6 @@ class DagLink < ApplicationRecord
   end
 
   include DagLinkTypes
-  include DagLinkRepair
   include DagLinkCaching if use_caching?
 
 end

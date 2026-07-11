@@ -490,8 +490,8 @@ describe User do
           subject
           @user.bv.should == @bv1
 
-          # a double dag link would indicate that the membership had been created twice.
-          @user.bv_membership.count.should == 1
+          # a second dag link would indicate that the membership had been created twice.
+          Membership.find_all_by_user_and_group(@user, @bv1).count.should == 1
         end
         it "should return the kept membership" do
           old_membership = @user.reload.bv_membership

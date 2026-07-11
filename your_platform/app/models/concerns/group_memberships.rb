@@ -24,13 +24,8 @@ concern :GroupMemberships do
     has_many :direct_memberships, -> { where ancestor_type: 'Group', descendant_type: 'User', direct: true },
         foreign_key: :ancestor_id, class_name: "Membership"
 
-    # The materialized indirect membership rows (direct: false). Only
-    # the closure maintenance still touches them; do not read from
-    # them. They disappear with
-    # https://github.com/fiedl/wingolfsplattform/issues/129
-    #
-    has_many :indirect_memberships, -> { where ancestor_type: 'Group', descendant_type: 'User', direct: false },
-        foreign_key: :ancestor_id, class_name: "Membership"
+    # Indirect memberships derive at read time; see membership_of and
+    # IndirectMembership.
 
 
     #  This method builds a new membership having this group (self) as group associated.
@@ -151,13 +146,6 @@ concern :GroupMemberships do
       end
     end
 
-
-    def calculate_validity_range_of_indirect_memberships
-      self.indirect_memberships.where(valid_from: nil).each do |membership|
-        membership.recalculate_validity_range_from_direct_memberships
-        membership.save
-      end
-    end
 
 
     # Members

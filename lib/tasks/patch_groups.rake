@@ -21,8 +21,7 @@ namespace :patch do
       'environment',
       'requirements',
       'print_info',
-      'add_wingolf_super_groups',
-      'recalculate_membership_validity_ranges_for_super_groups'
+      'add_wingolf_super_groups'
     ]
     
     task :part2 => [
@@ -87,35 +86,11 @@ namespace :patch do
       log.success "Fertig."
     end
     
-    task :recalculate_membership_validity_ranges_for_super_groups => [:environment, :requirements, :print_info] do
-      log.section "Gültigkeitszeiträume für Mitgliedschaften in Zusammenfassungsgruppen neu berechnen."
-      log.info "Wenn Gruppen-Beziehungen nachträglich hinzugefügt werden, müssen ggf. die Gültigkeitszeiträume neu abgeleitet werden."
-      log.info ""
+    # Die Aufgabe :recalculate_membership_validity_ranges_for_super_groups
+    # ist entfallen: Gültigkeitszeiträume indirekter Mitgliedschaften werden
+    # nicht mehr gespeichert, sondern beim Lesen abgeleitet.
+    # https://github.com/fiedl/wingolfsplattform/issues/129
 
-      groups = [
-        Group.find_by_flag(:alle_wingolfiten),
-        Group.find_by_flag(:alle_aktiven),
-        Group.find_by_flag(:alle_philister)
-      ]
-      
-      counter = 0
-      User.find_each do |user|
-        for group in groups
-          membership = Membership.with_invalid.find_by_user_and_group(user, group)
-          if membership
-            membership.recalculate_validity_range_from_direct_memberships!
-            print ".".green
-            counter += 1 
-          else
-            print "."
-          end
-        end
-      end
-      
-      log.info ""
-      log.success "#{counter} Memberships aktualisiert."
-    end
-    
     task :full_members_flags => [:environment, :requirements, :print_info] do
       log.section "Aktivitas und Philisterschaft mit :full_members markieren"
       log.info "Damit wird ermittelt, ob eine Person ordentliches Mitglied einer"

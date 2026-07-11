@@ -74,26 +74,22 @@ describe Dag::Query do
     @post.parent_groups << @status1
   end
 
-  it "reaches the same nodes as the materialized closure, for every node, type, and direction" do
+  it "does not materialize indirect links anymore" do
+    DagLink.where(direct: false).count.should == 0
+  end
+
+  it "answers ancestors and descendants symmetrically, for every node and type" do
     mismatches = []
     [Group, User, Page, Event, Project, Post, Workflow].each do |node_class|
       node_class.all.each do |node|
-        node_type = node.class.base_class.name
         %w(groups users pages events projects posts workflows).each do |table|
-          target_type = table.classify.constantize.base_class.name
-          [:descendant, :ancestor].each do |direction|
-            accessor = "#{direction}_#{table}"
-            next unless node.respond_to?(accessor)
-            closure_ids = if direction == :descendant
-              DagLink.where(ancestor_type: node_type, ancestor_id: node.id,
-                descendant_type: target_type).pluck(:descendant_id)
-            else
-              DagLink.where(descendant_type: node_type, descendant_id: node.id,
-                ancestor_type: target_type).pluck(:ancestor_id)
-            end.uniq.sort
-            cte_ids = node.send(accessor).pluck(:id).uniq.sort
-            unless closure_ids == cte_ids
-              mismatches << "#{node.class}##{node.id} #{accessor}: closure #{closure_ids} vs cte #{cte_ids}"
+          accessor = "descendant_#{table}"
+          next unless node.respond_to?(accessor)
+          node.send(accessor).each do |reached|
+            reverse = "ancestor_#{node.class.base_class.name.demodulize.tableize}"
+            next unless reached.respond_to?(reverse)
+            unless reached.send(reverse).pluck(:id).include?(node.id)
+              mismatches << "#{node.class}##{node.id} reaches #{reached.class}##{reached.id}, but not the reverse"
             end
           end
         end
@@ -123,12 +119,11 @@ describe Dag::Query do
       episodes.first.last.should == nil
     end
 
-    it "agrees with the min/max envelope of the materialized indirect membership when there is no gap" do
-      indirect = Membership.with_invalid.find_by(ancestor_id: @corporation.id, descendant_id: @member.id, direct: false)
-      indirect.recalculate_validity_range_from_direct_memberships
+    it "agrees with the envelope of the derived indirect membership when there is no gap" do
+      derived = IndirectMembership.new(@corporation, @member)
       episodes = Dag::Query.membership_episodes(@corporation, @member)
-      episodes.first.first.to_i.should == indirect.reload.valid_from.to_i
-      episodes.last.last.should == indirect.valid_to
+      episodes.first.first.to_i.should == derived.valid_from.to_i
+      episodes.last.last.should == derived.valid_to
     end
 
     it "returns a closed episode for an expired membership" do
