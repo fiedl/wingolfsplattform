@@ -33,8 +33,8 @@ class Page < ApplicationRecord
 
   scope :regular, -> { where(type: nil).not_flagged([:intranet_root]) }
   scope :without_group, -> {
-    where("pages.id NOT IN (#{Dag::Query.sql(start_type: 'Group', start_ids: :all,
-      direction: :descendant, target_type: 'Page')})")
+    where("pages.id NOT IN (#{Dag::Traversal.descendant_ids_sql(of_type: 'Group',
+      of_ids: :all, type: 'Page')})")
   }
 
   def not_empty?

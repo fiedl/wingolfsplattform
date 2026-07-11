@@ -5,7 +5,7 @@ require 'spec_helper'
 # maintained, the recursive CTE walk over the direct links has to reach
 # exactly the same nodes.
 #
-describe Dag::Query do
+describe Dag::Traversal do
 
   before do
     # A corporation tree with status groups and an attached promotion
@@ -102,52 +102,52 @@ describe Dag::Query do
     mismatches.should == []
   end
 
-  describe ".ids" do
+  describe ".descendant_ids_of" do
     it "walks multiple start nodes in one query" do
-      ids = Dag::Query.ids([@status1, @status2], direction: :descendant, type: 'User')
+      ids = Dag::Traversal.descendant_ids_of([@status1, @status2], type: 'User')
       ids.to_set.should ==
-        (Dag::Query.ids(@status1, direction: :descendant, type: 'User') +
-         Dag::Query.ids(@status2, direction: :descendant, type: 'User')).to_set
+        (Dag::Traversal.descendant_ids_of(@status1, type: 'User') +
+         Dag::Traversal.descendant_ids_of(@status2, type: 'User')).to_set
     end
 
     it "returns an empty array for no start nodes" do
-      Dag::Query.ids([], direction: :descendant, type: 'User').should == []
+      Dag::Traversal.descendant_ids_of([], type: 'User').should == []
     end
   end
 
-  describe ".membership_episodes" do
-    it "returns one episode covering the whole membership for an uninterrupted indirect membership" do
-      episodes = Dag::Query.membership_episodes(@corporation, @member)
-      episodes.count.should == 1
-      episodes.first.first.should be_within(1.minute).of(10.years.ago)
-      episodes.first.last.should == nil
+  describe ".membership_validity_ranges" do
+    it "returns one range covering the whole membership for an uninterrupted indirect membership" do
+      ranges = Dag::Traversal.membership_validity_ranges(@corporation, @member)
+      ranges.count.should == 1
+      ranges.first.begin.should be_within(1.minute).of(10.years.ago)
+      ranges.first.end.should == nil
     end
 
     it "agrees with the min/max envelope of the materialized indirect membership when there is no gap" do
       indirect = Membership.with_invalid.find_by(ancestor_id: @corporation.id, descendant_id: @member.id, direct: false)
       indirect.recalculate_validity_range_from_direct_memberships
-      episodes = Dag::Query.membership_episodes(@corporation, @member)
-      episodes.first.first.to_i.should == indirect.reload.valid_from.to_i
-      episodes.last.last.should == indirect.valid_to
+      ranges = Dag::Traversal.membership_validity_ranges(@corporation, @member)
+      ranges.first.begin.to_i.should == indirect.reload.valid_from.to_i
+      ranges.last.end.should == indirect.valid_to
     end
 
-    it "returns a closed episode for an expired membership" do
-      episodes = Dag::Query.membership_episodes(@corporation, @former_member)
-      episodes.count.should == 1
-      episodes.first.first.should be_within(1.minute).of(10.years.ago)
-      episodes.first.last.should be_within(1.minute).of(5.years.ago)
+    it "returns a closed range for an expired membership" do
+      ranges = Dag::Traversal.membership_validity_ranges(@corporation, @former_member)
+      ranges.count.should == 1
+      ranges.first.begin.should be_within(1.minute).of(10.years.ago)
+      ranges.first.end.should be_within(1.minute).of(5.years.ago)
     end
 
     it "keeps the gap visible where the materialized indirect membership only stores the envelope" do
       # The closure row spans 10.years.ago until today, hiding that the
       # user was no member between 8 and 3 years ago -- the documented
       # limitation of IndirectMembershipValidityRange.
-      episodes = Dag::Query.membership_episodes(@corporation, @rejoined_member)
-      episodes.count.should == 2
-      episodes.first.first.should be_within(1.minute).of(10.years.ago)
-      episodes.first.last.should be_within(1.minute).of(8.years.ago)
-      episodes.second.first.should be_within(1.minute).of(3.years.ago)
-      episodes.second.last.should == nil
+      ranges = Dag::Traversal.membership_validity_ranges(@corporation, @rejoined_member)
+      ranges.count.should == 2
+      ranges.first.begin.should be_within(1.minute).of(10.years.ago)
+      ranges.first.end.should be_within(1.minute).of(8.years.ago)
+      ranges.second.begin.should be_within(1.minute).of(3.years.ago)
+      ranges.second.end.should == nil
     end
 
     it "intersects the validity along the path" do
@@ -157,14 +157,14 @@ describe Dag::Query do
       @new_corporation = create :corporation
       link = DagLink.create ancestor: @new_corporation, descendant: @status2, direct: true
       link.update_attributes valid_from: 1.year.ago
-      episodes = Dag::Query.membership_episodes(@new_corporation, @member)
-      episodes.count.should == 1
-      episodes.first.first.should be_within(1.minute).of(1.year.ago)
-      episodes.first.last.should == nil
+      ranges = Dag::Traversal.membership_validity_ranges(@new_corporation, @member)
+      ranges.count.should == 1
+      ranges.first.begin.should be_within(1.minute).of(1.year.ago)
+      ranges.first.end.should == nil
     end
 
-    it "returns no episodes for a user without any membership path" do
-      Dag::Query.membership_episodes(@corporation, create(:user)).should == []
+    it "returns no ranges for a user without any membership path" do
+      Dag::Traversal.membership_validity_ranges(@corporation, create(:user)).should == []
     end
   end
 

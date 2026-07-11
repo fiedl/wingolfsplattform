@@ -44,8 +44,8 @@ concern :GroupSearch do
       relation = self
       query.split(" ").each do |expression|
         groups_with_matching_name = Group.where("groups.name ILIKE :e OR groups.extensive_name ILIKE :e", e: "%#{expression}%")
-        ids_with_matching_ancestor = Dag::Query.ids_from start_type: 'Group',
-          start_ids: groups_with_matching_name.pluck(:id), direction: :descendant, target_type: 'Group'
+        ids_with_matching_ancestor = Dag::Traversal.descendant_ids of_type: 'Group',
+          of_ids: groups_with_matching_name.pluck(:id), type: 'Group'
         relation = relation.where("groups.name ILIKE :e OR groups.extensive_name ILIKE :e OR groups.id IN (:ancestor_matches)",
           e: "%#{expression}%", ancestor_matches: ids_with_matching_ancestor + [0])
       end
