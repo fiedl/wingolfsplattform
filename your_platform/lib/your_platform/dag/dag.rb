@@ -11,7 +11,6 @@ module Dag
             :descendant_id_column => 'descendant_id',
             :descendant_type_column => 'descendant_type',
             :direct_column => 'direct',
-            :count_column => 'count',
             :polymorphic => false,
             :node_class_name => nil}
     conf.update(options)
@@ -28,7 +27,6 @@ module Dag
     extend Columns
     include Columns
 
-    #access to _changed? and _was for (edge,count) if not default
     unless direct_column_name == 'direct'
       module_eval <<-"end_eval", __FILE__, __LINE__
 						def direct_changed?
@@ -40,22 +38,11 @@ module Dag
       end_eval
     end
 
-    unless count_column_name == 'count'
-      module_eval <<-"end_eval", __FILE__, __LINE__
-						def count_changed?
-							self.#{count_column_name}_changed?
-						end
-						def count_was
-							self.#{count_column_name}_was
-						end
-      end_eval
-    end
 
     internal_columns = [ancestor_id_column_name, descendant_id_column_name]
     edge_class_name = self.to_s
 
     direct_column_name.intern
-    count_column_name.intern
 
     #links to ancestor and descendant
     if acts_as_dag_polymorphic?
@@ -131,13 +118,6 @@ module Dag
     code += 'end'
     module_eval code
 
-    [count_column_name].each do |column|
-      module_eval <<-"end_eval", __FILE__, __LINE__
-						def #{column}=(x)
-							raise ActiveRecord::ActiveRecordError, "ERROR: Unauthorized assignment to #{column}: it's an internal field handled by acts_as_dag code."
-						end
-      end_eval
-    end
   end
 
   def has_dag_links(options = {})

@@ -25,10 +25,13 @@ namespace :dag do
     created = 0
     updated = 0
     pairs.each do |ancestor_type, ancestor_id, descendant_type, descendant_id, path_count, has_direct|
+      has_count_column = DagLink.column_names.include?('count')
       if has_direct
-        DagLink.where(ancestor_type: ancestor_type, ancestor_id: ancestor_id,
-          descendant_type: descendant_type, descendant_id: descendant_id, direct: true)
-          .update_all(count: path_count)
+        if has_count_column
+          DagLink.where(ancestor_type: ancestor_type, ancestor_id: ancestor_id,
+            descendant_type: descendant_type, descendant_id: descendant_id, direct: true)
+            .update_all(count: path_count)
+        end
         updated += 1
       else
         next if DagLink.where(ancestor_type: ancestor_type, ancestor_id: ancestor_id,
@@ -36,7 +39,7 @@ namespace :dag do
         link = DagLink.new ancestor_type: ancestor_type, ancestor_id: ancestor_id,
           descendant_type: descendant_type, descendant_id: descendant_id
         link[:direct] = false
-        link[:count] = path_count
+        link[:count] = path_count if has_count_column
         link.send :change_type_according_to_other_attributes
         if link.type.to_s.start_with?('Membership')
           derived = IndirectMembership.new Group.find(ancestor_id), User.find(descendant_id)
