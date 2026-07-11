@@ -14,7 +14,6 @@ class Event < ApplicationRecord
 
 
   include Structureable
-  include EventGraph
   include Navable
   include EventGroups
   include EventContactPeople

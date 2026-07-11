@@ -81,4 +81,48 @@ describe "Page (DagLinkNode)" do
     end
   end
 
+  describe ".descendant_ids_via_direct_links" do
+    #   @group1 --- @group2 ---- @group3
+    #      |     \_ @group2b _/    (diamond)
+    #      |
+    #   @page --- @group_behind_page
+    #
+    before do
+      @group1 = create :group
+      @group2 = @group1.child_groups.create name: 'Group 2'
+      @group2b = @group1.child_groups.create name: 'Group 2b'
+      @group3 = @group2.child_groups.create name: 'Group 3'
+      @group2b << @group3
+      @page = create :page
+      @group1 << @page
+      @group_behind_page = create :group
+      @page << @group_behind_page
+    end
+
+    it "should walk the direct links of the given node type, transitively" do
+      ids = DagLink.descendant_ids_via_direct_links('Group', [@group1.id])
+      ids.should include @group2.id
+      ids.should include @group2b.id
+      ids.should include @group3.id
+    end
+
+    it "should return diamond nodes only once" do
+      ids = DagLink.descendant_ids_via_direct_links('Group', [@group1.id])
+      ids.count(@group3.id).should == 1
+    end
+
+    it "should not cross nodes of other types, unlike the indirect closure rows" do
+      @group1.descendant_groups.should include @group_behind_page
+      DagLink.descendant_ids_via_direct_links('Group', [@group1.id]).should_not include @group_behind_page.id
+    end
+
+    it "should not include the start ids" do
+      DagLink.descendant_ids_via_direct_links('Group', [@group1.id]).should_not include @group1.id
+    end
+
+    it "should return an empty array for empty start ids" do
+      DagLink.descendant_ids_via_direct_links('Group', []).should == []
+    end
+  end
+
 end

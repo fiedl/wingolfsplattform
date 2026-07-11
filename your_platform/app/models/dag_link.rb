@@ -6,7 +6,24 @@ class DagLink < ApplicationRecord
     "Link #{ancestor_type} #{ancestor_id} --> #{descendant_type} #{descendant_id}"
   end
 
-  include DagLinkGraph
+  # All ids reachable from the given start nodes by walking direct links
+  # between nodes of the same type, breadth first, excluding the start ids.
+  #
+  # This differs from the transitive closure rows (direct: false), which
+  # also contain paths crossing other node types, e.g. Group→Page→Group.
+  # It matches the former neo4j HAS_SUBGROUP*/HAS_SUBPAGE* traversal.
+  #
+  def self.descendant_ids_via_direct_links(type, start_ids)
+    descendant_ids = []
+    frontier_ids = start_ids
+    while frontier_ids.any?
+      frontier_ids = where(direct: true, ancestor_type: type, descendant_type: type,
+        ancestor_id: frontier_ids).pluck(:descendant_id).uniq - descendant_ids - start_ids
+      descendant_ids += frontier_ids
+    end
+    descendant_ids
+  end
+
   include DagLinkTypes
   include DagLinkRepair
   include DagLinkCaching if use_caching?

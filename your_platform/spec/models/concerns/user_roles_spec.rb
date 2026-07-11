@@ -235,4 +235,54 @@ describe User do
     end
   end
 
+  describe "#page_ids_of_pages_the_user_is_officer_of" do
+    before do
+      @user = create :user
+      @page = create :page
+      @sub_page = create :page; @page << @sub_page
+      @sub_sub_page = create :page; @sub_page << @sub_sub_page
+      @page.find_or_create_officers_parent_group
+      @officer_group = @page.create_officer_group name: 'Editors'
+      @officer_group.assign_user @user
+    end
+    subject { @user.page_ids_of_pages_the_user_is_officer_of }
+
+    it "should include the page the user is officer of" do
+      subject.should include @page.id
+    end
+
+    it "should include the sub pages, in any depth" do
+      subject.should include @sub_page.id, @sub_sub_page.id
+    end
+
+    it "should not include pages below the intranet root" do
+      # The suite seeds the intranet root page; there is only one.
+      @intranet_root = Page.find_or_create_intranet_root
+      @page << @intranet_root
+      @intranet_page = create :page
+      @intranet_root << @intranet_page
+      subject.should_not include @intranet_page.id
+    end
+
+    it "should not include pages for group offices" do
+      @group = create :group
+      @group.find_or_create_officers_parent_group
+      @group_officer_group = @group.create_officer_group name: 'Secretaries'
+      @group_officer = create :user
+      @group_officer_group.assign_user @group_officer
+      @group_officer.page_ids_of_pages_the_user_is_officer_of.should == []
+    end
+
+    it "should ignore officer groups without an officers_parent ancestor instead of raising" do
+      # Orphans arise when the structure around an officer group is
+      # dismantled later on. update_column skips the cache renewal,
+      # which cannot handle the orphan either.
+      @orphan_group = create :group
+      @orphan_officer = create :user
+      @orphan_group.assign_user @orphan_officer
+      @orphan_group.update_column :type, 'OfficerGroup'
+      @orphan_officer.reload.page_ids_of_pages_the_user_is_officer_of.should == []
+    end
+  end
+
 end
