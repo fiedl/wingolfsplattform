@@ -35,6 +35,20 @@ concern :GroupMemberships do
       direct_memberships.build(descendant_type: 'User')
     end
 
+    # All direct memberships in this group and its subtree of sub groups,
+    # for example for the membership management view of a corporation.
+    #
+    # Memberships in descendant officer groups are excluded, matching the
+    # former neo4j query: officers appear on the member list of their own
+    # officer group, but not on the list of the group they are officers of.
+    #
+    def descendant_memberships
+      subtree_group_ids = DagLink.descendant_ids_via_direct_links 'Group', [id]
+      regular_group_ids = Group.where(id: subtree_group_ids)
+        .where("type IS NULL OR type != 'OfficerGroup'").pluck(:id)
+      Membership.direct.where(ancestor_id: [id] + regular_group_ids)
+    end
+
     # This returns the Membership object that represents the membership of the
     # given user in this group.
     #

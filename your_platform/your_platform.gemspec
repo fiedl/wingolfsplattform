@@ -170,9 +170,6 @@ Gem::Specification.new do |s|
   # LDAP
   s.add_dependency 'net-ldap'
 
-  # Neo4j
-  s.add_dependency 'neography'
-
   # Trello API
   s.add_dependency 'ruby-trello'
 

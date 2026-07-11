@@ -11,7 +11,6 @@ class Page < ApplicationRecord
   serialize :box_configuration
 
   include Structureable
-  include PageGraph
   include Navable
   include HasAuthor
   include PageBody

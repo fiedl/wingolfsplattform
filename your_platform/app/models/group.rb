@@ -9,7 +9,6 @@ class Group < ApplicationRecord
   scope :has_descendant_users, -> { includes(:descendant_users).where(users: { id: nil }) }
 
   include Structureable
-  include GroupGraph
   include Navable
   include GroupMemberships
   include GroupMemberList

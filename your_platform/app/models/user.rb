@@ -60,7 +60,6 @@ class User < ApplicationRecord
   # ==========================================================================================
 
   include UserName
-  include UserGraph
   include UserMixins::Memberships
   include UserMixins::Identification
   include UserCorporations

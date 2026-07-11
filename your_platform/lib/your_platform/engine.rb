@@ -122,9 +122,6 @@ require 'exception_notification'
 # LDAP
 require 'net/ldap'
 
-# Neo4j
-require 'neography'
-
 # Trello API
 require 'trello'
 

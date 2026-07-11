@@ -12,7 +12,6 @@ volumes:
   postgres_test_data: {}
   mysql_data: {}
   redis_data: {}
-  neo4j_data: {}
   wingolfsplattform_uploads: {}
   wingolfsplattform_assets: {}
   wingolfsplattform_tmp: {}
@@ -41,8 +40,7 @@ services:
       DB_USERNAME: postgres
       DB_PASSWORD: secret
       REDIS_HOST: redis
-      NEO4J_REST_URL: http://neo4j:trinity@neo4j:7474
-      WAIT_HOSTS: "postgres:5432, redis:6379, neo4j:7474"
+      WAIT_HOSTS: "postgres:5432, redis:6379"
     tty: true
     stdin_open: true
 
@@ -65,8 +63,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      neo4j:
-        condition: service_started
       sidekiq:
         condition: service_started
     command: bash -c "/wait && bin/bundle_exec bin/server"
@@ -82,8 +78,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      neo4j:
-        condition: service_started
     command: bash -c "/wait && bin/bundle_exec rails console"
 
   sidekiq:
@@ -97,8 +91,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      neo4j:
-        condition: service_started
     command: bash -c "/wait && bin/bundle_exec bin/sidekiq"
 
   tests:
@@ -111,16 +103,13 @@ services:
     environment:
       RAILS_ENV: test
       DB_HOST: postgres_test
-      NEO4J_REST_URL_TEST: http://neo4j:trinity@neo4j:7474
       CHROME_URL: http://chrome:4444
-      WAIT_HOSTS: "postgres_test:5432, redis:6379, neo4j:7474"
+      WAIT_HOSTS: "postgres_test:5432, redis:6379"
     depends_on:
       postgres_test:
         condition: service_healthy
       redis:
         condition: service_healthy
-      neo4j:
-        condition: service_started
       chrome:
         condition: service_started
     command: bash -c "/wait && bin/bundle_exec rspec spec/models"
@@ -196,15 +185,3 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
-
-  neo4j:
-    image: neo4j:3.5
-    volumes:
-      - neo4j_data:/data
-    environment:
-      NEO4J_AUTH: "neo4j/trinity"
-      # The parallelized test suite queries neo4j from many processes at
-      # once; the default 512M heap collapses under that load.
-      NEO4J_dbms_memory_heap_initial__size: "2G"
-      NEO4J_dbms_memory_heap_max__size: "2G"
-      NEO4J_dbms_memory_pagecache_size: "1G"
