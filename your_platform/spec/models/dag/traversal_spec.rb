@@ -2,7 +2,7 @@ require 'spec_helper'
 
 # The recursive CTE walk over the direct links
 # (https://github.com/fiedl/wingolfsplattform/issues/129): structural
-# invariants and the episode semantics of derived memberships.
+# invariants and the validity ranges of derived memberships.
 #
 describe Dag::Traversal do
 

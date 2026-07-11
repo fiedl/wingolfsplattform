@@ -14,8 +14,8 @@ class DeleteMaterializedIndirectDagLinks < ActiveRecord::Migration[5.0]
       DagLink.unscoped.where(direct: false)
         .joins("JOIN flags ON flags.flagable_type = 'DagLink' AND flags.flagable_id = dag_links.id")
         .distinct.each do |row|
-        subtree_group_ids = [row.ancestor_id] + Dag::Query.ids_from(start_type: 'Group',
-          start_ids: [row.ancestor_id], direction: :descendant, target_type: 'Group')
+        subtree_group_ids = [row.ancestor_id] + Dag::Traversal.descendant_ids(of_type: 'Group',
+          of_ids: [row.ancestor_id], type: 'Group')
         target = DagLink.unscoped.where(direct: true, descendant_type: 'User',
           descendant_id: row.descendant_id, ancestor_type: 'Group', ancestor_id: subtree_group_ids)
           .reorder(Arel.sql('valid_from NULLS FIRST')).first
