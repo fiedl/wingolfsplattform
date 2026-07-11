@@ -203,8 +203,6 @@ concern :UserRoles do
   end
 
   def page_ids_of_pages_the_user_is_officer_of
-    # Officer groups without an officers_parent ancestor have no scope
-    # and raise; they grant no page responsibilities.
     scope_page_ids = groups.where(type: "OfficerGroup")
       .collect { |officer_group| officer_group.scope rescue nil }
       .select { |scope| scope.kind_of?(Page) }

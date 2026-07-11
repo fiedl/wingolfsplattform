@@ -318,5 +318,57 @@ describe GroupMemberships do
     end
   end
 
+  describe "#descendant_memberships" do
+    before do
+      @corporation = create :group
+      @subgroup = @corporation.child_groups.create name: 'Subgroup'
+      @subsubgroup = @subgroup.child_groups.create name: 'Subsubgroup'
+
+      @member = create :user
+      @membership = @subsubgroup.assign_user @member, at: 2.years.ago
+
+      @former = create :user
+      @former_membership = @subgroup.assign_user @former, at: 3.years.ago
+      @subgroup.unassign_user @former, at: 1.year.ago
+
+      @officers_parent = @corporation.find_or_create_officers_parent_group
+      @officer_group = @corporation.create_officer_group name: 'Presidents'
+      @officer = create :user
+      @officer_membership = @officer_group.assign_user @officer
+
+      @page = create :page
+      @corporation << @page
+      @group_behind_page = create :group
+      @page << @group_behind_page
+      @page_group_member = create :user
+      @group_behind_page.assign_user @page_group_member
+    end
+    subject { @corporation.descendant_memberships }
+
+    it "should include the direct memberships of the group's subtree, in any depth" do
+      subject.should include @membership
+    end
+
+    it "should not include indirect memberships" do
+      subject.map(&:direct?).uniq.should == [true]
+    end
+
+    it "should not include memberships in descendant officer groups" do
+      subject.should_not include @officer_membership
+    end
+
+    it "should include own memberships when called on an officer group itself" do
+      @officer_group.descendant_memberships.should include @officer_membership
+    end
+
+    it "should not include memberships in groups behind pages" do
+      subject.map(&:descendant_id).should_not include @page_group_member.id
+    end
+
+    it "should hide expired memberships unless .with_past is chained" do
+      subject.should_not include @former_membership
+      subject.with_past.should include @former_membership
+    end
+  end
 
 end

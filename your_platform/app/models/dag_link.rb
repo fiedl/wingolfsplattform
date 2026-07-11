@@ -18,7 +18,7 @@ class DagLink < ApplicationRecord
     frontier_ids = start_ids
     while frontier_ids.any?
       frontier_ids = where(direct: true, ancestor_type: type, descendant_type: type,
-        ancestor_id: frontier_ids).pluck(:descendant_id) - descendant_ids - start_ids
+        ancestor_id: frontier_ids).pluck(:descendant_id).uniq - descendant_ids - start_ids
       descendant_ids += frontier_ids
     end
     descendant_ids
