@@ -185,6 +185,18 @@ module Dag
           #this apparently is only one way is we can create some aliases making things easier
           self.class_eval "has_many :#{prefix}#{table_name}, :through => :#{prefix}links_as_descendant_for_#{table_name}, :source => :ancestor, :source_type => '#{class_name}'"
         end
+
+        # Same result as the ancestor_* association above, but read from
+        # the direct links by recursive CTE instead of the closure rows.
+        # https://github.com/fiedl/wingolfsplattform/issues/129
+        self.class_eval do
+          define_method "#{prefix}cte_ancestor_#{table_name}" do
+            klass = class_name.constantize
+            klass.where("#{klass.table_name}.id IN (#{Dag::Query.sql(
+              start_type: self.class.base_class.name, start_ids: [id],
+              direction: :ancestor, target_type: klass.base_class.name)})")
+          end
+        end
       end
 
       unless conf[:ancestor_class_names].empty?
@@ -234,6 +246,18 @@ module Dag
         child_table_names << (prefix+'child_'+table_name)
         unless conf[:ancestor_class_names].include?(class_name)
           self.class_eval "has_many :#{prefix}#{table_name}, :through => :#{prefix}links_as_ancestor_for_#{table_name}, :source => :descendant, :source_type => '#{class_name}'"
+        end
+
+        # Same result as the descendant_* association above, but read
+        # from the direct links by recursive CTE instead of the closure
+        # rows. https://github.com/fiedl/wingolfsplattform/issues/129
+        self.class_eval do
+          define_method "#{prefix}cte_descendant_#{table_name}" do
+            klass = class_name.constantize
+            klass.where("#{klass.table_name}.id IN (#{Dag::Query.sql(
+              start_type: self.class.base_class.name, start_ids: [id],
+              direction: :descendant, target_type: klass.base_class.name)})")
+          end
         end
       end
 
