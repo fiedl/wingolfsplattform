@@ -10,8 +10,8 @@ class Group < ApplicationRecord
   # which no user is reachable. (The CTE walk replaces the former
   # closure-row join; the name is kept for the existing callers.)
   scope :has_descendant_users, -> {
-    where("groups.id NOT IN (#{Dag::Query.sql(start_type: 'User', start_ids: :all,
-      direction: :ancestor, target_type: 'Group')})")
+    where("groups.id NOT IN (#{Dag::Traversal.ancestor_ids_sql(of_type: 'User',
+      of_ids: :all, type: 'Group')})")
   }
 
   include Structureable

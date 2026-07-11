@@ -19,7 +19,7 @@ concern :DagLinkCaching do
   def delay_renew_cache_of_dependent_nodes
     nodes = [ancestor, descendant] - [nil]
     if ancestor.kind_of?(Group)
-      nodes += Group.where(id: Dag::Query.ids(ancestor, direction: :ancestor, type: 'Group')).to_a
+      nodes += Group.where(id: Dag::Traversal.ancestor_ids_of(ancestor, type: 'Group')).to_a
     end
     RenewCacheJob.perform_later nodes.uniq, time: Time.zone.now
   end

@@ -5,7 +5,7 @@ module Dag
 
   # Validations on link creation. Ensures no duplicate edges and no
   # cycles. Only direct links can be created: transitive links are not
-  # materialized anymore but derived by recursive CTEs (Dag::Query).
+  # materialized anymore but derived by recursive CTEs (Dag::Traversal).
   # https://github.com/fiedl/wingolfsplattform/issues/129
   class CreateCorrectnessValidator < ActiveModel::Validator
 
@@ -21,9 +21,9 @@ module Dag
     # links to make sure the new edge's descendant cannot already
     # reach its ancestor.
     def has_long_cycles(record)
-      Dag::Query.ids_from(
-        start_type: record.descendant_type, start_ids: [record.descendant_id],
-        direction: :descendant, target_type: record.ancestor_type
+      Dag::Traversal.descendant_ids(
+        of_type: record.descendant_type, of_ids: [record.descendant_id],
+        type: record.ancestor_type
       ).include?(record.ancestor_id)
     end
 

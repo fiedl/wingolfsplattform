@@ -42,7 +42,7 @@ concern :GroupMemberships do
     # officer group, but not on the list of the group they are officers of.
     #
     def descendant_memberships
-      subtree_group_ids = DagLink.descendant_ids_via_direct_links 'Group', [id]
+      subtree_group_ids = DagLink.descendant_ids_through_same_type 'Group', [id]
       regular_group_ids = Group.where(id: subtree_group_ids)
         .where("type IS NULL OR type != 'OfficerGroup'").pluck(:id)
       Membership.direct.where(ancestor_id: [id] + regular_group_ids)
