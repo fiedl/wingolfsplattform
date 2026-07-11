@@ -61,16 +61,16 @@ class Corporation
   #   (b) keine Sammelnachrichten erhalten,
   #   (c) nicht in Export-Listen und Etiketten enthalten sind.
   #
-  def memberships(reload = nil)
+  def memberships
     if aktivitas && philisterschaft
       aktivitas_and_philisterschaft_member_ids = aktivitas.member_ids + philisterschaft.member_ids
-      super(reload).where(descendant_id: aktivitas_and_philisterschaft_member_ids)
+      super.where(descendant_id: aktivitas_and_philisterschaft_member_ids)
     else
-      super(reload)
+      super
     end
   end
-  def members(reload = nil)
-    User.where(id: memberships.pluck(:descendant_id))
+  def members
+    User.where(id: memberships.select(:descendant_id))
   end
 
 end

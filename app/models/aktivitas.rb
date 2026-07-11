@@ -4,6 +4,6 @@
 #
 class Aktivitas < Group
 
-  scope :active, -> { where id: (joins(:members).group('groups.id').having("count(users.id) > 5")) }
+  scope :active, -> { where id: all.to_a.select { |aktivitas| aktivitas.members.count > 5 }.collect(&:id) }
 
 end

@@ -384,7 +384,7 @@ class User < ApplicationRecord
   #
   def sorted_current_corporations
     current_corporations.sort_by do |corporation|
-      Membership.with_invalid.find_by_user_and_group(self, corporation).valid_from || Time.zone.now - 100.years
+      corporation.membership_of(self, also_in_the_past: true).try(:valid_from) || Time.zone.now - 100.years
     end
   end
 
@@ -410,9 +410,16 @@ class User < ApplicationRecord
   #
   def primary_corporation(options = {})
     if options[:at]
-      memberships.with_past.where(ancestor_id: Group.flagged(:full_members).pluck(:id))
-        .at_time(options[:at]).order(:valid_from)
-        .first.try(:group).try(:corporation)
+      # The full_members flag sits on groups like Aktivitas and
+      # Philisterschaft, which the user belongs to through his status
+      # group -- so the membership has to be derived, ordered by the
+      # earliest date of joining.
+      direct_group_ids = direct_memberships.with_past.at_time(options[:at]).pluck(:ancestor_id)
+      candidate_ids = direct_group_ids + Dag::Query.ids_from(start_type: 'Group',
+        start_ids: direct_group_ids, direction: :ancestor, target_type: 'Group')
+      Group.flagged(:full_members).where(id: candidate_ids).collect { |group|
+        [group, group.membership_of(self, also_in_the_past: true).try(:valid_from) || Time.zone.now]
+      }.sort_by(&:second).first.try(:first).try(:corporation)
     else
       # Temporary hack. This might not be correct for all cases.
       first_corporation
@@ -597,12 +604,8 @@ class User < ApplicationRecord
     self.find_all_by_email(email).first
   end
 
-  def self.with_group_flags
-    self.joins(:groups => :flags)
-  end
-
   def self.with_group_flag(flag)
-    self.with_group_flags.where("flags.key = ?", flag)
+    self.where(id: Group.flagged(flag).flat_map(&:member_ids))
   end
 
   def self.hidden
@@ -630,7 +633,7 @@ class User < ApplicationRecord
   end
 
   def self.joins_groups
-    self.joins(:groups).where('dag_links.valid_to IS NULL')
+    self.joins(:direct_memberships).where('dag_links.valid_to IS NULL').distinct
   end
 
   def accept_terms(terms_stamp)

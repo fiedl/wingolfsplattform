@@ -31,7 +31,8 @@ concern :UserRoles do
   def member_of?( object, options = {} )
     if object.kind_of? Group
       if options[:at]
-        Membership.find_all_by(user: self, group: object).at_time(options[:at]).any?
+        Membership.find_all_by(user: self, group: object).at_time(options[:at]).any? or
+          IndirectMembership.new(object, self).valid_at?(options[:at])
       elsif options[:with_invalid] or options[:also_in_the_past]
         self.ancestor_group_ids.include? object.id
       else  # only current memberships:

@@ -17,8 +17,8 @@ describe UserMixins::Memberships do
     @membership1 = Membership.find_by(user: @user1, group: @group)
     @membership2 = Membership.find_by(user: @user2, group: @group)
     @indirect_group = @group.parent_groups.create
-    @indirect_membership1 = Membership.find_by(user: @user1, group: @indirect_group)
-    @indirect_membership2 = Membership.find_by(user: @user2, group: @indirect_group)
+    @indirect_membership1 = @indirect_group.membership_of(@user1)
+    @indirect_membership2 = @indirect_group.membership_of(@user2)
     @group2 = @indirect_group.child_groups.create
   end
 
@@ -29,14 +29,12 @@ describe UserMixins::Memberships do
   describe "#memberships" do
     subject { @user1.memberships }
     it { should include @membership1 }
-    it { should include @indirect_membership1 }
+    it "should not include indirect memberships, which derive at read time" do
+      subject.map(&:group_id).should_not include @indirect_group.id
+    end
     it "should not include invalidated memberships" do
       @membership1.invalidate at: 10.minutes.ago
       subject { should_not include @membership1 }
-    end
-    it "should not include invalidated indirect memberships" do
-      @membership1.invalidate at: 10.minutes.ago
-      subject { should_not include @indirect_membership1 }
     end
   end
     
@@ -48,7 +46,9 @@ describe UserMixins::Memberships do
     
   describe "#indirect_memberships" do
     subject { @user1.indirect_memberships }
-    it { should include @indirect_membership1 }
+    it "should contain the materialized rows as long as the closure is still maintained" do
+      subject.pluck(:ancestor_id).should include @indirect_group.id
+    end
     it { should_not include @membership1 }
   end
     
@@ -60,7 +60,11 @@ describe UserMixins::Memberships do
     end
     describe "for the user being an indirect member" do
       subject { @user.membership_in @indirect_group }
-      it { should == @indirect_membership1 }
+      it "should be the derived, read-only indirect membership" do
+        subject.should be_kind_of IndirectMembership
+        subject.group.should == @indirect_group
+        subject.user.should == @user
+      end
     end
   end
   

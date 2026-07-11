@@ -9,11 +9,14 @@ concern :GroupMemberships do
     # User Group Memberships
     # ==========================================================================================
 
-    # This associates all Membership objects of the group, including indirect
-    # memberships.
+    # All memberships of the group: the direct memberships in the group
+    # itself and in the groups of its subtree. There is no stored row
+    # per (group, user) pair anymore -- a user with two direct
+    # memberships in the subtree appears with two rows here.
     #
-    has_many :memberships, -> { where ancestor_type: 'Group', descendant_type: 'User' },
-        foreign_key: :ancestor_id
+    def memberships
+      Membership.direct.where(ancestor_id: [id] + descendant_group_ids)
+    end
 
     # This associates all memberships of the group that are direct, i.e. direct
     # parent_group-child_user memberships.
@@ -21,9 +24,10 @@ concern :GroupMemberships do
     has_many :direct_memberships, -> { where ancestor_type: 'Group', descendant_type: 'User', direct: true },
         foreign_key: :ancestor_id, class_name: "Membership"
 
-    # This associates all memberships of the group that are indirect, i.e.
-    # ancestor_group-descendant_user memberships, where groups are between the
-    # ancestor_group and the descendant_user.
+    # The materialized indirect membership rows (direct: false). Only
+    # the closure maintenance still touches them; do not read from
+    # them. They disappear with
+    # https://github.com/fiedl/wingolfsplattform/issues/129
     #
     has_many :indirect_memberships, -> { where ancestor_type: 'Group', descendant_type: 'User', direct: false },
         foreign_key: :ancestor_id, class_name: "Membership"
@@ -50,7 +54,8 @@ concern :GroupMemberships do
     end
 
     # This returns the Membership object that represents the membership of the
-    # given user in this group.
+    # given user in this group: the direct membership if there is one,
+    # otherwise the derived, read-only indirect membership.
     #
     # options:
     #   - also_in_the_past
@@ -61,7 +66,14 @@ concern :GroupMemberships do
       else
         base = Membership
       end
-      base.find_by_user_and_group(user, self)
+      base.find_by_user_and_group(user, self) || derived_indirect_membership_of(user, options)
+    end
+
+    def derived_indirect_membership_of(user, options = {})
+      membership = IndirectMembership.new(self, user)
+      return nil unless membership.present?
+      return nil unless options[:also_in_the_past] || membership.currently_valid?
+      membership
     end
 
     # This returns a string of the titles of the direct members of this group. This is used
@@ -133,9 +145,9 @@ concern :GroupMemberships do
     # of the given user in this group.
     #
     def unassign_user( user, options = {} )
-      if user and user.in?(self.members)
+      if user and membership = Membership.find_by(user: user, group: self)
         time_of_unassignment = options[:at] || options[:time] || Time.zone.now
-        Membership.find_by(user: user, group: self).invalidate(at: time_of_unassignment)
+        membership.invalidate(at: time_of_unassignment)
       end
     end
 
@@ -151,16 +163,42 @@ concern :GroupMemberships do
     # Members
     # ==========================================================================================
 
-    # This associates the group members (users), direct ones as well as indirect ones.
+    # The group members (users), direct ones as well as the users of
+    # the subtree groups.
     #
-    # Attention! The conditions on the `memberships` association are ignored by Rails 3
-    # when generating the SQL query. This is why the conditions have to be repeated here.
-    #
-    has_many(:members,
-      -> { where('dag_links.ancestor_type' => 'Group').distinct },
-      through: :memberships,
-      source: :descendant, source_type: 'User'
-      )
+    def members
+      Dag::MemberUsers.new self, User.where(id: memberships.select(:descendant_id))
+    end
+
+    def member_ids
+      members.pluck(:id)
+    end
+
+    # Member counts
+    # ==========================================================================================
+    # These follow the former materialized pair rows: one membership
+    # per (group, user) counted from first joining to last leaving,
+    # even though a user can have several direct memberships in the
+    # subtree.
+
+    def member_count(at: Time.zone.now)
+      memberships.at_time(at).distinct.count(:descendant_id)
+    end
+
+    def new_member_ids(during:)
+      memberships.with_past.group(:descendant_id).minimum(:valid_from)
+        .select { |_, joined_at| joined_at && during.cover?(joined_at) }.keys
+    end
+
+    def new_member_count(during:)
+      new_member_ids(during: during).count
+    end
+
+    def ended_membership_count(during:)
+      open_user_ids = memberships.with_past.where(valid_to: nil).pluck(:descendant_id)
+      memberships.with_past.group(:descendant_id).maximum(:valid_to)
+        .count { |user_id, left_at| left_at && during.cover?(left_at) && !user_id.in?(open_user_ids) }
+    end
 
     # This associates only the direct group members (users).
     #
@@ -170,13 +208,11 @@ concern :GroupMemberships do
       source: :descendant, source_type: 'User'
       )
 
-    # This associates only the indirect group members (users).
+    # Only the members by subtree membership, without the direct ones.
     #
-    has_many(:indirect_members,
-      -> { where('dag_links.ancestor_type' => 'Group', 'dag_links.direct' => false).distinct },
-      through: :indirect_memberships,
-      source: :descendant, source_type: 'User'
-      )
+    def indirect_members
+      members.where.not(id: direct_memberships.select(:descendant_id))
+    end
 
   end
 end

@@ -21,7 +21,7 @@ describe MembershipCreator do
         subject
         @user.links_as_descendant.where(direct: true).count.should == 1
         @user.links_as_descendant.where(direct: false).count.should == 1
-        @user.memberships.count.should == 2
+        @user.memberships.count.should == 1 # direct only; indirect memberships derive at read time
         @user.direct_memberships.count.should == 1
         @user.indirect_memberships.count.should == 1
       end
@@ -35,7 +35,7 @@ describe MembershipCreator do
         subject
         @user.links_as_descendant.where(direct: true).count.should == 1
         @user.links_as_descendant.where(direct: false).count.should == 1
-        @user.memberships.count.should == 2
+        @user.memberships.count.should == 1 # direct only; indirect memberships derive at read time
         @user.direct_memberships.count.should == 1
         @user.indirect_memberships.count.should == 1
       end
@@ -49,7 +49,7 @@ describe MembershipCreator do
         subject
         @user.links_as_descendant.where(direct: true).count.should == 1
         @user.links_as_descendant.where(direct: false).count.should == 1
-        @user.memberships.count.should == 2
+        @user.memberships.count.should == 1 # direct only; indirect memberships derive at read time
         @user.direct_memberships.count.should == 1
         @user.indirect_memberships.count.should == 1
       end
@@ -62,7 +62,7 @@ describe MembershipCreator do
         subject
         @user.links_as_descendant.where(direct: true).count.should == 1
         @user.links_as_descendant.where(direct: false).count.should == 1
-        @user.memberships.count.should == 2
+        @user.memberships.count.should == 1 # direct only; indirect memberships derive at read time
         @user.direct_memberships.count.should == 1
         @user.indirect_memberships.count.should == 1
       end

@@ -115,8 +115,12 @@ class Dag::Query
   end
 
   # Structural links carry no validity dates; NULL means unbounded.
+  # Corrupted rows with valid_from > valid_to exist in production and
+  # would make tstzrange raise; they count as never valid.
   def self.link_validity
-    "tstzrange(coalesce(l.valid_from, '-infinity'), coalesce(l.valid_to, 'infinity'), '[)')"
+    "(CASE WHEN l.valid_from IS NOT NULL AND l.valid_to IS NOT NULL AND l.valid_from > l.valid_to" +
+    " THEN 'empty'::tstzrange" +
+    " ELSE tstzrange(coalesce(l.valid_from, '-infinity'), coalesce(l.valid_to, 'infinity'), '[)') END)"
   end
 
   # The adapter returns range bounds as Time, or as infinite Float or

@@ -228,7 +228,10 @@ module AbilityDefinitions
     # Von der eigenen Verbindung darf man alle sehen, also auch Gäste.
     # Den Namen kann man von allen Nutzern sehen.
     can :read, User, id: User.wingolfiten.alive.pluck(:id)
-    can :read, User, groups: { id: user.corporations.collect { |corporation| corporation.child_groups.where(type: ["Aktivitas", "Philisterschaft"]).or(corporation.child_groups.where(name: ["Gäste", "Hausbewohner"])) }.flatten.map(&:id) }
+    # By member ids rather than a `groups:` hash condition: cancancan
+    # would join the former groups association, which is now derived.
+    readable_groups = user.corporations.collect { |corporation| corporation.child_groups.where(type: ["Aktivitas", "Philisterschaft"]).or(corporation.child_groups.where(name: ["Gäste", "Hausbewohner"])) }.flatten
+    can :read, User, id: readable_groups.collect(&:member_ids).flatten
     can [:index, :read_name], User
 
     # For the moment, everybody can view the statistics.

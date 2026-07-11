@@ -8,6 +8,13 @@ require 'spec_helper'
 
 describe Membership do
 
+  # The materialized indirect rows, which the pair finders no longer
+  # return; this spec pins that the closure maintenance keeps them in
+  # sync as long as they exist.
+  def indirect_membership_row(user, group)
+    Membership.with_invalid.where(direct: false, descendant_id: user.id, ancestor_id: group.id).first
+  end
+
   before do
     @corporation1 = create :corporation_with_status_groups
     @corporation2 = create :corporation_with_status_groups
@@ -21,49 +28,49 @@ describe Membership do
   end
 
   specify "The indirect validity ranges should match the direct ones" do
-    Membership.with_invalid.find_by_user_and_group(@user1, @superstatus1).valid_from.year.should == @time1.year
-    Membership.with_invalid.find_by_user_and_group(@user1, @superstatus1).valid_to.year.should == @time4.year
-    Membership.with_invalid.find_by_user_and_group(@user1, @superstatus2).valid_from.year.should == @time3.year
-    Membership.with_invalid.find_by_user_and_group(@user1, @superstatus2).valid_to.should == nil
+    indirect_membership_row(@user1, @superstatus1).valid_from.year.should == @time1.year
+    indirect_membership_row(@user1, @superstatus1).valid_to.year.should == @time4.year
+    indirect_membership_row(@user1, @superstatus2).valid_from.year.should == @time3.year
+    indirect_membership_row(@user1, @superstatus2).valid_to.should == nil
   end
 
   describe "DagLink.repair" do
     before { DagLink.repair }
     specify "The indirect validity ranges should match the direct ones" do
-      Membership.with_invalid.find_by_user_and_group(@user1, @superstatus1).valid_from.year.should == @time1.year
-      Membership.with_invalid.find_by_user_and_group(@user1, @superstatus1).valid_to.year.should == @time4.year
-      Membership.with_invalid.find_by_user_and_group(@user1, @superstatus2).valid_from.year.should == @time3.year
-      Membership.with_invalid.find_by_user_and_group(@user1, @superstatus2).valid_to.should == nil
+      indirect_membership_row(@user1, @superstatus1).valid_from.year.should == @time1.year
+      indirect_membership_row(@user1, @superstatus1).valid_to.year.should == @time4.year
+      indirect_membership_row(@user1, @superstatus2).valid_from.year.should == @time3.year
+      indirect_membership_row(@user1, @superstatus2).valid_to.should == nil
     end
   end
 
   describe "DagLink.recalculate_indirect_validity_ranges" do
     before { DagLink.recalculate_indirect_validity_ranges }
     specify "The indirect validity ranges should match the direct ones" do
-      Membership.with_invalid.find_by_user_and_group(@user1, @superstatus1).valid_from.year.should == @time1.year
-      Membership.with_invalid.find_by_user_and_group(@user1, @superstatus1).valid_to.year.should == @time4.year
-      Membership.with_invalid.find_by_user_and_group(@user1, @superstatus2).valid_from.year.should == @time3.year
-      Membership.with_invalid.find_by_user_and_group(@user1, @superstatus2).valid_to.should == nil
+      indirect_membership_row(@user1, @superstatus1).valid_from.year.should == @time1.year
+      indirect_membership_row(@user1, @superstatus1).valid_to.year.should == @time4.year
+      indirect_membership_row(@user1, @superstatus2).valid_from.year.should == @time3.year
+      indirect_membership_row(@user1, @superstatus2).valid_to.should == nil
     end
   end
 
   describe "RenewCacheJob(direct membership)" do
     before { RenewCacheJob.perform_later(Membership.find_by_user_and_group(@user1, @corporation1.status_groups.first)) }
     specify "The indirect validity ranges should match the direct ones" do
-      Membership.with_invalid.find_by_user_and_group(@user1, @superstatus1).valid_from.year.should == @time1.year
-      Membership.with_invalid.find_by_user_and_group(@user1, @superstatus1).valid_to.year.should == @time4.year
-      Membership.with_invalid.find_by_user_and_group(@user1, @superstatus2).valid_from.year.should == @time3.year
-      Membership.with_invalid.find_by_user_and_group(@user1, @superstatus2).valid_to.should == nil
+      indirect_membership_row(@user1, @superstatus1).valid_from.year.should == @time1.year
+      indirect_membership_row(@user1, @superstatus1).valid_to.year.should == @time4.year
+      indirect_membership_row(@user1, @superstatus2).valid_from.year.should == @time3.year
+      indirect_membership_row(@user1, @superstatus2).valid_to.should == nil
     end
   end
 
   describe "RenewCacheJob(indirect membership)" do
-    before { RenewCacheJob.perform_later(Membership.find_by_user_and_group(@user1, @superstatus1)) }
+    before { RenewCacheJob.perform_later(indirect_membership_row(@user1, @superstatus1)) }
     specify "The indirect validity ranges should match the direct ones" do
-      Membership.with_invalid.find_by_user_and_group(@user1, @superstatus1).valid_from.year.should == @time1.year
-      Membership.with_invalid.find_by_user_and_group(@user1, @superstatus1).valid_to.year.should == @time4.year
-      Membership.with_invalid.find_by_user_and_group(@user1, @superstatus2).valid_from.year.should == @time3.year
-      Membership.with_invalid.find_by_user_and_group(@user1, @superstatus2).valid_to.should == nil
+      indirect_membership_row(@user1, @superstatus1).valid_from.year.should == @time1.year
+      indirect_membership_row(@user1, @superstatus1).valid_to.year.should == @time4.year
+      indirect_membership_row(@user1, @superstatus2).valid_from.year.should == @time3.year
+      indirect_membership_row(@user1, @superstatus2).valid_to.should == nil
     end
   end
 end
