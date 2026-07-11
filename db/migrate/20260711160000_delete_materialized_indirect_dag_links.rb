@@ -1,5 +1,5 @@
 # The materialized closure rows (direct: false) are not written or read
-# anymore; all transitive questions are answered by recursive CTEs over
+# anymore; all transitive questions are answered by recursive SQL queries over
 # the direct links. This deletes the stale rows, keeping an archive
 # table as rollback insurance for one release.
 # https://github.com/fiedl/wingolfsplattform/issues/129

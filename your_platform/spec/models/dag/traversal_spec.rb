@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-# The recursive CTE walk over the direct links
+# The recursive SQL traversal of the direct links
 # (https://github.com/fiedl/wingolfsplattform/issues/129): structural
 # invariants and the validity ranges of derived memberships.
 #
