@@ -1,5 +1,5 @@
 # Answers the transitive questions of the dag by walking the direct
-# links with recursive CTE queries -- which nodes lie above or below a
+# links with recursive SQL queries -- which nodes lie above or below a
 # node, and over which time ranges a membership holds along the way.
 # https://github.com/fiedl/wingolfsplattform/issues/129
 #

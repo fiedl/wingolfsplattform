@@ -6,13 +6,6 @@ class Group < ApplicationRecord
   scope :regular, -> {
     where(type: nil).or(where.not(type: "Groups::PhvsParent")).not_flagged([:contact_people, :attendees, :officers_parent, :admins_parent, :group_of_groups, :everyone, :corporations_parent, :bvs_parent, :wbl_abo])
   }
-  # Despite the name: groups WITHOUT descendant users, i.e. groups from
-  # which no user is reachable. (The CTE walk replaces the former
-  # closure-row join; the name is kept for the existing callers.)
-  scope :has_descendant_users, -> {
-    where("groups.id NOT IN (#{Dag::Traversal.ancestor_ids_sql(of_type: 'User',
-      of_ids: :all, type: 'Group')})")
-  }
 
   include Structureable
   include Navable
@@ -138,7 +131,7 @@ class Group < ApplicationRecord
   # 'WorkflowKit::Workflow' (single table inheritance and polymorphic
   # associations do not work together here, see
   # http://stackoverflow.com/questions/9628610). descendant_workflows
-  # needs no override anymore: the CTE accessor filters by base class.
+  # needs no override anymore: the transitive accessor filters by base class.
   #
   def child_workflows
     Workflow
