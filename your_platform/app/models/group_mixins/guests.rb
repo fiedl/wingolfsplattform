@@ -39,7 +39,7 @@ module GroupMixins::Guests
   end
 
   def find_guest_users
-    Dag::SpecialGroupUsers.new guests_parent
+    Dag::SubtreeUsersProxy.new guests_parent
   end
 
   def guests
