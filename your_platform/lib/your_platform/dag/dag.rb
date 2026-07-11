@@ -100,7 +100,7 @@ module Dag
 
     # The closure maintenance hooks (perpetuate, destroyable!) are
     # gone: only direct links are written, and transitive questions
-    # are answered by recursive CTEs (Dag::Traversal).
+    # are answered by recursive SQL queries (Dag::Traversal).
     # https://github.com/fiedl/wingolfsplattform/issues/129
     before_validation :field_check, :fill_defaults, :on => :update
     before_validation :fill_defaults, :on => :create
@@ -169,8 +169,8 @@ module Dag
         ancestor_table_names << (prefix+'ancestor_'+table_name)
         parent_table_names << (prefix+'parent_'+table_name)
 
-        # The transitive accessors read the direct links by recursive
-        # CTE instead of the closure rows (direct: false).
+        # The transitive accessors read the direct links by a
+        # recursive SQL query instead of the closure rows (direct: false).
         # https://github.com/fiedl/wingolfsplattform/issues/129
         self.class_eval do
           define_method "#{prefix}ancestor_#{table_name}" do
@@ -230,8 +230,8 @@ module Dag
         descendant_table_names << (prefix+'descendant_'+table_name)
         child_table_names << (prefix+'child_'+table_name)
 
-        # The transitive accessors read the direct links by recursive
-        # CTE instead of the closure rows (direct: false).
+        # The transitive accessors read the direct links by a
+        # recursive SQL query instead of the closure rows (direct: false).
         # https://github.com/fiedl/wingolfsplattform/issues/129
         self.class_eval do
           define_method "#{prefix}descendant_#{table_name}" do

@@ -5,7 +5,7 @@ module Dag
 
   # Validations on link creation. Ensures no duplicate edges and no
   # cycles. Only direct links can be created: transitive links are not
-  # materialized anymore but derived by recursive CTEs (Dag::Traversal).
+  # materialized anymore but derived by recursive SQL queries (Dag::Traversal).
   # https://github.com/fiedl/wingolfsplattform/issues/129
   class CreateCorrectnessValidator < ActiveModel::Validator
 

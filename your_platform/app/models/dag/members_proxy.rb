@@ -6,9 +6,9 @@
 #
 class Dag::MembersProxy < SimpleDelegator
 
-  def initialize(group, relation)
+  def initialize(group:, members:)
     @group = group
-    super(relation)
+    super(members)
   end
 
   def <<(user)
