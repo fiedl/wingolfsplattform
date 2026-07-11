@@ -239,7 +239,7 @@ describe SpecialGroups do
         end
 
         def testers
-          find_or_create_testers_parent_group.descendant_users
+          Dag::SpecialGroupUsers.new find_or_create_testers_parent_group
         end
 
         def find_main_testers_parent_group

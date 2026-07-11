@@ -171,7 +171,6 @@ module Dag
         table_name = class_name.tableize
         self.class_eval <<-EOL2
                 has_many :#{prefix}links_as_descendant_for_#{table_name}, lambda { where('#{dag_link_class.ancestor_type_column_name}' => '#{class_name}') }, :as => :descendant, :class_name => '#{dag_link_class_name}'
-                has_many :#{prefix}ancestor_#{table_name}, :through => :#{prefix}links_as_descendant_for_#{table_name}, :source => :ancestor, :source_type => '#{class_name}'
                 has_many :#{prefix}links_as_child_for_#{table_name}, lambda { where('#{dag_link_class.ancestor_type_column_name}' => '#{class_name}','#{dag_link_class.direct_column_name}' => true) }, :as => :descendant, :class_name => '#{dag_link_class_name}'
                 has_many :#{prefix}parent_#{table_name}, :through => :#{prefix}links_as_child_for_#{table_name}, :source => :ancestor, :source_type => '#{class_name}'
 
@@ -181,20 +180,19 @@ module Dag
         EOL2
         ancestor_table_names << (prefix+'ancestor_'+table_name)
         parent_table_names << (prefix+'parent_'+table_name)
-        unless conf[:descendant_class_names].include?(class_name)
-          #this apparently is only one way is we can create some aliases making things easier
-          self.class_eval "has_many :#{prefix}#{table_name}, :through => :#{prefix}links_as_descendant_for_#{table_name}, :source => :ancestor, :source_type => '#{class_name}'"
-        end
 
-        # Same result as the ancestor_* association above, but read from
-        # the direct links by recursive CTE instead of the closure rows.
+        # The transitive accessors read the direct links by recursive
+        # CTE instead of the closure rows (direct: false).
         # https://github.com/fiedl/wingolfsplattform/issues/129
         self.class_eval do
-          define_method "#{prefix}cte_ancestor_#{table_name}" do
+          define_method "#{prefix}ancestor_#{table_name}" do
             klass = class_name.constantize
             klass.where("#{klass.table_name}.id IN (#{Dag::Query.sql(
               start_type: self.class.base_class.name, start_ids: [id],
               direction: :ancestor, target_type: klass.base_class.name)})")
+          end
+          define_method "#{prefix}ancestor_#{table_name.singularize}_ids" do
+            send("#{prefix}ancestor_#{table_name}").pluck(:id)
           end
         end
       end
@@ -233,7 +231,6 @@ module Dag
         table_name = class_name.tableize
         self.class_eval <<-EOL3
                 has_many :#{prefix}links_as_ancestor_for_#{table_name}, lambda { where('#{dag_link_class.descendant_type_column_name}' => '#{class_name}') }, :as => :ancestor, :class_name => '#{dag_link_class_name}'
-                has_many :#{prefix}descendant_#{table_name}, :through => :#{prefix}links_as_ancestor_for_#{table_name}, :source => :descendant, :source_type => '#{class_name}'
 
                 has_many :#{prefix}links_as_parent_for_#{table_name}, lambda { where('#{dag_link_class.descendant_type_column_name}' => '#{class_name}','#{dag_link_class.direct_column_name}' => true) }, :as => :ancestor, :class_name => '#{dag_link_class_name}'
                 has_many :#{prefix}child_#{table_name}, :through => :#{prefix}links_as_parent_for_#{table_name}, :source => :descendant, :source_type => '#{class_name}'
@@ -244,19 +241,19 @@ module Dag
         EOL3
         descendant_table_names << (prefix+'descendant_'+table_name)
         child_table_names << (prefix+'child_'+table_name)
-        unless conf[:ancestor_class_names].include?(class_name)
-          self.class_eval "has_many :#{prefix}#{table_name}, :through => :#{prefix}links_as_ancestor_for_#{table_name}, :source => :descendant, :source_type => '#{class_name}'"
-        end
 
-        # Same result as the descendant_* association above, but read
-        # from the direct links by recursive CTE instead of the closure
-        # rows. https://github.com/fiedl/wingolfsplattform/issues/129
+        # The transitive accessors read the direct links by recursive
+        # CTE instead of the closure rows (direct: false).
+        # https://github.com/fiedl/wingolfsplattform/issues/129
         self.class_eval do
-          define_method "#{prefix}cte_descendant_#{table_name}" do
+          define_method "#{prefix}descendant_#{table_name}" do
             klass = class_name.constantize
             klass.where("#{klass.table_name}.id IN (#{Dag::Query.sql(
               start_type: self.class.base_class.name, start_ids: [id],
               direction: :descendant, target_type: klass.base_class.name)})")
+          end
+          define_method "#{prefix}descendant_#{table_name.singularize}_ids" do
+            send("#{prefix}descendant_#{table_name}").pluck(:id)
           end
         end
       end

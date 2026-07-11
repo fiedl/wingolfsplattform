@@ -70,7 +70,7 @@ class Corporation
     end
   end
   def members(reload = nil)
-    descendant_users(reload).includes(:links_as_descendant).where(dag_links: {id: memberships.pluck(:id)})
+    User.where(id: memberships.pluck(:descendant_id))
   end
 
 end

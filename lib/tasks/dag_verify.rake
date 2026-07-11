@@ -21,15 +21,23 @@ namespace :dag do
       scope = node_class.all
       nodes = scope.count > sample_size ? scope.order(Arel.sql('random()')).limit(sample_size) : scope
       nodes.each do |node|
+        node_type = node.class.base_class.name
         %w(groups users pages events projects posts workflows).each do |table|
+          target_type = table.classify.constantize.base_class.name
           [:descendant, :ancestor].each do |direction|
-            cte_method = "cte_#{direction}_#{table}"
-            next unless node.respond_to?(cte_method)
-            closure_ids = node.send("#{direction}_#{table}").pluck(:id).uniq.sort
-            cte_ids = node.send(cte_method).pluck(:id).uniq.sort
+            accessor = "#{direction}_#{table}"
+            next unless node.respond_to?(accessor)
+            closure_ids = if direction == :descendant
+              DagLink.where(ancestor_type: node_type, ancestor_id: node.id,
+                descendant_type: target_type).pluck(:descendant_id)
+            else
+              DagLink.where(descendant_type: node_type, descendant_id: node.id,
+                ancestor_type: target_type).pluck(:ancestor_id)
+            end.uniq.sort
+            cte_ids = node.send(accessor).pluck(:id).uniq.sort
             checks += 1
             unless closure_ids == cte_ids
-              mismatches << "#{node.class}##{node.id} #{cte_method}: " +
+              mismatches << "#{node.class}##{node.id} #{accessor}: " +
                 "closure-only #{(closure_ids - cte_ids).inspect}, cte-only #{(cte_ids - closure_ids).inspect}"
             end
           end

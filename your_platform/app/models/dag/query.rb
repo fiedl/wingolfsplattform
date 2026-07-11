@@ -24,15 +24,20 @@ class Dag::Query
       when :ancestor then ['descendant', 'ancestor']
       else raise ArgumentError, "direction must be :descendant or :ancestor"
     end
-    ids = start_ids.collect { |id| Integer(id) }
-    return "SELECT 1 WHERE FALSE" if ids.empty?
+    if start_ids == :all
+      id_condition = ""
+    else
+      ids = start_ids.collect { |id| Integer(id) }
+      return "SELECT 1 WHERE FALSE" if ids.empty?
+      id_condition = "AND l.#{from}_id IN (#{ids.join(', ')})"
+    end
     <<~SQL
       WITH RECURSIVE walk(node_type, node_id) AS (
           SELECT l.#{to}_type, l.#{to}_id
             FROM dag_links l
            WHERE l.direct = TRUE
              AND l.#{from}_type = #{connection.quote(start_type)}
-             AND l.#{from}_id IN (#{ids.join(', ')})
+             #{id_condition}
         UNION
           SELECT l.#{to}_type, l.#{to}_id
             FROM dag_links l
@@ -41,6 +46,17 @@ class Dag::Query
       )
       SELECT node_id FROM walk WHERE node_type = #{connection.quote(target_type)}
     SQL
+  end
+
+  # Like .ids, but for callers that have raw type names and ids at hand
+  # instead of records. start_ids may be :all to walk from every node
+  # of the start type.
+  #
+  def self.ids_from(start_type:, start_ids:, direction:, target_type:)
+    connection.select_values(sql(
+      start_type: start_type, start_ids: start_ids,
+      direction: direction, target_type: target_type
+    )).collect(&:to_i)
   end
 
   # Ids of all nodes of the given class reachable from the node (or
