@@ -132,7 +132,7 @@ concern :AddressProfileFields do
     end
 
     def with_primary_address_ids
-      profilables_with_address_field_with_direct_value = self.joins(:address_profile_fields).where('profile_fields.profileable_id IS NOT NULL AND profile_fields.value != ""')
+      profilables_with_address_field_with_direct_value = self.joins(:address_profile_fields).where("profile_fields.profileable_id IS NOT NULL AND profile_fields.value != ''")
       ids = self.joins(:address_profile_fields).select do |profileable|
         # The `value` is a composition of other sub-profile-fields, not necessarily written
         # to the database directly. That's why we have to double-check.

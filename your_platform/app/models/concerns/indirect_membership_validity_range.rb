@@ -56,12 +56,14 @@ concern :IndirectMembershipValidityRange do
     @earliest_direct_membership ||= Membership.with_invalid.find(earliest_direct_membership_id) if earliest_direct_membership_id
   end
   def earliest_direct_membership_id
-    direct_memberships(with_invalid: true).reorder('valid_from').pluck(:id).first
+    # NULLS FIRST, like mysql sorted: a nil valid_from counts as earliest.
+    direct_memberships(with_invalid: true).reorder(Arel.sql('(valid_from IS NOT NULL) ASC, valid_from ASC')).pluck(:id).first
   end
 
   def latest_direct_membership
     @latest_direct_membership ||= direct_memberships.only_valid.last
-    @latest_direct_membership ||= direct_memberships(with_invalid: true).reorder('valid_to').last
+    # NULLS LAST, like mysql sorted this descending ordering.
+    @latest_direct_membership ||= direct_memberships(with_invalid: true).reorder(Arel.sql('(valid_to IS NOT NULL) DESC, valid_to DESC')).first
   end
 
 

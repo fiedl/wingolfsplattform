@@ -23,10 +23,9 @@ concern :UserSearch do
 
     def search_by_name_and_title(query)
       q = "%" + query.gsub(' ', '%') + "%"
-      users = self.where(id: User
-        .where("CONCAT(users.first_name, ' ', users.last_name) LIKE ?", q)
-        .order('users.last_name', 'users.first_name').distinct
-      )
+      users = self
+        .where(id: User.where("CONCAT(users.first_name, ' ', users.last_name) ILIKE ?", q))
+        .order('users.last_name', 'users.first_name')
       users = [User.find_by_title(query)] - [nil] if users.none?
       users
     end

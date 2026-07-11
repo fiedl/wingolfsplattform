@@ -8,8 +8,9 @@
 # through a .env file — see the README section on environment variables.
 
 volumes:
+  postgres_data: {}
+  postgres_test_data: {}
   mysql_data: {}
-  mysql_test_data: {}
   redis_data: {}
   neo4j_data: {}
   wingolfsplattform_uploads: {}
@@ -36,12 +37,12 @@ services:
     environment:
       RAILS_ENV: "${RAILS_ENV:-development}"
       RAILS_PORT: "${RAILS_PORT:-3000}"
-      DB_HOST: mysql
-      DB_USERNAME: root
+      DB_HOST: postgres
+      DB_USERNAME: postgres
       DB_PASSWORD: secret
       REDIS_HOST: redis
       NEO4J_REST_URL: http://neo4j:trinity@neo4j:7474
-      WAIT_HOSTS: "mysql:3306, redis:6379, neo4j:7474"
+      WAIT_HOSTS: "postgres:5432, redis:6379, neo4j:7474"
     tty: true
     stdin_open: true
 
@@ -60,7 +61,7 @@ services:
       # layouts load them from localhost:9000, started by bin/dev).
       - "9000:9000"
     depends_on:
-      mysql:
+      postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -77,7 +78,7 @@ services:
       - "wingolfsplattform_uploads:/rails/uploads"
       - "wingolfsplattform_tmp:/rails/tmp"
     depends_on:
-      mysql:
+      postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -92,7 +93,7 @@ services:
       - "wingolfsplattform_uploads:/rails/uploads"
       - "wingolfsplattform_tmp:/rails/tmp"
     depends_on:
-      mysql:
+      postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -109,12 +110,12 @@ services:
     image: wingolfsplattform-tests
     environment:
       RAILS_ENV: test
-      DB_HOST: mysql_test
+      DB_HOST: postgres_test
       NEO4J_REST_URL_TEST: http://neo4j:trinity@neo4j:7474
       CHROME_URL: http://chrome:4444
-      WAIT_HOSTS: "mysql_test:3306, redis:6379, neo4j:7474"
+      WAIT_HOSTS: "postgres_test:5432, redis:6379, neo4j:7474"
     depends_on:
-      mysql_test:
+      postgres_test:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -127,7 +128,9 @@ services:
   guard:
     extends:
       service: tests
-    command: bash -c "/wait && bin/bundle_exec bash -c 'bundle exec rails db:create db:migrate && bundle exec guard'"
+    # schema:load instead of migrate: the migration history contains
+    # mysql-only SQL and is not replayed on postgres.
+    command: bash -c "/wait && bin/bundle_exec bash -c 'bundle exec rails db:create db:schema:load && bundle exec guard'"
 
   chrome:
     image: selenium/standalone-chromium:4.27.0
@@ -136,37 +139,53 @@ services:
       SE_NODE_MAX_SESSIONS: 4
       SE_NODE_SESSION_TIMEOUT: 600
 
-  mysql:
-    image: mysql:5.7
+  postgres:
+    image: postgres:17
     environment:
-      MYSQL_DATABASE: "wingolfsplattform_development"
-      MYSQL_ROOT_PASSWORD: "secret"
+      POSTGRES_DB: "wingolfsplattform_development"
+      POSTGRES_PASSWORD: "secret"
+      # ICU with German rules gives umlaut-aware ordering, comparable
+      # to mysql's utf8_unicode_ci, without generating OS locales.
+      POSTGRES_INITDB_ARGS: "--locale-provider=icu --icu-locale=de-DE --locale=C.UTF-8"
     volumes:
-      - "mysql_data:/var/lib/mysql"
-    command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --innodb-use-native-aio=0"
+      - "postgres_data:/var/lib/postgresql/data"
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -psecret --silent"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 10
       start_period: 60s
 
-  mysql_test:
-    image: mysql:5.7
+  postgres_test:
+    image: postgres:17
     environment:
-      MYSQL_DATABASE: "wingolfsplattform_test"
-      MYSQL_ROOT_PASSWORD: "secret"
+      POSTGRES_DB: "wingolfsplattform_test"
+      POSTGRES_PASSWORD: "secret"
+      POSTGRES_INITDB_ARGS: "--locale-provider=icu --icu-locale=de-DE --locale=C.UTF-8"
     volumes:
-      # A separate volume: mysql and mysql_test may run at the same time,
-      # and two mysqld processes on one datadir corrupt it.
-      - "mysql_test_data:/var/lib/mysql"
-    command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --innodb-use-native-aio=0"
+      # A separate volume: postgres and postgres_test may run at the
+      # same time, and two servers on one datadir corrupt it.
+      - "postgres_test_data:/var/lib/postgresql/data"
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -psecret --silent"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 10
       start_period: 60s
+
+  # The mysql service stays until the production cutover to postgres
+  # is through: the pgloader rehearsal restores a production dump here
+  # and copies it into the postgres service.
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: "wingolfsplattform_development"
+      MYSQL_PASSWORD: "secret"
+      MYSQL_ROOT_PASSWORD: "secret"
+      MYSQL_USER: "wingolfsplattform"
+    volumes:
+      - "mysql_data:/var/lib/mysql"
+    command: "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --innodb-use-native-aio=0"
 
   redis:
     image: redis

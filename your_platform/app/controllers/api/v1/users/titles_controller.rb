@@ -6,7 +6,7 @@ module Api::V1::Users
       
       query = params[:term] || params[:query] || ""
       @users = User
-        .where("CONCAT(first_name, ' ', last_name) LIKE ?", "%#{query}%")
+        .where("CONCAT(first_name, ' ', last_name) ILIKE ?", "%#{query}%")
         .select { |user| can? :read, user }
 
       render json: @users.map(&:title)

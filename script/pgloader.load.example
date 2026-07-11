@@ -1,0 +1,58 @@
+-- Copies the data of a mysql database into the postgres database,
+-- for the mysql-to-postgres migration (rehearsal and production
+-- cutover). https://github.com/fiedl/wingolfsplattform/issues/123
+--
+-- The target schema is created by rails beforehand
+-- (`rails db:schema:load`), so pgloader copies data only:
+--
+--   1. rails db:create db:schema:load  # against the postgres service
+--   2. docker run --rm --network <compose network> \
+--        -v $PWD:/load dimitri/pgloader:latest \
+--        pgloader /load/script/pgloader.load
+--   3. rails postgres:migration:counts  # diff against mysql counts
+--
+-- Use the docker hub image (pgloader 3.6.7): the ghcr.io build
+-- (3.6.10~devel) queries information_schema.CHECK_CONSTRAINTS,
+-- which mysql 5.7 does not have, and aborts immediately.
+--
+-- The pgloader summary table must report 0 errors.
+--
+-- pgloader copies ar_internal_metadata from the source, so a
+-- rehearsal in another environment needs a
+-- `rails db:environment:set` afterwards.
+--
+-- Rehearsed 2026-07-07 with the production data set (3.0 million
+-- rows, 357 MB): restore of the mysqldump 42s, pgloader 11s,
+-- all row counts equal, all sequences ahead of max(id).
+--
+-- Copy this file, fill in host names and passwords, do not commit
+-- the copy.
+
+LOAD DATABASE
+     FROM mysql://root:PASSWORD@mysql:3306/wingolfsplattform_development
+     INTO postgresql://postgres:PASSWORD@postgres:5432/wingolfsplattform_development
+
+-- data only: rails already created tables and indexes.
+-- truncate: clears rows that db:schema:load left behind
+--   (schema_migrations, ar_internal_metadata) before copying the
+--   mysql versions of those tables.
+-- disable triggers: the schema has foreign keys, and pgloader does
+--   not order tables topologically.
+-- reset sequences: sets each id sequence past the copied max(id).
+WITH data only,
+     truncate,
+     disable triggers,
+     reset sequences,
+     workers = 4, concurrency = 1,
+     prefetch rows = 10000
+
+-- datetime to timestamp (not pgloader's default timestamptz): rails
+--   columns are timestamp without time zone; keeps values verbatim.
+-- zero-dates-to-null: mysql allows 0000-00-00, postgres does not.
+-- tinyint-to-boolean: mysql stores rails booleans as tinyint(1).
+CAST type datetime to timestamp using zero-dates-to-null,
+     type date to date using zero-dates-to-null,
+     type tinyint to boolean using tinyint-to-boolean
+
+ALTER SCHEMA 'wingolfsplattform_development' RENAME TO 'public'
+;

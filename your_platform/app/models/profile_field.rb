@@ -6,8 +6,8 @@ class ProfileField < ApplicationRecord
   include ProfileFieldProfileable
   include ProfileFieldComposedValue
 
-  scope :ich_suche, -> { where(type: "ProfileFields::About").where("label like ?", "%ich suche%").where("length(value) > 10") }
-  scope :ich_biete, -> { where(type: "ProfileFields::About").where("label like ? or label like ?", "%ich biete%", "%i_offer%").where("length(value) > 10") }
+  scope :ich_suche, -> { where(type: "ProfileFields::About").where("label ILIKE ?", "%ich suche%").where("length(value) > 10") }
+  scope :ich_biete, -> { where(type: "ProfileFields::About").where("label ILIKE ? or label ILIKE ?", "%ich biete%", "%i_offer%").where("length(value) > 10") }
 
   # Only allow the type column to be an existing class name.
   #

@@ -19,7 +19,9 @@ class Birthday
 
   def self.users_ordered_by_upcoming_birthday(limit: 3)
     ids = Graph::User.user_ids_order_by_upcoming_birthday(limit: limit)
-    User.with_birthday.where(id: ids).order("field(users.id, #{ids.join ','})")
+    return User.none if ids.none?
+    id_positions = ids.each_with_index.map { |id, index| "WHEN #{id.to_i} THEN #{index}" }
+    User.with_birthday.where(id: ids).order(Arel.sql("CASE users.id #{id_positions.join(' ')} END"))
   end
 
 end

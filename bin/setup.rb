@@ -34,7 +34,13 @@ if !File.exist?(LOCK_FILE) || ((Time.now - File.mtime(LOCK_FILE)) > 86400)
     system "bundle exec rails db:drop 2>/dev/null"
     shell "bundle exec rails db:create db:schema:load"
   else
-    shell "bundle exec rails db:create db:migrate db:seed"
+    shell "bundle exec rails db:create"
+    # A fresh database gets the schema from db/schema.rb: the migration
+    # history contains mysql-only SQL and is not replayed on postgres.
+    if `bundle exec rails db:version 2>/dev/null`.include?("Current version: 0")
+      shell "bundle exec rails db:schema:load"
+    end
+    shell "bundle exec rails db:migrate db:seed"
   end
 
   require 'fileutils'

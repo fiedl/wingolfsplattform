@@ -10,8 +10,8 @@ class Attachment < ApplicationRecord
   after_create :set_default_title_if_empty
   before_destroy :remove_file!
 
-  scope :logos, -> { where('title like ?', "%logo%") }
-  scope :documents, -> { where('content_type like ? or content_type like?', "application/pdf", "%document%") }
+  scope :logos, -> { where('title ILIKE ?', "%logo%") }
+  scope :documents, -> { where('content_type ILIKE ? or content_type ILIKE ?', "application/pdf", "%document%") }
   scope :belongs_to_page_without_group, -> { includes(parent_page: :ancestor_groups).where(groups: {id: nil}) }
 
   include Flags
@@ -110,7 +110,7 @@ class Attachment < ApplicationRecord
   end
 
   def self.find_by_type( type )
-    where( "content_type like ?", "%" + type + "%" )
+    where( "content_type ILIKE ?", "%" + type + "%" )
   end
   def self.by_type(type)
     find_by_type(type)

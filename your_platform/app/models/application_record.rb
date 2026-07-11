@@ -59,7 +59,7 @@ class ApplicationRecord < ActiveRecord::Base
     attributes_hash.each do |attribute_name, value_or_values|
       values = value_or_values.kind_of?(Array) ? value_or_values : [value_or_values]
       query = values.collect do |value|
-        query.where("#{attribute_name} like ?", "%#{value}%")
+        query.where("#{attribute_name} ILIKE ?", "%#{value}%")
       end.inject(:or)
     end
     query

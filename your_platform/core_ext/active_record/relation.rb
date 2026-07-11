@@ -6,9 +6,9 @@ module ActiveRecord
           case node
           when Arel::Nodes::Grouping
             sql = node.to_sql
-            columns.any? { |column| sql.include? "\`#{column}\`" }
+            columns.any? { |column| sql.match? /\b#{column}\b/ }
           when String
-            columns.any? { |column| node.include? "\`#{column}\`" }
+            columns.any? { |column| node.match? /\b#{column}\b/ }
           end
         end
       end

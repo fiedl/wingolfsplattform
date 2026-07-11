@@ -43,7 +43,7 @@ concern :GroupSearch do
     def search_by_name_with_ancestors(query)
       relation = joins(:ancestor_groups)
       query.split(" ").each do |expression|
-        relation = relation.where("groups.name LIKE ? OR groups.extensive_name LIKE ? OR ancestor_groups_groups.name LIKE ?", "%#{expression}%", "%#{expression}%", "%#{expression}%")
+        relation = relation.where("groups.name ILIKE ? OR groups.extensive_name ILIKE ? OR ancestor_groups_groups.name ILIKE ?", "%#{expression}%", "%#{expression}%", "%#{expression}%")
       end
       relation.distinct
     end
@@ -51,20 +51,20 @@ concern :GroupSearch do
     def search_by_name_without_ancestors(query)
       relation = self
       query.split(" ").each do |expression|
-        relation = relation.where("groups.name LIKE ? OR groups.extensive_name LIKE ?", "%#{expression}%", "%#{expression}%")
+        relation = relation.where("groups.name ILIKE ? OR groups.extensive_name ILIKE ?", "%#{expression}%", "%#{expression}%")
       end
       relation.distinct
     end
 
     def search_by_extensive_name(query)
-      where("extensive_name LIKE ?", "%#{query}%")
+      where("extensive_name ILIKE ?", "%#{query}%")
     end
 
     def search_by_profile_fields(query)
       q = "%" + query.gsub(' ', '%') + "%"
       profile_fields =
-        ProfileField.where(profileable_type: "Group").where("value like ? or label like ?", q, q) +
-        ProfileField.joins(:parent).where(parents_profile_fields: {profileable_type: "Group"}).where("profile_fields.value like ? or profile_fields.label like ?", q, q)
+        ProfileField.where(profileable_type: "Group").where("value ILIKE ? or label ILIKE ?", q, q) +
+        ProfileField.joins(:parent).where(parents_profile_fields: {profileable_type: "Group"}).where("profile_fields.value ILIKE ? or profile_fields.label ILIKE ?", q, q)
       groups = profile_fields.collect do |profile_field|
         group = profile_field.profileable
         group.search_hint = "#{profile_field.label}: #{profile_field.value}"

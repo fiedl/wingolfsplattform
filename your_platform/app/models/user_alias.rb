@@ -66,7 +66,7 @@ class UserAlias < String
   #
   def self.try_to_generate_from_first_and_last_name(user)
     if User.where("last_name=?
-                   AND first_name LIKE ?
+                   AND first_name ILIKE ?
                    AND id!=?",
                    user.last_name, "#{user.first_name.first}%", user.id ).count == 0
       "#{user.first_name.downcase.first}.#{user.last_name.downcase}"

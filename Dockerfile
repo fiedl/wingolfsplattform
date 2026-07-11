@@ -45,9 +45,12 @@ FROM base AS development
 
 ENV RAILS_ENV=development
 
+# libpq-dev: the pg gem builds against libpq. Buster ships the v11
+# client, which works against the postgres 17 server.
 RUN apt-get -o Acquire::Check-Valid-Until=false update && \
     apt-get install -y build-essential g++ \
-      libssl-dev libxml2 libxslt-dev libreadline-dev libicu-dev libmagick-dev
+      libssl-dev libxml2 libxslt-dev libreadline-dev libicu-dev libmagick-dev \
+      libpq-dev
 
 # The nodesource apt repository for node 12 is gone: install from the
 # release tarball. Node 12 is the last line the legacy javascript

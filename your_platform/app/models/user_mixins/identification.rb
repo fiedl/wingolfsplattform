@@ -18,6 +18,13 @@ module UserMixins::Identification
       [ :alias, :last_name, :name, :email ]
     end
 
+    # Identification is case-insensitive, as it has always been under
+    # mysql's case-insensitive collation.
+    #
+    def find_by_alias(user_alias)
+      where('LOWER(users.alias) = LOWER(?)', user_alias).first
+    end
+
     # Find all users where the identification string matches one of the attributes
     # given by `attributes_used_for_identification`.
     #
@@ -27,8 +34,8 @@ module UserMixins::Identification
     #
     def find_all_by_identification_string( identification_string )
       (
-        User.where(alias: identification_string) +
-        User.where(last_name: identification_string) +
+        User.where('LOWER(users.alias) = LOWER(?)', identification_string) +
+        User.where('LOWER(last_name) = LOWER(?)', identification_string) +
         User.find_all_by_name(identification_string) +
         User.find_all_by_email(identification_string)
       ).uniq

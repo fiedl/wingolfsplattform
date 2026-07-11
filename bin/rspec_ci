@@ -29,7 +29,7 @@ RUN="$DOCKER_COMPOSE_RUN -e DISABLE_PRY=1 tests"
 
 # /wait (see Dockerfile) blocks until the WAIT_HOSTS of the tests
 # service accept connections.
-WAIT_FOR_MYSQL='/wait'
+WAIT_FOR_DB='/wait'
 
 # The image no longer bakes the gems in; they live in the per-project
 # bundle_cache volume and must be installed on its first use.
@@ -63,7 +63,7 @@ rm -f tmp/rspec/examples*.txt 2>/dev/null
 $RUN bash -c "mkdir -p tmp/rspec && rm -f tmp/rspec/examples*.txt" || failed
 
 section "prepare database"
-$RUN bash -c "$WAIT_FOR_MYSQL && $PREPARE" || failed
+$RUN bash -c "$WAIT_FOR_DB && $PREPARE" || failed
 
 section "initial run"
 $RUN bash -c "bundle exec rspec $SPECS"
@@ -98,7 +98,7 @@ for attempt in 1 2 3; do
 
   rm -f tmp/rspec/examples*.txt
 
-  $RUN bash -c "$WAIT_FOR_MYSQL && bundle exec rspec $FAILED_SPECS"
+  $RUN bash -c "$WAIT_FOR_DB && bundle exec rspec $FAILED_SPECS"
   exit_code=$?
 
   if [ $exit_code -eq 0 ]; then

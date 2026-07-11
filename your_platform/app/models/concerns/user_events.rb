@@ -11,7 +11,7 @@ concern :UserEvents do
   end
 
   def event_images
-    Attachment.where("content_type LIKE ?", "%image%").where(parent_type: "Event", parent_id: events.pluck(:id)).order(:created_at)
+    Attachment.where("content_type ILIKE ?", "%image%").where(parent_type: "Event", parent_id: events.pluck(:id)).order(:created_at)
   end
 
   # This makes the user join an event or a grop.
