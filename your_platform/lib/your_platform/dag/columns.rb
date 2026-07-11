@@ -1,3 +1,6 @@
+# Vendored from acts-as-dag. Corresponding upstream file:
+# https://github.com/resgraph/acts-as-dag/blob/master/lib/dag/columns.rb
+#
 module Dag
 
   #Methods that show columns
