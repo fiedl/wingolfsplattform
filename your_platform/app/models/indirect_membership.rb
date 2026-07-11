@@ -3,43 +3,45 @@
 #
 # Indirect memberships are not stored; they derive from the direct
 # membership rows along the paths between group and user
-# (Dag::Query.membership_episodes). A user can have several episodes:
-# leaving in 2010 and rejoining in 2015 gives two, and the gap between
-# them counts as not-a-member -- unlike the former materialized
-# indirect rows, which only stored the min/max envelope.
+# (Dag::Traversal.membership_validity_ranges). A user can have several
+# validity ranges: leaving in 2010 and rejoining in 2015 gives two,
+# and the span between them counts as not-a-member -- unlike the
+# former materialized indirect rows, which only stored the min/max
+# envelope.
 #
 class IndirectMembership
 
   attr_reader :group, :user
 
-  def initialize(group, user, episodes: nil)
+  def initialize(group, user, validity_ranges: nil)
     @group = group
     @user = user
-    @episodes = episodes
+    @validity_ranges = validity_ranges
   end
 
-  def episodes
-    @episodes ||= Dag::Query.membership_episodes(group, user)
+  # The time ranges over which the user is a member of the group, one
+  # per continuous span of subtree membership. Beginless or endless
+  # where the membership is unbounded.
+  def validity_ranges
+    @validity_ranges ||= Dag::Traversal.membership_validity_ranges(group, user)
   end
 
   def present?
-    episodes.any?
+    validity_ranges.any?
   end
 
   # The envelope bounds, for display compatibility with the former
   # materialized rows: first joined, last left (nil if still member).
   def valid_from
-    episodes.first.try(:first)
+    validity_ranges.first.try(:begin)
   end
 
   def valid_to
-    episodes.last.try(:last) if episodes.none? { |_, to| to.nil? }
+    validity_ranges.last.try(:end) if validity_ranges.none? { |range| range.end.nil? }
   end
 
   def valid_at?(time)
-    episodes.any? do |from, to|
-      (from.nil? || from <= time) && (to.nil? || to >= time)
-    end
+    validity_ranges.any? { |range| range.cover?(time) }
   end
 
   def currently_valid?
