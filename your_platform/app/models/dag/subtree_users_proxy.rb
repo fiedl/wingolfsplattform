@@ -8,13 +8,13 @@
 #
 class Dag::SubtreeUsersProxy < SimpleDelegator
 
-  def initialize(group)
-    @group = group
-    super(group.descendant_users)
+  def initialize(ancestor_group:)
+    @ancestor_group = ancestor_group
+    super(ancestor_group.descendant_users)
   end
 
   def <<(user)
-    @group.child_users << user
+    @ancestor_group.child_users << user
   end
 
   def ==(other)

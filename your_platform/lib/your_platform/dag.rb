@@ -3,7 +3,7 @@
 # revision 5e185dd, MIT license (see dag/MIT-LICENSE).
 #
 # Vendoring lets the closure-table DSL be edited in-repo while it is
-# replaced by recursive CTE queries, step by step:
+# replaced by recursive SQL queries, step by step:
 # https://github.com/fiedl/wingolfsplattform/issues/129
 
 require 'active_model'
