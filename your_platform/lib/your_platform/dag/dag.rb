@@ -113,7 +113,7 @@ module Dag
 
     # The closure maintenance hooks (perpetuate, destroyable!) are
     # gone: only direct links are written, and transitive questions
-    # are answered by recursive CTEs (Dag::Traversal).
+    # are answered by recursive SQL queries (Dag::Traversal).
     # https://github.com/fiedl/wingolfsplattform/issues/129
     before_validation :field_check, :fill_defaults, :on => :update
     before_validation :fill_defaults, :on => :create
