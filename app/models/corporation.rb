@@ -61,10 +61,11 @@ class Corporation
   #   (b) keine Sammelnachrichten erhalten,
   #   (c) nicht in Export-Listen und Etiketten enthalten sind.
   #
+  # Not composed with .or(): in rails 5.0, Relation#or mismatches the
+  # bind parameters when both branches contain bound subqueries.
   def memberships
     if aktivitas && philisterschaft
-      aktivitas_and_philisterschaft_member_ids = aktivitas.member_ids + philisterschaft.member_ids
-      super.where(descendant_id: aktivitas_and_philisterschaft_member_ids)
+      super.where(descendant_id: aktivitas.member_ids + philisterschaft.member_ids)
     else
       super
     end

@@ -558,11 +558,11 @@ class User < ApplicationRecord
   end
 
   def self.find_all_hidden
-    self.where(id: Group.hidden_users.member_ids)
+    self.where(id: Group.hidden_users.members)
   end
 
   def self.find_all_non_hidden
-    self.where.not(id: Group.hidden_users.member_ids)
+    self.where.not(id: Group.hidden_users.members)
   end
 
 
