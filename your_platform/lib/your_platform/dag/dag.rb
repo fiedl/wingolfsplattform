@@ -196,8 +196,8 @@ module Dag
           define_method "#{prefix}ancestor_#{table_name}" do
             klass = class_name.constantize
             klass.where("#{klass.table_name}.id IN (#{Dag::Traversal.ancestor_ids_sql(
-              of_type: self.class.base_class.name, of_ids: [id],
-              type: klass.base_class.name)})")
+              descendant_type: self.class.base_class.name, descendant_ids: [id],
+              ancestor_type: klass.base_class.name)})")
           end
           define_method "#{prefix}ancestor_#{table_name.singularize}_ids" do
             send("#{prefix}ancestor_#{table_name}").pluck(:id)
@@ -257,8 +257,8 @@ module Dag
           define_method "#{prefix}descendant_#{table_name}" do
             klass = class_name.constantize
             klass.where("#{klass.table_name}.id IN (#{Dag::Traversal.descendant_ids_sql(
-              of_type: self.class.base_class.name, of_ids: [id],
-              type: klass.base_class.name)})")
+              ancestor_type: self.class.base_class.name, ancestor_ids: [id],
+              descendant_type: klass.base_class.name)})")
           end
           define_method "#{prefix}descendant_#{table_name.singularize}_ids" do
             send("#{prefix}descendant_#{table_name}").pluck(:id)
