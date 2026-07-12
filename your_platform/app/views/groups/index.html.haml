@@ -18,7 +18,7 @@
           .members_count
             Mitglieder:
             = group.members.count
-          - if user && valid_from = Membership.where(ancestor_id: group.id, descendant_id: user.id).first.valid_from
+          - if user && (membership = user.membership_in(group)) && (valid_from = membership.valid_from)
             .text-center.mt-2.text-muted
               Mitglied seit:
               = localize valid_from.to_date
