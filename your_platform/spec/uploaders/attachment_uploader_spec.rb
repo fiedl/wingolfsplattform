@@ -22,7 +22,7 @@ if ENV['CI'] != 'travis'
       end
       describe "prelims: " do
         specify "the fixture pdf should be present" do
-          File.exists?(@pdf_fixture_path).should == true
+          File.exist?(@pdf_fixture_path).should == true
         end
       end
       describe "storing the file: " do
@@ -41,7 +41,8 @@ if ENV['CI'] != 'travis'
         describe "#thumb" do
           subject { @uploader.thumb }
           it "should have the correct size (pixels)" do
-            subject.should be_no_larger_than(100,100)
+            # The uploader's version ladder is thumb 300, medium 600, big 1500.
+            subject.should be_no_larger_than(300,300)
           end
         end
       end

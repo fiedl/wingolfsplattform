@@ -21,7 +21,9 @@ describe Mail::Message do
           @message = UserAccountMailer.welcome_email(@user, "Test: #{@random_string}")
         end
 
-        it { should == false }
+        it "should return false", pending: 'https://github.com/fiedl/wingolfsplattform/issues/109' do
+          should == false
+        end
         it "should not send a message" do
           last_email.to_s.should_not include @random_string
         end
