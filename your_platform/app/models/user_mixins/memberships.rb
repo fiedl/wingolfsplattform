@@ -47,9 +47,10 @@ module UserMixins::Memberships
     #
     def groups
       direct_group_ids = direct_memberships.pluck(:ancestor_id)
-      Dag::MemberGroupsProxy.new user: self, groups: Group.where(id: direct_group_ids +
-        Dag::Traversal.ancestor_ids(descendant_type: 'Group',
-          descendant_ids: direct_group_ids, ancestor_type: 'Group'))
+      Dag::MemberGroupsProxy.new user: self, groups: Group
+        .where("groups.id IN (:direct_group_ids) OR groups.id IN (#{Dag::Traversal.ancestor_ids_sql(
+          descendant_type: 'Group', descendant_ids: direct_group_ids, ancestor_type: 'Group')})",
+          direct_group_ids: direct_group_ids + [0])
     end
 
     def group_ids
