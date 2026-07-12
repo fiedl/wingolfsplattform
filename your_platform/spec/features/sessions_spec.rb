@@ -139,19 +139,16 @@ feature 'Sessions' do
       end
 
       it "the email should be sent to the user's email address" do
-        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         email = ActionMailer::Base.deliveries.last
         email.to.should include(@user.email)
       end
 
       it 'the email should contain a link to the password change page' do
-        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         email_text = ActionMailer::Base.deliveries.last.to_s
         email_text.should include(reset_password_path)
       end
 
       it 'the email should contain the users name' do
-        pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
         email_text = ActionMailer::Base.deliveries.last.to_s
         email_text.should include(@user.name)
       end

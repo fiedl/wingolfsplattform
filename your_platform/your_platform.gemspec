@@ -187,7 +187,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'eventmachine', '>= 1.0.7'
   # https://github.com/lautis/uglifier/pull/86
   s.add_dependency 'uglifier', '>= 2.7.2'
-  s.add_dependency 'mail', '~> 2.6.6.rc1' # https://gemnasium.com/github.com/fiedl/your_platform/alerts#advisory_309
+  s.add_dependency 'mail', '~> 2.8' # 2.6.6 crashed on nil Sender, https://github.com/fiedl/wingolfsplattform/issues/109
   s.add_dependency 'nokogiri', '>= 1.10.4' # CVE-2019-5477, https://trello.com/c/whoVKwMA/1394
   s.add_dependency 'actionpack', '>= 4.2.5.2' # CVE-2016-2098, https://gemnasium.com/fiedl/your_platform/alerts#advisory_342
   s.add_dependency 'activerecord', '>= 4.2.7.1' # CVE-2016-6317, https://gemnasium.com/github.com/fiedl/your_platform/alerts#advisory_426

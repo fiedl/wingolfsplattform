@@ -3,9 +3,10 @@ gem 'your_platform', path: 'your_platform'
 
 source 'https://rubygems.org' do
   gem 'rails', '~> 5.0'
-  # pg 1.2 removed the PGconn constant that rails 5.0's postgresql
-  # adapter still uses. Lift this pin during the rails upgrade.
-  gem 'pg', '~> 1.1.4'
+  # rails 5.2 works with pg 1.x; the former 1.1.4 pin (PGconn removal)
+  # was only needed for rails 5.0. 1.5 is the last line for ruby 2.7;
+  # lift to 1.6 with the ruby 3 bump.
+  gem 'pg', '~> 1.5.0'
   gem 'sass-rails'
   gem 'uglifier', '>= 1.3.0'
   gem 'coffee-rails', '>= 4.0.0'
