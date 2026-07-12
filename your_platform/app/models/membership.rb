@@ -39,7 +39,6 @@ class Membership < DagLink
   # ====================================================================================================
 
   include MembershipValidityRange
-  include IndirectMembershipValidityRange
 
 
   # May Need Review Flag

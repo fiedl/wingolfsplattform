@@ -27,13 +27,8 @@ module UserMixins::Memberships
     has_many :direct_memberships, -> { where ancestor_type: 'Group', descendant_type: 'User', direct: true },
          foreign_key: :descendant_id, class_name: "Membership"
 
-    # The materialized indirect membership rows (direct: false). Only
-    # the closure maintenance still touches them; do not read from
-    # them. They disappear with
-    # https://github.com/fiedl/wingolfsplattform/issues/129
-    #
-    has_many :indirect_memberships, -> { where ancestor_type: 'Group', descendant_type: 'User', direct: false },
-        foreign_key: :descendant_id, class_name: "Membership"
+    # Indirect memberships derive at read time; see membership_in and
+    # IndirectMembership.
 
 
     # This returns the membership of the user in the given group if

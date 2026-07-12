@@ -13,36 +13,10 @@ concern :Structureable do
   end
 
   # When a dag node is destroyed, also destroy the corresponding dag links.
-  # Otherwise, there would remain ghost dag links in the database that would
-  # corrupt the integrity of the database.
-  #
-  # If the database gets ever messed up like this, delete the concerning
-  # *direct* dag links by hand and then run this rake task to re-create
-  # the indirect dag links:
-  #
-  #    rake reconstruct_indirect_dag_links:all
+  # Otherwise, there would remain ghost dag links in the database.
   #
   def destroy_dag_links
-
-    # destory only child and parent links, since the indirect links
-    # are destroyed automatically by the DagLink model then.
-    links = self.links_as_parent + self.links_as_child
-
-    for link in links do
-
-      if link.reload.destroyable?
-        link.destroy
-      else
-
-        # In facty, all these links should be destroyable. If this error should
-        # be raised, something really went wrong. Please send in a bug report then
-        # at http://github.com/fiedl/your_platform.
-        raise RuntimeError, "Could not destroy dag links of the structureable object that should be deleted." +
-          " This is an important issue. Please send in a bug report at http://github.com/fiedl/your_platform."
-        return false
-      end
-
-    end
+    (self.links_as_parent + self.links_as_child).each(&:destroy)
   end
 
   # This somehow identifies which are the ancestors of this structureable.
@@ -79,14 +53,9 @@ concern :Structureable do
         raise RuntimeError 'Users can only be assigned to groups.' unless self.kind_of? Group
         self.assign_user(object) unless self.child_users.include? object
       elsif object.kind_of? Group
-        if self.kind_of?(Group) &&
-          (existing_link = DagLink.where(ancestor_type: 'Group', descendant_type: 'Group',
-            ancestor_id: self.id, descendant_id: object.id,
-            direct: false).first)
-          existing_link.make_direct
-        else
-          object.parent_groups << self unless self.child_groups.reload.include? object
-        end
+        # A new edge next to an existing indirect path is just a
+        # second edge; there is no materialized link to promote.
+        object.parent_groups << self unless self.child_groups.reload.include? object
       elsif object.kind_of? Page
         self.child_pages << object unless self.child_pages.include? object
       elsif object.kind_of? Event

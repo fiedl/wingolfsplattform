@@ -62,18 +62,13 @@ describe GroupMemberships do
     end
   end
 
-  describe "#indirect_memberships" do
-    describe "for a group having direct members" do
-      subject { @group.indirect_memberships }
-      it { should_not include( @membership1, @membership2 ) }
-      it { should_not include @indirect_membership1, @indirect_membership2 }
+  describe "the graph, without materialized indirect rows" do
+    it "should contain only direct links" do
+      DagLink.where(direct: false).count.should == 0
     end
-    describe "for a group having indirect members" do
-      subject { @indirect_group.indirect_memberships }
-      it "should contain the materialized rows as long as the closure is still maintained" do
-        subject.pluck(:descendant_id).should include @user1.id, @user2.id
-      end
-      it { should_not include @membership1, @membership2 }
+    it "should answer indirect memberships through the derived objects" do
+      @indirect_group.membership_of(@user1).should be_kind_of IndirectMembership
+      @indirect_group.membership_of(@user2).should be_kind_of IndirectMembership
     end
   end
 

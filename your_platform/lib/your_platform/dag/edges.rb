@@ -123,43 +123,17 @@ module Dag
     #Instance methods included into the link model for polymorphic and non-polymorphic DAGs
     module EdgeInstanceMethods
 
-      attr_accessor :do_not_perpetuate
-
       #Fill default direct and count values if necessary. In place of after_initialize method
       def fill_defaults
         self[direct_column_name] = true if self[direct_column_name].nil?
         self[count_column_name] = 0 if self[count_column_name].nil?
       end
 
-      #Whether the edge can be destroyed
+      # Without the materialized closure, every link is a plain direct
+      # edge and can always be destroyed. The method remains for the
+      # callers that guarded destruction in the closure days.
       def destroyable?
-        (self.count == 0) || (self.direct? && self.count == 1)
-      end
-
-      #Raises an exception if the edge is not destroyable. Otherwise makes the edge indirect before destruction to cleanup graph.
-      def destroyable!
-        raise ActiveRecord::ActiveRecordError, 'ERROR: cannot destroy this edge' unless destroyable?
-        #this triggers rewiring on destruction via perpetuate
-        if self.direct?
-          self[direct_column_name] = false
-        end
         true
-      end
-
-      #Analyzes the changes in a model instance and rewires as necessary.
-      def perpetuate
-        #flag set by links that were modified in association
-        return true if self.do_not_perpetuate
-
-        #if edge changed this was manually altered
-        if direct_changed?
-          if self.direct?
-            self[count_column_name] += 1
-          else
-            self[count_column_name] -= 1
-          end
-          self.wiring
-        end
       end
 
       #Id of the ancestor
@@ -222,88 +196,6 @@ module Dag
       #all links that start from the sink
       def links_from_sink
         self.class.with_ancestor_point(self.sink)
-      end
-
-      protected
-
-      # Changes on a wire based on the count (destroy or save!) (should not be called outside this plugin)
-      def push_associated_modification!(edge)
-        raise ActiveRecord::ActiveRecordError, 'ERROR: cannot modify our self in this way' if edge == self
-        edge.do_not_perpetuate = true
-        if edge.count == 0
-          edge.destroy
-        else
-          edge.save!
-        end
-      end
-
-      #Updates the wiring of edges that dependent on the current one
-      def rewire_crossing(above_leg, below_leg)
-        if above_leg.count_changed?
-          was = above_leg.count_was
-          was = 0 if was.nil?
-          above_leg_count = above_leg.count - was
-          if below_leg.count_changed?
-            raise ActiveRecord::ActiveRecordError, 'ERROR: both legs cannot 0 normal count change'
-          else
-            below_leg_count = below_leg.count
-          end
-        else
-          above_leg_count = above_leg.count
-          if below_leg.count_changed?
-            was = below_leg.count_was
-            was = 0 if was.nil?
-            below_leg_count = below_leg.count - was
-          else
-            raise ActiveRecord::ActiveRecordError, 'ERROR: both legs cannot have count changes'
-          end
-        end
-        count = above_leg_count * below_leg_count
-        source = above_leg.source
-        sink = below_leg.sink
-        bridging_leg = self.class.find_link(source, sink)
-        if bridging_leg.nil?
-          bridging_leg = self.class.new(self.class.conditions_for(source, sink))
-          bridging_leg.make_indirect
-          bridging_leg.internal_count = 0
-        end
-        bridging_leg.internal_count = bridging_leg.count + count
-        bridging_leg
-      end
-
-      #Find the edges that need to be updated
-      def wiring
-        source = self.source
-        sink = self.sink
-        above_sources = []
-        self.links_to_source.each do |edge|
-          above_sources << edge.source
-        end
-        below_sinks = []
-        self.links_from_sink.each do |edge|
-          below_sinks << edge.sink
-        end
-        above_bridging_legs = []
-        #everything above me tied to my sink
-        above_sources.each do |above_source|
-          above_leg = self.class.find_link(above_source, source)
-          above_bridging_leg = self.rewire_crossing(above_leg, self)
-          above_bridging_legs << above_bridging_leg unless above_bridging_leg.nil?
-        end
-
-        #everything beneath me tied to my source
-        below_sinks.each do |below_sink|
-          below_leg = self.class.find_link(sink, below_sink)
-          below_bridging_leg = self.rewire_crossing(self, below_leg)
-          self.push_associated_modification!(below_bridging_leg)
-          above_bridging_legs.each do |above_bridging_leg|
-            long_leg = self.rewire_crossing(above_bridging_leg, below_leg)
-            self.push_associated_modification!(long_leg)
-          end
-        end
-        above_bridging_legs.each do |above_bridging_leg|
-          self.push_associated_modification!(above_bridging_leg)
-        end
       end
     end
 

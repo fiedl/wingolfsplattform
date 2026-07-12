@@ -11,8 +11,7 @@ namespace :patch do
     'officers:chargen_in_chargengruppe_schieben',
     'officers:admins_anlegen',
     'officers:vereinigungsgruppen',
-    'officers:vereinigungsgruppen_benennen',
-    'officers:recalculate_memberships'
+    'officers:vereinigungsgruppen_benennen'
   ]
   
   namespace :officers do
@@ -368,15 +367,11 @@ namespace :patch do
       log.info "    "
     end
     
-    task :recalculate_memberships => [:requirements, :print_info] do
-      log.section "Gültigkeitszeitraum für indirekte Mitgliedschaften berechnen"
-      alle_vereinigungsgruppen.each do |group|
-        print "#{group.flags.first} ... "
-        group.calculate_validity_range_of_indirect_memberships
-        print "ok.\n"
-      end
-    end
-    
+    # Die Aufgabe :recalculate_memberships ist entfallen:
+    # Gültigkeitszeiträume indirekter Mitgliedschaften werden nicht mehr
+    # gespeichert, sondern beim Lesen abgeleitet.
+    # https://github.com/fiedl/wingolfsplattform/issues/129
+
     task :vereinigungsgruppen_benennen => [:requirements, :print_info] do
       log.section "Vereinigungsgruppen benennen"
       alle_vereinigungsgruppen.each do |group|

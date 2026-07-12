@@ -3,59 +3,50 @@
 #
 module Dag
 
-    #Validations on model instance creation. Ensures no duplicate links, no cycles, and correct count and direct attributes
+  # Validations on link creation. Ensures no duplicate edges and no
+  # cycles. Only direct links can be created: transitive links are not
+  # materialized anymore but derived by recursive SQL queries (Dag::Traversal).
+  # https://github.com/fiedl/wingolfsplattform/issues/129
   class CreateCorrectnessValidator < ActiveModel::Validator
 
     def validate(record)
-      record.errors[:base] << 'Link already exists between these points' if has_duplicates(record)
-      record.errors[:base] << 'Link already exists in the opposite direction' if has_long_cycles(record)
       record.errors[:base] << 'Link must start and end in different places' if has_short_cycles(record)
-      cnt = check_possible(record)
-      record.errors[:base] << 'Cannot create a direct link with a count other than 0' if cnt == 1
-      record.errors[:base] << 'Cannot create an indirect link with a count less than 1' if cnt == 2
+      record.errors[:base] << 'Link would create a cycle' if has_long_cycles(record)
+      record.errors[:base] << 'Only direct links can be created' unless record.direct?
     end
 
     private
 
-    #check for duplicates
-    def has_duplicates(record)
-      record.class.find_link(record.source, record.sink)
-    end
-
-    #check for long cycles
+    # The closure's implicit cycle protection is gone; walk the direct
+    # links to make sure the new edge's descendant cannot already
+    # reach its ancestor.
     def has_long_cycles(record)
-      record.class.find_link(record.sink, record.source)
+      # When the link is validated together with a brand-new node --
+      # for example `user.drafted_posts.create` builds the post and its
+      # link in one save -- the node has no id yet and cannot be part
+      # of any existing path.
+      return false if record.ancestor_id.nil? or record.descendant_id.nil?
+
+      Dag::Traversal.descendant_ids(
+        ancestor_type: record.descendant_type, ancestor_ids: [record.descendant_id],
+        descendant_type: record.ancestor_type
+      ).include?(record.ancestor_id)
     end
 
-    #check for short cycles
     def has_short_cycles(record)
       record.sink.matches?(record.source)
     end
-
-    #check not impossible
-    def check_possible(record)
-      record.direct? ? (record.count != 0 ? 1 : 0) : (record.count < 1 ? 2 : 0)
-    end
   end
 
-  #Validations on update. Makes sure that something changed, that not making a lonely link indirect, and count is correct.
+  # Validations on update: the graph columns of an existing link are
+  # immutable; validity and flag columns may change freely.
   class UpdateCorrectnessValidator < ActiveModel::Validator
 
     def validate(record)
       record.errors[:base] << "No changes" unless record.changed?
-      record.errors[:base] << "Do not manually change the count value" if manual_change(record)
-      record.errors[:base] << "Cannot make a direct link with count 1 indirect" if direct_indirect(record)
+      record.errors[:base] << "The direct flag cannot change; create or destroy the link instead" if record.direct_changed?
     end
 
-    private
-
-    def manual_change(record)
-      record.direct_changed? && record.count_changed?
-    end
-
-    def direct_indirect(record)
-      record.direct_changed? && !record.direct? && record.count == 1
-    end
   end
 
 end

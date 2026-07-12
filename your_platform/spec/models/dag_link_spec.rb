@@ -12,14 +12,13 @@ describe DagLink do
       it { should be_kind_of DagLink }
       its(:type) { should == "Membership" }
 
-      it "should create indirect memberships along" do
+      it "should not materialize indirect memberships" do
         @super_group = @group.parent_groups.create name: "Super group"
         subject
         @user.links_as_descendant.where(direct: true).count.should == 1
-        @user.links_as_descendant.where(direct: false).count.should == 1
-        @user.memberships.count.should == 1 # direct only; indirect memberships derive at read time
+        @user.links_as_descendant.where(direct: false).count.should == 0 # not materialized anymore
+        @user.memberships.count.should == 1
         @user.direct_memberships.count.should == 1
-        @user.indirect_memberships.count.should == 1
       end
     end
 

@@ -6,9 +6,8 @@
 #     rails dag:verify_cte_parity
 #     SAMPLE=500 rails dag:verify_cte_parity
 #
-# Differences are either closure corruption (run DagLink.repair, then
-# re-verify) or, for membership validity, the documented gap limitation
-# of the materialized indirect memberships.
+# Differences are stale closure rows: the closure is not maintained
+# anymore and only remains until the indirect rows are deleted.
 #
 namespace :dag do
   task verify_cte_parity: :environment do

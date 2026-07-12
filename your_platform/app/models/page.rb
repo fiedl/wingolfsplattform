@@ -134,17 +134,10 @@ class Page < ApplicationRecord
   #
   def <<(child)
     unless child.in? self.children
-      if child.in? self.descendants
-        link = DagLink.where(
-          ancestor_type: 'Page', ancestor_id: self.id,
-          descendant_type: child.class.name, descendant_id: child.id
-        ).first
-        link.make_direct
-        link.save
-      else
-        self.child_pages << child if child.kind_of? Page
-        self.child_groups << child if child.kind_of? Group
-      end
+      # A new edge next to an existing indirect path is just a second
+      # edge; there is no materialized link to promote anymore.
+      self.child_pages << child if child.kind_of? Page
+      self.child_groups << child if child.kind_of? Group
     end
   end
 

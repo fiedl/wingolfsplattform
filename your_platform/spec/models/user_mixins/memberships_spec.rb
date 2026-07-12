@@ -44,13 +44,6 @@ describe UserMixins::Memberships do
     it { should_not include @indirect_membership1 }
   end
     
-  describe "#indirect_memberships" do
-    subject { @user1.indirect_memberships }
-    it "should contain the materialized rows as long as the closure is still maintained" do
-      subject.pluck(:ancestor_id).should include @indirect_group.id
-    end
-    it { should_not include @membership1 }
-  end
     
   
   describe "#membership_in( group )" do

@@ -70,7 +70,10 @@ module Dag
 
       validates ancestor_type_column_name.to_sym, :presence => true
       validates descendant_type_column_name.to_sym, :presence => true
-      validates ancestor_id_column_name.to_sym, :uniqueness => {:scope => [ancestor_type_column_name, descendant_type_column_name, descendant_id_column_name]}
+      # Scoped to direct links: stale indirect rows may remain in the
+      # database until they are deleted, and must not block new edges.
+      # https://github.com/fiedl/wingolfsplattform/issues/129
+      validates ancestor_id_column_name.to_sym, :uniqueness => {:scope => [ancestor_type_column_name, descendant_type_column_name, descendant_id_column_name], :conditions => -> { where(direct: true) }}
 
       scope :with_ancestor, lambda { |ancestor| where(ancestor_id_column_name => ancestor.id, ancestor_type_column_name => ancestor.class.to_s) }
       scope :with_descendant, lambda { |descendant| where(descendant_id_column_name => descendant.id, descendant_type_column_name => descendant.class.to_s) }
@@ -108,8 +111,10 @@ module Dag
     extend Edges
     include Edges
 
-    before_destroy :destroyable!, :perpetuate
-    before_save :perpetuate
+    # The closure maintenance hooks (perpetuate, destroyable!) are
+    # gone: only direct links are written, and transitive questions
+    # are answered by recursive SQL queries (Dag::Traversal).
+    # https://github.com/fiedl/wingolfsplattform/issues/129
     before_validation :field_check, :fill_defaults, :on => :update
     before_validation :fill_defaults, :on => :create
 
