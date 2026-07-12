@@ -50,7 +50,7 @@ Gem::Specification.new do |s|
   # https://github.com/fiedl/acts-as-dag (branch sf/rails-5).
   s.add_dependency 'acts_as_tree'                                                      # MIT License
   s.add_dependency 'wannabe_bool'
-  s.add_dependency 'acts-as-taggable-on', '~> 4.0'
+  s.add_dependency 'acts-as-taggable-on', '~> 6.0'
 
   # Caching
   s.add_dependency 'redis', '>= 3.3.3'
