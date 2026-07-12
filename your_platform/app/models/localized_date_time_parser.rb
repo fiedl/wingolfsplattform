@@ -31,6 +31,9 @@ class LocalizedDateTimeParser
       return unless datetime
       return datetime if datetime.respond_to?(:strftime) # already a Date/Time object -> no need to parse it
 
+      # dup: translate_month_and_day_names edits in place, and the
+      # string may be a frozen attribute (rails 5.2).
+      datetime = datetime.dup
       translate_month_and_day_names(datetime)
       input_formats(type).each do |original_format|
         next unless datetime =~ /^#{apply_regex(original_format)}$/

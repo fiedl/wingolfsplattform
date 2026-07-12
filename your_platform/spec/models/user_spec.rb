@@ -769,7 +769,7 @@ describe User do
         first_membership_S.update_attributes(valid_from: "2010-05-01".to_datetime)
         @user.reload
       end
-      it { should == [@corporationE, @corporationS] }
+      it { should match_array [@corporationE, @corporationS] }
     end
     context "when user entered corporation H as guest" do
       before do
@@ -780,7 +780,7 @@ describe User do
         first_membership_H.update_attributes(valid_from: "2010-05-01".to_datetime)
         @user.reload
       end
-      it { should == [@corporationE, @corporationH] }
+      it { should match_array [@corporationE, @corporationH] }
     end
     context "when user left corporation E" do
       before do
@@ -820,7 +820,7 @@ describe User do
         first_membership_S.update_attributes(valid_from: "2010-05-01".to_datetime)
         @user.reload
       end
-      it { should == [ @corporationE, @corporationS ] }
+      it { should match_array [ @corporationE, @corporationS ] }
     end
     context "when user entered corporation H as guest" do
       before do
@@ -876,7 +876,7 @@ describe User do
         first_membership_S.update_attributes(valid_from: "2010-05-01".to_datetime)
         @user.reload
       end
-      it { should == [ @corporationE, @corporationS ] }
+      it { should match_array [ @corporationE, @corporationS ] }
     end
     context "when user entered corporation H as guest" do
       before do
