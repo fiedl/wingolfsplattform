@@ -17,13 +17,12 @@ describe MembershipCreator do
     describe "when creating directly" do
       subject { Membership.create ancestor_type: "Group", ancestor_id: @group.id, descendant_type: "User", descendant_id: @user.id }
       it { should be_kind_of Membership }
-      it "should create indirect memberships along" do
+      it "should not materialize indirect memberships" do
         subject
         @user.links_as_descendant.where(direct: true).count.should == 1
-        @user.links_as_descendant.where(direct: false).count.should == 1
-        @user.memberships.count.should == 2
+        @user.links_as_descendant.where(direct: false).count.should == 0 # not materialized anymore
+        @user.memberships.count.should == 1
         @user.direct_memberships.count.should == 1
-        @user.indirect_memberships.count.should == 1
       end
     end
 
@@ -31,13 +30,12 @@ describe MembershipCreator do
       subject { DagLink.create ancestor_type: "Group", ancestor_id: @group.id, descendant_type: "User", descendant_id: @user.id }
       it { should be_kind_of DagLink }
       its(:type) { should == "Membership"}
-      it "should create indirect memberships along" do
+      it "should not materialize indirect memberships" do
         subject
         @user.links_as_descendant.where(direct: true).count.should == 1
-        @user.links_as_descendant.where(direct: false).count.should == 1
-        @user.memberships.count.should == 2
+        @user.links_as_descendant.where(direct: false).count.should == 0 # not materialized anymore
+        @user.memberships.count.should == 1
         @user.direct_memberships.count.should == 1
-        @user.indirect_memberships.count.should == 1
       end
     end
 
@@ -45,26 +43,24 @@ describe MembershipCreator do
       subject { @group.links_as_parent.create descendant_type: "User", descendant_id: @user.id }
       it { should be_kind_of DagLink }
       its(:type) { should == "Membership"}
-      it "should create indirect memberships along" do
+      it "should not materialize indirect memberships" do
         subject
         @user.links_as_descendant.where(direct: true).count.should == 1
-        @user.links_as_descendant.where(direct: false).count.should == 1
-        @user.memberships.count.should == 2
+        @user.links_as_descendant.where(direct: false).count.should == 0 # not materialized anymore
+        @user.memberships.count.should == 1
         @user.direct_memberships.count.should == 1
-        @user.indirect_memberships.count.should == 1
       end
     end
 
     describe "when creating through the << operator" do
       subject { @group << @user }
       it { should be_kind_of Membership }
-      it "should create indirect memberships along" do
+      it "should not materialize indirect memberships" do
         subject
         @user.links_as_descendant.where(direct: true).count.should == 1
-        @user.links_as_descendant.where(direct: false).count.should == 1
-        @user.memberships.count.should == 2
+        @user.links_as_descendant.where(direct: false).count.should == 0 # not materialized anymore
+        @user.memberships.count.should == 1
         @user.direct_memberships.count.should == 1
-        @user.indirect_memberships.count.should == 1
       end
     end
 

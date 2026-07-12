@@ -14,10 +14,11 @@ module UserMixins::Memberships
     # User Group Memberships
     # ==========================================================================================
 
-    # This associates all Membership objects of the group, including indirect
-    # memberships.
+    # The user's memberships. Only direct memberships are stored;
+    # memberships in ancestor groups derive from them at read time
+    # (IndirectMembership).
     #
-    has_many :memberships, -> { where ancestor_type: 'Group', descendant_type: 'User' },
+    has_many :memberships, -> { where ancestor_type: 'Group', descendant_type: 'User', direct: true },
          foreign_key: :descendant_id
 
     # This associates all memberships of the group that are direct, i.e. direct
@@ -26,31 +27,35 @@ module UserMixins::Memberships
     has_many :direct_memberships, -> { where ancestor_type: 'Group', descendant_type: 'User', direct: true },
          foreign_key: :descendant_id, class_name: "Membership"
 
-    # This associates all memberships of the group that are indirect, i.e.
-    # ancestor_group-descendant_user memberships, where groups are between the
-    # ancestor_group and the descendant_user.
-    #
-    has_many :indirect_memberships, -> { where ancestor_type: 'Group', descendant_type: 'User', direct: false },
-        foreign_key: :descendant_id, class_name: "Membership"
+    # Indirect memberships derive at read time; see membership_in and
+    # IndirectMembership.
 
 
-    # This returns the membership of the user in the given group if existant.
+    # This returns the membership of the user in the given group if
+    # existant: the direct membership or the derived indirect one.
     #
     def membership_in( group )
-      memberships.where(ancestor_id: group.id).limit(1).first
+      group.membership_of self
     end
 
 
     # Groups the user is member of
     # ==========================================================================================
 
-    # This associates the groups the user is member of, direct as well as indirect.
+    # The groups the user is member of: the groups of his valid direct
+    # memberships and all groups above them.
     #
-    has_many(:groups,
-      -> { where('dag_links.descendant_type' => 'User').distinct },
-      through: :memberships,
-      source: :ancestor, source_type: 'Group'
-      )
+    def groups
+      direct_group_ids = direct_memberships.pluck(:ancestor_id)
+      Dag::MemberGroupsProxy.new user: self, groups: Group
+        .where("groups.id IN (:direct_group_ids) OR groups.id IN (#{Dag::Traversal.ancestor_ids_sql(
+          descendant_type: 'Group', descendant_ids: direct_group_ids, ancestor_type: 'Group')})",
+          direct_group_ids: direct_group_ids + [0])
+    end
+
+    def group_ids
+      groups.pluck(:id)
+    end
 
     # This associates only the direct groups.
     #
@@ -60,13 +65,12 @@ module UserMixins::Memberships
       source: :ancestor, source_type: 'Group'
       )
 
-    # This associates only the indirect groups.
+    # Only the groups the user is member of by subtree membership,
+    # i.e. without his direct groups.
     #
-    has_many(:indirect_groups,
-      -> { where('dag_links.descendant_type' => 'User', 'dag_links.direct' => false).distinct },
-      through: :indirect_memberships,
-      source: :ancestor, source_type: 'Group'
-      )
+    def indirect_groups
+      groups.where.not(id: direct_memberships.select(:ancestor_id))
+    end
 
   end
 

@@ -6,7 +6,6 @@ class Group < ApplicationRecord
   scope :regular, -> {
     where(type: nil).or(where.not(type: "Groups::PhvsParent")).not_flagged([:contact_people, :attendees, :officers_parent, :admins_parent, :group_of_groups, :everyone, :corporations_parent, :bvs_parent, :wbl_abo])
   }
-  scope :has_descendant_users, -> { includes(:descendant_users).where(users: { id: nil }) }
 
   include Structureable
   include Navable
@@ -127,29 +126,17 @@ class Group < ApplicationRecord
   # Workflows
   # ------------------------------------------------------------------------------------------
 
-  # These methods override the standard methods, which are usual ActiveRecord associations
-  # methods created by the acts-as-dag gem
-  # (https://github.com/resgraph/acts-as-dag/blob/master/lib/dag/dag.rb).
-  # But since the Workflow in the main application
-  # inherits from WorkflowKit::Workflow and single table inheritance and polymorphic
-  # associations do not always work together as expected in rails, as can be seen here
-  # http://stackoverflow.com/questions/9628610/why-polymorphic-association-doesnt-work-for-sti-if-type-column-of-the-polymorph,
-  # we have to override these methods.
+  # The generated child_workflows association queries descendant_type
+  # 'Workflow', but the polymorphic columns store the base class name
+  # 'WorkflowKit::Workflow' (single table inheritance and polymorphic
+  # associations do not work together here, see
+  # http://stackoverflow.com/questions/9628610). descendant_workflows
+  # needs no override anymore: the transitive accessor filters by base class.
   #
-  # ActiveRecord associations require 'WorkflowKit::Workflow' to be stored in the database's
-  # type column, but by asking for the `child_workflows` we want to get òbjects of the
-  # `Workflow` type, not `WorkflowKit::Workflow`, since Workflow objects may have
-  # additional methods, added by the main application.
-  #
-  def descendant_workflows
-    Workflow
-      .joins( :links_as_descendant )
-      .where( :dag_links => { :ancestor_type => "Group", :ancestor_id => self.id } )
-      .distinct
-  end
-
   def child_workflows
-    self.descendant_workflows.where( :dag_links => { direct: true } )
+    Workflow
+      .joins( :links_as_child )
+      .where( :dag_links => { :ancestor_type => "Group", :ancestor_id => self.id } )
   end
 
 

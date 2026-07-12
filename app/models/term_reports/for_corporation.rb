@@ -5,7 +5,7 @@ module TermReportAdditions
   def fill_info
     super
     self.anzahl_aktivmeldungen = number_of_new_members
-    self.anzahl_aller_aktiven = corporation.aktivitas.memberships.at_time(end_of_term).count
+    self.anzahl_aller_aktiven = corporation.aktivitas.member_count(at: end_of_term)
     self.anzahl_burschungen = anzahl_neue BURSCHEN_GROUP_NAMES
     self.anzahl_burschen = anzahl BURSCHEN_GROUP_NAMES
     self.anzahl_fuxen = anzahl FUXEN_GROUP_NAMES
@@ -13,11 +13,12 @@ module TermReportAdditions
     self.anzahl_inaktiver_burschen_loci = anzahl INAKTIVE_LOCI_GROUP_NAMES
     self.anzahl_inaktiver_burschen_non_loci = anzahl INAKTIVE_NON_LOCI_GROUP_NAMES
     self.anzahl_konkneipwanten = anzahl KONKNEIPANTEN_GROUP_NAMES
-    self.anzahl_philistrationen = corporation.philisterschaft.memberships.where(valid_from: term_time_range).count
-    self.anzahl_philister = corporation.philisterschaft.memberships.at_time(end_of_term).count
+    self.anzahl_philistrationen = corporation.philisterschaft.new_member_count(during: term_time_range)
+    self.anzahl_philister = corporation.philisterschaft.member_count(at: end_of_term)
     self.anzahl_austritte = number_of_membership_ends
-    self.anzahl_austritte_aktive = corporation.former_members_parent.memberships.where(valid_from: term_time_range).select { |membership| not membership.user.ancestor_group_ids.include? Group.alle_philister.id }.count
-    self.anzahl_austritte_philister = corporation.former_members_parent.memberships.where(valid_from: term_time_range).select { |membership| membership.user.ancestor_group_ids.include? Group.alle_philister.id }.count
+    new_former_members = User.where(id: corporation.former_members_parent.new_member_ids(during: term_time_range))
+    self.anzahl_austritte_aktive = new_former_members.select { |user| not user.ancestor_group_ids.include? Group.alle_philister.id }.count
+    self.anzahl_austritte_philister = new_former_members.select { |user| user.ancestor_group_ids.include? Group.alle_philister.id }.count
     self.anzahl_todesfaelle = number_of_deaths
     self.anzahl_erstbandtraeger_aktivitas = erstbandtraeger_der_aktivitas.count
     self.anzahl_erstbandtraeger_philisterschaft = erstbandtraeger_der_philisterschaft.count
@@ -40,11 +41,11 @@ module TermReportAdditions
   ## Anzahl Kalender-Abonnenten
 
   def anzahl(group_names)
-    corporation.sub_group(group_names).memberships.at_time(end_of_term).count
+    corporation.sub_group(group_names).member_count(at: end_of_term)
   end
 
   def anzahl_neue(group_names)
-    corporation.sub_group(group_names).memberships.where(valid_from: term_time_range).count
+    corporation.sub_group(group_names).new_member_count(during: term_time_range)
   end
 
   def senior

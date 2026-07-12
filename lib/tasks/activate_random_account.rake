@@ -183,10 +183,8 @@ namespace :activate do
   end
   
   def alle_wingolfiten
-    $alle_wingolfiten ||= User
-      .joins(:groups).where('dag_links.valid_to IS NULL')
-      .where('groups.name IN (?)', ['Aktivitas', 'Philisterschaft'])
-      .uniq
+    $alle_wingolfiten ||= User.where(id:
+      Group.where(name: ['Aktivitas', 'Philisterschaft']).flat_map(&:member_ids))
   end
   
   def alle_wingolfiten_ids

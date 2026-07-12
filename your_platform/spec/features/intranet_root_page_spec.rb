@@ -3,6 +3,20 @@ require 'spec_helper'
 feature "Intranet Root" do
   include SessionSteps
 
+  scenario "Viewing the intranet root page with upcoming birthdays" do
+    @birthday_user = create :user, first_name: "Birgit", last_name: "Birthday"
+    @birthday_user.date_of_birth = 30.years.ago.to_date
+    @birthday_user.save
+    # The birthday box only shows regular users, which the main app
+    # narrows down to wingolfiten.
+    Group.alle_wingolfiten.assign_user @birthday_user
+
+    login :user
+    visit root_path
+
+    page.should have_text "Birthday"
+  end
+
   scenario "Viewing the intranet root page when not logged in and the public website is not done with this system" do
     pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     create :user_with_account

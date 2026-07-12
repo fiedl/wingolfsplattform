@@ -2,7 +2,10 @@ concern :MembershipCreator do
 
   class_methods do
 
-    # This is needed, because acts-as-dag only creates indirect links when called this way.
+    # Created through DagLink and re-typed by DagLinkTypes: the
+    # returned object is a Membership regardless of the called class,
+    # so Memberships::Status callbacks (gap correction) only run on
+    # records that were loaded as such -- as before.
     def create(attributes = {})
       attributes[:ancestor_id] ||= attributes[:group_id] || attributes[:group].try(:id)
       attributes[:descendant_id] ||= attributes[:user_id] || attributes[:user].try(:id)
@@ -17,15 +20,6 @@ concern :MembershipCreator do
       membership
     end
 
-  end
-
-  # The regular destroy method won't trigger DagLink's callbacks properly,
-  # causing the former dag link bug. By calling the DagLink's destroy method
-  # we'll ensure the callbacks are called and indirect memberships are destroyed
-  # correctly.
-  #
-  def destroy
-    self.becomes(DagLink).destroy
   end
 
 end

@@ -46,8 +46,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'json', '~> 2.3.0'
 
   # Data Structures
-  # DAG Structure, https://github.com/resgraph/acts-as-dag
-  s.add_dependency 'acts-as-dag', '>= 4.0'
+  # The DAG structure lives in lib/your_platform/dag, vendored from
+  # https://github.com/fiedl/acts-as-dag (branch sf/rails-5).
   s.add_dependency 'acts_as_tree'                                                      # MIT License
   s.add_dependency 'wannabe_bool'
   s.add_dependency 'acts-as-taggable-on', '~> 4.0'

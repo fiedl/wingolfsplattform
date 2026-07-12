@@ -31,7 +31,8 @@ concern :UserRoles do
   def member_of?( object, options = {} )
     if object.kind_of? Group
       if options[:at]
-        Membership.find_all_by(user: self, group: object).at_time(options[:at]).any?
+        Membership.find_all_by(user: self, group: object).at_time(options[:at]).any? or
+          IndirectMembership.new(object, self).valid_at?(options[:at])
       elsif options[:with_invalid] or options[:also_in_the_past]
         self.ancestor_group_ids.include? object.id
       else  # only current memberships:
@@ -207,7 +208,7 @@ concern :UserRoles do
       .collect { |officer_group| officer_group.scope rescue nil }
       .select { |scope| scope.kind_of?(Page) }
       .collect(&:id)
-    sub_page_ids = DagLink.descendant_ids_via_direct_links('Page', scope_page_ids) -
+    sub_page_ids = DagLink.descendant_ids_through_same_type('Page', scope_page_ids) -
       (Page.find_intranet_root.try(:descendant_page_ids) || [])
     (scope_page_ids + sub_page_ids).uniq
   end

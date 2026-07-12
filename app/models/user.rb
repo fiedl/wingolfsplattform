@@ -28,7 +28,7 @@ class User
   include UserLeibverhaeltnisse
   include UserNetenvData
 
-  scope :wingolfiten, -> { joins(:groups).where(groups: {id: Group.alle_wingolfiten.id}) }
+  scope :wingolfiten, -> { where(id: Group.alle_wingolfiten.members) }
   scope :regular, -> { wingolfiten.alive }
 
   scope :with_w_nummer, -> { joins(:profile_fields).where(profile_fields: {label: "W-Nummer"}) }
@@ -412,7 +412,7 @@ class User
   end
 
   def self.wingolfiten
-    where id: (joins(:groups).where(groups: {id: Group.alle_wingolfiten}))
+    where id: Group.alle_wingolfiten.members
   end
 
   def group_names

@@ -4,10 +4,10 @@ class Groups::FreeGroupsController < ApplicationController
     authorize! :create, Groups::FreeGroup
 
     new_group = Groups::FreeGroup.create name: "Neue Gruppe", body: "Beschreibe doch kurz Deine neue Gruppe!"
-    new_group.members << current_user
+    new_group.assign_user current_user
 
     founders = new_group.create_office name: "Gruppen-Manager"
-    founders.members << current_user
+    founders.assign_user current_user
 
     redirect_to group_posts_path(new_group)
   end

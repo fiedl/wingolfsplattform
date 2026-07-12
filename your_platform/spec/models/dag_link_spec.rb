@@ -12,14 +12,13 @@ describe DagLink do
       it { should be_kind_of DagLink }
       its(:type) { should == "Membership" }
 
-      it "should create indirect memberships along" do
+      it "should not materialize indirect memberships" do
         @super_group = @group.parent_groups.create name: "Super group"
         subject
         @user.links_as_descendant.where(direct: true).count.should == 1
-        @user.links_as_descendant.where(direct: false).count.should == 1
-        @user.memberships.count.should == 2
+        @user.links_as_descendant.where(direct: false).count.should == 0 # not materialized anymore
+        @user.memberships.count.should == 1
         @user.direct_memberships.count.should == 1
-        @user.indirect_memberships.count.should == 1
       end
     end
 
@@ -81,7 +80,7 @@ describe "Page (DagLinkNode)" do
     end
   end
 
-  describe ".descendant_ids_via_direct_links" do
+  describe ".descendant_ids_through_same_type" do
     #   @group1 --- @group2 ---- @group3
     #      |     \_ @group2b _/    (diamond)
     #      |
@@ -100,28 +99,28 @@ describe "Page (DagLinkNode)" do
     end
 
     it "should walk the direct links of the given node type, transitively" do
-      ids = DagLink.descendant_ids_via_direct_links('Group', [@group1.id])
+      ids = DagLink.descendant_ids_through_same_type('Group', [@group1.id])
       ids.should include @group2.id
       ids.should include @group2b.id
       ids.should include @group3.id
     end
 
     it "should return diamond nodes only once" do
-      ids = DagLink.descendant_ids_via_direct_links('Group', [@group1.id])
+      ids = DagLink.descendant_ids_through_same_type('Group', [@group1.id])
       ids.count(@group3.id).should == 1
     end
 
     it "should not cross nodes of other types, unlike the indirect closure rows" do
       @group1.descendant_groups.should include @group_behind_page
-      DagLink.descendant_ids_via_direct_links('Group', [@group1.id]).should_not include @group_behind_page.id
+      DagLink.descendant_ids_through_same_type('Group', [@group1.id]).should_not include @group_behind_page.id
     end
 
     it "should not include the start ids" do
-      DagLink.descendant_ids_via_direct_links('Group', [@group1.id]).should_not include @group1.id
+      DagLink.descendant_ids_through_same_type('Group', [@group1.id]).should_not include @group1.id
     end
 
     it "should return an empty array for empty start ids" do
-      DagLink.descendant_ids_via_direct_links('Group', []).should == []
+      DagLink.descendant_ids_through_same_type('Group', []).should == []
     end
   end
 

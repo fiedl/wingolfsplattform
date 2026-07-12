@@ -1,13 +1,4 @@
 GIT
-  remote: https://github.com/fiedl/acts-as-dag
-  revision: 5e185dddff6563ee9ee92611555cd9d9a519d280
-  branch: sf/rails-5
-  specs:
-    acts-as-dag (4.0.0)
-      activemodel
-      activerecord (>= 4.0.0)
-
-GIT
   remote: https://github.com/refile/refile-mini_magick
   revision: 27b6c6c7affcc302a59068b8b3f458cb147c2fa6
   specs:
@@ -32,7 +23,6 @@ PATH
       actionpack (>= 4.2.5.2)
       actionview (>= 5.0.7.2)
       activerecord (>= 4.2.7.1)
-      acts-as-dag (>= 4.0)
       acts-as-taggable-on (~> 4.0)
       acts_as_tree
       apipie-rails (~> 0.5)
@@ -626,7 +616,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  acts-as-dag!
   binding_of_caller!
   brakeman (>= 2.3.1)!
   capybara (~> 3.0)!

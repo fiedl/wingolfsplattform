@@ -30,12 +30,14 @@ describe Membership do
     Membership.find_all_by( user: @user, group: @group ).now_and_in_the_past.first
   end
 
+  # Indirect memberships are not stored anymore; they derive from the
+  # direct memberships at read time.
   def find_indirect_membership
-    Membership.find_by( user: @user, group: @super_group )
+    @super_group.membership_of @user
   end
 
   def find_indirect_membership_now_and_in_the_past
-    Membership.find_all_by( user: @user, group: @super_group ).now_and_in_the_past.first
+    @super_group.membership_of @user, also_in_the_past: true
   end
 
   def create_other_membership
@@ -69,9 +71,12 @@ describe Membership do
     before { create_memberships }
 
     describe ".find_all_by" do
-      it "should find all memberships for a user" do
+      it "should find all direct memberships for a user" do
         Membership.find_all_by( user: @user ).should include( find_membership )
-        Membership.find_all_by( user: @user ).should include( find_indirect_membership )
+      end
+      it "should not include indirect memberships, which are derived, not stored" do
+        Membership.find_all_by( user: @user ).map(&:group_id).should_not include @super_group.id
+        find_indirect_membership.should be_kind_of IndirectMembership
       end
       it "should find all memberships for a group" do
         Membership.find_all_by( group: @group ).should include( find_membership )
@@ -93,7 +98,7 @@ describe Membership do
       before { find_membership.make_invalid }
       it "should find all memberships, including the ones that are invalid at the present time" do
         Membership.find_all_by( user: @user ).now_and_in_the_past
-          .should include( find_membership_now_and_in_the_past, find_indirect_membership, find_other_membership )
+          .should include( find_membership_now_and_in_the_past, find_other_membership )
       end
     end
 
@@ -304,7 +309,7 @@ describe Membership do
       @sub_group.parent_groups << @group
       @user.parent_groups << @sub_group
       @membership = Membership.find_by_user_and_group( @user, @sub_group )
-      @indirect_membership = Membership.find_by_user_and_group( @user, @group )
+      @indirect_membership = @group.membership_of( @user )
     end
 
     subject { @indirect_membership }

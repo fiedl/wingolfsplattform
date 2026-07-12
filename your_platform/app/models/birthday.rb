@@ -25,7 +25,12 @@ class Birthday
       .select { |_, birthday| birthday }
       .sort_by { |_, birthday| [(birthday < today) ? 1 : 0, birthday] }
       .first(limit).collect(&:first)
-    User.where(id: upcoming_user_ids).sort_by { |user| upcoming_user_ids.index(user.id) }
+    return User.none if upcoming_user_ids.empty?
+
+    # The birthday order is applied in sql rather than with `sort_by`
+    # so that callers can chain further scopes like `.regular`.
+    User.where(id: upcoming_user_ids)
+      .order("array_position(ARRAY[#{upcoming_user_ids.join(',')}], users.id)")
   end
 
 end
