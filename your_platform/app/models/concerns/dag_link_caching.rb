@@ -1,7 +1,9 @@
 concern :DagLinkCaching do
 
   included do
-    after_save { delay_renew_cache_of_dependent_nodes if self.changes.except(:needs_review, :updated_at).any? }
+    # saved_changes, not changes: inside after_save, rails 5.2 flipped
+    # `changes` to the post-save perspective, where it is always empty.
+    after_save { delay_renew_cache_of_dependent_nodes if self.saved_changes.except(:needs_review, :updated_at).any? }
     after_commit :delay_renew_cache_of_dependent_nodes, on: :destroy
   end
 

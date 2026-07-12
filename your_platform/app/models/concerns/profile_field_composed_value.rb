@@ -33,7 +33,9 @@ concern :ProfileFieldComposedValue do
   end
 
   def save_parent_composed_value
-    if self.value_changed? && (! @do_not_save_parent) && self.parent && self.parent.reload && self.parent.children.reload && (self.parent.value != (composed_value = self.parent.composed_value))
+    # saved_change_to_value?, not value_changed?: in after_save, rails
+    # 5.2 flipped the dirty API to the post-save perspective.
+    if self.saved_change_to_value? && (! @do_not_save_parent) && self.parent && self.parent.reload && self.parent.children.reload && (self.parent.value != (composed_value = self.parent.composed_value))
       self.parent.update_attributes value: composed_value
       @do_not_save_parent = false
     end

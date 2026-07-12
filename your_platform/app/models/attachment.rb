@@ -155,7 +155,9 @@ class Attachment < ApplicationRecord
   end
 
   def set_default_title_if_empty
-    if file.present? && file.filename.present? && file_changed?
+    # saved_change_to_file?, not file_changed?: in after_create, rails
+    # 5.2 flipped the dirty API to the post-save perspective.
+    if file.present? && file.filename.present? && saved_change_to_file?
       self.title ||= File.basename(file.filename, '.*').titleize
       self.save
     end
