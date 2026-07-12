@@ -92,15 +92,11 @@ source 'https://rubygems.org' do
   gem 'biggs', '~> 0.3.3'
   gem 'faraday', '~> 1.3'
   gem 'redis-rack', '~> 2.1'
-  # actionview 5.1 dropped erubis for erubi, but haml 4 still requires
-  # erubis. Drop together with the haml 5 bump.
-  gem 'erubis'
 
   # Temporary Forks and Overrides
   gem 'refile', git: 'https://github.com/sobrinho/refile'
   gem 'refile-mini_magick', git: 'https://github.com/refile/refile-mini_magick'
   gem 'rails-settings-cached', '0.7.1'
-  gem 'mimemagic', '~> 0.3.10' # TODO: remove when updating to rails 5.2, https://github.com/rails/rails/issues/41750
 
   # To customly set timeout time we need rack-timeout
   gem 'rack-timeout'

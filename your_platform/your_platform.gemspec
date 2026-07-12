@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   #
 
   # Rails and Rails Additions
-  s.add_dependency "rails", "~> 5.1.0"
+  s.add_dependency "rails", "~> 5.2.0"
   s.add_dependency 'rack', '>= 1.6.2'
   s.add_dependency 'rack-ssl', '>= 1.3.4'
   s.add_dependency "rails-i18n"                                                        # MIT License
@@ -87,7 +87,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'rails-settings-cached', '>= 0.6.5'
 
   # Template Engines
-  s.add_dependency 'haml', '~> 4.0' # NameError: undefined method `precompiled_method_return_value' for class `Haml::Compiler', https://github.com/fiedl/wingolfsplattform/commit/bad4932ce2e611b2a8d7015e20dcfd18e0a376d4
+  # haml 4 references the Erubis template handler that rails 5.2 removed.
+  # (The precompiled_method_return_value NameError that once blocked
+  # haml 5 — see bad4932c — did not reproduce on rails 5.2 with haml 5.2.)
+  s.add_dependency 'haml', '~> 5.0'
   s.add_dependency 'redcarpet', '>= 3.3.2'  # for Markdown                             # MIT License
   s.add_dependency 'gemoji', '>= 2.1.0'
   s.add_dependency 'auto_html', '~> 1.6.4'
