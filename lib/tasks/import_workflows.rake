@@ -29,7 +29,7 @@ namespace :import do
     
       require 'csv'
       file_name = File.join( Rails.root, "import", "workflows_for_standard_wah_structure.csv" )
-      if File.exists? file_name
+      if File.exist? file_name
     
         wah_counter = 0
         workflow_counter = 0

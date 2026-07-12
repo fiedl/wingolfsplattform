@@ -232,7 +232,7 @@ module GroupMixins::Import
     #
     def yaml_import_groups_into_parent_group( yaml_file_title, parent_group )
       yaml_file_name = File.join( Rails.root, "import", yaml_file_title )
-      if File.exists? yaml_file_name
+      if File.exist? yaml_file_name
 
         sub_group_hashes = []
         File.open( yaml_file_name, "r" ) do |file|

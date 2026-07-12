@@ -34,7 +34,7 @@ class Importer
   # This attribute refers to the file name of the file to import
   #
   def filename=( filename )
-    raise "File #{filename} does not exist." if not File.exists? filename
+    raise "File #{filename} does not exist." if not File.exist? filename
     @filename = filename
   end
   def filename
@@ -117,7 +117,7 @@ class ImportFile
     @filename = args[:filename]
     @data_class_name = args[:data_class_name]
 
-    raise "File #{@filename} does not exist." if not File.exists? @filename
+    raise "File #{@filename} does not exist." if not File.exist? @filename
     raise "Data class not found: #{@data_class_name}" if not @data_class_name.constantize.kind_of? Class
   end
 

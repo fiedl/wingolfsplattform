@@ -15,7 +15,7 @@ class WorkflowsController < ApplicationController
     @workflow.execute( params )
 
     flash[ :notice ] = "#{I18n.t(:executed_workflow)}: #{@workflow.name}"
-    redirect_to :back
+    redirect_back fallback_location: root_path
   end
 
 

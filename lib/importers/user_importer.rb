@@ -10,7 +10,7 @@ class UserImporter < Importer
     super(args)
     @object_class_name = "User"
     if @continue_with.in? [:last_user, :auto]
-      if File.exists? @continue_with_file
+      if File.exist? @continue_with_file
         @continue_with = File.open(@continue_with_file, 'r') { |file| file.read }
       else
         @continue_with = nil

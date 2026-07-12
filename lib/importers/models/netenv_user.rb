@@ -29,7 +29,7 @@ class NetenvUser
   
   def self.import_filename
     filename = File.join(Rails.root, 'import/netenv_data/users.csv')
-    raise 'please symlink import/netenv_data/users.csv first.' unless File.exists? filename
+    raise 'please symlink import/netenv_data/users.csv first.' unless File.exist? filename
     return filename
   end
   
