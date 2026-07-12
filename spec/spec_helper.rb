@@ -296,6 +296,13 @@ RSpec.configure do |config|
     # Clear the cache.
     Rails.cache.clear unless ENV['NO_CACHING']
 
+    # View fragments (`= cache :key do` in views) do not live in
+    # `Rails.cache` but in the controller's own cache store, a file
+    # store in tmp/cache that would otherwise leak between examples
+    # and even between test runs.
+    # See your_platform/config/initializers/cache.rb.
+    ActionController::Base.cache_store.clear unless ENV['NO_CACHING']
+
     # # Clear cookies
     # # https://makandracards.com/makandra/16117
     # browser = Capybara.current_session.driver.browser
