@@ -76,6 +76,26 @@ source 'https://rubygems.org' do
   gem 'rubyzip', '>= 1.2.1'  # CVE-2017-5946
   gem 'nokogiri', '>= 1.7.1'  #  USN-3235-1
 
+  # Temporary pins during the rails upgrade
+  # (https://github.com/fiedl/wingolfsplattform/issues/126):
+  # bumping the engine gemspec unlocks all engine dependencies in the
+  # lockfile, and bundler would jump these to new majors mid-upgrade.
+  # The JS-facing gems must not move at all (frozen JS stack); the API
+  # clients and formatters stay on their pre-upgrade majors until after
+  # the rails hops. Remove pin by pin once the upgrade has landed.
+  gem 'i18n-js', '~> 3.8.0'
+  gem 'chartkick', '~> 3.4.2'
+  gem 'discourse_api', '~> 0.45.0'
+  gem 'merit', '~> 4.0.1'
+  gem 'gemoji', '~> 3.0.1'
+  gem 'reverse_markdown', '~> 2.0.0'
+  gem 'biggs', '~> 0.3.3'
+  gem 'faraday', '~> 1.3'
+  gem 'redis-rack', '~> 2.1'
+  # actionview 5.1 dropped erubis for erubi, but haml 4 still requires
+  # erubis. Drop together with the haml 5 bump.
+  gem 'erubis'
+
   # Temporary Forks and Overrides
   gem 'refile', git: 'https://github.com/sobrinho/refile'
   gem 'refile-mini_magick', git: 'https://github.com/refile/refile-mini_magick'
