@@ -22,8 +22,8 @@ module Dag
     # reach its ancestor.
     def has_long_cycles(record)
       Dag::Traversal.descendant_ids(
-        of_type: record.descendant_type, of_ids: [record.descendant_id],
-        type: record.ancestor_type
+        ancestor_type: record.descendant_type, ancestor_ids: [record.descendant_id],
+        descendant_type: record.ancestor_type
       ).include?(record.ancestor_id)
     end
 
