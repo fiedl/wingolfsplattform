@@ -175,8 +175,11 @@ describe IncomingMails::GroupMailingListMail do
         end
         it "replaces the {{greeting}} placeholder with the personal greeting for the recipient" do
           subject
-          ActionMailer::Base.deliveries[-1].to_s.should include "Dear Alec Trevelyan"
-          ActionMailer::Base.deliveries[-2].to_s.should include "Dear James Bond"
+          # The delivery order follows the members query and is not
+          # guaranteed; each recipient gets his own greeting, once.
+          last_two_deliveries = ActionMailer::Base.deliveries.last(2).collect(&:to_s)
+          last_two_deliveries.count { |mail| mail.include?("Dear Alec Trevelyan") }.should == 1
+          last_two_deliveries.count { |mail| mail.include?("Dear James Bond") }.should == 1
         end
       end
 

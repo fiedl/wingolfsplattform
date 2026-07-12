@@ -25,8 +25,8 @@ describe GroupMixins::Import do
 
     it "should import the group structure correctly" do
       @root_group.reload
-      @root_group.child_groups.collect { |g| g.name }.should == [ "Group 1", "Group 2" ]
-      @root_group.child_groups.first.child_groups.collect { |g| g.name }.should == 
+      @root_group.child_groups.order(:id).collect { |g| g.name }.should == [ "Group 1", "Group 2" ]
+      @root_group.child_groups.order(:id).first.child_groups.order(:id).collect { |g| g.name }.should ==
         [ "Group 1.1", "Group 1.2" ]
     end
 

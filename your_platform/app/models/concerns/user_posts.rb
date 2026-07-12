@@ -17,15 +17,14 @@ concern :UserPosts do
   # 5. Posts in events in my groups.
   #
   def posts
-    my_group_ids = self.group_ids
     Post.where(id: child_posts).or(
       Post.where(id: posts_from_me)
     ).or(
-      Post.where(id: Post.joins(:parent_groups).where(groups: {id: my_group_ids}))
+      Post.where(id: Post.joins(:parent_groups).where(groups: {id: self.groups}))
     ).or(
-      Post.where(group_id: my_group_ids)
+      Post.where(group_id: self.groups)
     ).or(
-      Post.where(id: Post.joins(:parent_events).merge(Event.where(group_id: my_group_ids)))
+      Post.where(id: Post.joins(:parent_events).merge(Event.where(group_id: self.groups)))
     )
   end
 
