@@ -1,10 +1,12 @@
 module ProfileFieldHelper
 
   def profile_field_li( profile_field, options = {} )
-    # options:
-    #   lock_label: true/false, default: false
-    #   no_remove: true/false, default: false
-    render partial: 'profile_fields/profile_field', locals: {profile_field: profile_field}.merge(options) if profile_field
+    # The server-rendered partial 'profile_fields/profile_field' was
+    # removed with the tabler redesign (55e03fb8f); profile fields
+    # render as vue components now, which bring their own edit
+    # controls. The former options (lock_label, no_remove) are
+    # accepted but obsolete.
+    content_tag :li, editable_profile_field(profile_field), class: "attribute profile_field" if profile_field
   end
 
   def profile_field_lis( profile_fields, options = {} )
