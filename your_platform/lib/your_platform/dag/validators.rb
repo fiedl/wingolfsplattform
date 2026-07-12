@@ -21,6 +21,12 @@ module Dag
     # links to make sure the new edge's descendant cannot already
     # reach its ancestor.
     def has_long_cycles(record)
+      # When the link is validated together with a brand-new node --
+      # for example `user.drafted_posts.create` builds the post and its
+      # link in one save -- the node has no id yet and cannot be part
+      # of any existing path.
+      return false if record.ancestor_id.nil? or record.descendant_id.nil?
+
       Dag::Traversal.descendant_ids(
         ancestor_type: record.descendant_type, ancestor_ids: [record.descendant_id],
         descendant_type: record.ancestor_type

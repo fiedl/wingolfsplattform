@@ -20,7 +20,7 @@ class MailingList < ProfileFields::MailingListEmail
   end
 
   def members_count
-    group.memberships.length
+    group.members.count
   end
 
   def posts
@@ -40,7 +40,7 @@ class MailingList < ProfileFields::MailingListEmail
   end
 
   def self.all
-    ProfileFields::MailingListEmail.includes(:group, :memberships).order(value: :asc).all.collect { |profile_field| profile_field.becomes(MailingList) }
+    ProfileFields::MailingListEmail.includes(:group).order(value: :asc).all.collect { |profile_field| profile_field.becomes(MailingList) }
   end
 
   def self.sti_name
