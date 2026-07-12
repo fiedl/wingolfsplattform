@@ -1,9 +1,8 @@
 require 'spec_helper'
 
-# A/B verification for https://github.com/fiedl/wingolfsplattform/issues/129:
-# as long as the materialized closure rows (direct: false) are still
-# maintained, the recursive CTE walk over the direct links has to reach
-# exactly the same nodes.
+# The recursive SQL traversal of the direct links
+# (https://github.com/fiedl/wingolfsplattform/issues/129): structural
+# invariants and the validity ranges of derived memberships.
 #
 describe Dag::Traversal do
 

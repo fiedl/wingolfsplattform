@@ -123,10 +123,9 @@ module Dag
     #Instance methods included into the link model for polymorphic and non-polymorphic DAGs
     module EdgeInstanceMethods
 
-      #Fill default direct and count values if necessary. In place of after_initialize method
+      #Fill the default direct value if necessary. In place of after_initialize method
       def fill_defaults
         self[direct_column_name] = true if self[direct_column_name].nil?
-        self[count_column_name] = 0 if self[count_column_name].nil?
       end
 
       # Without the materialized closure, every link is a plain direct
@@ -144,16 +143,6 @@ module Dag
       #Id of the descendant
       def descendant_id
         self[descendant_id_column_name]
-      end
-
-      #Count of the edge, ie the edge exists in X ways
-      def count
-        self[count_column_name]
-      end
-
-      #Changes the count of the edge. DO NOT CALL THIS OUTSIDE THE PLUGIN
-      def internal_count=(val)
-        self[count_column_name] = val
       end
 
       #Whether the link is direct, ie manually created

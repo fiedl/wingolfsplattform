@@ -17,9 +17,6 @@ module Dag
         acts_as_dag_options[:direct_column]
       end
 
-      def count_column_name
-        acts_as_dag_options[:count_column]
-      end
 
       def acts_as_dag_polymorphic?
         acts_as_dag_options[:polymorphic]
