@@ -143,6 +143,15 @@ Capybara.default_max_wait_time = 30
 #
 Sidekiq::Testing.inline!
 
+# View fragments (`= cache :key do` in views) do not live in Rails.cache
+# but in the controller's own cache store, by default a file store that
+# shares tmp/cache with the sprockets asset cache and leaks fragments
+# between examples and even between test runs.
+# (See your_platform/config/initializers/cache.rb.)
+# Point the fragments at Rails.cache, so that the per-example
+# Rails.cache.clear below covers them, too.
+ActionController::Base.cache_store = Rails.cache
+
 
 # Rspec Configuration
 # ----------------------------------------------------------------------------------------
@@ -293,15 +302,9 @@ RSpec.configure do |config|
     end
     DatabaseCleaner.start
 
-    # Clear the cache.
+    # Clear the cache. This includes the view fragments, see the
+    # `ActionController::Base.cache_store` assignment above.
     Rails.cache.clear unless ENV['NO_CACHING']
-
-    # View fragments (`= cache :key do` in views) do not live in
-    # `Rails.cache` but in the controller's own cache store, a file
-    # store in tmp/cache that would otherwise leak between examples
-    # and even between test runs.
-    # See your_platform/config/initializers/cache.rb.
-    ActionController::Base.cache_store.clear unless ENV['NO_CACHING']
 
     # # Clear cookies
     # # https://makandracards.com/makandra/16117
