@@ -78,14 +78,22 @@ describe Dag::Traversal do
     mismatches = []
     [Group, User, Page, Event, Project, Post, Workflow].each do |node_class|
       node_class.all.each do |node|
+        node_type = node.class.base_class.name
         %w(groups users pages events projects posts workflows).each do |table|
+          target_type = table.classify.constantize.base_class.name
           [:descendant, :ancestor].each do |direction|
-            cte_method = "cte_#{direction}_#{table}"
-            next unless node.respond_to?(cte_method)
-            closure_ids = node.send("#{direction}_#{table}").pluck(:id).uniq.sort
-            cte_ids = node.send(cte_method).pluck(:id).uniq.sort
+            accessor = "#{direction}_#{table}"
+            next unless node.respond_to?(accessor)
+            closure_ids = if direction == :descendant
+              DagLink.where(ancestor_type: node_type, ancestor_id: node.id,
+                descendant_type: target_type).pluck(:descendant_id)
+            else
+              DagLink.where(descendant_type: node_type, descendant_id: node.id,
+                ancestor_type: target_type).pluck(:ancestor_id)
+            end.uniq.sort
+            cte_ids = node.send(accessor).pluck(:id).uniq.sort
             unless closure_ids == cte_ids
-              mismatches << "#{node.class}##{node.id} #{cte_method}: closure #{closure_ids} vs cte #{cte_ids}"
+              mismatches << "#{node.class}##{node.id} #{accessor}: closure #{closure_ids} vs cte #{cte_ids}"
             end
           end
         end

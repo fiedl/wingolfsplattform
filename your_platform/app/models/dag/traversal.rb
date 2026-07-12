@@ -1,5 +1,5 @@
 # Answers the transitive questions of the dag by walking the direct
-# links with recursive CTE queries -- which nodes lie above or below a
+# links with recursive SQL queries -- which nodes lie above or below a
 # node, and over which time ranges a membership holds along the way.
 # https://github.com/fiedl/wingolfsplattform/issues/129
 #
@@ -22,17 +22,20 @@ class Dag::Traversal
   end
 
   # Like descendant_ids_of, for callers that have raw type names and
-  # ids at hand instead of records. of_ids may be :all to start from
-  # every node of the start type.
+  # ids at hand instead of records. The keywords name the dag_links
+  # columns; ancestor_ids may be :all to start from every node of the
+  # ancestor type.
   #
-  #     Dag::Traversal.descendant_ids(of_type: 'Group', of_ids: [1, 2], type: 'Page')
+  #     Dag::Traversal.descendant_ids(ancestor_type: 'Group', descendant_type: 'Page', ancestor_ids: [1, 2])
   #
-  def self.descendant_ids(of_type:, of_ids:, type:)
-    connection.select_values(descendant_ids_sql(of_type: of_type, of_ids: of_ids, type: type)).collect(&:to_i)
+  def self.descendant_ids(ancestor_type:, descendant_type:, ancestor_ids:)
+    connection.select_values(descendant_ids_sql(ancestor_type: ancestor_type,
+      descendant_type: descendant_type, ancestor_ids: ancestor_ids)).collect(&:to_i)
   end
 
-  def self.ancestor_ids(of_type:, of_ids:, type:)
-    connection.select_values(ancestor_ids_sql(of_type: of_type, of_ids: of_ids, type: type)).collect(&:to_i)
+  def self.ancestor_ids(descendant_type:, ancestor_type:, descendant_ids:)
+    connection.select_values(ancestor_ids_sql(descendant_type: descendant_type,
+      ancestor_type: ancestor_type, descendant_ids: descendant_ids)).collect(&:to_i)
   end
 
   # SQL subselect for the descendant ids, for embedding in a
@@ -40,12 +43,14 @@ class Dag::Traversal
   # the polymorphic columns, i.e. `base_class.name`
   # ('WorkflowKit::Workflow', not 'Workflow').
   #
-  def self.descendant_ids_sql(of_type:, of_ids:, type:)
-    reachable_ids_sql direction: :descendant, of_type: of_type, of_ids: of_ids, type: type
+  def self.descendant_ids_sql(ancestor_type:, descendant_type:, ancestor_ids:)
+    reachable_ids_sql direction: :descendant, start_type: ancestor_type,
+      start_ids: ancestor_ids, result_type: descendant_type
   end
 
-  def self.ancestor_ids_sql(of_type:, of_ids:, type:)
-    reachable_ids_sql direction: :ancestor, of_type: of_type, of_ids: of_ids, type: type
+  def self.ancestor_ids_sql(descendant_type:, ancestor_type:, descendant_ids:)
+    reachable_ids_sql direction: :ancestor, start_type: descendant_type,
+      start_ids: descendant_ids, result_type: ancestor_type
   end
 
   # Over which time ranges is the user a member of the group, directly
@@ -97,9 +102,9 @@ class Dag::Traversal
       return [] if nodes.empty?
       connection.select_values(reachable_ids_sql(
         direction: direction,
-        of_type: nodes.first.class.base_class.name,
-        of_ids: nodes.collect(&:id),
-        type: type.to_s.constantize.base_class.name
+        start_type: nodes.first.class.base_class.name,
+        start_ids: nodes.collect(&:id),
+        result_type: type.to_s.constantize.base_class.name
       )).collect(&:to_i)
     end
 
@@ -108,16 +113,16 @@ class Dag::Traversal
     # walk includes expired links. Validity scopes live in the
     # Membership layer.
     #
-    def reachable_ids_sql(direction:, of_type:, of_ids:, type:)
+    def reachable_ids_sql(direction:, start_type:, start_ids:, result_type:)
       from, to = case direction
         when :descendant then ['ancestor', 'descendant']
         when :ancestor then ['descendant', 'ancestor']
         else raise ArgumentError, "direction must be :descendant or :ancestor"
       end
-      if of_ids == :all
+      if start_ids == :all
         id_condition = ""
       else
-        ids = of_ids.collect { |id| Integer(id) }
+        ids = start_ids.collect { |id| Integer(id) }
         return "SELECT 1 WHERE FALSE" if ids.empty?
         id_condition = "AND l.#{from}_id IN (#{ids.join(', ')})"
       end
@@ -126,7 +131,7 @@ class Dag::Traversal
             SELECT l.#{to}_type, l.#{to}_id
               FROM dag_links l
              WHERE l.direct = TRUE
-               AND l.#{from}_type = #{connection.quote(of_type)}
+               AND l.#{from}_type = #{connection.quote(start_type)}
                #{id_condition}
           UNION
             SELECT l.#{to}_type, l.#{to}_id
@@ -134,7 +139,7 @@ class Dag::Traversal
               JOIN walk w ON l.#{from}_type = w.node_type AND l.#{from}_id = w.node_id
              WHERE l.direct = TRUE
         )
-        SELECT node_id FROM walk WHERE node_type = #{connection.quote(type)}
+        SELECT node_id FROM walk WHERE node_type = #{connection.quote(result_type)}
       SQL
     end
 

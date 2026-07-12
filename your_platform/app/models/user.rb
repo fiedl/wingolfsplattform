@@ -513,7 +513,9 @@ class User < ApplicationRecord
     # List all pages that do not have ancestor groups
     # which the user is no member of.
     #
-    Page.where.not(id: Page.joins(:ancestor_groups).where.not(groups: {id: self.groups}))
+    foreign_group_ids = Group.pluck(:id) - self.group_ids
+    Page.where.not(id: Dag::Traversal.descendant_ids(ancestor_type: 'Group',
+      descendant_type: 'Page', ancestor_ids: foreign_group_ids))
   end
 
 
