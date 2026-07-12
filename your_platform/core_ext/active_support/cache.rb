@@ -111,17 +111,31 @@ module CacheStoreExtension
   end
 
   def delete_regex(regex)
-    keys = find_keys_by_regex(regex)
-    @data.del(*keys) if keys.count > 0
+    keys = raw_keys_by_regex(regex)
+    redis.del(*keys) if keys.count > 0
   end
 
+  # Logical keys (without the namespace prefix), matching the regex.
+  # With redis_cache_store, the namespace is a key prefix applied by
+  # ActiveSupport, so the raw redis keys carry it and the public cache
+  # api expects keys without it.
   def find_keys_by_regex(regex)
-    if @data
-      @data.keys.select { |key| key =~ regex }
-    else
-      []
-    end
+    raw_keys_by_regex(regex).collect { |raw_key| raw_key.delete_prefix(namespace_prefix) }
   end
+
+  def raw_keys_by_regex(regex)
+    return [] unless respond_to? :redis
+    prefix = namespace_prefix
+    redis.keys.select { |raw_key| raw_key.delete_prefix(prefix) =~ regex }
+  end
+  private :raw_keys_by_regex
+
+  def namespace_prefix
+    namespace = merged_options(nil)[:namespace]
+    namespace = namespace.call if namespace.respond_to? :call
+    namespace.present? ? "#{namespace}:" : ""
+  end
+  private :namespace_prefix
 
   def find_entries_by_regex(regex)
     find_keys_by_regex(regex).collect { |key|

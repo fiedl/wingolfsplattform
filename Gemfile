@@ -91,7 +91,6 @@ source 'https://rubygems.org' do
   gem 'reverse_markdown', '~> 2.0.0'
   gem 'biggs', '~> 0.3.3'
   gem 'faraday', '~> 1.3'
-  gem 'redis-rack', '~> 2.1'
 
   # Temporary Forks and Overrides
   gem 'refile', git: 'https://github.com/sobrinho/refile'

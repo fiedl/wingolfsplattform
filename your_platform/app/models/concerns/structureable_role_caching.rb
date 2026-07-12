@@ -52,7 +52,7 @@ concern :StructureableRoleCaching do
   end
 
   def fill_cache_concerning_roles_for(methods)
-    Sidekiq::Logging.logger.info "#{self.title} # fill_cache_concerning_roles_for" if Sidekiq::Logging.logger && (! Rails.env.test?)
+    Sidekiq.logger.info "#{self.title} # fill_cache_concerning_roles_for" unless Rails.env.test?
 
     methods.each do |method|
       self.send method

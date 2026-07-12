@@ -18,7 +18,7 @@ require 'wannabe_bool'
 require 'acts-as-taggable-on'
 
 # Caching
-require 'redis-rails'
+require 'redis'
 require 'redis-namespace'
 
 # Workers

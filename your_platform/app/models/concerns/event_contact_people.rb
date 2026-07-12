@@ -39,7 +39,7 @@ concern :EventContactPeople do
 
   def assign_contact_person_given_by_contact_person_id
     # Assign the contact person in a background job to save some time here.
-    Event.delay.assign_contact_person_to_event self.id, contact_person_id if contact_person_id
+    AssignContactPersonToEventJob.perform_later self.id, contact_person_id if contact_person_id
   end
 
   class_methods do

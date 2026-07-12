@@ -37,7 +37,7 @@ concern :GroupCaching do
   end
 
   def fill_cache_for_export_lists
-    Sidekiq::Logging.logger.info "#{self.title} # fill_cache_for_export_lists" if Sidekiq::Logging.logger && (! Rails.env.test?)
+    Sidekiq.logger.info "#{self.title} # fill_cache_for_export_lists" unless Rails.env.test?
 
     Group.export_list_presets.each do |preset|
       [:csv, :xls].each do |format|

@@ -22,7 +22,7 @@ class RenewCacheJob < ApplicationJob
 
   def perform_on_record(record, options)
     Rails.cache.running_from_background_job = true
-    Sidekiq::Logging.logger.info "Running RenewCacheJob for #{record.title} with #{options.to_s}.\n" if Sidekiq::Logging.logger && (! Rails.env.test?)
+    Sidekiq.logger.info "Running RenewCacheJob for #{record.title} with #{options.to_s}.\n" unless Rails.env.test?
     renew_cache(record, options)
     Rails.cache.running_from_background_job = false
   end

@@ -187,9 +187,7 @@ class User
     end
 
     # Cache zurücksetzen
-    self.delay.delete_cache
-    #self.delay.delete_cached :bv
-    #self.delay.delete_cached :bv_membership
+    DeleteCacheJob.perform_later self
 
     self.groups.reload
     return new_membership

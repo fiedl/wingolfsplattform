@@ -28,7 +28,6 @@ Gem::Specification.new do |s|
   # Rails and Rails Additions
   s.add_dependency "rails", "~> 5.2.0"
   s.add_dependency 'rack', '>= 1.6.2'
-  s.add_dependency 'rack-ssl', '>= 1.3.4'
   s.add_dependency "rails-i18n"                                                        # MIT License
   s.add_dependency "responders", "~> 2.0"
   s.add_dependency "bundler", ">= 1.9.4"
@@ -52,14 +51,16 @@ Gem::Specification.new do |s|
   s.add_dependency 'wannabe_bool'
   s.add_dependency 'acts-as-taggable-on', '~> 6.0'
 
-  # Caching
-  s.add_dependency 'redis', '>= 3.3.3'
-  s.add_dependency 'redis-rails'
+  # Caching (rails' redis_cache_store; redis-namespace only for sidekiq)
+  s.add_dependency 'redis', '>= 4.0.1' # required by redis_cache_store
   s.add_dependency 'redis-namespace'
 
   # Workers
   s.add_dependency 'foreman'
-  s.add_dependency 'sidekiq', '~> 4.0'
+  # sidekiq 4 pins redis < 4, which redis_cache_store needs; 6 is the
+  # newest major that still runs the custom fetch strategy with minor
+  # adaptions and supports rails 5.2 through 6.x.
+  s.add_dependency 'sidekiq', '~> 6.0'
 
   # Authentification
   s.add_dependency 'devise', '>= 3.5.4'                           # MIT License, CVE-2015-8314, https://gemnasium.com/fiedl/your_platform/alerts#advisory_329

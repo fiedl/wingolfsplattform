@@ -2,11 +2,9 @@ require_relative './redis'
 
 Sidekiq.default_worker_options = { 'backtrace' => true, retry: false }
 
-# Define queues here instead of config/sidekiq.rb.
-# This way, this defines default queues for all your_platform applications.
-#
-Sidekiq.options[:queues] ||= ['default', 'mailgate', 'mailers', 'cache', 'dag_links', 'retry', 'slow']
-
+# The queue list lives in bin/sidekiq (-q flags); sidekiq only works
+# queues it is told about. (The former `Sidekiq.options[:queues] ||=`
+# line here was a no-op: the default is a truthy array.)
 
 # http://stackoverflow.com/questions/14825565/sidekiq-deploy-to-multiple-environments
 #
@@ -20,7 +18,9 @@ sidekiq_redis_port = Rails.application.secrets.sidekiq_redis_port || "6379"
 Sidekiq.configure_server do |config|
   require_relative "../../lib/sidekiq/fetch_newest_first"
   config.redis = ConnectionPool.new(size: 75) { RedisConnectionConfiguration.new(:sidekiq, port: sidekiq_redis_port).to_namespaced_redis }
-  Sidekiq.options[:fetch] = Sidekiq::FetchNewestFirst
+  # Since sidekiq 6.1, the fetch strategy is an instance; the CLI has
+  # parsed the queue list by the time the initializers run.
+  config[:fetch] = Sidekiq::FetchNewestFirst.new(config)
 end
 Sidekiq.configure_client do |config|
   config.redis = ConnectionPool.new(size: 25) { RedisConnectionConfiguration.new(:sidekiq, port: sidekiq_redis_port).to_namespaced_redis }
