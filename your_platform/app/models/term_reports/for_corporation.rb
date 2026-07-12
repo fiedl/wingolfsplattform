@@ -12,10 +12,14 @@ class TermReports::ForCorporation < TermReport
     raise ActiveRecord::RecordInvalid, "term report has already been #{self.state.to_s}." if self.state
     self.delete_cache
     self.number_of_events = events.count
-    self.number_of_members = corporation.memberships_for_member_list.at_time(end_of_term).count
-    self.number_of_new_members = corporation.memberships.with_past.where(valid_from: term_time_range).count
-    self.number_of_membership_ends = corporation.former_members_memberships.where(valid_from: term_time_range).count
-    self.number_of_deaths = corporation.deceased.memberships.with_past.where(valid_from: term_time_range).count
+    # Counted per user, not per membership row: a user can have
+    # several direct memberships in the corporation's subtree, and a
+    # status change within the term must not count as a new member.
+    self.number_of_members = Membership.where(id: corporation.membership_ids_for_member_list)
+      .at_time(end_of_term).distinct.count(:descendant_id)
+    self.number_of_new_members = corporation.new_member_count(during: term_time_range)
+    self.number_of_membership_ends = corporation.former_members_parent.try(:new_member_count, during: term_time_range) || 0
+    self.number_of_deaths = corporation.deceased.try(:new_member_count, during: term_time_range) || 0
     self.balance = number_of_new_members - number_of_membership_ends - number_of_deaths
     self.save
 

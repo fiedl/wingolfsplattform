@@ -14,7 +14,10 @@ class GroupMembersController < ApplicationController
     end
   }
   expose :new_membership, -> { group.build_membership }
-  expose :own_memberships, -> { Membership.with_past.find_all_by_user_and_group(current_user, group) }
+  expose :own_memberships, -> {
+    Membership.with_past.find_all_by_user_and_group(current_user, group).to_a.presence ||
+      [group.derived_indirect_membership_of(current_user, also_in_the_past: true)].compact
+  }
 
   def index
     authorize! :read, group

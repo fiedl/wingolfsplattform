@@ -78,6 +78,9 @@ class Membership < DagLink
   #     memberships = Membership.find_all_by( user: u, group: g ).in_the_past
   #     memberships = Membership.find_all_by( user: u, group: g ).now_and_in_the_past
   #
+  # Only direct memberships are stored; memberships in ancestor groups
+  # derive from them at read time (IndirectMembership).
+  #
   def self.find_all_by( params )
     user = params[ :user ]
     user ||= User.find params[:user_id] if params[:user_id]
@@ -87,6 +90,7 @@ class Membership < DagLink
     links = Membership
       .where( :descendant_type => "User" )
       .where( :ancestor_type => "Group" )
+      .where( :direct => true )
     links = links.where( :descendant_id => user.id ) if user
     links = links.where( :ancestor_id => group.id ) if group
     links = links.order('valid_from')
@@ -225,10 +229,8 @@ class Membership < DagLink
 
   def indirect_memberships
     self.group.ancestor_groups.collect do |ancestor_group|
-      Membership.with_invalid.find_by_user_and_group(self.user, ancestor_group)
-    end.select do |item|
-      item != nil
-    end
+      IndirectMembership.new(ancestor_group, self.user)
+    end.select(&:present?)
   end
 
   # Methods to Change the Membership

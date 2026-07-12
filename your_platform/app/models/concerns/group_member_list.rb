@@ -9,45 +9,26 @@ concern :GroupMemberList do
   # - joined at
   #
   def member_table_rows
-    if memberships.count == members.count
-      memberships_for_member_list.reorder('valid_from ASC').collect do |membership|
-        if user = membership.user
-          hash = {
-            user_id: user.id,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            name_affix: user.name_affix,
-            joined_at: membership.valid_from,
-            address_fields_json: user.address_fields_json,
-            avatar_path: user.avatar_path,
-            status: user.current_status_in(self),
-            status_group_id: user.current_status_group_in(self).try(:id),
-            direct_group_name: user.direct_groups_in(self).last.try(:name),
-            direct_group_id: user.direct_groups_in(self).last.try(:id),
-            age: user.age
-          }
-          hash
-        end
-      end
-    else
-      members.collect do |user|
-        hash = {
-          user_id: user.id,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          name_affix: user.name_affix,
-          joined_at: nil,
-          address_fields_json: user.address_fields_json,
-          avatar_path: user.avatar_path,
-          status: user.current_status_in(self),
-          status_group_id: user.current_status_group_in(self).try(:id),
-          direct_group_name: user.direct_groups_in(self).last.try(:name),
-          direct_group_id: user.direct_groups_in(self).last.try(:id),
-          age: user.age
-        }
-        hash
-      end
-    end - [nil]
+    # A user can have several direct memberships in the subtree; the
+    # earliest valid_from counts as the date of joining.
+    joined_ats = Membership.where(id: membership_ids_for_member_list)
+      .group(:descendant_id).minimum(:valid_from)
+    members.sort_by { |user| joined_ats[user.id] || Time.zone.now }.collect do |user|
+      {
+        user_id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        name_affix: user.name_affix,
+        joined_at: joined_ats[user.id],
+        address_fields_json: user.address_fields_json,
+        avatar_path: user.avatar_path,
+        status: user.current_status_in(self),
+        status_group_id: user.current_status_group_in(self).try(:id),
+        direct_group_name: user.direct_groups_in(self).last.try(:name),
+        direct_group_id: user.direct_groups_in(self).last.try(:id),
+        age: user.age
+      }
+    end
   end
 
 
@@ -60,7 +41,7 @@ concern :GroupMemberList do
   # memberships.
   #
   def membership_ids_for_member_list
-    membership_ids
+    memberships.pluck(:id)
   end
   def memberships_for_member_list
     memberships_including_members.where(id: membership_ids_for_member_list)

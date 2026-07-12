@@ -17,8 +17,8 @@ describe GroupMemberships do
     @membership1 = Membership.find_by(user: @user1, group: @group)
     @membership2 = Membership.find_by(user: @user2, group: @group)
     @indirect_group = @group.parent_groups.create
-    @indirect_membership1 = Membership.find_by(user: @user1, group: @indirect_group)
-    @indirect_membership2 = Membership.find_by(user: @user2, group: @indirect_group)
+    @indirect_membership1 = @indirect_group.membership_of(@user1)
+    @indirect_membership2 = @indirect_group.membership_of(@user2)
     @group2 = @indirect_group.child_groups.create
   end
 
@@ -34,8 +34,9 @@ describe GroupMemberships do
     end
     describe "for a group having indirect members" do
       subject { @indirect_group.memberships }
-      it { should include @indirect_membership1, @indirect_membership2 }
-      it { should_not include @membership1, @membership2 }
+      it "should include the direct memberships of the subtree" do
+        should include @membership1, @membership2
+      end
     end
     describe "for a group having invalidated memberships" do
       before { @membership1.invalidate at: 10.minutes.ago }
@@ -69,7 +70,9 @@ describe GroupMemberships do
     end
     describe "for a group having indirect members" do
       subject { @indirect_group.indirect_memberships }
-      it { should include @indirect_membership1, @indirect_membership2 }
+      it "should contain the materialized rows as long as the closure is still maintained" do
+        subject.pluck(:descendant_id).should include @user1.id, @user2.id
+      end
       it { should_not include @membership1, @membership2 }
     end
   end

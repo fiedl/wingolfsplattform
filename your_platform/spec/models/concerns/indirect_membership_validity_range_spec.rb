@@ -2,6 +2,13 @@ require 'spec_helper'
 
 describe IndirectMembershipValidityRange do
 
+  # The materialized indirect rows, which the pair finders no longer
+  # return; this concern maintains them as long as the closure is
+  # written, so this spec fetches the rows explicitly.
+  def indirect_membership_row(user, group)
+    Membership.with_invalid.where(direct: false, descendant_id: user.id, ancestor_id: group.id).first
+  end
+
   # Memberships:
   #
   #       *-----------------(c)--------------------*
@@ -26,7 +33,7 @@ describe IndirectMembershipValidityRange do
     @direct_group_a = @indirect_group.child_groups.create
     @direct_group_b = @indirect_group.child_groups.create
     @direct_group_a.assign_user @user
-    @indirect_membership = Membership.find_by_user_and_group(@user, @indirect_group)
+    @indirect_membership = indirect_membership_row(@user, @indirect_group)
     @direct_membership_a = Membership.find_by_user_and_group(@user, @direct_group_a)
     @direct_membership_b = @direct_membership_a.move_to_group(@direct_group_b)
     @t1 = 2.hours.ago
@@ -126,11 +133,10 @@ describe IndirectMembershipValidityRange do
         @user = create( :user )
         @status_group.assign_user @user
         @membership = Membership.find_by_user_and_group( @user, @status_group )
-        @intermediate_group_membership = Membership
-          .find_by_user_and_group( @user, @intermediate_group )
+        @intermediate_group_membership = indirect_membership_row( @user, @intermediate_group )
         @second_status_group = @intermediate_group.child_groups.create(name: "Second Status Group")
         @membership.update_attribute(:valid_from, 1.year.ago)
-        @corpo_membership = Membership.find_by_user_and_group(@user, @corporation)
+        @corpo_membership = indirect_membership_row(@user, @corporation)
       end
       specify "prelims" do
         @user.should be_kind_of User
@@ -173,8 +179,11 @@ describe IndirectMembershipValidityRange do
           @corporation.memberships.count.should > 0
           @corporation.memberships.count.should == @corporation.members.count
         end
-        specify "the indirect membership should be included in the memberships associated with the corporation" do
-          @corporation.memberships.should include @corpo_membership
+        specify "the current direct membership should be included in the memberships associated with the corporation" do
+          # group.memberships lists the direct memberships of the
+          # subtree; the corporation-level membership derives from them.
+          @corporation.memberships.should include @second_membership
+          @corporation.membership_of(@user).should be_kind_of IndirectMembership
         end
         it "should make no difference if the validity range is forcefully updated" do
           @corpo_membership.read_attribute(:valid_from).to_date.should == 1.year.ago.to_date
@@ -255,19 +264,21 @@ describe IndirectMembershipValidityRange do
     it "should find the direct membership" do
       subject.should include @direct_membership_b
     end
-    it "should find the indirect membership as well" do
-      subject.should include @indirect_membership
+    it "should not find the materialized indirect row; the derived membership answers instead" do
+      subject.should_not include @indirect_membership
+      @indirect_group.membership_of(@user).valid_at?(30.minutes.ago).should == true
     end
   end
 
   describe "#only_valid" do
     subject { Membership.only_valid.find_all_by_user(@user) }
-    it "should find the valid indirect memberships" do
-      subject.should include @indirect_membership
-    end
-    it "should not find the invalid indirect memberships" do
-      @direct_membership_b.invalidate at: 20.minutes.ago
+    it "should find only direct memberships; the derived membership reflects validity" do
       subject.should_not include @indirect_membership
+      @indirect_group.membership_of(@user).should be_kind_of IndirectMembership
+    end
+    it "should not find a derived membership once all direct memberships are invalid" do
+      @direct_membership_b.invalidate at: 20.minutes.ago
+      @indirect_group.membership_of(@user).should == nil
     end
   end
 

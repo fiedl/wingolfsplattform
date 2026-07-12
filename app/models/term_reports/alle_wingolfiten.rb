@@ -1,9 +1,9 @@
 class TermReports::AlleWingolfiten < TermReport
   def fill_info
-    self.number_of_members = Group.alle_wingolfiten.memberships.at_time(end_of_term).count
-    self.number_of_new_members = Group.alle_wingolfiten.memberships.with_past.where(valid_from: term_time_range).count
-    self.number_of_deaths = Group.alle_verstorbenen_wingolfiten.memberships.with_past.where(valid_from: term_time_range).count
-    self.number_of_membership_ends = Group.alle_wingolfiten.memberships.with_past.where(valid_to: term_time_range).count - number_of_deaths
+    self.number_of_members = Group.alle_wingolfiten.member_count(at: end_of_term)
+    self.number_of_new_members = Group.alle_wingolfiten.new_member_count(during: term_time_range)
+    self.number_of_deaths = Group.alle_verstorbenen_wingolfiten.new_member_count(during: term_time_range)
+    self.number_of_membership_ends = Group.alle_wingolfiten.ended_membership_count(during: term_time_range) - number_of_deaths
     self.balance = number_of_new_members - number_of_membership_ends - number_of_deaths
 
     self.anzahl_aktivmeldungen = self.number_of_new_members

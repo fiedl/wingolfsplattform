@@ -43,11 +43,10 @@ concern :GroupSearch do
     def search_by_name_with_ancestors(query)
       relation = self
       query.split(" ").each do |expression|
-        groups_with_matching_name = Group.where("groups.name ILIKE :e OR groups.extensive_name ILIKE :e", e: "%#{expression}%")
-        ids_with_matching_ancestor = Dag::Traversal.descendant_ids ancestor_type: 'Group',
-          descendant_type: 'Group', ancestor_ids: groups_with_matching_name.pluck(:id)
-        relation = relation.where("groups.name ILIKE :e OR groups.extensive_name ILIKE :e OR groups.id IN (:ancestor_matches)",
-          e: "%#{expression}%", ancestor_matches: ids_with_matching_ancestor + [0])
+        groups_with_matching_name_ids = Group.where("groups.name ILIKE :e OR groups.extensive_name ILIKE :e", e: "%#{expression}%").pluck(:id)
+        relation = relation.where("groups.name ILIKE :e OR groups.extensive_name ILIKE :e OR groups.id IN (#{Dag::Traversal.descendant_ids_sql(
+          ancestor_type: 'Group', descendant_type: 'Group', ancestor_ids: groups_with_matching_name_ids)})",
+          e: "%#{expression}%")
       end
       relation.distinct
     end

@@ -91,7 +91,11 @@ concern :IndirectMembershipValidityRange do
 
   def recalculate_indirect_validity_ranges
     if self.direct?
-      self.indirect_memberships.each do |indirect_membership|
+      # The materialized rows, not the derived IndirectMembership
+      # objects: this maintenance keeps the rows in sync as long as
+      # the closure is still written.
+      Membership.with_invalid.where(direct: false, descendant_id: descendant_id,
+        ancestor_id: group.ancestor_group_ids).each do |indirect_membership|
         indirect_membership.recalculate_validity_range_from_direct_memberships
         indirect_membership.save
       end
