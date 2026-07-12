@@ -415,8 +415,8 @@ class User < ApplicationRecord
       # group -- so the membership has to be derived, ordered by the
       # earliest date of joining.
       direct_group_ids = direct_memberships.with_past.at_time(options[:at]).pluck(:ancestor_id)
-      candidate_ids = direct_group_ids + Dag::Traversal.ancestor_ids(of_type: 'Group',
-        of_ids: direct_group_ids, type: 'Group')
+      candidate_ids = direct_group_ids + Dag::Traversal.ancestor_ids(descendant_type: 'Group',
+        descendant_ids: direct_group_ids, ancestor_type: 'Group')
       Group.flagged(:full_members).where(id: candidate_ids).collect { |group|
         [group, group.membership_of(self, also_in_the_past: true).try(:valid_from) || Time.zone.now]
       }.sort_by(&:second).first.try(:first).try(:corporation)
