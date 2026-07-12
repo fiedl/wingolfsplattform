@@ -35,7 +35,10 @@ class CommentMailer < BaseMailer
 
     message = mail subject: @subject
 
-    message.from = "#{@author.title} <#{@author.email}>"
+    # To pass DMARC checks at the receiving mail servers, the `From:` address
+    # must be on our own email domain. The author moves to `Reply-To:`.
+    # https://github.com/fiedl/wingolfsplattform/issues/125
+    message.from = "\"#{@author.title} via #{AppVersion.app_name}\" <#{Setting.support_email}>"
     message.reply_to = "#{@author.title} <#{@author.email}>"
     message.return_path = BaseMailer.delivery_errors_address
     message.sender = BaseMailer.technical_sender

@@ -48,7 +48,9 @@ describe IncomingMails::GroupMailingListMail do
         expect { subject }.to change { ActionMailer::Base.deliveries.count }.by 1
         last_email.smtp_envelope_to.should == [@member.email]
         last_email.to.should == ['all-developers@example.com']
-        last_email.from.should == ['john@example.com']
+        last_email.from.should == ['all-developers@example.com'] # DMARC From-rewriting
+        last_email[:from].to_s.should include 'via Developers'
+        last_email.reply_to.should == ['john@example.com']
         last_email.subject.should include 'Great news for all developers!'
         last_email.body.should include 'Free drinks this evening!'
       end
@@ -202,6 +204,10 @@ describe IncomingMails::GroupMailingListMail do
           subject
           last_email.to_s.should include "Dear #{@member.name}!"
           last_email.to_s.should_not include "{{greeting}}"
+        end
+        it "keeps the attachment intact" do
+          subject
+          last_email.attachments.collect(&:filename).should == ['pdf-upload.pdf']
         end
 
         describe "when the message has a text and an html part" do
@@ -668,6 +674,92 @@ describe IncomingMails::GroupMailingListMail do
           subject
           last_email["CC"].to_s.should == Mail::Message.new(example_raw_message)["CC"].to_s
           last_email["CC"].to_s.should_not include "all-developers@example.com"
+        end
+      end
+    end
+
+    # DMARC requires SPF or DKIM to validate for the `From:` domain,
+    # which neither can when we forward the author's address through
+    # our own SMTP server. Therefore, the `From:` field is rewritten
+    # to the list address; the author moves to `Reply-To:`.
+    #
+    # https://github.com/fiedl/wingolfsplattform/issues/125
+    #
+    describe "rewriting headers for DMARC alignment" do
+      before { @group.update! mailing_list_sender_filter: :open }
+
+      it "rewrites the From field to the list address on our own email domain" do
+        subject
+        last_email.from.should == ['all-developers@example.com']
+        last_email[:from].to_s.should include "#{@user.title} via Developers"
+      end
+      it "keeps the author as Reply-To" do
+        subject
+        last_email.reply_to.should == ['john@example.com']
+      end
+      it "keeps the original from line as X-Original-From" do
+        subject
+        last_email['X-Original-From'].to_s.should include 'john@example.com'
+      end
+      it "keeps the Message-ID for threading and deduplication" do
+        subject
+        last_email.message_id.should == '579b28a0a60e2_5ccb3ff56d4319d8918bc@example.com'
+      end
+      it "adds the list headers" do
+        subject
+        last_email['List-Id'].to_s.should include 'all-developers.example.com'
+        last_email['List-Post'].to_s.should == '<mailto:all-developers@example.com>'
+        last_email['List-Unsubscribe'].to_s.should include 'unsubscribe'
+        last_email['Precedence'].to_s.should == 'list'
+      end
+      it "keeps the smtp envelope for delivery-error tracking" do
+        subject
+        last_email.smtp_envelope_to.should == [@member.email]
+        last_email['Return-Path'].to_s.should include BaseMailer.delivery_errors_address
+      end
+
+      describe "when the original message carries transport and authentication headers" do
+        let(:example_raw_message) { %{
+          Received: from mail.example.com by mx.example.com with ESMTP id 12345
+          DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=default; h=from:to:subject; bh=abc; b=def
+          Authentication-Results: mx.example.com; dkim=pass header.d=example.com
+          Delivered-To: all-developers@example.com
+          X-Original-To: all-developers@example.com
+          From: john@example.com
+          To: all-developers@example.com
+          Subject: Great news for all developers!
+          Message-ID: <579b28a0a60e2_5ccb3ff56d4319d8918bc@example.com>
+
+          Free drinks this evening!
+        }.gsub("  ", "") }
+
+        it "strips them from the forwarded copies" do
+          subject
+          last_email['DKIM-Signature'].should be_nil
+          last_email['Authentication-Results'].should be_nil
+          last_email['Received'].should be_nil
+          last_email['Delivered-To'].should be_nil
+          last_email['X-Original-To'].should be_nil
+        end
+      end
+
+      describe "when the message was sent to a foreign-domain alias that forwards to us" do
+        let(:example_raw_message) { %{
+          From: john@example.com
+          To: developers@foreign-association.de
+          X-Original-To: developers@foreign-association.de
+          Subject: Great news for all developers!
+          Message-ID: <579b28a0a60e2_5ccb3ff56d4319d8918bc@example.com>
+
+          Free drinks this evening!
+        }.gsub("  ", "") }
+        before do
+          @group.mailing_lists.create label: "Mailing list", value: "developers@foreign-association.de"
+        end
+
+        it "uses the group's own-domain list address in the From field" do
+          subject
+          last_email.from.should == ['all-developers@example.com']
         end
       end
     end
