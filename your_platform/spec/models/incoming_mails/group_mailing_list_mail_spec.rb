@@ -177,9 +177,9 @@ describe IncomingMails::GroupMailingListMail do
           subject
           # The delivery order follows the members query and is not
           # guaranteed; each recipient gets his own greeting, once.
-          last_two_deliveries = ActionMailer::Base.deliveries.last(2).collect(&:to_s)
-          last_two_deliveries.count { |mail| mail.include?("Dear Alec Trevelyan") }.should == 1
-          last_two_deliveries.count { |mail| mail.include?("Dear James Bond") }.should == 1
+          deliveries = ActionMailer::Base.deliveries.collect(&:to_s)
+          deliveries.count { |mail| mail.include?("Dear Alec Trevelyan") }.should == 1
+          deliveries.count { |mail| mail.include?("Dear James Bond") }.should == 1
         end
       end
 
