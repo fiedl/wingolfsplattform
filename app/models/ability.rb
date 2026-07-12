@@ -230,8 +230,11 @@ module AbilityDefinitions
     can :read, User, id: User.wingolfiten.alive.pluck(:id)
     # By member ids rather than a `groups:` hash condition: cancancan
     # would join the former groups association, which is now derived.
-    readable_groups = user.corporations.collect { |corporation| corporation.child_groups.where(type: ["Aktivitas", "Philisterschaft"]).or(corporation.child_groups.where(name: ["Gäste", "Hausbewohner"])) }.flatten
-    can :read, User, id: readable_groups.collect(&:member_ids).flatten
+    # One query for all readable groups' members together.
+    readable_group_ids = user.corporations.collect { |corporation| corporation.child_groups.where(type: ["Aktivitas", "Philisterschaft"]).or(corporation.child_groups.where(name: ["Gäste", "Hausbewohner"])).pluck(:id) }.flatten
+    readable_subtree_ids = readable_group_ids + Dag::Traversal.descendant_ids(
+      ancestor_type: 'Group', ancestor_ids: readable_group_ids, descendant_type: 'Group')
+    can :read, User, id: Membership.direct.where(ancestor_id: readable_subtree_ids).distinct.pluck(:descendant_id)
     can [:index, :read_name], User
 
     # For the moment, everybody can view the statistics.

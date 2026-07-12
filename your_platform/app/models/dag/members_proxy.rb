@@ -4,7 +4,7 @@
 # write through to the direct membership, like the former
 # has_many :through association did. Returned by `group.members`.
 #
-class Dag::MembersProxy < SimpleDelegator
+class Dag::MembersProxy < Dag::CollectionProxy
 
   def initialize(group:, members:)
     @group = group
@@ -23,9 +23,5 @@ class Dag::MembersProxy < SimpleDelegator
     membership.destroy
   end
 
-  def ==(other)
-    return false if other.nil?
-    to_a == (other.respond_to?(:to_a) ? other.to_a : other)
-  end
 
 end

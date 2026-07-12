@@ -6,7 +6,7 @@
 # Returned by special group accessors such as `page.guests`, whose
 # subtree may contain subgroups like regular_guests/vip_guests.
 #
-class Dag::SubtreeUsersProxy < SimpleDelegator
+class Dag::SubtreeUsersProxy < Dag::CollectionProxy
 
   def initialize(ancestor_group:)
     @ancestor_group = ancestor_group
@@ -17,9 +17,5 @@ class Dag::SubtreeUsersProxy < SimpleDelegator
     @ancestor_group.child_users << user
   end
 
-  def ==(other)
-    return false if other.nil?
-    to_a == (other.respond_to?(:to_a) ? other.to_a : other)
-  end
 
 end

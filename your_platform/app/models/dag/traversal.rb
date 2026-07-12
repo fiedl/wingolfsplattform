@@ -38,6 +38,23 @@ class Dag::Traversal
       ancestor_type: ancestor_type, descendant_ids: descendant_ids)).collect(&:to_i)
   end
 
+  # All nodes of the descendant type reachable below the given
+  # ancestors, as a relation of that class -- composable and lazy, so
+  # `where(id: Dag::Traversal.descendants(...))` becomes a single
+  # query with a subselect instead of two round trips.
+  #
+  def self.descendants(ancestor_type:, descendant_type:, ancestor_ids:)
+    klass = descendant_type.to_s.constantize
+    klass.where("#{klass.table_name}.id IN (#{descendant_ids_sql(ancestor_type: ancestor_type,
+      descendant_type: descendant_type, ancestor_ids: ancestor_ids)})")
+  end
+
+  def self.ancestors(descendant_type:, ancestor_type:, descendant_ids:)
+    klass = ancestor_type.to_s.constantize
+    klass.where("#{klass.table_name}.id IN (#{ancestor_ids_sql(descendant_type: descendant_type,
+      ancestor_type: ancestor_type, descendant_ids: descendant_ids)})")
+  end
+
   # SQL subselect for the descendant ids, for embedding in a
   # `WHERE id IN (...)` clause. The type strings are the ones stored in
   # the polymorphic columns, i.e. `base_class.name`
