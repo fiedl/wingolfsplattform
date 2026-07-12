@@ -514,8 +514,8 @@ class User < ApplicationRecord
     # which the user is no member of.
     #
     foreign_group_ids = Group.pluck(:id) - self.group_ids
-    Page.where.not(id: Dag::Traversal.descendant_ids(of_type: 'Group',
-      of_ids: foreign_group_ids, type: 'Page'))
+    Page.where.not(id: Dag::Traversal.descendant_ids(ancestor_type: 'Group',
+      descendant_type: 'Page', ancestor_ids: foreign_group_ids))
   end
 
 
