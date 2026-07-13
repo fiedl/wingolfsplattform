@@ -125,7 +125,9 @@ Gem::Specification.new do |s|
   # refile-mini_magick caps below 1.0 — revisit with the refile ->
   # ActiveStorage migration.
   s.add_dependency 'carrierwave', '~> 1.3'
-  s.add_dependency 'mini_magick', '>= 4.9.4' # CVE-2019-13574
+  # 4.x line: carrierwave 1.3 drives the mini_magick 4 api
+  # (combine_options is gone in 5). 4.11+ is ruby-3 clean.
+  s.add_dependency 'mini_magick', '~> 4.11'
   s.add_dependency 'refile', '>= 0.5.5'
   s.add_dependency 'rest-client', '>= 1.8'
 

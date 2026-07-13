@@ -10,8 +10,13 @@ FROM ruby:3.1 AS base
 RUN apt-get update && \
     apt-get install -y ca-certificates curl \
       default-mysql-client postgresql-client \
-      imagemagick rsync pwgen \
+      imagemagick ghostscript rsync pwgen \
       shared-mime-info
+
+# The checkout is bind-mounted and owned by the host user; newer git
+# refuses to read repositories of other owners (AppVersion reads git
+# tags at runtime).
+RUN git config --global --add safe.directory '*'
 
 # Patch the imagemagick policy to allow pdf conversion.
 # https://stackoverflow.com/a/53180170/2066546

@@ -1,28 +1,30 @@
 module CapybaraHelper
   # See also: https://github.com/jnicklas/capybara/blob/master/lib/capybara/node/actions.rb
 
-  def t(*args)
-    if I18n.exists?(args.first)
-      I18n.translate(*args)
+  # Keyword arguments throughout: I18n.translate and the capybara
+  # actions take **options on ruby 3.
+  def t(key, **options)
+    if I18n.exists?(key)
+      I18n.translate(key, **options)
     else
-      args.last.try(:[], :default) || args.first
+      options[:default] || key
     end
   end
 
-  def click_on(link_text, options = {})
+  def click_on(link_text, **options)
     if link_text.kind_of?(String) or link_text.kind_of?(Symbol)
-      super(t(link_text, default: link_text), options)
+      super(t(link_text, default: link_text), **options)
     else # It could already be a node.
-      super link_text, options
+      super link_text, **options
     end
   end
 
-  def check(label_text, options = {})
-    super(t(label_text, default: label_text), options)
+  def check(label_text, **options)
+    super(t(label_text, default: label_text), **options)
   end
 
-  def uncheck(label_text, options = {})
-    super(t(label_text, default: label_text), options)
+  def uncheck(label_text, **options)
+    super(t(label_text, default: label_text), **options)
   end
 
   def selenium?

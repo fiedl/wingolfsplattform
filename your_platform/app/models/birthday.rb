@@ -30,7 +30,7 @@ class Birthday
     # The birthday order is applied in sql rather than with `sort_by`
     # so that callers can chain further scopes like `.regular`.
     User.where(id: upcoming_user_ids)
-      .order("array_position(ARRAY[#{upcoming_user_ids.join(',')}], users.id)")
+      .order(Arel.sql("array_position(ARRAY[#{upcoming_user_ids.join(',')}], users.id)"))
   end
 
 end
