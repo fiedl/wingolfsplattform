@@ -93,6 +93,9 @@ source 'https://rubygems.org' do
   gem 'reverse_markdown', '~> 2.0.0'
   gem 'biggs', '~> 0.3.3'
   gem 'faraday', '~> 1.3'
+  # sprockets 3 (frozen JS stack) passes the positional safe_level and
+  # trim_mode arguments, which erb >= 6 removed.
+  gem 'erb', '< 6'
 
   # Temporary Forks and Overrides
   # refile is vendored (from the sobrinho fork) with rest-client

@@ -182,8 +182,8 @@ GEM
       zeitwerk (>= 2.4, < 3.0)
     acts_as_tree (2.9.1)
       activerecord (>= 3.0.0)
-    addressable (2.7.0)
-      public_suffix (>= 2.0.2, < 5.0)
+    addressable (2.9.0)
+      public_suffix (>= 2.0.2, < 8.0)
     ambry (1.0.0)
     anonymous_loader (0.1.2)
       version_gem (~> 1.1, >= 1.1.13)
@@ -222,7 +222,6 @@ GEM
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
       ssrf_filter (~> 1.0, < 1.1.0)
-    cgi (0.5.2)
     charlock_holmes (0.7.9)
     chartkick (3.4.2)
     choice (0.2.0)
@@ -287,8 +286,7 @@ GEM
       htmlentities (~> 4.3.3)
       launchy (~> 2.1)
       mail (~> 2.6)
-    erb (4.0.4.1)
-      cgi (>= 0.3.3)
+    erb (5.1.3)
     erubi (1.13.1)
     eventmachine (1.2.7)
     excelinator (1.3.1)
@@ -385,14 +383,15 @@ GEM
     json (2.3.1)
     judge (3.1.0)
       rails (>= 5.0)
-    launchy (2.4.3)
-      addressable (~> 2.3)
-    letter_opener (1.4.1)
-      launchy (~> 2.2)
-    letter_opener_web (1.3.4)
-      actionmailer (>= 3.2)
-      letter_opener (~> 1.0)
-      railties (>= 3.2)
+    launchy (2.5.2)
+      addressable (~> 2.8)
+    letter_opener (1.10.0)
+      launchy (>= 2.2, < 4)
+    letter_opener_web (3.0.0)
+      actionmailer (>= 6.1)
+      letter_opener (~> 1.9)
+      railties (>= 6.1)
+      rexml
     libv8-node (24.12.0.1)
     listen (3.5.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -427,14 +426,16 @@ GEM
     mini_portile2 (2.8.9)
     mini_racer (0.21.1)
       libv8-node (~> 24.12.0.1)
-    minitest (5.27.0)
+    minitest (6.0.6)
+      drb (~> 2.0)
+      prism (~> 1.5)
     multi_json (1.19.1)
     multipart-post (2.1.1)
     mustermann (2.0.2)
       ruby2_keywords (~> 0.0.1)
     naturally (2.3.0)
     nenv (0.3.0)
-    net-imap (0.5.15)
+    net-imap (0.6.4.1)
       date
       net-protocol
     net-ldap (0.20.0)
@@ -448,7 +449,7 @@ GEM
       net-protocol
     netrc (0.11.0)
     nio4r (2.7.5)
-    nokogiri (1.18.10)
+    nokogiri (1.19.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     notiffany (0.1.3)
@@ -487,15 +488,12 @@ GEM
     pry-remote (0.1.8)
       pry (~> 0.9)
       slop (~> 3.0)
-    psych (5.4.0)
-      date
-      stringio
     public_activity (3.0.2)
       actionpack (>= 6.1)
       activerecord (>= 6.1)
       i18n (>= 0.5.0)
       railties (>= 6.1)
-    public_suffix (4.0.1)
+    public_suffix (7.0.5)
     puma (4.3.3)
       nio4r (~> 2.0)
     racc (1.8.1)
@@ -558,10 +556,15 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    rbs (4.0.3)
+      logger
+      prism (>= 1.6.0)
+      tsort
     rdiscount (2.2.7.5)
-    rdoc (7.2.0)
+    rdoc (8.0.0)
       erb
-      psych (>= 4.0.0)
+      prism (>= 1.6.0)
+      rbs (>= 4.0.0)
       tsort
     readline (0.0.4)
       reline
@@ -675,7 +678,6 @@ GEM
       sprockets (>= 3.0.0)
     ssrf_filter (1.0.8)
     stackprof (0.2.10)
-    stringio (3.2.0)
     sugar-rails (1.4.1)
       railties (>= 3.0.0)
     table-formatter (0.7.1)
@@ -723,7 +725,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yard (0.9.20)
-    zeitwerk (2.6.18)
+    zeitwerk (2.8.2)
 
 PLATFORMS
   ruby
@@ -740,6 +742,7 @@ DEPENDENCIES
   database_cleaner!
   discourse_api (~> 0.45.0)!
   email_spec!
+  erb (< 6)!
   execjs!
   factory_bot_rails!
   faraday (~> 1.3)!
