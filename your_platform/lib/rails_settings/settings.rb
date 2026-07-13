@@ -6,9 +6,14 @@ module RailsSettings
 
     belongs_to :thing, polymorphic: true
 
-    # get the value field, YAML decoded
+    # get the value field, YAML decoded.
+    # unsafe_load where available: ruby 3.1 turned YAML.load into
+    # safe-load, but the settings rows store symbols and arbitrary
+    # value objects in the pre-existing production format.
     def value
-      YAML.load(self[:value]) if self[:value].present?
+      if self[:value].present?
+        YAML.respond_to?(:unsafe_load) ? YAML.unsafe_load(self[:value]) : YAML.load(self[:value])
+      end
     end
 
     # set the value field, YAML encoded

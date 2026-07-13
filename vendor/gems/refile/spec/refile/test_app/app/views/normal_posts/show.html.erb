@@ -1,0 +1,28 @@
+<h1><%= @post.title %></h1>
+
+<% if @post.image %>
+  <%= attachment_image_tag(@post, :image) %>
+<% end %>
+
+<% if @post.document %>
+  <%= link_to "Document", attachment_url(@post, :document) %>
+
+  <p class="content-type"><%= @post.document_content_type %></p>
+  <p class="size"><%= @post.document_size %></p>
+  <p class="filename"><%= @post.document_filename %></p>
+
+  <%= link_to "Convert to Upper", attachment_url(@post, :document, :convert_case, format: "up") %>
+<% end %>
+
+<%= link_to "Edit", edit_normal_post_url(@post) %>
+<%= link_to "Edit multiple", edit_multiple_post_url(@post) %>
+
+<%= link_to "Delete", normal_post_url(@post), method: :delete %>
+
+<ul>
+  <% @post.documents.each do |document| %>
+    <li>
+      <%= link_to "Document: #{document.file_filename}", attachment_url(document, :file) %>
+    </li>
+  <% end %>
+</ul>

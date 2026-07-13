@@ -3,10 +3,7 @@ gem 'your_platform', path: 'your_platform'
 
 source 'https://rubygems.org' do
   gem 'rails', '~> 6.0'
-  # rails 5.2 works with pg 1.x; the former 1.1.4 pin (PGconn removal)
-  # was only needed for rails 5.0. 1.5 is the last line for ruby 2.7;
-  # lift to 1.6 with the ruby 3 bump.
-  gem 'pg', '~> 1.5.0'
+  gem 'pg', '>= 1.5'
   gem 'sassc-rails' # ruby-sass is EOL; libsass via sassc
   gem 'terser' # uglifier is abandoned and fails on ES6
   gem 'coffee-rails', '>= 4.0.0'
@@ -55,9 +52,7 @@ source 'https://rubygems.org' do
     gem 'rspec-retry'
     gem 'capybara', '~> 3.0'
     gem 'selenium-webdriver', '~> 4.0'
-    # Pin: factory_bot 6.3+ requires ruby 3, but the old bundler ignores
-    # the gem's required_ruby_version.
-    gem 'factory_bot_rails', '~> 6.2.0'
+    gem 'factory_bot_rails'
     gem 'database_cleaner'
     gem 'email_spec'
     gem 'timecop'
@@ -94,7 +89,10 @@ source 'https://rubygems.org' do
   gem 'faraday', '~> 1.3'
 
   # Temporary Forks and Overrides
-  gem 'refile', git: 'https://github.com/sobrinho/refile'
+  # refile is vendored (from the sobrinho fork) with rest-client
+  # relaxed: ~> 1.8 pinned mime-types below 3, which is a SyntaxError
+  # on ruby 3. The ActiveStorage migration retires it eventually.
+  gem 'refile', path: 'vendor/gems/refile'
   gem 'refile-mini_magick', git: 'https://github.com/refile/refile-mini_magick'
 
   # To customly set timeout time we need rack-timeout
@@ -115,4 +113,4 @@ source 'https://rubygems.org' do
 
 end
 
-ruby '2.7.1'
+ruby '~> 3.1.0'

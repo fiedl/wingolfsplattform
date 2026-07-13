@@ -1,0 +1,2 @@
+-r refile/spec_helper
+-r pry

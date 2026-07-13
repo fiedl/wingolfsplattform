@@ -5,19 +5,13 @@
 # Production:
 #     docker build --target production -t wingolfsplattform .
 
-FROM ruby:2.7.1 AS base
+FROM ruby:3.1 AS base
 
-# Debian Buster is EOL; its packages moved to archive.debian.org.
-RUN sed -i -e 's|deb.debian.org/debian|archive.debian.org/debian|g' \
-           -e 's|security.debian.org/debian-security|archive.debian.org/debian-security|g' \
-           -e '/buster-updates/d' /etc/apt/sources.list
-RUN apt-get -o Acquire::Check-Valid-Until=false update && \
+RUN apt-get update && \
     apt-get install -y ca-certificates curl \
       default-mysql-client postgresql-client \
       imagemagick rsync pwgen \
       shared-mime-info
-
-RUN gem install bundler -v 2.1.4
 
 # Patch the imagemagick policy to allow pdf conversion.
 # https://stackoverflow.com/a/53180170/2066546
@@ -45,11 +39,10 @@ FROM base AS development
 
 ENV RAILS_ENV=development
 
-# libpq-dev: the pg gem builds against libpq. Buster ships the v11
-# client, which works against the postgres 17 server.
-RUN apt-get -o Acquire::Check-Valid-Until=false update && \
+# libpq-dev: the pg gem builds against libpq.
+RUN apt-get update && \
     apt-get install -y build-essential g++ \
-      libssl-dev libxml2 libxslt-dev libreadline-dev libicu-dev libmagick-dev \
+      libssl-dev libxml2 libxslt-dev libreadline-dev libicu-dev libmagickwand-dev \
       libpq-dev
 
 # The nodesource apt repository for node 12 is gone: install from the
