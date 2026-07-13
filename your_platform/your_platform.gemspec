@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 5.2.0"
   s.add_dependency 'rack', '>= 1.6.2'
   s.add_dependency "rails-i18n"                                                        # MIT License
-  s.add_dependency "responders", "~> 2.0"
+  s.add_dependency "responders", "~> 3.0"
   s.add_dependency "bundler", ">= 1.9.4"
   s.add_development_dependency 'web-console'
   s.add_dependency 'sprockets-rails', '>= 2.3.2' # required by bootstrap
@@ -63,7 +63,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'sidekiq', '~> 6.0'
 
   # Authentification
-  s.add_dependency 'devise', '>= 3.5.4'                           # MIT License, CVE-2015-8314, https://gemnasium.com/fiedl/your_platform/alerts#advisory_329
+  # rails 6 requires >= 4.7; devise 5 requires rails >= 6.1 — widen at
+  # the rails 6.1 hop.
+  s.add_dependency 'devise', '~> 4.7'
   #s.add_dependency 'omniauth-github'
   #s.add_dependency 'omniauth-twitter'
   #s.add_dependency 'omniauth-google-oauth2'
@@ -75,11 +77,16 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'devise_masquerade', '~> 0.5.3'
   s.add_dependency 'gender_detector'
-  s.add_dependency 'devise_token_auth', '1.1.0' # 1.1.1 introduces an issue with `authenticate_api_v1_user_account!`, https://trello.com/c/p7kSJGz5/1398-app-funktioniert-nicht-mehr-access-control-origin#comment-5d5d65e117444351197bea4e
+  # The former = 1.1.0 pin guarded an authenticate_api_v1_user_account!
+  # regression in 1.1.1 (trello c/p7kSJGz5); retested per the upgrade
+  # plan, https://github.com/fiedl/wingolfsplattform/issues/126.
+  s.add_dependency 'devise_token_auth', '~> 1.2'
   s.add_dependency 'rack-cors'
 
   # Authorization
-  s.add_dependency 'cancancan', '~> 1.15.0'
+  # 1.15's accessible_by built OR chains with broken bind parameters on
+  # rails 5.2 (PG::ProtocolViolation on the group members page).
+  s.add_dependency 'cancancan', '~> 3.0'
 
   # To use ActiveModel has_secure_password (password encryption)
   s.add_dependency 'bcrypt', '>= 3.0.1'                                                # MIT License
