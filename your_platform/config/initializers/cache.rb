@@ -26,6 +26,11 @@ cache_redis_configuration = RedisConnectionConfiguration.new(:cache, port: cache
 # prefixed raw keys accordingly).
 Rails.application.config.cache_store = :redis_cache_store, {
   redis: cache_redis_configuration.to_redis,
+  # Marshal the whole entry object: the rails >= 7.1 default coder
+  # reconstructs entries on every read, which would discard the
+  # write-time stamp the renew mechanism compares against (see
+  # core_ext/active_support/cache.rb).
+  coder: Marshal,
   namespace: cache_redis_configuration.namespace,
   expires_in: if Rails.env.production?
       1.week

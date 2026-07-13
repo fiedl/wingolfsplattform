@@ -21,6 +21,14 @@ module ActiveRecord
             columns.any? { |column| sql.match? /\b#{column}\b/ }
           when String
             columns.any? { |column| node.match? /\b#{column}\b/ }
+          else
+            # rails 7.2 wraps string conditions in BoundSqlLiteral
+            # nodes (not present in older rails, hence the feature
+            # check instead of a class reference).
+            if defined?(Arel::Nodes::BoundSqlLiteral) && node.is_a?(Arel::Nodes::BoundSqlLiteral)
+              sql = node.sql_with_placeholders.to_s
+              columns.any? { |column| sql.match? /\b#{column}\b/ }
+            end
           end
         end
       end

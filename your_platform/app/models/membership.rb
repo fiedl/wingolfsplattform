@@ -10,9 +10,14 @@
 class Membership < DagLink
 
   alias_attribute :user_id, :descendant_id
-  alias_attribute :user, :descendant
   alias_attribute :group_id, :ancestor_id
-  alias_attribute :group, :ancestor
+
+  # Real associations, not alias_attribute: since rails 7.2, aliasing
+  # non-attributes raises. For memberships, the polymorphic link ends
+  # are always User and Group, so the typed associations also give
+  # `where(user:)`, `find_by(group:)` and joins for free.
+  belongs_to :user, foreign_key: :descendant_id, class_name: 'User', optional: true
+  belongs_to :group, foreign_key: :ancestor_id, class_name: 'Group', optional: true
 
   has_many :issues, as: :reference, dependent: :destroy
 

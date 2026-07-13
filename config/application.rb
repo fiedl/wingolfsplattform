@@ -18,6 +18,13 @@ module Wingolfsplattform
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+    # Enqueue jobs immediately, as before rails 7.2: the cache-renewal
+    # jobs run inline in the test suite, whose transactional examples
+    # never commit — deferring until commit would silently skip them.
+    # (The renewal jobs are idempotent; deferred enqueue buys nothing
+    # here.)
+    config.active_job.enqueue_after_transaction_commit = :never if Rails.version >= "7.2"
+
     # App secrets, formerly config/secrets.yml: Rails.application.secrets
     # is removed in rails 7.2. Values come from the environment; the yml
     # provides known dummy fallbacks for development and test.

@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   #
 
   # Rails and Rails Additions
-  s.add_dependency "rails", "~> 7.1.0"
+  s.add_dependency "rails", "~> 7.2.0"
   s.add_dependency 'rack', '>= 1.6.2'
   s.add_dependency "rails-i18n"                                                        # MIT License
   s.add_dependency "responders", "~> 3.0"
@@ -145,7 +145,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'impressionist', '>= 1.6' # 1.6 breaks on rails 7 engine load hooks
 
   # Activity Feed
-  s.add_dependency 'public_activity', '~> 1.4.1'                                       # MIT License
+  s.add_dependency 'public_activity', '>= 2.0' # 1.4 uses the 2-arg serialize removed in rails 7.2
 
   # XLS Export
   s.add_dependency 'to_xls'
