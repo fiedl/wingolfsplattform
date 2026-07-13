@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   #
 
   # Rails and Rails Additions
-  s.add_dependency "rails", "~> 5.2.0"
+  s.add_dependency "rails", "~> 6.0.0"
   s.add_dependency 'rack', '>= 1.6.2'
   s.add_dependency "rails-i18n"                                                        # MIT License
   s.add_dependency "responders", "~> 3.0"
