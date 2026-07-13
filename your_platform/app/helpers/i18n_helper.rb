@@ -8,8 +8,9 @@ module I18nHelper
   end
 
   # avoid exceptions in views
-  def translate(key, options={})
-    super(key, options.merge(raise: true))
+  # (keyword splat: actionview's translate takes **options since 6.1)
+  def translate(key, **options)
+    super(key, **options.merge(raise: true))
   rescue I18n::MissingTranslationData
     key
   end
