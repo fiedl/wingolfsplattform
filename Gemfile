@@ -2,7 +2,7 @@
 gem 'your_platform', path: 'your_platform'
 
 source 'https://rubygems.org' do
-  gem 'rails', '~> 7.2'
+  gem 'rails', '~> 8.0'
   gem 'pg', '>= 1.5'
   gem 'sassc-rails' # ruby-sass is EOL; libsass via sassc
   gem 'terser' # uglifier is abandoned and fails on ES6
