@@ -21,7 +21,7 @@ namespace :bootstrap do
     'add_flags_to_basic_pages',
     'add_structure'
   ]
-    
+
   task :print_info do
     Log.new.section "Bootstrapping: Creating basic groups and pages."
   end
@@ -85,10 +85,10 @@ namespace :bootstrap do
     p "Task: Adding Wingolfsblätter Abo Group"
     Group.find_or_create_wbl_abo_group
   end
-  
+
   task :add_structure => [:environment] do
     p "Task: Add basic structure."
-    # 
+    #
     # root
     #   |--- intranet_root
     #             |----------- everyone
@@ -101,13 +101,13 @@ namespace :bootstrap do
     #             |---------------- help
     #
     Page.find_root << Page.find_intranet_root
+    Page.find_intranet_root << Group.find_corporations_parent_group
+    Page.find_intranet_root << Group.find_bvs_parent_group
+    Page.find_intranet_root << Page.find_help_page
     Page.find_intranet_root << Group.everyone
     Group.everyone << Group.find_corporations_parent_group
     Group.everyone << Group.find_bvs_parent_group
     Group.everyone << Group.hidden_users
-    Page.find_intranet_root << Group.find_corporations_parent_group
-    Page.find_intranet_root << Group.find_bvs_parent_group
-    Page.find_intranet_root << Page.find_help_page
   end
 
 
