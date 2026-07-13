@@ -12,6 +12,12 @@ module Wingolfsplattform
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+    # Zeitwerk, flipped ahead of the defaults (no config.load_defaults
+    # yet): classic autoloading is gone in rails 7, and 6.x is the
+    # version window where both modes work and the switch can be
+    # verified in isolation.
+    config.autoloader = :zeitwerk
+
     # Serialized columns (pages.redirect_to, pages.box_configuration,
     # settings.value) hold more than plain strings; rails >= 5.2.8.1
     # rejects these classes in YAML columns unless listed

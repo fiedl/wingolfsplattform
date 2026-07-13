@@ -145,7 +145,8 @@ module YourPlatform
 
     engine_name "your_platform"
 
-    config.autoload_paths += %W(#{config.root}/app/pdfs)
+    # app/pdfs needs no explicit autoload path: rails autoloads every
+    # app/ subdirectory.
 
     # In order to override the locales in the main_app, add the following to the main app's
     # config/initializers/locale.rb:

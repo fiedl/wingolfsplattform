@@ -414,7 +414,9 @@ describe Ability do
               the_user.should_not be_able_to :update, @attachment
             end
             he "should not be able to create unrelated attachments" do
-              the_user.should_not be_able_to :create, Attachment
+              # An instance, not the class: since cancancan 2, class-level
+              # checks return true whenever conditional rules exist.
+              the_user.should_not be_able_to :create, Attachment.new
             end
           end
           # describe "(when no officer)" do
