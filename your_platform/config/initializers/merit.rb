@@ -20,8 +20,14 @@ Merit.setup do |config|
 end
 
 # Create application badges (uses https://github.com/norman/ambry)
-badge_id = 0
-[{
+# Merit::Badge is autoloadable (the merit engine ships it in
+# app/models), so the definitions move into to_prepare for rails 7.
+# The guard keeps development reloads from duplicating the registry.
+Rails.application.config.to_prepare do
+  next if Merit::Badge.all.any?
+
+  badge_id = 0
+  [{
   id: (badge_id = badge_id+1),
   name: 'first-login',
   level: 1,
@@ -98,6 +104,7 @@ badge_id = 0
   custom_fields: { difficulty: :bronce }
 
 
-}].each do |attrs|
-  Merit::Badge.create! attrs
+  }].each do |attrs|
+    Merit::Badge.create! attrs
+  end
 end

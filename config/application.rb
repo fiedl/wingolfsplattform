@@ -6,6 +6,12 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# The impressionist engine includes ImpressionistController into
+# ActionController via an on_load hook, but leaves the module to
+# autoloading — which rails 7 forbids at that point. Require it
+# explicitly before action_controller loads.
+require Gem.loaded_specs['impressionist'].full_gem_path + '/app/controllers/impressionist_controller.rb'
+
 module Wingolfsplattform
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.

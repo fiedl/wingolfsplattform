@@ -208,8 +208,21 @@ end
 
 ActiveSupport::Cache::Store.send(:prepend, CacheStoreExtension)
 
+# The renew mechanism compares cache entries by write time. Rails 7.0
+# stopped stamping entries (@created_at is initialized to 0.0 unless
+# expiry bookkeeping needs it), so the stamp is restored here. The
+# instance variable travels through Marshal, so persisted entries keep
+# their original stamp across deploys.
+module CacheEntryCreatedAtStamp
+  def initialize(*args, **options)
+    super
+    @created_at = Time.now.to_f if !defined?(@created_at) || @created_at.nil? || @created_at == 0.0
+  end
+end
+ActiveSupport::Cache::Entry.prepend CacheEntryCreatedAtStamp
+
 class ActiveSupport::Cache::Entry
   def created_at
-    Time.at(@created_at)
+    Time.at(@created_at) if defined?(@created_at) && @created_at
   end
 end
