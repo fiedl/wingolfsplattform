@@ -129,7 +129,7 @@ describe StatusMembershipFinders do
   #
   describe ".find_all_by_user_and_corporation.now_and_in_the_past" do
     before do
-      @membership.update_attributes valid_from: 1.year.ago
+      @membership.update valid_from: 1.year.ago
       @second_membership = @membership.move_to(@second_status_group, at: 20.days.ago)
     end
     subject { Memberships::Status.find_all_by_user_and_corporation(@user, @corporation).now_and_in_the_past }

@@ -68,7 +68,7 @@ class GroupsController < ApplicationController
   end
 
   def update
-    @group.update_attributes!(group_params)
+    @group.update!(group_params)
     render json: {}, status: :ok
   end
 

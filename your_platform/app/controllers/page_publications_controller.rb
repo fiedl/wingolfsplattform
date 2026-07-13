@@ -5,7 +5,7 @@ class PagePublicationsController < ApplicationController
   def create
     authorize! :publish, page
 
-    page.update_attributes published_at: Time.zone.now
+    page.update published_at: Time.zone.now
 
     respond_with page
   end

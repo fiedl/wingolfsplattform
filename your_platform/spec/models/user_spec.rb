@@ -407,7 +407,7 @@ describe User do
         end
       end
       describe "when there is no text below the name" do
-        before { @name_surrounding.update_attributes(text_below_name: nil) }
+        before { @name_surrounding.update(text_below_name: nil) }
         it "should leave no blank line" do
           subject.should ==
           "Herrn\n" +
@@ -416,7 +416,7 @@ describe User do
         end
       end
       describe "when there is no text above the name" do
-        before { @name_surrounding.update_attributes(text_above_name: nil) }
+        before { @name_surrounding.update(text_above_name: nil) }
         it "should not begin with a blnak line" do
           subject.should ==
           "Dr. #{@user.first_name} #{@user.last_name} M.Sc.\n" +
@@ -425,7 +425,7 @@ describe User do
         end
       end
       describe "when there is neither prefix nor personal title" do
-        before { @name_surrounding.update_attributes(name_prefix: nil) }
+        before { @name_surrounding.update(name_prefix: nil) }
         it "should set no spaces before the name" do
           subject.should ==
           "Herrn\n" +
@@ -435,7 +435,7 @@ describe User do
         end
       end
       describe "when there is no name suffix" do
-        before { @name_surrounding.update_attributes(name_suffix: nil) }
+        before { @name_surrounding.update(name_suffix: nil) }
         it "should set no spaces after the name" do
           subject.should ==
           "Herrn\n" +
@@ -766,7 +766,7 @@ describe User do
         wait_for_cache
 
         first_membership_S = Memberships::Status.create(user: @user, group: @corporationS.status_groups.first)
-        first_membership_S.update_attributes(valid_from: "2010-05-01".to_datetime)
+        first_membership_S.update(valid_from: "2010-05-01".to_datetime)
         @user.reload
       end
       it { should match_array [@corporationE, @corporationS] }
@@ -777,7 +777,7 @@ describe User do
         wait_for_cache
 
         first_membership_H = Memberships::Status.create(user: @user, group: @corporationH.guests_parent)
-        first_membership_H.update_attributes(valid_from: "2010-05-01".to_datetime)
+        first_membership_H.update(valid_from: "2010-05-01".to_datetime)
         @user.reload
       end
       it { should match_array [@corporationE, @corporationH] }
@@ -788,8 +788,8 @@ describe User do
         former_group = @corporationE.child_groups.create
         former_group.add_flag :former_members_parent
         second_membership_E = Memberships::Status.create(user: @user, group: former_group)
-        second_membership_E.update_attributes(valid_from: "2014-05-01".to_datetime)
-        @first_membership_E.update_attributes(valid_to: "2014-05-01".to_datetime)
+        second_membership_E.update(valid_from: "2014-05-01".to_datetime)
+        @first_membership_E.update(valid_to: "2014-05-01".to_datetime)
         @user.reload
       end
       it { should == [@corporationE] }
@@ -817,7 +817,7 @@ describe User do
     context "when user entered corporation S" do
       before do
         first_membership_S = Memberships::Status.create(user: @user, group: @corporationS.status_groups.first)
-        first_membership_S.update_attributes(valid_from: "2010-05-01".to_datetime)
+        first_membership_S.update(valid_from: "2010-05-01".to_datetime)
         @user.reload
       end
       it { should match_array [ @corporationE, @corporationS ] }
@@ -825,7 +825,7 @@ describe User do
     context "when user entered corporation H as guest" do
       before do
         first_membership_H = Memberships::Status.create(user: @user, group: @corporationH.guests_parent)
-        first_membership_H.update_attributes(valid_from: "2010-05-01".to_datetime)
+        first_membership_H.update(valid_from: "2010-05-01".to_datetime)
         @user.reload
       end
       it { should == [ @corporationE ] }
@@ -835,8 +835,8 @@ describe User do
         former_group = @corporationE.child_groups.create
         former_group.add_flag :former_members_parent
         second_membership_E = Memberships::Status.create(user: @user, group: former_group)
-        second_membership_E.update_attributes(valid_from: "2014-05-01".to_datetime)
-        @first_membership_E.update_attributes(valid_to: "2014-05-01".to_datetime)
+        second_membership_E.update(valid_from: "2014-05-01".to_datetime)
+        @first_membership_E.update(valid_to: "2014-05-01".to_datetime)
         @user.reload
       end
       it { should be_empty }
@@ -873,7 +873,7 @@ describe User do
         wait_for_cache
 
         first_membership_S = Memberships::Status.create(user: @user, group: @corporationS.status_groups.first)
-        first_membership_S.update_attributes(valid_from: "2010-05-01".to_datetime)
+        first_membership_S.update(valid_from: "2010-05-01".to_datetime)
         @user.reload
       end
       it { should match_array [ @corporationE, @corporationS ] }
@@ -882,7 +882,7 @@ describe User do
       before do
         @user.current_corporations
         first_membership_H = Memberships::Status.create(user: @user, group: @corporationH.guests_parent)
-        first_membership_H.update_attributes(valid_from: "2010-05-01".to_datetime)
+        first_membership_H.update(valid_from: "2010-05-01".to_datetime)
         @user.reload
       end
       it { should == [ @corporationE ] }
@@ -895,8 +895,8 @@ describe User do
         former_group = @corporationE.child_groups.create
         former_group.add_flag :former_members_parent
         second_membership_E = Memberships::Status.create(user: @user, group: former_group)
-        second_membership_E.update_attributes(valid_from: "2014-05-01".to_datetime)
-        @first_membership_E.update_attributes(valid_to: "2014-05-01".to_datetime)
+        second_membership_E.update(valid_from: "2014-05-01".to_datetime)
+        @first_membership_E.update(valid_to: "2014-05-01".to_datetime)
         @user.reload
       end
       it { should be_empty }
@@ -1432,7 +1432,7 @@ describe User do
       @user_without_email = create(:user)
       @user_without_email.profile_fields.destroy_all
       @user_with_empty_email = create(:user)
-      @user_with_empty_email.email_and_mailing_list_fields.first.update_attributes(:value => nil)  # to circumvent validation
+      @user_with_empty_email.email_and_mailing_list_fields.first.update(:value => nil)  # to circumvent validation
     end
     subject { User.with_email }
     specify "prelims" do

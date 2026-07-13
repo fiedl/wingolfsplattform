@@ -8,7 +8,7 @@ class StatusMembershipsController < ApplicationController
 
   def update
     attributes = params[:status_membership]
-    if @status_membership.update_attributes(attributes)
+    if @status_membership.update(attributes)
       respond_with @status_membership
     else
       raise ActiveRecord::RecordInvalid.new(@status_membership)

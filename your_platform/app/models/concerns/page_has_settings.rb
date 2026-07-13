@@ -15,7 +15,7 @@ concern :PageHasSettings do
     end
   end
 
-  def update_attributes(attributes)
+  def update(attributes)
     if attributes[:settings]
       self.settings_attributes = attributes[:settings]
       attributes = attributes.except(:settings)
@@ -23,7 +23,7 @@ concern :PageHasSettings do
     super(attributes)
   end
 
-  def update_attributes!(attributes)
+  def update!(attributes)
     if attributes[:settings]
       self.settings_attributes = attributes[:settings]
       attributes = attributes.except(:settings)

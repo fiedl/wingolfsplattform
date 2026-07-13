@@ -19,7 +19,7 @@ class ProfileField
         attr_hash[:type] = "ProfileFieldTypes::#{attr_hash[:type]}"
       end
 
-      self.update_attributes( type: attr_hash[:type] )
+      self.update( type: attr_hash[:type] )
       self.save
 
       # This is needed in order to have access to the methods

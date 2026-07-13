@@ -157,7 +157,7 @@ class EventsController < ApplicationController
   def update
     authorize! :update, event
 
-    event.update_attributes!(event_params)
+    event.update!(event_params)
     render json: event, status: :ok
   end
 

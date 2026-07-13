@@ -34,7 +34,7 @@ class AttachmentsController < ApplicationController
     end
 
     @attachment = Attachment.create! author: current_user
-    @attachment.update_attributes(attachment_params)
+    @attachment.update(attachment_params)
 
     respond_to do |format|
       format.json { render json: Attachment.find(@attachment.id) } # reload does not reload the filename, thus use `find`.

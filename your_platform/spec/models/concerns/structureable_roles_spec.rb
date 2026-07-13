@@ -394,7 +394,7 @@ describe StructureableRoles do
     describe "for the sub group's admins_parent beging created first" do
       before do
         @sub_group_admins_parent_group = @group2.find_or_create_admins_parent_group
-        @sub_group_admins_parent_group.update_attributes( name: "group2.admins_parent" )
+        @sub_group_admins_parent_group.update( name: "group2.admins_parent" )
       end
       specify "the parent group's admins_parent should not refer to the sub group's admins_parent (Bug Fix!)" do
         @group2.find_admins_parent_group.should == @sub_group_admins_parent_group

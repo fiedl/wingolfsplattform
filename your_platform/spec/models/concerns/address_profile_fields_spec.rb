@@ -35,13 +35,13 @@ describe AddressProfileFields do
       @address_field = user.address_fields.create label: "Study Address", value: "My Study Address"
       subject.should == @address_field.value
 
-      @address_field.update_attributes label: "Semesteranschrift", value: "Meine Semesteranschrift"
+      @address_field.update label: "Semesteranschrift", value: "Meine Semesteranschrift"
       user.study_address.should == @address_field.value
 
-      @address_field.update_attributes label: "Studienanschrift", value: "Meine Studienanschrift"
+      @address_field.update label: "Studienanschrift", value: "Meine Studienanschrift"
       user.study_address.should == @address_field.value
 
-      @address_field.update_attributes label: "Sonstige Anschrift", value: "Noch eine andere Anschrift"
+      @address_field.update label: "Sonstige Anschrift", value: "Noch eine andere Anschrift"
       user.study_address.should_not == @address_field.value
     end
   end

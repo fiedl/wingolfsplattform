@@ -66,7 +66,7 @@ class UsersController < ApplicationController
     @basic_user_params[:first_name] ||= I18n.t(:first_name)
     @basic_user_params[:last_name] ||= I18n.t(:last_name)
     @user = User.create(@basic_user_params)
-    @user.update_attributes(@user_params)
+    @user.update(@user_params)
     @user.fill_in_template_profile_information
     @user.send_welcome_email if @user.account
 

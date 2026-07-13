@@ -20,7 +20,7 @@ concern :UserProfile do
     personal_title_field.try(:value).try(:strip)
   end
   def personal_title=(new_value)
-    profile_fields.where(label: 'personal_title').first_or_create.update_attributes value: new_value
+    profile_fields.where(label: 'personal_title').first_or_create.update value: new_value
   end
 
   def academic_degree_field
@@ -30,7 +30,7 @@ concern :UserProfile do
     academic_degree_field.try(:value).try(:strip)
   end
   def academic_degree=(new_value)
-    profile_fields.where(label: 'academic_degree').first_or_create.update_attributes value: new_value
+    profile_fields.where(label: 'academic_degree').first_or_create.update value: new_value
   end
 
 

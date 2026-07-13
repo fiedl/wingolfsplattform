@@ -108,12 +108,12 @@ describe User do
       @corporationH = create( :wingolf_corporation, :token => "H" )
 
       @first_membership_E = Memberships::Status.create( user: @user, group: @corporationE.status_group('Hospitanten') )
-      @first_membership_E.update_attributes(valid_from: "2006-12-01".to_datetime)
+      @first_membership_E.update(valid_from: "2006-12-01".to_datetime)
       @first_membership_H = Memberships::Status.create( user: @user, group: @corporationH.status_group('Hospitanten') )
-      @first_membership_H.update_attributes(valid_from: "2008-12-01".to_datetime)
+      @first_membership_H.update(valid_from: "2008-12-01".to_datetime)
       @first_membership_E.invalidate
       @second_membership_E = Memberships::Status.create( user: @user, group: @corporationE.status_group('Philister') )
-      @second_membership_E.update_attributes(valid_from: "2013-12-01".to_datetime)
+      @second_membership_E.update(valid_from: "2013-12-01".to_datetime)
       @user.reload
     end
     subject { @user.aktivitaetszahl }
@@ -139,11 +139,11 @@ describe User do
     context "when a status membership has no valid_from (issue circumvention)" do
       # Some users have deleted validity ranges in their vita, because they didn't know the date.
       #
-      before { @second_membership_E.update_attributes valid_from: nil }
+      before { @second_membership_E.update valid_from: nil }
       it { should == "E06 H08"}
     end
     context "when the validity range order does not match the created_at order (issue circumvention)" do
-      before { @first_membership_H.update_attributes valid_from: "2004-12-01".to_datetime }
+      before { @first_membership_H.update valid_from: "2004-12-01".to_datetime }
       it { should == "H04 E06"}
       it { should_not == "E06 H04"}
     end
@@ -173,12 +173,12 @@ describe User do
       @corporationS = create( :wingolf_corporation, :token => "S" )
 
       @first_membership_E = Memberships::Status.create( user: @user, group: @corporationE.status_group('Hospitanten') )
-      @first_membership_E.update_attributes(valid_from: "2006-12-01".to_datetime)
+      @first_membership_E.update(valid_from: "2006-12-01".to_datetime)
       @first_membership_H = Memberships::Status.create( user: @user, group: @corporationH.status_group('Hospitanten') )
-      @first_membership_H.update_attributes(valid_from: "2008-12-01".to_datetime)
+      @first_membership_H.update(valid_from: "2008-12-01".to_datetime)
       @first_membership_E.invalidate
       @second_membership_E = Memberships::Status.create( user: @user, group: @corporationE.status_group('Philister') )
-      @second_membership_E.update_attributes(valid_from: "2013-12-01".to_datetime)
+      @second_membership_E.update(valid_from: "2013-12-01".to_datetime)
     end
     subject { @user.aktivitaetszahl }
     it "should return the composed aktivitaetszahl" do
@@ -194,7 +194,7 @@ describe User do
       before do
         @user.aktivitaetszahl
         first_membership_S = Memberships::Status.create( user: @user, group: @corporationS.status_groups.first )
-        first_membership_S.update_attributes(valid_from: "2014-05-01".to_datetime)
+        first_membership_S.update(valid_from: "2014-05-01".to_datetime)
         time_travel 2.seconds
         @user.reload
       end
@@ -696,7 +696,7 @@ describe User do
         @corporation.status_group("Hospitanten").members.should include @user
       end
       it "should add the user to the Nicht-Recipierte-Fuxen group if the first status group is named like that" do
-        @corporation.status_group("Hospitanten").update_attributes(name: "Nicht-Recipierte Fuxen")
+        @corporation.status_group("Hospitanten").update(name: "Nicht-Recipierte Fuxen")
         subject
         time_travel 2.seconds
         @corporation.reload.status_group("Nicht-Recipierte Fuxen").members.should include @user

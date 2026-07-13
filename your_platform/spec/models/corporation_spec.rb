@@ -118,7 +118,7 @@ describe Corporation do
 
     specify "the cache should be updated after a status group is renamed" do
       @corporation.status_groups # This created the cached version.
-      @status_group.update_attributes name: 'New Status Name'
+      @status_group.update name: 'New Status Name'
       subject.reload.map(&:name).should include 'New Status Name'
     end
   end

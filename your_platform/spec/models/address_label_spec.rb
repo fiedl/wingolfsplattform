@@ -99,7 +99,7 @@ describe AddressLabel do
       end
     end
     describe "when there is no text below the name" do
-      before { @name_surrounding.update_attributes(text_below_name: nil) }
+      before { @name_surrounding.update(text_below_name: nil) }
       it "should leave no blank line" do
         subject.should == 
         "Herrn\n" +
@@ -109,7 +109,7 @@ describe AddressLabel do
       end
     end
     describe "when there is no text above the name" do
-      before { @name_surrounding.update_attributes(text_above_name: nil) }
+      before { @name_surrounding.update(text_above_name: nil) }
       it "should not begin with a blnak line" do
         subject.should == 
         "Dr. #{@user.first_name} #{@user.last_name} M.Sc.\n" + 
@@ -119,7 +119,7 @@ describe AddressLabel do
       end
     end
     describe "when there is neither prefix nor personal title" do
-      before { @name_surrounding.update_attributes(name_prefix: nil) }
+      before { @name_surrounding.update(name_prefix: nil) }
       it "should set no spaces before the name" do
         subject.should == 
         "Herrn\n" +
@@ -130,7 +130,7 @@ describe AddressLabel do
       end
     end
     describe "when there is no name suffix" do
-      before { @name_surrounding.update_attributes(name_suffix: nil) }
+      before { @name_surrounding.update(name_suffix: nil) }
       it "should set no spaces after the name" do
         subject.should == 
         "Herrn\n" +

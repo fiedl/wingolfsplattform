@@ -5,7 +5,7 @@ describe ProfileFields::Address do
   subject { @profile_field }
 
   describe "when a free-text address is stored that can be geocoded" do
-    before { @profile_field.update_attributes value: "Pariser Platz 1\n 10117 Berlin" }
+    before { @profile_field.update value: "Pariser Platz 1\n 10117 Berlin" }
 
     its(:street_with_number) { should == 'Pariser Platz 1' }
     its(:postal_code) { should == '10117' }
@@ -25,7 +25,7 @@ describe ProfileFields::Address do
   end
 
   describe "for a french address that can be geocoded" do
-    before { @profile_field.update_attributes value: "44 Rue de Stalingrad, Grenoble, Frankreich" }
+    before { @profile_field.update value: "44 Rue de Stalingrad, Grenoble, Frankreich" }
 
     its(:street_with_number) { should include '44' }
     its(:street_with_number) { should include 'Rue de Stalingrad' }

@@ -9,7 +9,7 @@ class Api::V1::AttachmentsController < Api::V1::BaseController
     authorize! :update, parent
 
     new_attachment = parent.attachments.create! author: current_user
-    new_attachment.update_attributes! attachment_params
+    new_attachment.update! attachment_params
     new_attachment.update title: new_attachment.filename.gsub("_", " ").gsub(/\.[a-zA-Z]{3,4}$/, "") unless attachment_params[:title].present?
 
     render json: attachment_json(Attachment.find(new_attachment.id)), status: :ok  # reload does not reload the filename, thus use `find`

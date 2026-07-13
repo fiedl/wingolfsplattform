@@ -156,11 +156,11 @@ describe Structureable do
         #
         describe "when it creates a second connection to a user" do
           before do
-            @parent.update_attributes name: 'Alle Amtsträger'
+            @parent.update name: 'Alle Amtsträger'
             @alle_seniores = @parent.child_groups.create name: 'Alle Seniores'
             @user = create(:user)
             @alle_seniores.assign_user @user
-            @child.update_attributes name: 'Alle Admins'
+            @child.update name: 'Alle Admins'
             @child.assign_user @user
           end
           it "should add the group as child group of the parent group" do

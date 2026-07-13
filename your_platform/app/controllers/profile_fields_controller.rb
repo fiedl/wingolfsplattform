@@ -44,7 +44,7 @@ class ProfileFieldsController < ApplicationController
       raise ActionController::BadRequest, "security interrupt: '#{@profile_field.type}' is no permitted profileable object type."
     end
     @profile_field = @profile_field.becomes(profile_field_class)
-    updated = @profile_field.update_attributes(profile_field_params)
+    updated = @profile_field.update(profile_field_params)
 
     # Mark issues to be resolved. Then, they will be rechecked later.
     @profile_field.issues.update_all resolved_at: Time.zone.now

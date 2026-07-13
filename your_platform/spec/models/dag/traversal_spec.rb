@@ -150,7 +150,7 @@ describe Dag::Traversal do
       # since then.
       @new_corporation = create :corporation
       link = DagLink.create ancestor: @new_corporation, descendant: @status2, direct: true
-      link.update_attributes valid_from: 1.year.ago
+      link.update valid_from: 1.year.ago
       ranges = Dag::Traversal.membership_validity_ranges(@new_corporation, @member)
       ranges.count.should == 1
       ranges.first.begin.should be_within(1.minute).of(1.year.ago)
