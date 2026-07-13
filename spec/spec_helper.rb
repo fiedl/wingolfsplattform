@@ -99,8 +99,9 @@ Geocoder.configure( lookup: :test )
 
 require 'selenium/webdriver'
 
-# Capybara 3 defaults to puma as its test server, which is not bundled.
-Capybara.server = :webrick
+# Puma is bundled (it is the production server); webrick left the
+# ruby standard library with ruby 3.
+Capybara.server = :puma, { Silent: true }
 
 # Feature specs run against a browser in a separate docker container
 # (CHROME_URL), so the app under test must be reachable from there:
