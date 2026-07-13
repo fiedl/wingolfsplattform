@@ -88,7 +88,7 @@ module ListExports
     # This exports the `data` into a csv formatted String.
     #
     def to_csv
-      CSV.generate(csv_options) do |csv|
+      CSV.generate(**csv_options) do |csv|
         csv << headers
         data_rows.each do |row|
           csv << columns.collect do |column_name|
