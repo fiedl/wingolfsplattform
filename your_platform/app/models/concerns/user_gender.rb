@@ -45,14 +45,17 @@ concern :UserGender do
   #     John Doe
   #
   def male_or_female_salutation
+    # locale as keyword: i18n < 1.8 silently swallowed the positional
+    # argument (the salutation was always in the default locale);
+    # ruby 3 raises instead. The keyword makes it work as intended.
     if female?
       if age < 18
-        I18n.translate(:to_ms, locale)
+        I18n.translate(:to_ms, locale: locale)
       else
-        I18n.translate(:to_mrs, locale)
+        I18n.translate(:to_mrs, locale: locale)
       end
     else
-      I18n.translate(:to_mr, locale)
+      I18n.translate(:to_mr, locale: locale)
     end
   end
 
