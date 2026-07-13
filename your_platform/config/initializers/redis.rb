@@ -27,7 +27,10 @@ class Redis
     end
 
     # @api private
-    def method_missing(*a,&b)
+    # ruby2_keywords: plain splat forwarding breaks keyword arguments
+    # on ruby 3 (redis commands like set(key, value, ex:) arrive with
+    # the options hash as a positional argument otherwise).
+    ruby2_keywords def method_missing(*a,&b)
       Namespace.new(current_namespace, @options).public_send(*a,&b)
     end
   end
