@@ -5,7 +5,7 @@
 # Production:
 #     docker build --target production -t wingolfsplattform .
 
-FROM ruby:3.4 AS base
+FROM ruby:4.0 AS base
 
 RUN apt-get update && \
     apt-get install -y ca-certificates curl \

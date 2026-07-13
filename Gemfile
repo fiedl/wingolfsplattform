@@ -68,6 +68,12 @@ source 'https://rubygems.org' do
   gem 'json'
   gem 'colored'
 
+  # Former ruby default gems, pruned from the standard library by
+  # ruby 4; required at boot by rails and friends.
+  gem 'benchmark'
+  gem 'observer'
+  gem 'ostruct'
+
   # Security fixes
   gem 'rubyzip', '>= 1.2.1'  # CVE-2017-5946
   gem 'nokogiri', '>= 1.7.1'  #  USN-3235-1
@@ -112,4 +118,4 @@ source 'https://rubygems.org' do
 
 end
 
-ruby '~> 3.4.0'
+ruby '>= 3.4'
