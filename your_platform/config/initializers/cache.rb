@@ -24,13 +24,30 @@ cache_redis_configuration = RedisConnectionConfiguration.new(:cache, port: cache
 # the store applies it as a key prefix, so no Redis::Namespace wrapper
 # is involved anymore (core_ext/active_support/cache.rb works on the
 # prefixed raw keys accordingly).
+# Marshal the whole entry object: the rails >= 7.1 default coder
+# reconstructs entries on every read, which would discard the
+# write-time stamp the renew mechanism compares against (see
+# core_ext/active_support/cache.rb).
+#
+# Entries written by an older rails version may reference classes that
+# no longer exist (rails 5 cached ActiveRecord::AttributeSet objects,
+# for example). Treat those as cache misses instead of raising into
+# the request that happens to read them.
+module CacheEntryMarshalCoder
+  def self.dump(entry)
+    Marshal.dump(entry)
+  end
+
+  def self.load(payload)
+    Marshal.load(payload)
+  rescue ArgumentError, NameError, TypeError
+    nil
+  end
+end
+
 Rails.application.config.cache_store = :redis_cache_store, {
   redis: cache_redis_configuration.to_redis,
-  # Marshal the whole entry object: the rails >= 7.1 default coder
-  # reconstructs entries on every read, which would discard the
-  # write-time stamp the renew mechanism compares against (see
-  # core_ext/active_support/cache.rb).
-  coder: Marshal,
+  coder: CacheEntryMarshalCoder,
   namespace: cache_redis_configuration.namespace,
   expires_in: if Rails.env.production?
       1.week
