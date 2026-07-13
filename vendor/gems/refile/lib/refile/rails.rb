@@ -27,8 +27,10 @@ module Refile
     end
 
     initializer "refile.secret_key" do |app|
-      Refile.secret_key ||= if app.respond_to?(:secrets)
-        app.secrets.secret_key_base
+      # vendored change: config first — app.secrets is deprecated in
+      # rails 7.1 and removed in 7.2.
+      Refile.secret_key ||= if app.config.respond_to?(:secret_key_base) && app.config.secret_key_base
+        app.config.secret_key_base
       elsif app.config.respond_to?(:secret_key_base)
         app.config.secret_key_base
       elsif app.config.respond_to?(:secret_token)

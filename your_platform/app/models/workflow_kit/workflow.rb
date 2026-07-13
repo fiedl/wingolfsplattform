@@ -81,7 +81,7 @@ module WorkflowKit
     def wah_group  # => TODO: Delete this method and check specs.
       corporation
     end
-    deprecate :wah_group  # http://stackoverflow.com/a/7112231/2066546
+    deprecate :wah_group, deprecator: ActiveSupport::Deprecation.new  # http://stackoverflow.com/a/7112231/2066546
 
     def parent
       parent_groups.first

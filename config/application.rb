@@ -18,12 +18,6 @@ module Wingolfsplattform
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    # Zeitwerk, flipped ahead of the defaults (no config.load_defaults
-    # yet): classic autoloading is gone in rails 7, and 6.x is the
-    # version window where both modes work and the switch can be
-    # verified in isolation.
-    config.autoloader = :zeitwerk
-
     # App secrets, formerly config/secrets.yml: Rails.application.secrets
     # is removed in rails 7.2. Values come from the environment; the yml
     # provides known dummy fallbacks for development and test.
