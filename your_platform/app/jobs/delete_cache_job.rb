@@ -6,7 +6,7 @@
 class DeleteCacheJob < ApplicationJob
   queue_as :cache
 
-  def perform(record)
+  def perform(record:)
     record.delete_cache
   end
 end

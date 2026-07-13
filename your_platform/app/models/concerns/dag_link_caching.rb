@@ -23,7 +23,7 @@ concern :DagLinkCaching do
     if ancestor.kind_of?(Group)
       nodes += Group.where(id: Dag::Traversal.ancestor_ids_of(ancestor, type: 'Group')).to_a
     end
-    RenewCacheJob.perform_later nodes.uniq, time: Time.zone.now
+    RenewCacheJob.perform_later records: nodes.uniq, time: Time.zone.now
   end
 
 end

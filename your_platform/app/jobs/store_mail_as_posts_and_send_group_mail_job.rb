@@ -7,14 +7,14 @@ class StoreMailAsPostsAndSendGroupMailJob < ApplicationJob
   # Therefore, we only allow synchronous performance as a temporary
   # workaround.
   #
-  def self.perform_later(*args)
+  def self.perform_later(*, **)
     raise RuntimeError, 'Only `perform_now` is allowed at the moment.'
   end
-  def self.perform(*args)
-    self.perform_now(*args)
+  def self.perform(...)
+    self.perform_now(...)
   end
 
-  def perform(message)
+  def perform(message:)
     sleep_a_random_time
     wait_for_unlock
     lock do

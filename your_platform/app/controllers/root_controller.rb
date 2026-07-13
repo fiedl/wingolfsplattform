@@ -44,7 +44,7 @@ class RootController < ApplicationController
     if Group.alle_wingolfiten.read_cached(:member_table_rows).present?
       true
     else
-      RenewCacheJob.perform_later Group.alle_wingolfiten, method: :fill_cache
+      RenewCacheJob.perform_later records: Group.alle_wingolfiten, method: :fill_cache
       false
     end
   }

@@ -6,7 +6,7 @@
 class AssignContactPersonToEventJob < ApplicationJob
   queue_as :default
 
-  def perform(event_id, contact_person_id)
+  def perform(event_id:, contact_person_id:)
     Event.assign_contact_person_to_event event_id, contact_person_id
   end
 end

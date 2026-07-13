@@ -1,6 +1,6 @@
 class CreateAktivmeldungJob < ApplicationJob
 
-  def perform(user_params)
+  def perform(user_params:)
     @user_params = user_params
 
     user = User.create!(basic_user_params)

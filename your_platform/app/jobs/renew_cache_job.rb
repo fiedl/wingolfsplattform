@@ -1,5 +1,5 @@
-# This job renews the cache of the given `record`.
-# Only caches that are older than `options[:time]` are renewed.
+# This job renews the cache of the given `records`.
+# Only caches that are older than `time` are renewed.
 #
 class RenewCacheJob < ApplicationJob
   queue_as :cache
@@ -12,43 +12,37 @@ class RenewCacheJob < ApplicationJob
     super
   end
 
-  def perform(record_or_records, options)
-    if record_or_records.respond_to? :each
-      record_or_records.each { |record| perform_on_record(record, options) }
-    else
-      perform_on_record(record_or_records, options)
-    end
+  def perform(records:, time:, method: nil, methods: nil)
+    Array(records).each { |record| perform_on_record(record, time:, method:, methods:) }
   end
 
-  def perform_on_record(record, options)
+  def perform_on_record(record, time:, method: nil, methods: nil)
     Rails.cache.running_from_background_job = true
-    Sidekiq.logger.info "Running RenewCacheJob for #{record.title} with #{options.to_s}.\n" unless Rails.env.test?
-    renew_cache(record, options)
+    Sidekiq.logger.info "Running RenewCacheJob for #{record.title} with time: #{time}, method: #{method}, methods: #{methods}.\n" unless Rails.env.test?
+    renew_cache(record, time:, method:, methods:)
     Rails.cache.running_from_background_job = false
   end
 
-  def renew_cache(record, options)
+  def renew_cache(record, time:, method: nil, methods: nil)
     with_timeout do
       if record
-        if options[:method].present?
-          Rails.cache.renew(options[:time]) { record.send(options[:method]) if record.respond_to?(options[:method]) }
-        elsif options[:methods]
-          Rails.cache.renew(options[:time]) do
-            options[:methods].each do |method|
-              record.send(method) if record.respond_to?(method)
+        if method.present?
+          Rails.cache.renew(time) { record.send(method) if record.respond_to?(method) }
+        elsif methods
+          Rails.cache.renew(time) do
+            methods.each do |cached_method|
+              record.send(cached_method) if record.respond_to?(cached_method)
             end
           end
         else
-          record.renew_cache (options[:time])
+          record.renew_cache(time)
         end
       end
     end
   end
 
-  def self.perform_later(record_or_records, options = {})
-    options[:time] ||= Time.zone.now
-    options[:method] = options[:method].to_s
-    super(record_or_records, options)
+  def self.perform_later(records:, time: Time.zone.now, method: nil, methods: nil)
+    super(records:, time:, method: method.to_s, methods:)
   end
 
 end

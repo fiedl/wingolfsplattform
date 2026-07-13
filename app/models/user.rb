@@ -187,7 +187,7 @@ class User
     end
 
     # Cache zurücksetzen
-    DeleteCacheJob.perform_later self
+    DeleteCacheJob.perform_later record: self
 
     self.groups.reload
     return new_membership

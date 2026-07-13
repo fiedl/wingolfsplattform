@@ -150,7 +150,7 @@ concern :Caching do
 
   def renew_cache_later(options = {})
     options[:time] ||= Rails.cache.renew_at || Time.zone.now
-    RenewCacheJob.perform_later(self, time: options[:time], method: options[:method])
+    RenewCacheJob.perform_later(records: self, time: options[:time], method: options[:method])
   end
 
   # The default way to fill the cache is to call all methods
