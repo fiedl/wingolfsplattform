@@ -175,7 +175,8 @@ module Dag
         self.class_eval do
           define_method "#{prefix}ancestor_#{table_name}" do
             klass = class_name.constantize
-            klass.where("#{klass.table_name}.id IN (#{Dag::Traversal.ancestor_ids_sql(
+            # default_scoped: see the descendant accessor above.
+            klass.default_scoped.where("#{klass.table_name}.id IN (#{Dag::Traversal.ancestor_ids_sql(
               descendant_type: self.class.base_class.name, descendant_ids: [id],
               ancestor_type: klass.base_class.name)})")
           end
@@ -236,7 +237,10 @@ module Dag
         self.class_eval do
           define_method "#{prefix}descendant_#{table_name}" do
             klass = class_name.constantize
-            klass.where("#{klass.table_name}.id IN (#{Dag::Traversal.descendant_ids_sql(
+            # default_scoped: the traversal means all descendants, not
+            # the subset of whatever scoping block happens to be active
+            # (which rails 6.1 stops leaking into class methods anyway).
+            klass.default_scoped.where("#{klass.table_name}.id IN (#{Dag::Traversal.descendant_ids_sql(
               ancestor_type: self.class.base_class.name, ancestor_ids: [id],
               descendant_type: klass.base_class.name)})")
           end

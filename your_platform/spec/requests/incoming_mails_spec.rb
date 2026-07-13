@@ -22,7 +22,7 @@ describe "Incoming mails" do
       }
 
       it { should_not be_unauthorized }
-      it { should be_success } # "201 created"
+      it { should be_successful } # "201 created"
 
       #it 'returns the created incoming_mail' do
       #  subject
@@ -34,7 +34,7 @@ describe "Incoming mails" do
 
     describe "/incoming_emails" do
       subject { post '/incoming_emails', params: {message: example_raw_message}; response }
-      it { should be_success }
+      it { should be_successful }
     end
   end
 end
