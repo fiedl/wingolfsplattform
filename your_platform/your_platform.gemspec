@@ -119,7 +119,12 @@ Gem::Specification.new do |s|
   s.add_dependency 'simple_form', '>= 5.0.0' # GHSA-r74q-gxcg-73hx, https://trello.com/c/rX2RZtgU/1438
 
   # File Uploads
-  s.add_dependency 'carrierwave', '~> 0.11'                                                       # MIT License
+  # Store paths are unchanged by the bump: the uploader defines an
+  # absolute store_dir, and production uploads exist there.
+  # 1.x, not 2.x: carrierwave 2 needs image_processing >= 1.1, which
+  # refile-mini_magick caps below 1.0 — revisit with the refile ->
+  # ActiveStorage migration.
+  s.add_dependency 'carrierwave', '~> 1.3'
   s.add_dependency 'mini_magick', '>= 4.9.4' # CVE-2019-13574
   s.add_dependency 'refile', '>= 0.5.5'
   s.add_dependency 'rest-client', '>= 1.8'
