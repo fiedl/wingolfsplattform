@@ -38,8 +38,8 @@ require 'rack/cors'
 # Authorization
 require 'cancancan'
 
-# Settings
-require 'rails-settings-cached'
+# Settings (vendored, formerly the rails-settings-cached gem)
+require 'rails_settings'
 
 # Template Engines
 require 'haml'

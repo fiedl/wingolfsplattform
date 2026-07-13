@@ -96,7 +96,6 @@ source 'https://rubygems.org' do
   # Temporary Forks and Overrides
   gem 'refile', git: 'https://github.com/sobrinho/refile'
   gem 'refile-mini_magick', git: 'https://github.com/refile/refile-mini_magick'
-  gem 'rails-settings-cached', '0.7.1'
 
   # To customly set timeout time we need rack-timeout
   gem 'rack-timeout'

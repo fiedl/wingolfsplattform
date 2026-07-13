@@ -91,8 +91,9 @@ Gem::Specification.new do |s|
   # To use ActiveModel has_secure_password (password encryption)
   s.add_dependency 'bcrypt', '>= 3.0.1'                                                # MIT License
 
-  # Settings
-  s.add_dependency 'rails-settings-cached', '>= 0.6.5'
+  # Settings: vendored in lib/rails_settings (formerly the
+  # rails-settings-cached gem, whose 2.x line dropped object-scoped
+  # settings; the settings table holds production data).
 
   # Template Engines
   # haml 4 references the Erubis template handler that rails 5.2 removed.
