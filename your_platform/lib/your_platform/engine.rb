@@ -53,7 +53,7 @@ require 'jquery-rails'
 require 'sugar-rails'
 require 'i18n-js'
 
-require 'sass-rails'
+require 'sassc-rails'
 
 # Search
 require 'elasticsearch/model'

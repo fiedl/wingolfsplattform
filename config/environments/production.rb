@@ -20,7 +20,7 @@ Rails.application.configure do
 
   # Compress JavaScripts and CSS.
   # https://github.com/lautis/uglifier/issues/127#issuecomment-352224986
-  config.assets.js_compressor = Uglifier.new(harmony: true)
+  config.assets.js_compressor = :terser
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.

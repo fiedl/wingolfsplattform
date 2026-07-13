@@ -48,7 +48,7 @@ Rails.application.configure do
 
   # Simulate asset stuff to mimic production.
   if ENV['SIMULATE_PRODUCTION']
-    config.assets.js_compressor = :uglifier
+    config.assets.js_compressor = :terser
     config.assets.css_compressor = :sass
     config.assets.compile = false
     config.assets.digest = true

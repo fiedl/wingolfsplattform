@@ -7,8 +7,8 @@ source 'https://rubygems.org' do
   # was only needed for rails 5.0. 1.5 is the last line for ruby 2.7;
   # lift to 1.6 with the ruby 3 bump.
   gem 'pg', '~> 1.5.0'
-  gem 'sass-rails'
-  gem 'uglifier', '>= 1.3.0'
+  gem 'sassc-rails' # ruby-sass is EOL; libsass via sassc
+  gem 'terser' # uglifier is abandoned and fails on ES6
   gem 'coffee-rails', '>= 4.0.0'
   gem 'turbolinks'
 

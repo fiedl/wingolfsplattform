@@ -105,8 +105,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'auto_html', '~> 1.6.4'
   s.add_dependency 'reverse_markdown'
 
-  s.add_dependency 'sass-rails'
-  s.add_dependency 'sass', '>= 3.7.4' # https://github.com/twbs/bootstrap/issues/24549#issuecomment-339473607
+  s.add_dependency 'sassc-rails' # ruby-sass is EOL; libsass via sassc
 
   # Search
   s.add_dependency 'elasticsearch-model'
@@ -198,8 +197,7 @@ Gem::Specification.new do |s|
   # Fixes
   # https://github.com/eventmachine/eventmachine/issues/509
   s.add_dependency 'eventmachine', '>= 1.0.7'
-  # https://github.com/lautis/uglifier/pull/86
-  s.add_dependency 'uglifier', '>= 2.7.2'
+  s.add_dependency 'terser' # uglifier is abandoned and fails on ES6
   s.add_dependency 'mail', '~> 2.8' # 2.6.6 crashed on nil Sender, https://github.com/fiedl/wingolfsplattform/issues/109
   s.add_dependency 'nokogiri', '>= 1.10.4' # CVE-2019-5477, https://trello.com/c/whoVKwMA/1394
   s.add_dependency 'actionpack', '>= 4.2.5.2' # CVE-2016-2098, https://gemnasium.com/fiedl/your_platform/alerts#advisory_342
