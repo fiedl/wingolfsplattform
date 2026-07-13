@@ -5,7 +5,7 @@
 # Production:
 #     docker build --target production -t wingolfsplattform .
 
-FROM ruby:3.1 AS base
+FROM ruby:3.4 AS base
 
 RUN apt-get update && \
     apt-get install -y ca-certificates curl \
@@ -26,7 +26,9 @@ RUN git config --global --add safe.directory '*'
 # This is ok for ghostscript >= 9.24, which we do have.
 # https://www.kb.cert.org/vuls/id/332928/
 #
-RUN sed -i -e 's|<policy domain="coder" rights="none" pattern="PDF" />|<policy domain="coder" rights="read \| write" pattern="PDF" />|g' /etc/ImageMagick-6/policy.xml
+# Only ImageMagick 6 (bookworm and earlier) ships the PDF block;
+# the ImageMagick 7 policy of newer Debians does not restrict PDF.
+RUN if [ -f /etc/ImageMagick-6/policy.xml ]; then sed -i -e 's|<policy domain="coder" rights="none" pattern="PDF" />|<policy domain="coder" rights="read \| write" pattern="PDF" />|g' /etc/ImageMagick-6/policy.xml; fi
 
 # Tool for waiting for the database, honoring WAIT_HOSTS (docker-compose-wait).
 RUN curl -fsSL https://github.com/ufoscout/docker-compose-wait/releases/download/2.12.1/wait -o /wait && \

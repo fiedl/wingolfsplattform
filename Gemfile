@@ -112,4 +112,4 @@ source 'https://rubygems.org' do
 
 end
 
-ruby '~> 3.1.0'
+ruby '~> 3.4.0'
