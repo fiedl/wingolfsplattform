@@ -73,6 +73,7 @@ source 'https://rubygems.org' do
   gem 'benchmark'
   gem 'observer'
   gem 'ostruct'
+  gem 'readline'  # required by pry-remote
 
   # Security fixes
   gem 'rubyzip', '>= 1.2.1'  # CVE-2017-5946
