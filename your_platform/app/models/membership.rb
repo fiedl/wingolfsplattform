@@ -25,12 +25,12 @@ class Membership < DagLink
     @membership_logger ||= Logger.new("#{Rails.root}/log/memberships.log")
   end
 
-  def save(*args)
+  def save(*args, **options)
     if valid_from_changed?
       callstack = caller.select { |entry| entry.include?("app/") }.join(", ")
       self.class.logger.info "Saving membership #{self.attributes.to_s}: #{callstack}"
     end
-    super(*args)
+    super(*args, **options)
   end
 
 

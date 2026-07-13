@@ -1,0 +1,11 @@
+# Active Storage service definitions, required by the framework since
+# rails 6.1 even though the app itself still stores files via
+# carrierwave and refile (the ActiveStorage migration is a separate
+# project, https://github.com/fiedl/wingolfsplattform/issues/126).
+local:
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
+
+test:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>

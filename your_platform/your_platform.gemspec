@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   #
 
   # Rails and Rails Additions
-  s.add_dependency "rails", "~> 6.0.0"
+  s.add_dependency "rails", "~> 6.1.0"
   s.add_dependency 'rack', '>= 1.6.2'
   s.add_dependency "rails-i18n"                                                        # MIT License
   s.add_dependency "responders", "~> 3.0"
@@ -49,7 +49,7 @@ Gem::Specification.new do |s|
   # https://github.com/fiedl/acts-as-dag (branch sf/rails-5).
   s.add_dependency 'acts_as_tree'                                                      # MIT License
   s.add_dependency 'wannabe_bool'
-  s.add_dependency 'acts-as-taggable-on', '~> 6.0'
+  s.add_dependency 'acts-as-taggable-on', '>= 7.0'
 
   # Caching (rails' redis_cache_store; redis-namespace only for sidekiq)
   s.add_dependency 'redis', '>= 4.0.1' # required by redis_cache_store

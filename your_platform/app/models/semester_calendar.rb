@@ -72,8 +72,8 @@ class SemesterCalendar < ApplicationRecord
     events.commers.first
   end
 
-  def save(*args)
-    super(*args)
+  def save(*args, **options)
+    super(*args, **options)
     self.events.map(&:save)
   end
 

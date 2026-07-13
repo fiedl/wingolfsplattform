@@ -12,7 +12,6 @@ class Attachment < ApplicationRecord
 
   scope :logos, -> { where('title ILIKE ?', "%logo%") }
   scope :documents, -> { where('content_type ILIKE ? or content_type ILIKE ?', "application/pdf", "%document%") }
-  scope :belongs_to_page_without_group, -> { includes(parent_page: :ancestor_groups).where(groups: {id: nil}) }
 
   include Flags
   include HasAuthor

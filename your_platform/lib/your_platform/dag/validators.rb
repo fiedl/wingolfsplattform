@@ -10,9 +10,9 @@ module Dag
   class CreateCorrectnessValidator < ActiveModel::Validator
 
     def validate(record)
-      record.errors[:base] << 'Link must start and end in different places' if has_short_cycles(record)
-      record.errors[:base] << 'Link would create a cycle' if has_long_cycles(record)
-      record.errors[:base] << 'Only direct links can be created' unless record.direct?
+      record.errors.add :base, 'Link must start and end in different places' if has_short_cycles(record)
+      record.errors.add :base, 'Link would create a cycle' if has_long_cycles(record)
+      record.errors.add :base, 'Only direct links can be created' unless record.direct?
     end
 
     private
@@ -43,8 +43,8 @@ module Dag
   class UpdateCorrectnessValidator < ActiveModel::Validator
 
     def validate(record)
-      record.errors[:base] << "No changes" unless record.changed?
-      record.errors[:base] << "The direct flag cannot change; create or destroy the link instead" if record.direct_changed?
+      record.errors.add :base, "No changes" unless record.changed?
+      record.errors.add :base, "The direct flag cannot change; create or destroy the link instead" if record.direct_changed?
     end
 
   end

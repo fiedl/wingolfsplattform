@@ -194,7 +194,8 @@ module CacheStoreExtension
   def entry(name)
     options = merged_options(nil)
     key = normalize_key(name, options)
-    read_entry(key, options)
+    # Keyword splat: since rails 6.1, read_entry takes **options.
+    read_entry(key, **options)
   end
 
   # This method reveals when a cache entry has been created.
