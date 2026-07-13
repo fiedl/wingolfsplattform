@@ -55,6 +55,10 @@ UserCorporations concern.
 
 ## History
 
+- 2026-07-13, rails 8.1.3 / ruby 4.0.5 / postgres 17: full suite
+  green across 24 shards, one gate per version hop (5.1, 5.2, 6.0,
+  zeitwerk, 6.1, ruby 3.1, 7.0, 7.2 + haml 6, ruby 3.4, 8.1,
+  ruby 4.0).
 - 2026-07-12, rails 5.2.8.1 / ruby 2.7.1 / postgres 17: full suite
   green across 24 shards (~2000 examples).
 - 2026-07-05, rails 5.0.7.2 / mysql 5.7, against the demo app (now
