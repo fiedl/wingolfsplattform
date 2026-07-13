@@ -50,12 +50,12 @@ concern :UserGender do
     # ruby 3 raises instead. The keyword makes it work as intended.
     if female?
       if age < 18
-        I18n.translate(:to_ms, locale: locale)
+        I18n.translate(:to_ms, locale:)
       else
-        I18n.translate(:to_mrs, locale: locale)
+        I18n.translate(:to_mrs, locale:)
       end
     else
-      I18n.translate(:to_mr, locale: locale)
+      I18n.translate(:to_mr, locale:)
     end
   end
 

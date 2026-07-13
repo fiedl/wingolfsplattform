@@ -1,7 +1,7 @@
 -# Shadows the engine partial of the same name; see devise/sessions/new.
-= render inline: File.read(YourPlatform::Engine.root.join('app/views/users/_data_summary.html.haml')), type: :haml, locals: {user: user}
+= render inline: File.read(YourPlatform::Engine.root.join('app/views/users/_data_summary.html.haml')), type: :haml, locals: {user:}
 
 - if user.bv
   %ul.attributes
-    %li= render partial: 'users/user_bv_attribute', locals: {user: user}
+    %li= render partial: 'users/user_bv_attribute', locals: {user:}
     
