@@ -1,6 +1,9 @@
 class CommentMailer < BaseMailer
 
-  def comment_email(post:, recipient:)
+  # Parameterized like PostMailer#post_email.
+  def comment_email
+    post = params[:post]
+    recipient = params[:recipient]
     @subject = post.title
     @post_url = post_url(post)
     @current_user = recipient

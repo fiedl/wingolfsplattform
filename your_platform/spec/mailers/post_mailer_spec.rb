@@ -13,7 +13,7 @@ describe PostMailer, type: :model do
     let(:recipient) { create :user_with_account }
     let(:post) { group.create_post author_user_id: author.id, subject: "Great news", text: "Free drinks this evening!", sent_at: 1.hour.ago }
 
-    subject(:message) { PostMailer.post_email(post: post, recipient: recipient) }
+    subject(:message) { PostMailer.with(post: post, recipient: recipient).post_email }
 
     # DMARC requires SPF or DKIM to validate for the `From:` domain,
     # which neither can when we send the author's address through our

@@ -13,7 +13,7 @@ class Comment < ApplicationRecord
   def comment_emails
     raise 'this is only supported for post comments' unless commentable.kind_of? Post
     recipients.collect do |recipient|
-      CommentMailer.comment_email(post: commentable, recipient: recipient)
+      CommentMailer.with(post: commentable, recipient: recipient).comment_email
     end
   end
 

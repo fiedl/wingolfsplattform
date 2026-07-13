@@ -1,6 +1,11 @@
 class PostMailer < BaseMailer
 
-  def post_email(post:, recipient:)
+  # Parameterized (PostMailer.with(post:, recipient:).post_email):
+  # keyword arguments on mailer actions stopped surviving action
+  # mailer's process chain with ruby 3.4.
+  def post_email
+    post = params[:post]
+    recipient = params[:recipient]
     @subject = post.title
     @post_url = post_url(post)
     @body = post.text.html_safe

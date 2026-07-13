@@ -16,7 +16,7 @@ describe CommentMailer, type: :model do
     # (see PrivateViews); the specs bring their own minimal one.
     before { CommentMailer.prepend_view_path File.expand_path("../../support/views", __FILE__) }
 
-    subject(:message) { CommentMailer.comment_email(post: post, recipient: recipient) }
+    subject(:message) { CommentMailer.with(post: post, recipient: recipient).comment_email }
 
     # DMARC requires SPF or DKIM to validate for the `From:` domain,
     # which neither can when we send the author's address through our
