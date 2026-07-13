@@ -115,7 +115,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'biggs'
 
   # Form Helper
-  s.add_dependency 'formtastic'  # MIT License
+  s.add_dependency 'formtastic', '~> 5.0' # 6.0 drops the bundled stylesheets the layouts require
   s.add_dependency 'simple_form', '>= 5.0.0' # GHSA-r74q-gxcg-73hx, https://trello.com/c/rX2RZtgU/1438
 
   # File Uploads

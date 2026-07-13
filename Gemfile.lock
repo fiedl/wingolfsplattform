@@ -48,7 +48,7 @@ PATH
       faker (~> 2.3)
       fiedl-log
       foreman
-      formtastic
+      formtastic (~> 5.0)
       gemoji (>= 2.1.0)
       gender_detector
       geocoder
@@ -319,8 +319,8 @@ GEM
     foreman (0.90.0)
       thor (~> 1.4)
     formatador (0.3.0)
-    formtastic (6.0.0)
-      actionpack (>= 7.2.0)
+    formtastic (5.0.0)
+      actionpack (>= 6.0.0)
     gemoji (3.0.1)
     gender_detector (2.1.0)
     geocoder (1.8.6)
