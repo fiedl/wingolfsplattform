@@ -16,7 +16,7 @@ require_relative './redis'
 
 ENV['REDIS_HOST'] || raise('ENV["REDIS_HOST"] not set, yet.')
 
-cache_redis_port = Rails.application.secrets.cache_redis_port || "6379"
+cache_redis_port = Rails.application.config.app_secrets.cache_redis_port || "6379"
 cache_redis_configuration = RedisConnectionConfiguration.new(:cache, port: cache_redis_port)
 
 # rails' built-in redis cache store (5.2+), replacing redis-rails.

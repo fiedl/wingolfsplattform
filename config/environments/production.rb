@@ -58,10 +58,10 @@ Rails.application.configure do
   # Mailing
   config.action_mailer.perform_caching = false
   config.action_mailer.smtp_settings = {
-      address: Rails.application.secrets.smtp_host,
-      user_name: Rails.application.secrets.smtp_user,
-      password: Rails.application.secrets.smtp_password,
-      domain: Rails.application.secrets.smtp_domain,
+      address: Rails.application.config.app_secrets.smtp_host,
+      user_name: Rails.application.config.app_secrets.smtp_user,
+      password: Rails.application.config.app_secrets.smtp_password,
+      domain: Rails.application.config.app_secrets.smtp_domain,
       enable_starttls_auto: true,
       # only if certificate malfunctions:
       # openssl_verify_mode: OpenSSL::SSL::VERIFY_NONE
@@ -70,7 +70,7 @@ Rails.application.configure do
   # See: http://stackoverflow.com/a/12609856/2066546
   config.action_mailer.default_options = {
     from: 'Wingolfsplattform <noreply@wingolf.io>',
-    sender: Rails.application.secrets.smtp_user
+    sender: Rails.application.config.app_secrets.smtp_user
   }
 
   config.action_mailer.default_url_options = { host: 'wingolf.io', protocol: 'https' }

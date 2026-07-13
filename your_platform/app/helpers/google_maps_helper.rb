@@ -10,7 +10,7 @@ module GoogleMapsHelper
   end
 
   def google_maps_api_key
-    Rails.application.secrets.google_maps_api_key
+    Rails.application.config.app_secrets.google_maps_api_key
   end
 
   def map_of_address_profile_fields(address_profile_fields, options = {})

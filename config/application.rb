@@ -24,6 +24,12 @@ module Wingolfsplattform
     # verified in isolation.
     config.autoloader = :zeitwerk
 
+    # App secrets, formerly config/secrets.yml: Rails.application.secrets
+    # is removed in rails 7.2. Values come from the environment; the yml
+    # provides known dummy fallbacks for development and test.
+    config.app_secrets = config_for(:app_secrets)
+    config.secret_key_base = config.app_secrets.secret_key_base
+
     # Serialized columns (pages.redirect_to, pages.box_configuration,
     # settings.value) hold more than plain strings; rails >= 5.2.8.1
     # rejects these classes in YAML columns unless listed

@@ -13,7 +13,7 @@ module Api::V1
     def sign_in
       authorize! :use, :single_sign_on
 
-      secret = Rails.application.secrets.sso_secret || raise(StandardError, 'no sso_secret configured')
+      secret = Rails.application.config.app_secrets.sso_secret || raise(StandardError, 'no sso_secret configured')
 
       request.query_string.include?("sso=") || raise(ActionController::ParameterMissing, 'no "sso" parameter given')
       request.query_string.include?("sig=") || raise(ActionController::ParameterMissing, 'no "sig" parameter given')

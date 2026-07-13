@@ -27,7 +27,7 @@ module GalleriaHelper
 
   def video_gallery(video_url)
     content_tag :div, class: 'wysihtml-uneditable-container for-video-gallery', contenteditable: false do
-      content_tag :div, class: 'galleria video-gallery', data: {video_url: video_url, theme_js_path: asset_path('galleria-classic.js'), you_tube_api_key: Rails.application.secrets.you_tube_api_key} do
+      content_tag :div, class: 'galleria video-gallery', data: {video_url: video_url, theme_js_path: asset_path('galleria-classic.js'), you_tube_api_key: Rails.application.config.app_secrets.you_tube_api_key} do
         content_tag :a, href: video_url do
           content_tag :span, class: 'video' do
             "Video"
