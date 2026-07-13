@@ -4,7 +4,6 @@ feature "Pages" do
   include SessionSteps
 
   scenario "Visiting a page" do
-    pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @page = Page.create(title: "My Shiny Page")
     login :user
 

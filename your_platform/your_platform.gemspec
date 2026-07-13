@@ -99,7 +99,7 @@ Gem::Specification.new do |s|
   # haml 4 references the Erubis template handler that rails 5.2 removed.
   # (The precompiled_method_return_value NameError that once blocked
   # haml 5 — see bad4932c — did not reproduce on rails 5.2 with haml 5.2.)
-  s.add_dependency 'haml', '~> 5.0'
+  s.add_dependency 'haml', '>= 6.0' # rails 7.1's capture needs a real OutputBuffer, which haml 5 replaced with a String
   s.add_dependency 'redcarpet', '>= 3.3.2'  # for Markdown                             # MIT License
   s.add_dependency 'gemoji', '>= 2.1.0'
   s.add_dependency 'auto_html', '~> 1.6.4'

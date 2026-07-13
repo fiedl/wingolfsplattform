@@ -53,7 +53,7 @@ PATH
       gender_detector
       geocoder
       groupdate
-      haml (~> 5.0)
+      haml (>= 6.0)
       i18n-js (>= 3.0.0.rc8)
       icalendar
       impressionist (>= 1.6)
@@ -344,8 +344,9 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
-    haml (5.2.2)
-      temple (>= 0.8.0)
+    haml (6.4.0)
+      temple (>= 0.8.2)
+      thor
       tilt
     hashie (5.1.0)
       logger
@@ -408,8 +409,9 @@ GEM
       activemodel (>= 7.0)
     marcel (1.2.1)
     matrix (0.4.3)
-    merit (4.0.1)
+    merit (5.0.0)
       ambry (~> 1.0.0)
+      observer
       zeitwerk
     method_source (1.1.0)
     mime-types (3.7.0)
@@ -458,6 +460,7 @@ GEM
       anonymous_loader (~> 0.1, >= 0.1.1)
       auth-sanitizer (~> 0.2, >= 0.2.2)
       version_gem (~> 1.1, >= 1.1.12)
+    observer (0.1.2)
     orm_adapter (0.5.0)
     ostruct (0.6.3)
     parallel (1.12.0)
@@ -741,7 +744,6 @@ DEPENDENCIES
   json!
   letter_opener!
   letter_opener_web!
-  merit (~> 4.0.1)!
   mini_racer!
   nokogiri (>= 1.7.1)!
   parallel_tests!

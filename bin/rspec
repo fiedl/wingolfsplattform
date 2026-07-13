@@ -23,6 +23,9 @@ if ARGV.empty? || ARGV.join(' ').include?('features')
   shell "bundle exec rails assets:precompile"
 end
 
-command = "bundle exec rspec #{ARGV.join(' ')}"
+# A clean RUBYOPT: the outer bin/bundle_exec already runs under
+# `bundle exec`, and the inherited -rbundler/setup confuses zeitwerk's
+# per-gem loaders (merit) into "cannot load such file -- <dir>".
+command = "env RUBYOPT= bundle exec rspec #{ARGV.join(' ')}"
 log.prompt command
 exec(command)

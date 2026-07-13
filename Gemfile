@@ -82,7 +82,6 @@ source 'https://rubygems.org' do
   gem 'i18n-js', '~> 3.8.0'
   gem 'chartkick', '~> 3.4.2'
   gem 'discourse_api', '~> 0.45.0'
-  gem 'merit', '~> 4.0.1'
   gem 'gemoji', '~> 3.0.1'
   gem 'reverse_markdown', '~> 2.0.0'
   gem 'biggs', '~> 0.3.3'
