@@ -1,4 +1,4 @@
-concern :ProfileFields do
+concern :HasProfileFields do
 
   included do
     has_many :profile_fields, as: :profileable, dependent: :destroy, autosave: true
