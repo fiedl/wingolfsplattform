@@ -139,6 +139,18 @@ class Ability
     @user
   end
 
+  # Several block rules ask for the same group's admins while one page
+  # renders, and each uncached answer walks the whole ancestor chain.
+  # The ability object lives for a single request, so the answers can
+  # be memoized here.
+  #
+  def user_is_admin_of?(group)
+    @user_is_admin_of ||= {}
+    @user_is_admin_of.fetch(group.id) do
+      @user_is_admin_of[group.id] = group.admins_of_self_and_ancestors.include?(user)
+    end
+  end
+
   def rights_for_beta_testers
     # can :use, :new_menu_feature
     can :use, :tab_view  # this switch is only for user-tabs; group-tabs are for all.
@@ -186,11 +198,12 @@ class Ability
     can :index, Issue
     if not read_only_mode?
       can :manage, Group do |group|
-        group.admins_of_self_and_ancestors.include? user
+        user_is_admin_of?(group)
       end
 
-      can [:update, :change_first_name, :change_alias, :create_account_for, :change_status], User, id: Role.of(user).administrated_users.map(&:id)
-      can :manage, UserAccount, user_id: Role.of(user).administrated_users.map(&:id)
+      administrated_user_ids = Role.of(user).administrated_user_ids
+      can [:update, :change_first_name, :change_alias, :create_account_for, :change_status], User, id: administrated_user_ids
+      can :manage, UserAccount, user_id: administrated_user_ids
 
       can :manage, ProfileField do |profile_field|
         profile_field.profileable.nil? ||  # in order to create profile fields

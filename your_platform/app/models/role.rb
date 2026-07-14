@@ -168,6 +168,14 @@ class Role
     directly_administrated_groups.collect { |g| g.descendant_users }.flatten
   end
 
+  # For authorization rules that only need the ids: one recursive
+  # query instead of instantiating every administrated user.
+  #
+  def administrated_user_ids
+    Dag::Traversal.descendant_ids ancestor_type: 'Group', descendant_type: 'User',
+      ancestor_ids: directly_administrated_groups.collect(&:id)
+  end
+
 
   # This finder method returns all global admins.
   #

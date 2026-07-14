@@ -57,24 +57,24 @@ module AbilityDefinitions
 
     if not read_only_mode?
       can :update, Group do |group|
-        group.admins_of_self_and_ancestors.include?(user)
+        user_is_admin_of?(group)
       end
       can :update, Corporation do |group|
-        group.aktivitas.admins_of_self_and_ancestors.include?(user)
+        user_is_admin_of?(group.aktivitas)
       end
       can :rename, Group do |group|
-        group.admins_of_self_and_ancestors.include?(user) and
+        user_is_admin_of?(group) and
 
         # local admins cannot rename groups with flags or corporations.
         #
         not (group.flags.present? || group.corporation?)
       end
       can :change_internal_token, Group do |group|
-        group.admins_of_self_and_ancestors.include?(user)
+        user_is_admin_of?(group)
       end
       # cannot :change_token, Group
       can :update_memberships, Group do |group|
-        group.admins_of_self_and_ancestors.include?(user) and
+        user_is_admin_of?(group) and
 
         # only global admins are allowed to manage local admins.
         #
@@ -84,7 +84,7 @@ module AbilityDefinitions
       # Administratoren von Gruppen dürfen Untergruppen erstellen.
       #
       can :create_group_for, Group do |group|
-        group.admins_of_self_and_ancestors.include?(user)
+        user_is_admin_of?(group)
       end
 
       # Administratoren einer Aktivitas dürfen ihr Amt weitergeben.
@@ -139,7 +139,7 @@ module AbilityDefinitions
       end
 
       can :destroy, Group do |group|
-        group.admins_of_self_and_ancestors.include?(user) and
+        user_is_admin_of?(group) and
 
         # One can't destroy a group with members.
         group.descendant_users.count == 0 and
@@ -148,8 +148,9 @@ module AbilityDefinitions
         group.flags.count == 0
       end
 
-      can [:read, :update, :change_first_name, :change_alias, :change_status, :create_account_for], User, id: Role.of(user).administrated_users.map(&:id)
-      can :manage, UserAccount, user_id: Role.of(user).administrated_users.map(&:id)
+      administrated_user_ids = Role.of(user).administrated_user_ids
+      can [:read, :update, :change_first_name, :change_alias, :change_status, :create_account_for], User, id: administrated_user_ids
+      can :manage, UserAccount, user_id: administrated_user_ids
       can :update_members, Group do |group|
         can? :update, group
       end
@@ -227,14 +228,11 @@ module AbilityDefinitions
     # Eingeloggte Benutzer können lebende Wingolfiten sehen.
     # Von der eigenen Verbindung darf man alle sehen, also auch Gäste.
     # Den Namen kann man von allen Nutzern sehen.
-    can :read, User, id: User.wingolfiten.alive.pluck(:id)
+    can :read, User, id: readable_wingolfit_ids
     # By member ids rather than a `groups:` hash condition: cancancan
     # would join the former groups association, which is now derived.
     # One query for all readable groups' members together.
-    readable_group_ids = user.corporations.collect { |corporation| corporation.child_groups.where(type: ["Aktivitas", "Philisterschaft"]).or(corporation.child_groups.where(name: ["Gäste", "Hausbewohner"])).pluck(:id) }.flatten
-    readable_subtree_ids = readable_group_ids + Dag::Traversal.descendant_ids(
-      ancestor_type: 'Group', ancestor_ids: readable_group_ids, descendant_type: 'Group')
-    can :read, User, id: Membership.direct.where(ancestor_id: readable_subtree_ids).distinct.pluck(:descendant_id)
+    can :read, User, id: readable_corporation_member_ids
     can [:index, :read_name], User
 
     # For the moment, everybody can view the statistics.
@@ -428,6 +426,40 @@ module AbilityDefinitions
   def rights_for_dummy_users
     super
 
+  end
+
+  private
+
+  # The set of living wingolfiten is the same for every signed-in
+  # user, so all requests share one cache entry instead of plucking
+  # thousands of ids each time. Membership changes delete the entry
+  # (see DagLinkCaching); the ttl covers the remaining inputs, such as
+  # newly recorded deaths.
+  #
+  def readable_wingolfit_ids
+    Rails.cache.fetch("ability/wingolfiten_alive_user_ids", expires_in: 10.minutes) do
+      User.wingolfiten.alive.pluck(:id)
+    end
+  end
+
+  # Users of the same corporations share the same readable-member set.
+  # Computed in three flat queries instead of one query chain per
+  # corporation; membership changes are picked up when the ttl runs
+  # out, which matches the eventual consistency the background cache
+  # renewal provides elsewhere.
+  #
+  def readable_corporation_member_ids
+    corporation_ids = user.corporations.map(&:id).sort
+    return [] if corporation_ids.empty?
+    Rails.cache.fetch(["ability/corporation_member_ids", corporation_ids], expires_in: 10.minutes) do
+      child_group_ids = DagLink.where(direct: true, ancestor_type: 'Group', descendant_type: 'Group',
+        ancestor_id: corporation_ids).select(:descendant_id)
+      readable_group_ids = Group.where(id: child_group_ids, type: ["Aktivitas", "Philisterschaft"])
+        .or(Group.where(id: child_group_ids, name: ["Gäste", "Hausbewohner"])).pluck(:id)
+      readable_subtree_ids = readable_group_ids + Dag::Traversal.descendant_ids(
+        ancestor_type: 'Group', ancestor_ids: readable_group_ids, descendant_type: 'Group')
+      Membership.direct.where(ancestor_id: readable_subtree_ids).distinct.pluck(:descendant_id)
+    end
   end
 
 end
