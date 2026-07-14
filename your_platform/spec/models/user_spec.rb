@@ -921,8 +921,11 @@ describe User do
     before do
       @corporation1 = create :corporation_with_status_groups
       @corporation2 = create :corporation_with_status_groups
-      @corporation1.status_groups.first.assign_user @user
-      @corporation1.status_groups.last.assign_user @user
+      # Ordered explicitly: neither status_groups nor user.groups
+      # guarantees an order, so first/last would name arbitrary groups.
+      @status_groups = @corporation1.status_groups.order(:id).to_a
+      @status_groups.first.assign_user @user
+      @status_groups.last.assign_user @user
       @corporation2.status_groups.first.assign_user @user
       @corporation1.assign_admin @user
       time_travel 5.seconds
@@ -930,7 +933,7 @@ describe User do
     end
     subject { @user.my_groups_in_first_corporation }
     it "should return the non special groups of user's first corporation" do
-      subject.should == [ @corporation1.status_groups.first, @corporation1.status_groups.last ]
+      subject.should match_array [ @status_groups.first, @status_groups.last ]
     end
   end
 

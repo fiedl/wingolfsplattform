@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20260711160000) do
+ActiveRecord::Schema.define(version: 20260714080000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,7 +124,9 @@ ActiveRecord::Schema.define(version: 20260711160000) do
     t.datetime "valid_from",      precision: 6
     t.string   "type"
     t.index ["ancestor_id", "ancestor_type", "direct"], name: "dag_ancestor", using: :btree
+    t.index ["ancestor_type", "ancestor_id"], name: "dag_links_direct_walk_down", where: "direct", include: ["descendant_type", "descendant_id", "valid_from", "valid_to"]
     t.index ["descendant_id", "descendant_type"], name: "dag_descendant", using: :btree
+    t.index ["descendant_type", "descendant_id"], name: "dag_links_direct_walk_up", where: "direct", include: ["ancestor_type", "ancestor_id", "valid_from", "valid_to"]
   end
 
   create_table "dag_links_indirect_archive", id: false, force: :cascade do |t|
