@@ -5,7 +5,7 @@ concern :PrivateViews do
   end
 
   def prepend_private_views
-    prepend_view_path private_views_path if File.exists? private_views_path
+    prepend_view_path private_views_path if File.exist? private_views_path
   end
 
   private

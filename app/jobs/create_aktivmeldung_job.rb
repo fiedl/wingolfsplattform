@@ -1,6 +1,6 @@
 class CreateAktivmeldungJob < ApplicationJob
 
-  def perform(user_params)
+  def perform(user_params:)
     @user_params = user_params
 
     user = User.create!(basic_user_params)
@@ -19,9 +19,9 @@ class CreateAktivmeldungJob < ApplicationJob
     user.home_address_field.save
     user.study_fields.create
 
-    user.address_fields.reload.first.update_attributes user_params["study_address_field"]
-    user.address_fields.second.update_attributes user_params["home_address_field"]
-    user.study_fields.first.update_attributes user_params["primary_study_field"]
+    user.address_fields.reload.first.update user_params["study_address_field"]
+    user.address_fields.second.update user_params["home_address_field"]
+    user.study_fields.first.update user_params["primary_study_field"]
 
     user.fill_in_template_profile_information
     user.fill_cache

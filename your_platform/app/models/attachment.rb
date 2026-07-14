@@ -12,7 +12,6 @@ class Attachment < ApplicationRecord
 
   scope :logos, -> { where('title ILIKE ?', "%logo%") }
   scope :documents, -> { where('content_type ILIKE ? or content_type ILIKE ?', "application/pdf", "%document%") }
-  scope :belongs_to_page_without_group, -> { includes(parent_page: :ancestor_groups).where(groups: {id: nil}) }
 
   include Flags
   include HasAuthor
@@ -155,7 +154,9 @@ class Attachment < ApplicationRecord
   end
 
   def set_default_title_if_empty
-    if file.present? && file.filename.present? && file_changed?
+    # saved_change_to_file?, not file_changed?: in after_create, rails
+    # 5.2 flipped the dirty API to the post-save perspective.
+    if file.present? && file.filename.present? && saved_change_to_file?
       self.title ||= File.basename(file.filename, '.*').titleize
       self.save
     end

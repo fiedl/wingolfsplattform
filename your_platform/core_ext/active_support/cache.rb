@@ -111,17 +111,31 @@ module CacheStoreExtension
   end
 
   def delete_regex(regex)
-    keys = find_keys_by_regex(regex)
-    @data.del(*keys) if keys.count > 0
+    keys = raw_keys_by_regex(regex)
+    redis.del(*keys) if keys.count > 0
   end
 
+  # Logical keys (without the namespace prefix), matching the regex.
+  # With redis_cache_store, the namespace is a key prefix applied by
+  # ActiveSupport, so the raw redis keys carry it and the public cache
+  # api expects keys without it.
   def find_keys_by_regex(regex)
-    if @data
-      @data.keys.select { |key| key =~ regex }
-    else
-      []
-    end
+    raw_keys_by_regex(regex).collect { |raw_key| raw_key.delete_prefix(namespace_prefix) }
   end
+
+  def raw_keys_by_regex(regex)
+    return [] unless respond_to? :redis
+    prefix = namespace_prefix
+    redis.keys.select { |raw_key| raw_key.delete_prefix(prefix) =~ regex }
+  end
+  private :raw_keys_by_regex
+
+  def namespace_prefix
+    namespace = merged_options(nil)[:namespace]
+    namespace = namespace.call if namespace.respond_to? :call
+    namespace.present? ? "#{namespace}:" : ""
+  end
+  private :namespace_prefix
 
   def find_entries_by_regex(regex)
     find_keys_by_regex(regex).collect { |key|
@@ -180,7 +194,8 @@ module CacheStoreExtension
   def entry(name)
     options = merged_options(nil)
     key = normalize_key(name, options)
-    read_entry(key, options)
+    # Keyword splat: since rails 6.1, read_entry takes **options.
+    read_entry(key, **options)
   end
 
   # This method reveals when a cache entry has been created.
@@ -193,8 +208,21 @@ end
 
 ActiveSupport::Cache::Store.send(:prepend, CacheStoreExtension)
 
+# The renew mechanism compares cache entries by write time. Rails 7.0
+# stopped stamping entries (@created_at is initialized to 0.0 unless
+# expiry bookkeeping needs it), so the stamp is restored here. The
+# instance variable travels through Marshal, so persisted entries keep
+# their original stamp across deploys.
+module CacheEntryCreatedAtStamp
+  def initialize(*args, **options)
+    super
+    @created_at = Time.now.to_f if !defined?(@created_at) || @created_at.nil? || @created_at == 0.0
+  end
+end
+ActiveSupport::Cache::Entry.prepend CacheEntryCreatedAtStamp
+
 class ActiveSupport::Cache::Entry
   def created_at
-    Time.at(@created_at)
+    Time.at(@created_at) if defined?(@created_at) && @created_at
   end
 end

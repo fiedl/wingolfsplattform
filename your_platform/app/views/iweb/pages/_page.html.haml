@@ -1,1 +1,3 @@
-= render file: YourPlatform::Engine.root.join('app/views/pages/_page').to_s, locals: local_assigns.merge({separate_image_box: true})
+-# render partial, not file: rails 6.1 renders `file:` raw. The engine's
+-# pages/_page resolves normally here — no app-side partial shadows it.
+= render partial: 'pages/page', locals: local_assigns.merge({separate_image_box: true})

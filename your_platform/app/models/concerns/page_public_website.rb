@@ -21,7 +21,9 @@ concern :PagePublicWebsite do
 
     scope :public_websites, -> { where(id: Page.unscoped.public_websites_page_ids) }
 
-    scope :intranet, -> { where(id: (Page.flagged(:intranet_root).pluck(:id) + (Page.flagged(:intranet_root).first.try(:descendant_page_ids) || []))) }
+    # default_scoped: the intranet subtree is defined over all pages,
+    # not the subset of an active scoping block (rails 6.1 semantics).
+    scope :intranet, -> { where(id: (Page.default_scoped.flagged(:intranet_root).pluck(:id) + (Page.default_scoped.flagged(:intranet_root).first.try(:descendant_page_ids) || []))) }
 
   end
 

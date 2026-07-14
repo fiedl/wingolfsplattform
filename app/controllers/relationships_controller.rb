@@ -18,7 +18,7 @@ class RelationshipsController < ApplicationController
   end
 
   def update
-    @relationship.update_attributes(relationship_params)
+    @relationship.update(relationship_params)
     respond_with @relationship
   end
 

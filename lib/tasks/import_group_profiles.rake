@@ -130,7 +130,7 @@ namespace :import do
     def csv_rows( file_title, &block )
       require 'csv'
       file_name = File.join( Rails.root, file_title )
-      if File.exists? file_name
+      if File.exist? file_name
         counter = 0
         CSV.foreach file_name, headers: true, col_sep: ';' do |row|
           result = yield row

@@ -172,7 +172,8 @@ class IncomingMails::GroupMailingListMail < IncomingMail
 
   def formatted_field(header_key)
     if message[header_key]
-      parts = message[header_key].address_list.addresses.collect do |part|
+      # `element` is mail >= 2.8 for the removed `address_list`.
+      parts = message[header_key].element.addresses.collect do |part|
         part = formatted_to if part.address == destination
         part.to_s
       end

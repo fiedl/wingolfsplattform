@@ -201,7 +201,7 @@ namespace :activate do
   
   def system_stage
     filename = File.join(Rails.root, 'tmp', 'account_activation.stage')
-    if File.exists? filename
+    if File.exist? filename
       stage = File.read(filename).gsub("\n", "").strip
     else
       stage = nil
@@ -212,13 +212,13 @@ namespace :activate do
   
   def switch_back_to_stage_zero
     filename = File.join(Rails.root, 'tmp', 'account_activation.stage')
-    if File.exists? filename
+    if File.exist? filename
       File.delete filename
     end
   end
   
   def trigger_pressed?
-    File.exists? File.join(Rails.root, 'tmp', 'account_activation.trigger')
+    File.exist? File.join(Rails.root, 'tmp', 'account_activation.trigger')
   end
   
   def set_event_display(text)

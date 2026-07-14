@@ -192,7 +192,7 @@ class ListExport
   end
 
   def to_csv
-    CSV.generate(csv_options) do |csv|
+    CSV.generate(**csv_options) do |csv|
       csv << headers
       data.each do |row|
         csv << columns.collect do |column_name|

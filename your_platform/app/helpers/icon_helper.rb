@@ -198,13 +198,16 @@ module IconHelper
   end
 
   def home_icon
-    Haml::Engine.new(
-    %Q(%svg.icon{:fill => "none", :height => "24", :stroke => "currentColor", "stroke-linecap" => "round", "stroke-linejoin" => "round", "stroke-width" => "2", :viewbox => "0 0 24 24", :width => "24", :xmlns => "http://www.w3.org/2000/svg"}
-      %path{:d => "M0 0h24v24H0z", :stroke => "none"}
-      %polyline{:points => "5 12 3 12 12 3 21 12 19 12"}
-      %path{:d => "M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"}
-      %path{:d => "M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"}
-    )).render
+    # A plain svg string like the other icons: haml 6 changed the
+    # Haml::Engine api and no longer renders inline source this way.
+    %q{
+      <svg class="icon" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 0h24v24H0z" stroke="none"></path>
+        <polyline points="5 12 3 12 12 3 21 12 19 12"></polyline>
+        <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
+        <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"></path>
+      </svg>
+    }.html_safe
   end
 
   def contact_icon

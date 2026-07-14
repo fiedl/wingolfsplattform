@@ -27,7 +27,10 @@ class Redis
     end
 
     # @api private
-    def method_missing(*a,&b)
+    # ruby2_keywords: plain splat forwarding breaks keyword arguments
+    # on ruby 3 (redis commands like set(key, value, ex:) arrive with
+    # the options hash as a positional argument otherwise).
+    ruby2_keywords def method_missing(*a,&b)
       Namespace.new(current_namespace, @options).public_send(*a,&b)
     end
   end
@@ -83,7 +86,7 @@ class RedisConnectionConfiguration
   def default_options
     {
       host: ENV['REDIS_HOST'],
-      port: Rails.application.secrets.redis_port || '6379',
+      port: Rails.application.config.app_secrets.redis_port || '6379',
       expires_in: 1.week,
       namespace: namespace,
       timeout: 15.0

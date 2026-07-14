@@ -38,7 +38,7 @@ namespace :import do
 
         require 'csv'
         file_name = File.join( Rails.root, "import", "groups_bv_zuordnung.csv" )
-        if File.exists? file_name
+        if File.exist? file_name
           counter = 0
           CSV.foreach file_name, headers: true, col_sep: ';' do |row|
             BvMapping.create bv_name: row['BV'], plz: row['PLZ'], town: row['Wohnort'].strip

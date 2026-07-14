@@ -131,7 +131,7 @@ concern :GroupMemberships do
         m
       else
         m = Membership.create descendant_id: user.id, ancestor_id: self.id
-        m.update_attributes valid_from: time_of_joining # It does not work when added in `create`.
+        m.update valid_from: time_of_joining # It does not work when added in `create`.
         m
       end
     end

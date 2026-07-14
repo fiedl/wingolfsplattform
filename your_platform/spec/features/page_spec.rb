@@ -4,6 +4,8 @@ feature "Pages" do
   include SessionSteps
 
   scenario "Visiting a page" do
+    # Flaky: the title element renders but stays hidden until the vue
+    # app mounts, which does not reliably happen in the test browser.
     pending 'https://github.com/fiedl/wingolfsplattform/issues/115'
     @page = Page.create(title: "My Shiny Page")
     login :user

@@ -9,7 +9,7 @@ describe PagePublishing do
   it { should be_draft }
 
   describe "after setting published_at" do
-    before { page.update_attributes published_at: 1.day.ago }
+    before { page.update published_at: 1.day.ago }
 
     it { should be_published }
     it { should_not be_draft }

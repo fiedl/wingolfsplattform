@@ -5,7 +5,7 @@ concern :UserLocation do
   end
 
   def set_current_location(attributes = {longitude: nil, latitude: nil})
-    (self.location || self.create_location).update_attributes(attributes)
+    (self.location || self.create_location).update(attributes)
   end
 
   # user.neadby_users(within_meters: 100)

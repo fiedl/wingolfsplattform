@@ -1,7 +1,9 @@
 concern :DagLinkCaching do
 
   included do
-    after_save { delay_renew_cache_of_dependent_nodes if self.changes.except(:needs_review, :updated_at).any? }
+    # saved_changes, not changes: inside after_save, rails 5.2 flipped
+    # `changes` to the post-save perspective, where it is always empty.
+    after_save { delay_renew_cache_of_dependent_nodes if self.saved_changes.except(:needs_review, :updated_at).any? }
     after_commit :delay_renew_cache_of_dependent_nodes, on: :destroy
   end
 
@@ -21,7 +23,7 @@ concern :DagLinkCaching do
     if ancestor.kind_of?(Group)
       nodes += Group.where(id: Dag::Traversal.ancestor_ids_of(ancestor, type: 'Group')).to_a
     end
-    RenewCacheJob.perform_later nodes.uniq, time: Time.zone.now
+    RenewCacheJob.perform_later records: nodes.uniq, time: Time.zone.now
   end
 
 end

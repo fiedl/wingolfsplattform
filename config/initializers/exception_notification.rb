@@ -21,13 +21,9 @@ ExceptionNotification.configure do |config|
   #   :exception_recipients    => %w{support@example.org},
   # }
 
-  # Custom ticket system via email.
-  config.add_notifier :ticket_system, {
-    :email_prefix            => "[ERROR] ",
-    :fallback_sender_address => %{"Plattform-Fehler" <noreply@wingolf.io>},
-    :exception_recipients    => ["fehler.wingolf.io@fiedlschuster.de"],
-    :sections                => %w(request current_user session environment backtrace)
-  }
+  # The custom ticket-system notifier is registered in to_prepare
+  # below: registering resolves the notifier class, which lives in the
+  # app's autoload path — off-limits in initializers since rails 7.
 
   # Campfire notifier sends notifications to your Campfire room. Requires 'tinder' gem.
   # config.add_notifier :campfire, {
@@ -48,4 +44,16 @@ ExceptionNotification.configure do |config|
   #   :http_method => :post
   # }
 
+end
+
+# Custom ticket system via email.
+Rails.application.config.to_prepare do
+  ExceptionNotification.configure do |config|
+    config.add_notifier :ticket_system, {
+      :email_prefix            => "[ERROR] ",
+      :fallback_sender_address => %{"Plattform-Fehler" <noreply@wingolf.io>},
+      :exception_recipients    => ["fehler.wingolf.io@fiedlschuster.de"],
+      :sections                => %w(request current_user session environment backtrace)
+    }
+  end
 end

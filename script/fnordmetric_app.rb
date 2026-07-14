@@ -117,7 +117,7 @@ end
 #
 require 'yaml'
 secrets_file = File.expand_path('../../config/secrets.yml', __FILE__)
-if File.exists?(secrets_file)
+if File.exist?(secrets_file)
   ::SECRETS = YAML.load(File.read(secrets_file)) 
 else
   ::SECRETS = {}

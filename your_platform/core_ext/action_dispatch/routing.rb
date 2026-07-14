@@ -13,7 +13,9 @@ module ActionDispatch::Routing
     #
     # See also: http://stackoverflow.com/a/35209404/2066546
     #
-    def url_for(options, route_name = nil, url_strategy = ActionDispatch::Routing::RouteSet::UNKNOWN)
+    # The splat keeps the override signature-compatible across rails
+    # versions (6.1 passes additional internal arguments).
+    def url_for(options, *args)
 
       if options[:subdomain].respond_to? :call
         options[:subdomain] = options[:subdomain].call
@@ -25,7 +27,7 @@ module ActionDispatch::Routing
         options[:subdomain] ||= Rails.application.config.action_mailer.default_url_options[:subdomain].call
       end
 
-      super(options, route_name, url_strategy)
+      super(options, *args)
 
     end
   end

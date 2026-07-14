@@ -60,7 +60,7 @@ class SemesterCalendarsController < ApplicationController
     authorize! :create_event, group
     authorize! :update, semester_calendar
 
-    semester_calendar.update_attributes(semester_calendar_params)
+    semester_calendar.update(semester_calendar_params)
     render json: semester_calendar.as_json.merge({
       attachment: semester_calendar.attachments.last
     }), status: :ok

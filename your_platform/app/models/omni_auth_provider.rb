@@ -9,7 +9,7 @@ class OmniAuthProvider
   end
 
   def config
-    Rails.application.secrets.omniauth
+    Rails.application.config.app_secrets.omniauth
     .try(:[], AppVersion.domain)
     .try(:[], @provider_name.to_s)
   end

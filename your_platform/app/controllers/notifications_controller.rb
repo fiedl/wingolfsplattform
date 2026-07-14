@@ -23,7 +23,7 @@ class NotificationsController < ApplicationController
   #
   def read_all
     current_user.notifications.unread.update_all read_at: Time.zone.now
-    redirect_to :back, change: 'notifications_menu'
+    redirect_back fallback_location: root_path, change: 'notifications_menu'
   end
   
 end

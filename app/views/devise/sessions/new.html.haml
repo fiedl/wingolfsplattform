@@ -1,4 +1,8 @@
-= render file: YourPlatform::Engine.root.join('app/views/devise/sessions/new').to_s
+-# This app view shadows the engine view of the same name, so the
+-# engine template cannot be rendered by lookup; rails 6.1 removed
+-# template rendering through `render file:`. Render the engine file
+-# inline instead.
+= render inline: File.read(YourPlatform::Engine.root.join('app/views/devise/sessions/new.html.haml')), type: :haml
 
 .text-center.text-muted{style: 'margin-top: -4rem'}
   %p

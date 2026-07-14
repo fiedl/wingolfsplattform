@@ -21,7 +21,11 @@ class Abilities::AttachmentAbility < Abilities::BaseAbility
 
   def rights_for_signed_in_users
     can [:read, :download], Attachment, parent_type: "Group", parent_id: user.group_ids
-    can [:read, :download], Attachment, Attachment.belongs_to_page_without_group do |attachment|
+    # Block only, no sql-condition relation: Attachment.accessible_by is
+    # unused, and the former belongs_to_page_without_group scope
+    # included :ancestor_groups, which has been a traversal method (not
+    # an association) since the pg_cte migration — rails 6.1 rejects it.
+    can [:read, :download], Attachment do |attachment|
       attachment.parent_page && attachment.parent_page.ancestor_groups.none?
     end
 

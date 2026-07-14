@@ -5,19 +5,18 @@
 # Production:
 #     docker build --target production -t wingolfsplattform .
 
-FROM ruby:2.7.1 AS base
+FROM ruby:4.0 AS base
 
-# Debian Buster is EOL; its packages moved to archive.debian.org.
-RUN sed -i -e 's|deb.debian.org/debian|archive.debian.org/debian|g' \
-           -e 's|security.debian.org/debian-security|archive.debian.org/debian-security|g' \
-           -e '/buster-updates/d' /etc/apt/sources.list
-RUN apt-get -o Acquire::Check-Valid-Until=false update && \
+RUN apt-get update && \
     apt-get install -y ca-certificates curl \
       default-mysql-client postgresql-client \
-      imagemagick rsync pwgen \
+      imagemagick ghostscript rsync pwgen \
       shared-mime-info
 
-RUN gem install bundler -v 2.1.4
+# The checkout is bind-mounted and owned by the host user; newer git
+# refuses to read repositories of other owners (AppVersion reads git
+# tags at runtime).
+RUN git config --global --add safe.directory '*'
 
 # Patch the imagemagick policy to allow pdf conversion.
 # https://stackoverflow.com/a/53180170/2066546
@@ -27,7 +26,9 @@ RUN gem install bundler -v 2.1.4
 # This is ok for ghostscript >= 9.24, which we do have.
 # https://www.kb.cert.org/vuls/id/332928/
 #
-RUN sed -i -e 's|<policy domain="coder" rights="none" pattern="PDF" />|<policy domain="coder" rights="read \| write" pattern="PDF" />|g' /etc/ImageMagick-6/policy.xml
+# Only ImageMagick 6 (bookworm and earlier) ships the PDF block;
+# the ImageMagick 7 policy of newer Debians does not restrict PDF.
+RUN if [ -f /etc/ImageMagick-6/policy.xml ]; then sed -i -e 's|<policy domain="coder" rights="none" pattern="PDF" />|<policy domain="coder" rights="read \| write" pattern="PDF" />|g' /etc/ImageMagick-6/policy.xml; fi
 
 # Tool for waiting for the database, honoring WAIT_HOSTS (docker-compose-wait).
 RUN curl -fsSL https://github.com/ufoscout/docker-compose-wait/releases/download/2.12.1/wait -o /wait && \
@@ -45,11 +46,10 @@ FROM base AS development
 
 ENV RAILS_ENV=development
 
-# libpq-dev: the pg gem builds against libpq. Buster ships the v11
-# client, which works against the postgres 17 server.
-RUN apt-get -o Acquire::Check-Valid-Until=false update && \
+# libpq-dev: the pg gem builds against libpq.
+RUN apt-get update && \
     apt-get install -y build-essential g++ \
-      libssl-dev libxml2 libxslt-dev libreadline-dev libicu-dev libmagick-dev \
+      libssl-dev libxml2 libxslt-dev libreadline-dev libicu-dev libmagickwand-dev \
       libpq-dev
 
 # The nodesource apt repository for node 12 is gone: install from the

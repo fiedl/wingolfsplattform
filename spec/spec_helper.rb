@@ -41,7 +41,9 @@ require File.expand_path('../../config/environment', __FILE__)
 # by default; anchor it so the check also works when the specs are
 # started from the engine directory (your_platform/).
 ActiveRecord::Migrator.migrations_paths = [Rails.root.join('db/migrate').to_s]
-ActiveRecord::Migration.check_pending!
+# check_all_pending!: check_pending! left in rails 7.2 (the suite
+# loads the schema, it does not migrate).
+ActiveRecord::Migration.check_all_pending!
 
 
 # The original setting whether the renew-cache mechanism should be skipped
@@ -99,8 +101,9 @@ Geocoder.configure( lookup: :test )
 
 require 'selenium/webdriver'
 
-# Capybara 3 defaults to puma as its test server, which is not bundled.
-Capybara.server = :webrick
+# Puma is bundled (it is the production server); webrick left the
+# ruby standard library with ruby 3.
+Capybara.server = :puma, { Silent: true }
 
 # Feature specs run against a browser in a separate docker container
 # (CHROME_URL), so the app under test must be reachable from there:

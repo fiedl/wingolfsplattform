@@ -18,8 +18,10 @@ Rails.application.configure do
   # config/initializers/cache.rb (redis via REDIS_HOST). Anything set
   # here would be overridden there.
 
-  # Mailing
-  config.action_mailer.delivery_method = :letter_opener
+  # Mailing: letter_opener_web stores outgoing mails and serves them at
+  # /letter_opener — plain letter_opener would try to open a browser,
+  # which there is none of inside the docker container.
+  config.action_mailer.delivery_method = :letter_opener_web
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_caching = false
   config.action_mailer.default_url_options = {host: 'wingolf.io', protocol: 'https'}
@@ -46,9 +48,11 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
+  config.hosts << "data:3000"
+
   # Simulate asset stuff to mimic production.
   if ENV['SIMULATE_PRODUCTION']
-    config.assets.js_compressor = :uglifier
+    config.assets.js_compressor = :terser
     config.assets.css_compressor = :sass
     config.assets.compile = false
     config.assets.digest = true

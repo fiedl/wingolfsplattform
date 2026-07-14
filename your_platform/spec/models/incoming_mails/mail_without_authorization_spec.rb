@@ -28,7 +28,6 @@ describe IncomingMails::MailWithoutAuthorization do
     end
 
     it do
-      pending 'https://github.com/fiedl/wingolfsplattform/issues/109'
       should be_kind_of Array
     end
 
@@ -40,7 +39,7 @@ describe IncomingMails::MailWithoutAuthorization do
           ActionMailer::Base.deliveries.count.should == 0
         end
         its(:count) { should == 0 }
-        describe "when the sender is unauthorized", pending: 'https://github.com/fiedl/wingolfsplattform/issues/109' do
+        describe "when the sender is unauthorized" do
           before { @group.update! mailing_list_sender_filter: :global_officers }
           it 'sends a rejection mail' do
             subject
@@ -49,7 +48,7 @@ describe IncomingMails::MailWithoutAuthorization do
           end
         end
       end
-      describe "when the user has no account", pending: 'https://github.com/fiedl/wingolfsplattform/issues/109' do
+      describe "when the user has no account" do
         before { @user = john_doe; @user.account.destroy; @user.reload }
         it 'sends a rejection mail' do
           subject
@@ -60,7 +59,7 @@ describe IncomingMails::MailWithoutAuthorization do
     end
 
     describe "when the sender is not in the database" do
-      describe "when the mailing list is closed", pending: 'https://github.com/fiedl/wingolfsplattform/issues/109' do
+      describe "when the mailing list is closed" do
         before { @group.update! mailing_list_sender_filter: :group_members }
 
         its(:count) { should == 1 }

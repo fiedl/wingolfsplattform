@@ -15,7 +15,7 @@ class WorkflowsController < ApplicationController
     @workflow.execute( params )
 
     flash[ :notice ] = "#{I18n.t(:executed_workflow)}: #{@workflow.name}"
-    redirect_to :back
+    redirect_back fallback_location: root_path
   end
 
 
@@ -83,7 +83,7 @@ class WorkflowsController < ApplicationController
   # PUT /workflows/1.json
   def update
     respond_to do |format|
-      if @workflow.update_attributes(workflow_params)
+      if @workflow.update(workflow_params)
         format.html { redirect_to @workflow, notice: 'Workflow was successfully updated.' }
         format.json { head :no_content }
       else

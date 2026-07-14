@@ -2,12 +2,10 @@
 gem 'your_platform', path: 'your_platform'
 
 source 'https://rubygems.org' do
-  gem 'rails', '~> 5.0'
-  # pg 1.2 removed the PGconn constant that rails 5.0's postgresql
-  # adapter still uses. Lift this pin during the rails upgrade.
-  gem 'pg', '~> 1.1.4'
-  gem 'sass-rails'
-  gem 'uglifier', '>= 1.3.0'
+  gem 'rails', '~> 8.1'
+  gem 'pg', '>= 1.5'
+  gem 'sassc-rails' # ruby-sass is EOL; libsass via sassc
+  gem 'terser' # uglifier is abandoned and fails on ES6
   gem 'coffee-rails', '>= 4.0.0'
   gem 'turbolinks'
 
@@ -54,9 +52,7 @@ source 'https://rubygems.org' do
     gem 'rspec-retry'
     gem 'capybara', '~> 3.0'
     gem 'selenium-webdriver', '~> 4.0'
-    # Pin: factory_bot 6.3+ requires ruby 3, but the old bundler ignores
-    # the gem's required_ruby_version.
-    gem 'factory_bot_rails', '~> 6.2.0'
+    gem 'factory_bot_rails'
     gem 'database_cleaner'
     gem 'email_spec'
     gem 'timecop'
@@ -72,15 +68,41 @@ source 'https://rubygems.org' do
   gem 'json'
   gem 'colored'
 
+  # Former ruby default gems, pruned from the standard library by
+  # ruby 4; required at boot by rails and friends.
+  gem 'benchmark'
+  gem 'observer'
+  gem 'ostruct'
+  gem 'readline'  # required by pry-remote
+
   # Security fixes
   gem 'rubyzip', '>= 1.2.1'  # CVE-2017-5946
   gem 'nokogiri', '>= 1.7.1'  #  USN-3235-1
 
+  # Temporary pins during the rails upgrade
+  # (https://github.com/fiedl/wingolfsplattform/issues/126):
+  # bumping the engine gemspec unlocks all engine dependencies in the
+  # lockfile, and bundler would jump these to new majors mid-upgrade.
+  # The JS-facing gems must not move at all (frozen JS stack); the API
+  # clients and formatters stay on their pre-upgrade majors until after
+  # the rails hops. Remove pin by pin once the upgrade has landed.
+  gem 'i18n-js', '~> 3.8.0'
+  gem 'chartkick', '~> 3.4.2'
+  gem 'discourse_api', '~> 0.45.0'
+  gem 'gemoji', '~> 3.0.1'
+  gem 'reverse_markdown', '~> 2.0.0'
+  gem 'biggs', '~> 0.3.3'
+  gem 'faraday', '~> 1.3'
+  # sprockets 3 (frozen JS stack) passes the positional safe_level and
+  # trim_mode arguments, which erb >= 6 removed.
+  gem 'erb', '< 6'
+
   # Temporary Forks and Overrides
-  gem 'refile', git: 'https://github.com/sobrinho/refile'
+  # refile is vendored (from the sobrinho fork) with rest-client
+  # relaxed: ~> 1.8 pinned mime-types below 3, which is a SyntaxError
+  # on ruby 3. The ActiveStorage migration retires it eventually.
+  gem 'refile', path: 'vendor/gems/refile'
   gem 'refile-mini_magick', git: 'https://github.com/refile/refile-mini_magick'
-  gem 'rails-settings-cached', '0.7.1'
-  gem 'mimemagic', '~> 0.3.10' # TODO: remove when updating to rails 5.2, https://github.com/rails/rails/issues/41750
 
   # To customly set timeout time we need rack-timeout
   gem 'rack-timeout'
@@ -100,4 +122,4 @@ source 'https://rubygems.org' do
 
 end
 
-ruby '2.7.1'
+ruby '>= 3.4'

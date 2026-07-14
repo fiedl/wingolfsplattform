@@ -72,12 +72,12 @@ class SemesterCalendar < ApplicationRecord
     events.commers.first
   end
 
-  def save(*args)
-    super(*args)
+  def save(*args, **options)
+    super(*args, **options)
     self.events.map(&:save)
   end
 
-  def update_attributes(attributes)
+  def update(attributes)
     self.events_attributes = attributes[:events_attributes] if attributes[:events_attributes]
     self.save
     super(attributes.except(:events_attributes))

@@ -26,11 +26,10 @@ Gem::Specification.new do |s|
   #
 
   # Rails and Rails Additions
-  s.add_dependency "rails", "~> 5.0.0"
+  s.add_dependency "rails", "~> 8.1.0"
   s.add_dependency 'rack', '>= 1.6.2'
-  s.add_dependency 'rack-ssl', '>= 1.3.4'
   s.add_dependency "rails-i18n"                                                        # MIT License
-  s.add_dependency "responders", "~> 2.0"
+  s.add_dependency "responders", "~> 3.0"
   s.add_dependency "bundler", ">= 1.9.4"
   s.add_development_dependency 'web-console'
   s.add_dependency 'sprockets-rails', '>= 2.3.2' # required by bootstrap
@@ -50,19 +49,23 @@ Gem::Specification.new do |s|
   # https://github.com/fiedl/acts-as-dag (branch sf/rails-5).
   s.add_dependency 'acts_as_tree'                                                      # MIT License
   s.add_dependency 'wannabe_bool'
-  s.add_dependency 'acts-as-taggable-on', '~> 4.0'
+  s.add_dependency 'acts-as-taggable-on', '>= 7.0'
 
-  # Caching
-  s.add_dependency 'redis', '>= 3.3.3'
-  s.add_dependency 'redis-rails'
+  # Caching (rails' redis_cache_store; redis-namespace only for sidekiq)
+  s.add_dependency 'redis', '>= 4.0.1' # required by redis_cache_store
   s.add_dependency 'redis-namespace'
 
   # Workers
   s.add_dependency 'foreman'
-  s.add_dependency 'sidekiq', '~> 4.0'
+  # sidekiq 4 pins redis < 4, which redis_cache_store needs; 6 is the
+  # newest major that still runs the custom fetch strategy with minor
+  # adaptions and supports rails 5.2 through 6.x.
+  s.add_dependency 'sidekiq', '~> 6.0'
 
   # Authentification
-  s.add_dependency 'devise', '>= 3.5.4'                           # MIT License, CVE-2015-8314, https://gemnasium.com/fiedl/your_platform/alerts#advisory_329
+  # rails 6 requires >= 4.7; devise 5 requires rails >= 6.1 — widen at
+  # the rails 6.1 hop.
+  s.add_dependency 'devise', '~> 4.7'
   #s.add_dependency 'omniauth-github'
   #s.add_dependency 'omniauth-twitter'
   #s.add_dependency 'omniauth-google-oauth2'
@@ -74,27 +77,35 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'devise_masquerade', '~> 0.5.3'
   s.add_dependency 'gender_detector'
-  s.add_dependency 'devise_token_auth', '1.1.0' # 1.1.1 introduces an issue with `authenticate_api_v1_user_account!`, https://trello.com/c/p7kSJGz5/1398-app-funktioniert-nicht-mehr-access-control-origin#comment-5d5d65e117444351197bea4e
+  # The former = 1.1.0 pin guarded an authenticate_api_v1_user_account!
+  # regression in 1.1.1 (trello c/p7kSJGz5); retested per the upgrade
+  # plan, https://github.com/fiedl/wingolfsplattform/issues/126.
+  s.add_dependency 'devise_token_auth', '~> 1.2'
   s.add_dependency 'rack-cors'
 
   # Authorization
-  s.add_dependency 'cancancan', '~> 1.15.0'
+  # 1.15's accessible_by built OR chains with broken bind parameters on
+  # rails 5.2 (PG::ProtocolViolation on the group members page).
+  s.add_dependency 'cancancan', '~> 3.0'
 
   # To use ActiveModel has_secure_password (password encryption)
   s.add_dependency 'bcrypt', '>= 3.0.1'                                                # MIT License
 
-  # Settings
-  s.add_dependency 'rails-settings-cached', '>= 0.6.5'
+  # Settings: vendored in lib/rails_settings (formerly the
+  # rails-settings-cached gem, whose 2.x line dropped object-scoped
+  # settings; the settings table holds production data).
 
   # Template Engines
-  s.add_dependency 'haml', '~> 4.0' # NameError: undefined method `precompiled_method_return_value' for class `Haml::Compiler', https://github.com/fiedl/wingolfsplattform/commit/bad4932ce2e611b2a8d7015e20dcfd18e0a376d4
+  # haml 4 references the Erubis template handler that rails 5.2 removed.
+  # (The precompiled_method_return_value NameError that once blocked
+  # haml 5 — see bad4932c — did not reproduce on rails 5.2 with haml 5.2.)
+  s.add_dependency 'haml', '>= 6.0' # rails 7.1's capture needs a real OutputBuffer, which haml 5 replaced with a String
   s.add_dependency 'redcarpet', '>= 3.3.2'  # for Markdown                             # MIT License
   s.add_dependency 'gemoji', '>= 2.1.0'
   s.add_dependency 'auto_html', '~> 1.6.4'
   s.add_dependency 'reverse_markdown'
 
-  s.add_dependency 'sass-rails'
-  s.add_dependency 'sass', '>= 3.7.4' # https://github.com/twbs/bootstrap/issues/24549#issuecomment-339473607
+  s.add_dependency 'sassc-rails' # ruby-sass is EOL; libsass via sassc
 
   # Search
   s.add_dependency 'elasticsearch-model'
@@ -104,12 +115,19 @@ Gem::Specification.new do |s|
   s.add_dependency 'biggs'
 
   # Form Helper
-  s.add_dependency 'formtastic'  # MIT License
+  s.add_dependency 'formtastic', '~> 5.0' # 6.0 drops the bundled stylesheets the layouts require
   s.add_dependency 'simple_form', '>= 5.0.0' # GHSA-r74q-gxcg-73hx, https://trello.com/c/rX2RZtgU/1438
 
   # File Uploads
-  s.add_dependency 'carrierwave', '~> 0.11'                                                       # MIT License
-  s.add_dependency 'mini_magick', '>= 4.9.4' # CVE-2019-13574
+  # Store paths are unchanged by the bump: the uploader defines an
+  # absolute store_dir, and production uploads exist there.
+  # 1.x, not 2.x: carrierwave 2 needs image_processing >= 1.1, which
+  # refile-mini_magick caps below 1.0 — revisit with the refile ->
+  # ActiveStorage migration.
+  s.add_dependency 'carrierwave', '~> 1.3'
+  # 4.x line: carrierwave 1.3 drives the mini_magick 4 api
+  # (combine_options is gone in 5). 4.11+ is ruby-3 clean.
+  s.add_dependency 'mini_magick', '~> 4.11'
   s.add_dependency 'refile', '>= 0.5.5'
   s.add_dependency 'rest-client', '>= 1.8'
 
@@ -124,10 +142,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'rack-mini-profiler'
   s.add_dependency 'chartkick', '>= 3.2.0' # CVE-2019-12732
   s.add_dependency 'groupdate'
-  s.add_dependency 'impressionist', '~> 1.6'
+  s.add_dependency 'impressionist', '>= 1.6' # 1.6 breaks on rails 7 engine load hooks
 
   # Activity Feed
-  s.add_dependency 'public_activity', '~> 1.4.1'                                       # MIT License
+  s.add_dependency 'public_activity', '>= 2.0' # 1.4 uses the 2-arg serialize removed in rails 7.2
 
   # XLS Export
   s.add_dependency 'to_xls'
@@ -181,9 +199,8 @@ Gem::Specification.new do |s|
   # Fixes
   # https://github.com/eventmachine/eventmachine/issues/509
   s.add_dependency 'eventmachine', '>= 1.0.7'
-  # https://github.com/lautis/uglifier/pull/86
-  s.add_dependency 'uglifier', '>= 2.7.2'
-  s.add_dependency 'mail', '~> 2.6.6.rc1' # https://gemnasium.com/github.com/fiedl/your_platform/alerts#advisory_309
+  s.add_dependency 'terser' # uglifier is abandoned and fails on ES6
+  s.add_dependency 'mail', '~> 2.8' # 2.6.6 crashed on nil Sender, https://github.com/fiedl/wingolfsplattform/issues/109
   s.add_dependency 'nokogiri', '>= 1.10.4' # CVE-2019-5477, https://trello.com/c/whoVKwMA/1394
   s.add_dependency 'actionpack', '>= 4.2.5.2' # CVE-2016-2098, https://gemnasium.com/fiedl/your_platform/alerts#advisory_342
   s.add_dependency 'activerecord', '>= 4.2.7.1' # CVE-2016-6317, https://gemnasium.com/github.com/fiedl/your_platform/alerts#advisory_426

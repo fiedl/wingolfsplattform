@@ -1,7 +1,7 @@
 concern :HasProfile do
 
   included do
-    include ProfileFields
+    include HasProfileFields
     include ProfileSections
   end
 

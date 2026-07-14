@@ -16,11 +16,14 @@ feature "Smoke test" do
   scenario "Testing the rails cache" do
     Rails.cache.write "foo", "bar"
     Rails.cache.read("foo").should == "bar"
-    Rails.cache.should be_kind_of ActiveSupport::Cache::RedisStore
+    Rails.cache.should be_kind_of ActiveSupport::Cache::RedisCacheStore
   end
 
   scenario "Testing the sidekiq connection" do
-    Sidekiq.reachable?.should be true
+    # Not `Sidekiq.reachable?`: that resolved to active support's
+    # Module#reachable? (removed in rails 6), which was always true
+    # and never touched redis.
+    Sidekiq.redis { |connection| connection.ping }.should == "PONG"
   end
 
 end

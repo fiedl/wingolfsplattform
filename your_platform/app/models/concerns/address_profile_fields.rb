@@ -70,7 +70,7 @@ concern :AddressProfileFields do
     address_fields.where(label: home_address_labels).first
   end
   def home_address=(address_string)
-    home_address_field.update_attributes value: address_string
+    home_address_field.update value: address_string
   end
   def home_address_field
     address_fields.where(label: home_address_labels).first || address_fields.build(label: home_address_labels.first)

@@ -24,7 +24,7 @@ module DecisionMaking
         redirect_to signable
       else
         flash[:error] = t(:could_not_sign_document_because_of_wrong_password)
-        redirect_to :back
+        redirect_back fallback_location: signable
       end
 
     end

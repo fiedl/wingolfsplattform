@@ -112,7 +112,7 @@ describe UserAccount do
       end
     end
     context "for multiple users with the same last name" do
-      before { @user1.update_attributes(:alias => nil) }
+      before { @user1.update(:alias => nil) }
       it "should raise an error" do
         expect { UserAccount.identify('doe') }.to raise_error 'identification_not_unique'
       end

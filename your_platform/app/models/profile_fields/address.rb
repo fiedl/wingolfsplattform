@@ -65,8 +65,8 @@ module ProfileFields
       geo_information(:state)
     end
     def state_shortcut(str)
-      GeoLocation.usa_state_shortcuts.each { |k, v| str.sub!(k, v) } if str.present?
-      str
+      return str if not str.present?
+      GeoLocation.usa_state_shortcuts.reduce(str) { |result, (shortcut, replacement)| result.sub(shortcut, replacement) }
     end
 
     def self.default_country_code
@@ -150,7 +150,7 @@ module ProfileFields
           else
             self.remove_flag :postal_address
           end
-          RenewCacheJob.perform_later(self, time: Time.zone.now)
+          RenewCacheJob.perform_later(records: self, time: Time.zone.now)
         end
       end
       def postal_address?

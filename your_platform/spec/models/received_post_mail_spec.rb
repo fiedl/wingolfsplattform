@@ -40,7 +40,7 @@ describe ReceivedPostMail do
     before { mail.store_as_posts_when_authorized }
     subject { mail.deliver_rejection_emails }
 
-    it "should send a rejection email to the sender user", pending: 'https://github.com/fiedl/wingolfsplattform/issues/109' do
+    it "should send a rejection email to the sender user" do
       subject
       rejection_mail = ActionMailer::Base.deliveries.last
       rejection_mail.to.should == [sender_user.email]

@@ -187,9 +187,7 @@ class User
     end
 
     # Cache zurücksetzen
-    self.delay.delete_cache
-    #self.delay.delete_cached :bv
-    #self.delay.delete_cached :bv_membership
+    DeleteCacheJob.perform_later record: self
 
     self.groups.reload
     return new_membership
@@ -263,7 +261,7 @@ class User
     status_memberships.with_past.order(:valid_from).first.try(:valid_from).try(:to_date)
   end
   def aktivmeldungsdatum=(date)
-    status_memberships.with_past.order(:valid_from).first.update_attributes valid_from: date.to_datetime
+    status_memberships.with_past.order(:valid_from).first.update valid_from: date.to_datetime
   end
 
   # Virtual attributes for the Aktivmeldung: `User.create` may request an

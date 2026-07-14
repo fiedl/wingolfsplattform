@@ -14,13 +14,13 @@ class BaseMailer < ActionMailer::Base
 
   helper ApplicationHelper
   default from: "\"#{AppVersion.app_name}\" <#{Setting.support_email}>"
-  default sender: Rails.application.secrets.smtp_user
-  default "Message-ID" => lambda { |v| "<#{SecureRandom.uuid}@#{Rails.application.secrets.smtp_domain}>" }
+  default sender: Rails.application.config.app_secrets.smtp_user
+  default "Message-ID" => lambda { |v| "<#{SecureRandom.uuid}@#{Rails.application.config.app_secrets.smtp_domain}>" }
 
   include PrivateViews
 
   def self.delivery_errors_address
-    Rails.application.secrets.delivery_error_address || "delivery-errors@#{AppVersion.email_domain}"
+    Rails.application.config.app_secrets.delivery_error_address || "delivery-errors@#{AppVersion.email_domain}"
   end
 
   def self.technical_sender

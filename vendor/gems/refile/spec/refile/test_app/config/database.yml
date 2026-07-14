@@ -1,0 +1,7 @@
+development: &default
+  adapter: "sqlite3"
+  database: "db/db.sqlite"
+  verbosity: "quiet"
+
+test:
+  <<: *default

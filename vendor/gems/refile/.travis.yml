@@ -1,0 +1,18 @@
+language: ruby
+
+rvm:
+  - 2.2.8
+  - 2.3.5
+  - 2.4.2
+  - jruby-9.1.13.0
+
+gemfile:
+  - Gemfile
+
+cache: bundler
+
+sudo: false
+
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start

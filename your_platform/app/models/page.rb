@@ -218,7 +218,7 @@ class Page < ApplicationRecord
 
   def self.create_root(attrs = {})
     root_page = Page.create(title: "Root", published_at: Time.zone.now, domain: "example.com", type: "Pages::HomePage")
-    root_page.update_attributes attrs
+    root_page.update attrs
     root_page.add_flag :root
     n = root_page.nav_node; n.slim_menu = true; n.save; n = nil
     return root_page
@@ -243,7 +243,7 @@ class Page < ApplicationRecord
     root_page = Page.find_by_flag :root
     root_page = self.create_root unless root_page
     intranet_root = root_page.child_pages.create(title: "Intranet", published_at: Time.zone.now)
-    intranet_root.update_attributes attrs
+    intranet_root.update attrs
     intranet_root.add_flag :intranet_root
     return intranet_root
   end

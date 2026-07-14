@@ -1,4 +1,4 @@
-concern :ProfileFields do
+concern :HasProfileFields do
 
   included do
     has_many :profile_fields, as: :profileable, dependent: :destroy, autosave: true
@@ -56,7 +56,7 @@ concern :ProfileFields do
     end
   end
   def phone=(new_number)
-    (landline_profile_fields.first || phone_and_fax_fields.create(label: I18n.t(:phone), type: 'ProfileFields::Phone')).update_attributes(value: new_number)
+    (landline_profile_fields.first || phone_and_fax_fields.create(label: I18n.t(:phone), type: 'ProfileFields::Phone')).update(value: new_number)
     phone_profile_fields.reload
   end
   def phone_field
@@ -67,7 +67,7 @@ concern :ProfileFields do
     (mobile_phone_profile_fields + phone_profile_fields).first.try(:value)
   end
   def mobile=(new_number)
-    (mobile_phone_profile_fields.first || phone_and_fax_fields.create(label: I18n.t(:mobile), type: 'ProfileFields::Phone')).update_attributes(value: new_number)
+    (mobile_phone_profile_fields.first || phone_and_fax_fields.create(label: I18n.t(:mobile), type: 'ProfileFields::Phone')).update(value: new_number)
   end
 
   def website_fields

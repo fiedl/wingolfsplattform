@@ -6,7 +6,7 @@ class ApplicationJob < ActiveJob::Base
       raise exception
     else
       wait_time = (Rails.env.test? ? 2 : 30)
-      Sidekiq::Logging.logger.warn "Job has failed. Retry in #{wait_time}s. #{exception.to_s}." if Sidekiq::Logging.logger
+      Sidekiq.logger.warn "Job has failed. Retry in #{wait_time}s. #{exception.to_s}."
       retry_job(wait: wait_time, queue: :retry)
     end
   end
@@ -24,10 +24,10 @@ class ApplicationJob < ActiveJob::Base
   rescue_from ActiveJob::DeserializationError do |exception|
     if self.queue_name.to_s == 'retry'
       # Skip this job. The record has been deleted in the meantime.
-      Sidekiq::Logging.logger.warn "Object not found. It has been removed in the meantime. Skipping this job. #{exception.to_s}." if Sidekiq::Logging.logger
+      Sidekiq.logger.warn "Object not found. It has been removed in the meantime. Skipping this job. #{exception.to_s}."
     else
       wait_time = (Rails.env.test? ? 2 : 30)
-      Sidekiq::Logging.logger.warn "Job has failed. Retry in #{wait_time}s. #{exception.to_s}." if Sidekiq::Logging.logger
+      Sidekiq.logger.warn "Job has failed. Retry in #{wait_time}s. #{exception.to_s}."
       retry_job(wait: wait_time, queue: :retry)
     end
   end

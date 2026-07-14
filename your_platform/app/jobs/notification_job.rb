@@ -1,7 +1,7 @@
 class NotificationJob < ApplicationJob
   queue_as :notification
 
-  def perform(*args)
+  def perform
     # # Deliver all notifications that are due to be sent.
     # Notification.due.deliver
 
