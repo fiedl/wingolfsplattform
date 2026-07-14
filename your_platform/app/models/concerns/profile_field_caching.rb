@@ -37,7 +37,9 @@ concern :ProfileFieldCaching do
   class_methods do
 
     def cached_profileable_methods_depending_on_profile_fields
-      %w(date_of_birth date_of_death age birthday_this_year email name_with_surrounding address_label)
+      # Single-field lookups (email, dates, age) are no longer cached
+      # and need no renewal here.
+      %w(name_with_surrounding address_label)
     end
 
   end

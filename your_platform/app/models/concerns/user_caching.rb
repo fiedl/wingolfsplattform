@@ -7,7 +7,12 @@ concern :UserCaching do
   included do
     after_save { RenewCacheJob.perform_later(records: self, time: Time.zone.now) }
 
-    cache :date_of_death
+    # Only methods whose recomputation costs clearly more than a cache
+    # round trip are cached: multi-query aggregations and graph
+    # traversals. Single profile-field or flag lookups (email, dates,
+    # gender, hidden) are one indexed query each -- caching them saves
+    # nothing per read but costs an invalidation and a renewal job on
+    # every write, forever.
     cache :name_with_surrounding
     cache :address_label
     cache :current_corporations
@@ -15,30 +20,20 @@ concern :UserCaching do
     cache :my_groups_in_first_corporation
     cache :status_group_in_primary_corporation
     cache :status_export_string
-    cache :hidden
     cache :workflows_by_corporation
-
-    # UserDateOfBirth
-    cache :date_of_birth
-    cache :birthday_this_year
 
     cache :group_ids_by_category
 
     # UserRoles
     cache :admin_of_anything?
     cache :former_member?
-    cache :localized_date_of_org_membership_end
     cache :developer?
     cache :beta_tester?
     cache :global_admin?
     cache :global_officer?
 
     # ProfileFields
-    cache :email
     cache :address_fields_json
-
-    # UserGender
-    cache :female?
   end
 
   # # Aparently, the `StructureableMixins::Roles` don't work correctly
