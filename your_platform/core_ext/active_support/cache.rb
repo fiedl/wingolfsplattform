@@ -111,8 +111,7 @@ module CacheStoreExtension
   end
 
   def delete_regex(regex)
-    keys = raw_keys_by_regex(regex)
-    redis.del(*keys) if keys.count > 0
+    raw_keys_by_regex(regex).each_slice(1000) { |keys| redis.del(*keys) }
   end
 
   # Logical keys (without the namespace prefix), matching the regex.
@@ -123,10 +122,15 @@ module CacheStoreExtension
     raw_keys_by_regex(regex).collect { |raw_key| raw_key.delete_prefix(namespace_prefix) }
   end
 
+  # SCAN rather than KEYS: KEYS walks the whole keyspace in one
+  # blocking call and freezes the redis server for every other cache
+  # read while it runs.
   def raw_keys_by_regex(regex)
     return [] unless respond_to? :redis
     prefix = namespace_prefix
-    redis.keys.select { |raw_key| raw_key.delete_prefix(prefix) =~ regex }
+    keys = []
+    redis.scan_each { |raw_key| keys << raw_key if raw_key.delete_prefix(prefix) =~ regex }
+    keys
   end
   private :raw_keys_by_regex
 

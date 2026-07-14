@@ -19,13 +19,10 @@ concern :CurrentNavable do
   end
 
   def current_home_page
-    @current_home_page ||= if current_navable && current_navable.respond_to?(:home_page) && current_navable.home_page
-      current_navable.home_page
-    elsif Page.find_by(domain: request.host)
-      Page.find_by(domain: request.host)
-    else
-      Page.root || nil
-    end
+    @current_home_page ||=
+      (current_navable.home_page if current_navable && current_navable.respond_to?(:home_page)) ||
+      Page.find_by(domain: request.host) ||
+      Page.root
   end
 
   # This method sets the currently shown navable object.

@@ -583,7 +583,8 @@ class User
     cache :fruehere_aktivitaetszahl
     cache :name_affix
     cache :title
-    cache :w_nummer
+    # w_nummer is a single indexed profile-field query -- not worth
+    # the cache maintenance.
     cache :aktiver?
     cache :philister?
     cache :administrated_aktivitates

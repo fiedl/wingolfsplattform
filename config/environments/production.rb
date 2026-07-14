@@ -101,4 +101,9 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Tag every SQL statement with the controller and action it belongs
+  # to, so slow queries in the postgres log point back to their
+  # request. See https://github.com/fiedl/wingolfsplattform/issues/129
+  config.active_record.query_log_tags_enabled = true
 end
