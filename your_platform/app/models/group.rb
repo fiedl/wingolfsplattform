@@ -199,10 +199,22 @@ class Group < ApplicationRecord
   def leaf_groups
     Group.find(leaf_group_ids)
   end
+  # Flat queries instead of asking every descendant group for its
+  # subgroups and ancestors one by one: one traversal for the subtree,
+  # one query for the direct links within it, and one traversal for
+  # the officer subtrees.
+  #
   def leaf_group_ids
-    self.descendant_groups.order('id').includes(:flags).select { |group|
-      group.has_no_subgroups_other_than_the_officers_parent? and not group.is_officers_group?
-    }.map(&:id).uniq
+    ids = Dag::Traversal.descendant_ids_of(self, type: 'Group')
+    return [] if ids.empty?
+    links = DagLink.where(direct: true, ancestor_type: 'Group', descendant_type: 'Group',
+      ancestor_id: ids).pluck(:ancestor_id, :descendant_id)
+    officer_named_ids = Group.where(id: links.collect(&:last).uniq, name: ["Amtsträger", "officers"]).pluck(:id).to_set
+    ids_with_real_subgroups = links.reject { |_, child_id| officer_named_ids.include?(child_id) }.collect(&:first).to_set
+    officers_parent_ids = Group.where(id: ids + [id]).flagged(:officers_parent).pluck(:id)
+    officer_group_ids = Dag::Traversal.descendant_ids(ancestor_type: 'Group', descendant_type: 'Group',
+      ancestor_ids: officers_parent_ids).to_set
+    ids.sort.select { |group_id| !ids_with_real_subgroups.include?(group_id) && !officer_group_ids.include?(group_id) }
   end
 
   def status_groups
@@ -222,10 +234,16 @@ class Group < ApplicationRecord
     end
   end
   def status_group_tree_ids
-    child_groups_with_status_groups.collect { |child_group| [child_group, child_group.descendant_groups] }.flatten.map(&:id)
+    ids = child_groups_with_status_groups.map(&:id)
+    ids + Dag::Traversal.descendant_ids(ancestor_type: 'Group', descendant_type: 'Group', ancestor_ids: ids)
   end
+  # One traversal for the ancestors of all status groups together
+  # rather than one traversal per status group.
   def child_groups_with_status_groups
-    child_groups & (status_groups + status_groups.map(&:ancestor_groups)).flatten
+    ids = status_group_ids
+    keep = (ids + Dag::Traversal.ancestor_ids(descendant_type: 'Group', ancestor_type: 'Group',
+      descendant_ids: ids)).to_set
+    child_groups.select { |child_group| keep.include?(child_group.id) }
   end
   def status_groups_with_level(group_hash_array = status_group_tree, level = 0)
     group_hash_array.collect do |entry|
